@@ -22,17 +22,20 @@
 
 
 from openerp.osv import fields, orm
+from openerp import netsvc
+import base64
 
 
 class ProxyActionHelper(orm.AbstractModel):
     _name="proxy.action.helper"
 
-    def _build_print_action(self, cr, uid, data,
-                            printer_name='laser',
-                            raw=False,
-                            copies=1,
-                            host='http://localhost',
-                            context=None):
+    def get_print_data_action(
+            self, cr, uid, data,
+            printer_name='laser',
+            raw=False,
+            copies=1,
+            host='https://localhost',
+            context=None):
         kwargs = {'options':{}}
         if copies > 1:
             kwargs['options']['copie'] = copies
@@ -49,20 +52,20 @@ class ProxyActionHelper(orm.AbstractModel):
     def _get_report(self, cr, uid, report_name, model, object_ids,
                     context=None):
         service = netsvc.LocalService(report_name)
-        (result, format) = service.create(cr, uid, ids, {
+        (result, format) = service.create(cr, uid, object_ids, {
             'model': model,
             }, context)
         return base64.b64encode(result)
 
-    def get_print_action(self, cr, uid, report_name,
+    def get_print_report_action(self, cr, uid, report_name,
                      model, object_ids, **kwargs):
         data = self._get_report(
             cr, uid, report_name, model,
             object_ids, context=kwargs.get('context'))
-        return self._build_print_action(cr, uid, data, **kwargs)
+        return self.get_print_data_action(cr, uid, data, **kwargs)
 
     def return_action(self, todo):
         return {
-            'type': 'ir.actions.proxy',
+            'type': 'ir.actions.act_proxy',
             'action_list': todo,
             }
