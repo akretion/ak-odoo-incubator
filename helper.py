@@ -49,19 +49,12 @@ class ProxyActionHelper(orm.AbstractModel):
                 }
             }
 
-    def _get_report(self, cr, uid, report_name, model, object_ids,
-                    context=None):
-        service = netsvc.LocalService(report_name)
-        (result, format) = service.create(cr, uid, object_ids, {
-            'model': model,
-            }, context)
-        return base64.b64encode(result)
-
     def get_print_report_action(self, cr, uid, report_name,
-                     model, object_ids, **kwargs):
-        data = self._get_report(
-            cr, uid, report_name, model,
-            object_ids, context=kwargs.get('context'))
+                                model, object_ids, **kwargs):
+        result = self.pool['report'].get_pdf(
+            cr, uid, object_ids, report_name,
+            context=kwargs.get('context'))
+        data = base64.b64encode(result)
         return self.get_print_data_action(cr, uid, data, **kwargs)
 
     def return_action(self, todo):
