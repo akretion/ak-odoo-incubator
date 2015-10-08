@@ -28,7 +28,11 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     holding_company_id = fields.Many2one(
-        'res.company', string='Holding Company for Invoicing')
+        'res.company',
+        related='section_id.holding_company_id',
+        string='Holding Company for Invoicing',
+        readonly=True,
+        store=True)
 
     #TODO rethink
     holding_invoice_id = fields.Many2one(
@@ -62,12 +66,14 @@ class SaleOrder(models.Model):
 
     @api.multi
     def _prepare_holding_invoice_line(self):
-        self.ensure_one()
-        return {
-            'name': self.name,
-            'price_unit': self.amount_untaxed,
+        total = 0
+        for sale in self:
+            total += sale.amount_untaxed
+        return [{
+            'name': 'TODO',
+            'price_unit': total,
             'quantity': 1,
-            }
+            }]
 
     @api.multi
     def _prepare_holding_invoice(self, lines):
@@ -79,7 +85,7 @@ class SaleOrder(models.Model):
                 raise UserError(
                     _('Error'),
                     _('Invoice partner must be the same'))
-        vals = self.env['sale.order']._prepare_invoice(self[0], lines)
+        vals = self.env['sale.order']._prepare_invoice(self[0], lines.ids)
         vals.update({
             'origin': '', # the list is too long so better to have nothing
             'company_id': self._context['force_company'],
@@ -108,10 +114,10 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_holding_invoice(self):
-        lines = []
-        for sale in self:
-            lines.append(self.env['account.invoice.line'].create(
-                sale._prepare_holding_invoice_line()).id)
+        lines = self.env['account.invoice.line'].browse(False)
+        val_lines = self._prepare_holding_invoice_line()
+        for val in val_lines:
+            lines |= self.env['account.invoice.line'].create(val)
         invoice_vals = self._prepare_holding_invoice(lines)
         invoice = self.env['account.invoice'].create(invoice_vals)
         self.write({'holding_invoice_id': invoice.id})
