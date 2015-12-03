@@ -1,0 +1,20 @@
+# coding: utf-8
+# © 2015 David BEAL @ Akretion
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+{
+    'name': 'Product Variant Weight',
+    'summary': 'Split weight in 2 fields',
+    'description': "Split weight in 2 fields: template and product",
+    'version': '0.1',
+    'author': 'Akretion',
+    'category': 'product',
+    'depends': [
+        'product',
+    ],
+    'website': 'http://www.akretion.com/',
+    'data': [
+        'view.xml',
+    ],
+    'license': 'AGPL-3',
+}
