@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+
+<record id="price_discount_builder_form_view" model="ir.ui.view">
+    <field name="model">price.discount.builder</field>
+    <field name="arch" type="xml">
+        <form>
+            <group name="main" col="6">
+                <field name="name" default_focus="1"/>
+                <field name="sequence" widget="handle"/>
+                <field name="based"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="percent_limit"/>
+                <field name="active" invisible="True"/>
+            </group>
+            <group name="dicount" col="2">
+                <separator string="Discounts" colspan="2"/>
+                <field name="discount_rule_ids" nolabel="1"
+                       attrs="{'readonly': ['|',('name', '=', False)]}">
+                    <tree name="discount_rule" editable="bottom">
+                        <field name="sequence" widget="handle"/>
+                        <field name="qty"/>
+                        <field name="discount"/>
+                        <!--field name="discount_rule_id" invisible="1"/-->
+                    </tree>
+                </field>
+            </group>
+            <group name="product" col="2">
+                <separator string="Products" colspan="2"/>
+                <field name="product_rule_ids" nolabel="1"
+                       attrs="{'readonly': ['|',('name', '=', False)]}">
+                    <tree name="product_rule" editable="bottom">
+                        <field name="sequence" widget="handle"/>
+                        <field name="product_tmpl_id"
+                               attrs="{'invisible': ['|', ('categ_id', '!=', False), ('product_id', '!=', False)]}"/> 
+                        <field name="product_id"
+                               attrs="{'invisible': [('categ_id', '!=', False)]}"/>
+                        <field name="categ_id"
+                               attrs="{'invisible': [('product_id', '!=', False)]}"/>
+                        <field name="default_code"
+                               attrs="{'invisible': [('product_id', '!=', False)]}"/>
+                    </tree>
+                </field>
+            </group>
+            <group name="partner" col="2">
+                <separator string="Partners" colspan="2"/>
+                <field name="partner_rule_ids" nolabel="1"
+                       attrs="{'readonly': ['|',('name', '=', False)]}">
+                    <tree name="partner_rule" editable="bottom">
+                        <field name="sequence" widget="handle"/>
+                        <field name="partner_id"/>
+                        <field name="ref"/>
+                    </tree>
+                </field>
+            </group>
+        </form>
+    </field>
+</record>
+
+<record id="price_discount_builder_tree_view" model="ir.ui.view">
+    <field name="model">price.discount.builder</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="sequence" widget="handle"/>
+            <field name="name"/>
+            <field name="based"/>
+            <field name="start_date"/>
+            <field name="end_date"/>
+            <field name="active" readonly="True"/>
+        </tree>
+    </field>
+</record>
+
+
+
+<record id="action_client_price_discount_builder" model="ir.actions.act_window">
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">price.discount.builder</field>
+    <field name="name">Discount Builder</field>
+    <field name="context">{'active_test': False}</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to add .
+      </p>
+    </field>
+</record>
+
+<menuitem id="menu_price_discount_builder"
+          action="action_client_price_discount_builder"
+          parent="product.menu_product_pricelist_main"
+          groups="product.group_sale_pricelist"
+          sequence="10"/>
+
+
+    </data>
+</openerp>
