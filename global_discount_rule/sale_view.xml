@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<record id="view_order_form" model="ir.ui.view">
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+        <field name="note" position="before">
+            <group>
+            <button name="apply_global_discount"
+                    string="Remise" type="object"/>
+                <!-- <field name="discount_rule_ids" nolabel="1"/> -->
+            </group>
+        </field>
+        <xpath expr="//field[@name='order_line']/tree/field[@name='discount']"
+               position="before">
+            <field name="discount_rule_id"/>
+            <field name="threshold"/>
+        </xpath>
+    </field>
+</record>
+
+    </data>
+</openerp>

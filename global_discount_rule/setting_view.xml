@@ -3,13 +3,13 @@
     <data noupdate="0">
 
 <!-- After installation of the module, open the related menu -->
-<record id="action_client_price_discount_builder" model="ir.actions.client">
-    <field name="name">Open discount builder menu</field>
+<record id="action_client_price_discount_rule" model="ir.actions.client">
+    <field name="name">Open discount rule menu</field>
     <field name="tag">reload</field>
-    <field name="params" eval="{'menu_id': ref('menu_price_discount_builder')}"/>
+    <field name="params" eval="{'menu_id': ref('menu_price_discount_rule')}"/>
 </record>
 <record id="base.open_menu" model="ir.actions.todo">
-    <field name="action_id" ref="action_client_price_discount_builder"/>
+    <field name="action_id" ref="action_client_price_discount_rule"/>
     <field name="state">open</field>
 </record>
 
