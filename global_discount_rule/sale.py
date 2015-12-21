@@ -22,8 +22,7 @@ def sum_in_dict(data, first_key, mapping):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    discount_rule_ids = fields.Many2many(
-        comodel_name='global.discount.rule')
+    explanation = fields.Text()
 
     @api.multi
     def apply_global_discount(self):
@@ -33,55 +32,89 @@ class SaleOrder(models.Model):
         '''
         for sale in self:
             trace = []
-            conditions = {}
+            # candidates_conditions = {}
             self.remove_old_promotion()
             products, tmpls, categs, sequence = self.get_infos_from_sale()
-            discount_rules = sale.get_relevant_rules_from_partner()
+            global_rules = sale.get_relevant_rules_from_partner()
             product_ids = products.keys()
-            # print products
-            for rule in discount_rules:
+            for rule in global_rules:
                 initial_domain = [('product_id', 'in', product_ids)]
                 initial_domain.append(('global_discount_id', '=', rule.id))
                 domain = rule.get_domain()
-                match_prds_domain = self.env['product.price.domain'].search(
+                match_products = self.env['product.price.domain'].search(
                     domain + initial_domain)
-                print 'match', match_prds_domain
-                if match_prds_domain:
-                    conditions.update(sale.compute_candidate_rule(
-                        products, match_prds_domain, rule, trace))
-            sale.update_sale_line(products, conditions, trace)
+                print 'match', match_products
+                if match_products:
+                    candidate = sale.compute_candidate_rule(
+                        products, match_products, rule, trace)
+            for product_id in products:
+                domain = [('product_id', '=', product_id),
+                          ('global_discount_id', 'in',
+                           [x.id for x in global_rules])]
+                match = self.env['product.price.domain'].search(domain)
+                match_rules = list(set([x.global_discount_id for x in match]))
+                products[product_id]['condition'] = sale.get_best_rule4product(
+                    match_rules, products[product_id])
+                sale.update_sale_product_lines(
+                    products[product_id], product_id)
+            # import pdb; pdb.set_trace()
+            trace.append(str(products).replace('}', '\n}'))
+            # sale.update_sale_lines(products, conds, trace)
+            # sale.update_sale_lines(products, conditions, trace)
             if trace:
-                vals = {'note': '\n'.join(trace)}
+                vals = {'explanation': trace}
             else:
-                vals = {'note': False}
+                vals = {'explanation': False}
             sale.write(vals)
 
+    @api.model
+    def update_sale_product_lines(self, product, product_id):
+        if product.get('condition'):
+        # if product.get('condition') and len(product['conditions']) == 1:
+            condition = product['condition']
+            vals = {
+                'global_discount_id': condition['global_discount_id'],
+                'discount': product['condition']['value'],
+                'threshold': "qty %s" % condition['threshold'],
+            }
+            sale_lines = self.env['sale.order.line'].search(
+                [('product_id', '=', product_id)])
+            sale_lines.write(vals)
+
     @api.multi
-    def compute_candidate_rule(
-            self, products, match_prds_domain, rule, trace):
+    def get_best_rule4product(self, rules, product):
         self.ensure_one()
-        match = False
+        conditions = {}
+        for rule in rules:
+            condition = self.get_best_condition(rule, product)
+            if condition:
+                conditions.update({rule.id: condition})
+        if conditions:
+            print conditions
+            condition_values = {
+                cond['value']: id for id, cond in conditions.items()}
+            max_discount = max([x for x in condition_values])
+            best_condition = condition_values[max_discount]
+            return conditions[best_condition]
+        return False
+
+    @api.multi
+    def get_best_condition(self, rule, product):
         condition = {}
-        qty = sum([products[x.product_id.id]['qty']
-                   for x in match_prds_domain])
-        amount = sum([products[x.product_id.id]['amount']
-                      for x in match_prds_domain])
-        names = [utf8(x.product_id.display_name)
-                 for x in match_prds_domain]
-        print names
+        self.ensure_one()
         for disc in rule.discount_rule_ids:
-            if qty >= disc.qty:
-                condition = {'type': 'percent',
-                             'value': disc.discount,
-                             'threshold': disc.qty}
-                match = True
-        if match:
-            for domain in match_prds_domain:
-                products[domain.product_id.id]['rules'].append(rule)
-        return {rule.id: condition}
+            if product['qty'] >= disc.qty:
+                condition = {
+                    'id': disc.id,
+                    'global_discount_id': disc.global_discount_id.id,
+                    'type': 'percent',
+                    'value': disc.discount,
+                    'threshold': disc.qty,
+                }
+        return condition
 
     @api.model
-    def update_sale_line(self, products, conditions, trace):
+    def update_sale_lines(self, products, conditions, trace):
         print products
         for key, params in products.items():
             rules = params['rules']
@@ -103,6 +136,32 @@ class SaleOrder(models.Model):
         return trace
 
     @api.multi
+    def compute_candidate_rule(
+            self, products, match_products, rule, trace):
+        self.ensure_one()
+        match = False
+        condition = {}
+        qty_total = sum([products[x.product_id.id]['qty']
+                         for x in match_products])
+        # amount = sum([products[x.product_id.id]['amount']
+        #               for x in match_products])
+        # names = [utf8(x.product_id.display_name)
+        #          for x in match_products]
+        # print names
+        # qty_by_product = {x.product_id: False for x in match_products}
+        # azerty = defaultdict(dict)
+        for disc in rule.discount_rule_ids:
+            if qty_total >= disc.qty:
+                # condition = {'type': 'percent',
+                #              'value': disc.discount,
+                #              'threshold': disc.qty}
+                match = True
+        if match:
+            for domain in match_products:
+                products[domain.product_id.id]['conditions'].append(rule)
+        return True
+
+    @api.multi
     def get_infos_from_sale(self):
         self.ensure_one()
         products = defaultdict(dict)
@@ -112,7 +171,7 @@ class SaleOrder(models.Model):
             mapping = {'qty': line.product_uom_qty,
                        'amount': line.price_subtotal,
                        'name': line.product_id.display_name,
-                       'rules': []}
+                       'conditions': []}
             products = sum_in_dict(
                 products, line.product_id.id, mapping)
             tmpl_products = sum_in_dict(
@@ -141,7 +200,6 @@ class SaleOrder(models.Model):
         self._cr.execute(query)
         excluded_rules |= self.env['global.discount.rule'].browse(
             [x[0] for x in self._cr.fetchall()])
-        # print 'comm, exclu, final', common_rules, excluded_rules, common_rules - excluded_rules, '   ---'
         return common_rules - excluded_rules
 
     @api.multi
@@ -156,14 +214,16 @@ class SaleOrder(models.Model):
             ('order_id', '=', self.id),
             '|',
             ('threshold', '!=', False),
-            ('discount_rule_id', '!=', False)])
-        disc_lines.write({'discount_rule_id': False, 'threshold': False})
+            ('global_discount_id', '!=', False)])
+        vals = {'global_discount_id': False,
+                'threshold': False, 'discount': False}
+        disc_lines.write(vals)
 
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    discount_rule_id = fields.Many2one(
+    global_discount_id = fields.Many2one(
         comodel_name='global.discount.rule', string="Discount Rule",
         copy=False,
         help="")

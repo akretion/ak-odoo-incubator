@@ -1,114 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data>
+  <data>
 
 
-<record id="price_discount_rule_form_view" model="ir.ui.view">
-    <field name="model">global.discount.rule</field>
-    <field name="arch" type="xml">
-        <form>
-            <div class="oe_title" style="width: 80%;">
-                <h2>
-                    <span >Global Discount Rule: </span>
-                    <field name="name" default_focus="1" class="oe_inline oe_right"/>
-                </h2>
-            </div>
-            <group name="main" col="6">
+    <record id="price_discount_rule_form_view" model="ir.ui.view">
+        <field name="model">global.discount.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <div class="oe_title" style="width: 80%;">
+                    <h2>
+                        <span >Global Discount Rule: </span>
+                        <field name="name" default_focus="1" class="oe_inline oe_right"/>
+                    </h2>
+                </div>
+                <group name="main" col="6">
+                    <field name="based"/>
+                    <field name="start_date"/>
+                    <field name="active"/>
+                    <!-- <field name="short_name"/> -->
+                    <field name="product_id"/>
+                    <field name="end_date"/>
+                    <field name="display_partner"/>
+                    <field name="active" invisible="True"/>
+                </group>
+                <group col="4">
+                    <group name="discount" col="2">
+                        <separator string="Discounts" colspan="2"/>
+                        <field name="discount_rule_ids" nolabel="1"
+                               attrs="{'readonly': ['|',('name', '=', False)]}">
+                            <tree name="discount_rule" editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="qty"/>
+                                <field name="discount"/>
+                                <field name="global_discount_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group name="partner" col="2" attrs="{
+                            'invisible': [('display_partner', '=', False)]}">
+                        <separator string="Excluded Customers" colspan="2"/>
+                        <field name="partner_rule_ids" nolabel="1"
+                               attrs="{'readonly': ['|',('name', '=', False)]}">
+                            <tree name="partner_rule" editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="partner_id"/>
+                                <field name="ref"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+                <group name="product" col="2">
+                    <separator string="Involved Products" colspan="2"/>
+                    <field name="product_rule_ids" nolabel="1"
+                           attrs="{'readonly': ['|',('name', '=', False)]}">
+                        <tree name="product_rule" editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="product_id"
+                                   attrs="{'invisible': [('categ_id', '!=', False)]}"/>
+                            <field name="product_tmpl_id"
+                                   attrs="{'invisible': ['|', ('categ_id', '!=', False), ('product_id', '!=', False)]}"/>
+                            <field name="categ_id"
+                                   attrs="{'invisible': [('product_id', '!=', False)]}"/>
+                            <field name="default_code"
+                                   attrs="{'invisible': [('product_id', '!=', False)]}"/>
+                        </tree>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="price_discount_rule_tree_view" model="ir.ui.view">
+        <field name="model">global.discount.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="id"/>
+                <field name="name"/>
                 <field name="based"/>
                 <field name="start_date"/>
-                <field name="short_name"/>
-                <field name="product_id"/>
                 <field name="end_date"/>
-                <field name="display_partner"/>
-                <field name="active" invisible="True"/>
-            </group>
-            <group col="4">
-                <group name="discount" col="2">
-                    <separator string="Discounts" colspan="2"/>
-                    <field name="discount_rule_ids" nolabel="1"
-                           attrs="{'readonly': ['|',('name', '=', False)]}">
-                        <tree name="discount_rule" editable="bottom">
-                            <field name="sequence" widget="handle"/>
-                            <field name="qty"/>
-                            <field name="discount"/>
-                            <field name="global_discount_id" invisible="1"/>
-                        </tree>
-                    </field>
-                </group>
-                <group name="partner" col="2" attrs="{
-                        'invisible': [('display_partner', '=', False)]}">
-                    <separator string="Excluded Customers" colspan="2"/>
-                    <field name="partner_rule_ids" nolabel="1"
-                           attrs="{'readonly': ['|',('name', '=', False)]}">
-                        <tree name="partner_rule" editable="bottom">
-                            <field name="sequence" widget="handle"/>
-                            <field name="partner_id"/>
-                            <field name="ref"/>
-                        </tree>
-                    </field>
-                </group>
-            </group>
-            <group name="product" col="2">
-                <separator string="Involved Products" colspan="2"/>
-                <field name="product_rule_ids" nolabel="1"
-                       attrs="{'readonly': ['|',('name', '=', False)]}">
-                    <tree name="product_rule" editable="bottom">
-                        <field name="sequence" widget="handle"/>
-                        <field name="product_id"
-                               attrs="{'invisible': [('categ_id', '!=', False)]}"/>
-                        <field name="product_tmpl_id"
-                               attrs="{'invisible': ['|', ('categ_id', '!=', False), ('product_id', '!=', False)]}"/>
-                        <field name="categ_id"
-                               attrs="{'invisible': [('product_id', '!=', False)]}"/>
-                        <field name="default_code"
-                               attrs="{'invisible': [('product_id', '!=', False)]}"/>
-                    </tree>
-                </field>
-            </group>
-        </form>
-    </field>
-</record>
-
-<record id="price_discount_rule_tree_view" model="ir.ui.view">
-    <field name="model">global.discount.rule</field>
-    <field name="arch" type="xml">
-        <tree>
-            <field name="sequence" widget="handle"/>
-            <field name="id"/>
-            <field name="name"/>
-            <field name="based"/>
-            <field name="start_date"/>
-            <field name="end_date"/>
-            <field name="product_id"/>
-            <field name="partner_rule_ids" string="Customers"/>
-            <field name="product_rule_ids" string="Products"/>
-            <field name="discount_rule_ids" string="Discounts"/>
-            <field name="active" readonly="True"/>
-        </tree>
-    </field>
-</record>
+                <field name="product_id"/>
+                <field name="partner_rule_ids" string="Customers"/>
+                <field name="product_rule_ids" string="Products"/>
+                <field name="discount_rule_ids" string="Discounts"/>
+                <field name="active" readonly="True"/>
+            </tree>
+        </field>
+    </record>
 
 
 
-<record id="action_client_price_discount_rule"
-        model="ir.actions.act_window">
-    <field name="type">ir.actions.act_window</field>
-    <field name="res_model">global.discount.rule</field>
-    <field name="name">Global Discount Rules</field>
-    <field name="context">{'active_test': False}</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to add .
-      </p>
-    </field>
-</record>
+    <record id="action_client_price_discount_rule"
+            model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">global.discount.rule</field>
+        <field name="name">Global Discount Rules</field>
+        <field name="context">{'active_test': False}</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to add .
+          </p>
+        </field>
+    </record>
 
-<menuitem id="menu_price_discount_rule"
-          action="action_client_price_discount_rule"
-          parent="product.menu_product_pricelist_main"
-          groups="product.group_sale_pricelist"
-          sequence="2"/>
+    <menuitem id="menu_price_discount_rule"
+              action="action_client_price_discount_rule"
+              parent="product.menu_product_pricelist_main"
+              groups="product.group_sale_pricelist"
+              sequence="2"/>
 
 
-    </data>
+  </data>
 </openerp>

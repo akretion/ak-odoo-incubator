@@ -7,15 +7,15 @@
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
         <field name="note" position="before">
-            <group>
             <button name="apply_global_discount"
                     string="Remise" type="object"/>
-                <!-- <field name="discount_rule_ids" nolabel="1"/> -->
-            </group>
+            <label for="explanation" attrs="{
+                'invisible': [('explanation', '=', False)]}"/>
+            <field name="explanation" nolabel="1"/>
         </field>
         <xpath expr="//field[@name='order_line']/tree/field[@name='discount']"
                position="before">
-            <field name="discount_rule_id"/>
+            <field name="global_discount_id"/>
             <field name="threshold"/>
         </xpath>
     </field>

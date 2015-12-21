@@ -110,6 +110,8 @@ class GlobalDiscountRule(models.Model):
                          # True becomes False and False becomes True
                          ('active', '=', not vals['active'])])
                     states_to_write.write({'active': vals['active']})
+            if 'start_date' in vals or 'end_date' in vals:
+                record.run_discount_rule_state()
         return res
 
     @api.multi
@@ -119,20 +121,35 @@ class GlobalDiscountRule(models.Model):
 
     @api.model
     def run_discount_rule_state(self):
-        """ Update builder activation according to dates fields
+        """ Update activation according to dates fields
             propagate to o2m
             TODO complete
         """
         disc_rules = self.env['global.discount.rule'].search(
-            [('start_date', '<=', fields.Date.today()),
+            ['|', '&',
+             ('start_date', '=', False),
+             ('end_date', '=', False),
+             '|', '&',
+             ('start_date', '<=', fields.Date.today()),
+             ('end_date', '=', False),
+             '|', '&',
+             ('start_date', '<=', False),
+             ('end_date', '>=', fields.Date.today()),
+             ('start_date', '<=', fields.Date.today()),
              ('end_date', '>=', fields.Date.today()),
              ('active', '=', False)])
-        disc_rules.write({'active': True})
+        if disc_rules:
+            disc_rules.write({'active': True})
         disc_rules = self.env['global.discount.rule'].search(
-            [('start_date', '>=', fields.Date.today()),
+            ['|', '|',
+             ('start_date', '>=', fields.Date.today()),
+             ('end_date', '<=', fields.Date.today()),
+             ('start_date', '>=', fields.Date.today()),
              ('end_date', '<=', fields.Date.today()),
              ('active', '=', True)])
-        return disc_rules.write({'active': False})
+        if disc_rules:
+            disc_rules.write({'active': False})
+        return True
 
 
 class DiscountRule(models.Model):
