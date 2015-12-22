@@ -21,7 +21,7 @@
                     <field name="product_id"/>
                     <field name="end_date"/>
                     <field name="display_partner"/>
-                    <field name="active" invisible="True"/>
+                    <!-- <field name="active" invisible="True"/> -->
                 </group>
                 <group col="4">
                     <group name="discount" col="2">

@@ -58,7 +58,7 @@ class SaleOrder(models.Model):
                 sale.update_sale_product_lines(
                     products[product_id], product_id)
             # import pdb; pdb.set_trace()
-            trace.append(str(products).replace('}', '\n}'))
+            trace.append(str(products))
             # sale.update_sale_lines(products, conds, trace)
             # sale.update_sale_lines(products, conditions, trace)
             if trace:

@@ -9,6 +9,8 @@
         <field name="note" position="before">
             <button name="apply_global_discount"
                     string="Remise" type="object"/>
+            <button name="remove_old_promotion"
+                    string="Remove" type="object"/>
             <label for="explanation" attrs="{
                 'invisible': [('explanation', '=', False)]}"/>
             <field name="explanation" nolabel="1"/>

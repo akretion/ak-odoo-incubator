@@ -39,7 +39,7 @@ class GlobalDiscountRule(models.Model):
     partner_rule_ids = fields.One2many(
         comodel_name='partner.price.domain', inverse_name='global_discount_id')
     sequence = fields.Integer()
-    active = fields.Boolean(default=True)
+    active = fields.Boolean(default=True, readonly=True)
 
     @api.one
     @api.constrains('end_date', 'start_date')
@@ -100,18 +100,9 @@ class GlobalDiscountRule(models.Model):
             according to model
         '''
         res = super(GlobalDiscountRule, self).write(vals)
-        models = ['discount.rule', 'product.price.domain',
-                  'partner.price.domain']
         for record in self:
-            if 'active' in vals:
-                for model in models:
-                    states_to_write = self.env[model].search(
-                        [('global_discount_id', '=', record.id),
-                         # True becomes False and False becomes True
-                         ('active', '=', not vals['active'])])
-                    states_to_write.write({'active': vals['active']})
             if 'start_date' in vals or 'end_date' in vals:
-                record.run_discount_rule_state()
+                self.run_discount_rule_state()
         return res
 
     @api.multi
@@ -122,33 +113,56 @@ class GlobalDiscountRule(models.Model):
     @api.model
     def run_discount_rule_state(self):
         """ Update activation according to dates fields
-            propagate to o2m
-            TODO complete
         """
-        disc_rules = self.env['global.discount.rule'].search(
-            ['|', '&',
+        global_disc = self.env['global.discount.rule'].search(
+            ['|', '|', '|',
+             '&', '&',
              ('start_date', '=', False),
              ('end_date', '=', False),
-             '|', '&',
+             ('active', '=', False),
+             '&', '&',
              ('start_date', '<=', fields.Date.today()),
              ('end_date', '=', False),
-             '|', '&',
-             ('start_date', '<=', False),
+             ('active', '=', False),
+             '&', '&',
+             ('start_date', '=', False),
              ('end_date', '>=', fields.Date.today()),
+             ('active', '=', False),
+             '&', '&',
              ('start_date', '<=', fields.Date.today()),
              ('end_date', '>=', fields.Date.today()),
-             ('active', '=', False)])
-        if disc_rules:
-            disc_rules.write({'active': True})
-        disc_rules = self.env['global.discount.rule'].search(
+             ('active', '=', False),
+             ])
+        self._propagate_activation(global_disc, True)
+        global_disc = self.env['global.discount.rule'].search(
             ['|', '|',
+             '&',
+             ('start_date', '>=', fields.Date.today()),
+             ('active', '=', True),
+             '&',
+             ('end_date', '<=', fields.Date.today()),
+             ('active', '=', True),
+             '&', '&',
              ('start_date', '>=', fields.Date.today()),
              ('end_date', '<=', fields.Date.today()),
-             ('start_date', '>=', fields.Date.today()),
-             ('end_date', '<=', fields.Date.today()),
-             ('active', '=', True)])
-        if disc_rules:
-            disc_rules.write({'active': False})
+             ('active', '=', True)
+             ])
+        return self._propagate_activation(global_disc, False)
+
+    @api.model
+    def _propagate_activation(self, glob_discs, active):
+        '''Active or Unactive models associated via o2m
+           to global.discount.rule'''
+        if glob_discs:
+            print '     act', active
+            glob_discs.write({'active': active})
+            o2m_fields = [
+                'discount_rule_ids', 'product_rule_ids', 'partner_rule_ids']
+            for field in o2m_fields:
+                model = glob_discs[field]._model._name
+                records = self.env[model].search(
+                    [('global_discount_id', 'in', [x.id for x in glob_discs])])
+                records.write({'active': active})
         return True
 
 
