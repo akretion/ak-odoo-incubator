@@ -9,22 +9,22 @@
 
         <record id="stock_inventory_export_product_name" model="ir.exports.line">
             <field name="name">line_ids/product_id/id</field>
-            <field name="export_id" ref="stock_inventory_export_valuation"/>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
         </record>
 
         <record id="stock_inventory_export_product_uom" model="ir.exports.line">
             <field name="name">line_ids/product_uom_id/id</field>
-            <field name="export_id" ref="stock_inventory_export_valuation"/>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
         </record>
 
         <record id="stock_inventory_export_location_line" model="ir.exports.line">
             <field name="name">line_ids/location_id/id</field>
-            <field name="export_id" ref="stock_inventory_export_valuation"/>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
         </record>
 
         <record id="stock_inventory_export_product_qty" model="ir.exports.line">
             <field name="name">line_ids/product_qty</field>
-            <field name="export_id" ref="stock_inventory_export_valuation"/>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
         </record>
 
     </data>
