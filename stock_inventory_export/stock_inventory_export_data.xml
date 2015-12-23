@@ -7,18 +7,38 @@
             <field name="resource">stock.inventory</field>
         </record>
 
-        <record id="stock_inventory_export_product_name" model="ir.exports.line">
+        <record id="stock_inventory_export_product_id" model="ir.exports.line">
             <field name="name">line_ids/product_id/id</field>
             <field name="export_id" ref="stock_inventory_export_profile"/>
         </record>
 
-        <record id="stock_inventory_export_product_uom" model="ir.exports.line">
-            <field name="name">line_ids/product_uom_id/id</field>
+        <record id="stock_inventory_export_product_name" model="ir.exports.line">
+            <field name="name">line_ids/product_name</field>
             <field name="export_id" ref="stock_inventory_export_profile"/>
         </record>
 
-        <record id="stock_inventory_export_location_line" model="ir.exports.line">
+        <record id="stock_inventory_export_location_id" model="ir.exports.line">
             <field name="name">line_ids/location_id/id</field>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
+        </record>
+
+        <record id="stock_inventory_export_location_name" model="ir.exports.line">
+            <field name="name">line_ids/location_name</field>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
+        </record>
+
+        <record id="stock_inventory_export_prod_lot_id" model="ir.exports.line">
+            <field name="name">line_ids/prod_lot_id</field>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
+        </record>
+
+        <record id="stock_inventory_export_prodlot_name" model="ir.exports.line">
+            <field name="name">line_ids/prodlot_name</field>
+            <field name="export_id" ref="stock_inventory_export_profile"/>
+        </record>
+
+        <record id="stock_inventory_export_product_uom_id" model="ir.exports.line">
+            <field name="name">line_ids/product_uom_id/id</field>
             <field name="export_id" ref="stock_inventory_export_profile"/>
         </record>
 
