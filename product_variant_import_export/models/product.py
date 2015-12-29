@@ -50,7 +50,8 @@ class ProductProduct(models.Model):
     def _export_rows(self, fields):
         data = super(ProductProduct, self)._export_rows(fields)
         if (['variant_configuration'] in fields
-                and self._context.get('from_template_id')):
+                and self._context.get('from_template_id')
+                and len(self) > 1):
             default_fields = self._get_default_fields(fields)
             if default_fields:
                 default = self._get_default_row(fields, default_fields)
