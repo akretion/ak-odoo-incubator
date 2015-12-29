@@ -32,7 +32,7 @@
     ],
     'website': 'http://www.akretion.com/',
     'data': [
-        'product_view.xml',
+        'views/product_view.xml',
     ],
     'qweb': [
     ],
