@@ -17,7 +17,7 @@
         "bin": [],
     },
     "depends": [
-        "product",
+        "product_supplierinfo_variant",
     ],
     "data": [
         'data/misc_data.xml',
