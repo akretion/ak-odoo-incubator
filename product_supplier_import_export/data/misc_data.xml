@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="ir_exp_product_supplier" model="ir.exports">
+            <field name="name">Champs Fournisseur</field>
+            <field name="resource">product.template</field>
+        </record>
+
+    </data>
+</openerp>
