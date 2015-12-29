@@ -5,7 +5,7 @@
     "name": "Web Colored Export",
     "summary": "Add background color white/gray when exporting data to excel",
     "version": "8.0.1.0.0",
-    "category": "Product",
+    "category": "Web",
     "website": "http://akretion.com",
     "author": "Akretion",
     "license": "AGPL-3",
