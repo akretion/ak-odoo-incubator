@@ -18,6 +18,7 @@
     },
     "depends": [
         "product_supplierinfo_variant",
+        "product_variant_import_export",
     ],
     "data": [
         'data/misc_data.xml',

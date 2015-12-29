@@ -106,9 +106,11 @@ class DenormalizedProductSupplier(models.AbstractModel):
         return super(DenormalizedProductSupplier, cls)._add_magic_fields()
 
     def _compute_supplier(self):
+        sup_export = config.get('supplier_export_nbr', 3)
+        qty_export = config.get('supplier_qty_export_nbr', 3)
         for record in self:
             for idx, supplier in enumerate(record.seller_ids):
-                if idx >= config.get('supplier_export_nbr', 3):
+                if idx >= sup_export:
                     break
                 s_idx = idx + 1
                 record['supplier_%s_name' % s_idx] = supplier.name
@@ -117,7 +119,7 @@ class DenormalizedProductSupplier(models.AbstractModel):
                 record['supplier_%s_product_code' % s_idx] =\
                     supplier.product_code
                 for idx2, pricelist in enumerate(supplier.pricelist_ids):
-                    if idx >= config.get('supplier_qty_export_nbr', 3):
+                    if idx >= qty_export:
                         break
                     p_idx = idx2 + 1
                     record['supplier_%s_qty_%s' % (s_idx, p_idx)] =\
