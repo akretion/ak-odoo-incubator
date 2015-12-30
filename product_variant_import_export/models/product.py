@@ -77,7 +77,6 @@ class ProductTemplate(models.Model):
             self, tmpl_id, variant_configuration):
         product_obj = self.env['product.product']
         domain = [('product_tmpl_id', '=', tmpl_id)]
-        value_ids = []
         value_obj = self.env['product.attribute.value']
         for option in variant_configuration.split('\n'):
             attribute_name, value_name = option.split(':')
@@ -96,7 +95,7 @@ class ProductTemplate(models.Model):
         elif record.get('id'):
             xml_id = record['id']
             if not '.' in xml_id:
-               xml_id = u'.' + xml_id
+                xml_id = u'.' + xml_id
             __, __, tmpl_id = self.env['ir.model.data'].xmlid_lookup(xml_id)
         else:
             # If there is not template id then we can not look at the variant
@@ -110,7 +109,6 @@ class ProductTemplate(models.Model):
 
     @api.model
     def _process_default_template_value(self, record):
-        default = None
         for variant in list(record['product_variant_ids']):
             if variant['variant_configuration'] == 'default':
                 variant.pop('variant_configuration')
