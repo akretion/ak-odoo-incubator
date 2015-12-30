@@ -21,10 +21,10 @@
         "product_variant_import_export",
     ],
     "data": [
-        'data/misc_data.xml',
-        'data/ir.exports.line.csv',
     ],
     "demo": [
+        'demo/misc_data.xml',
+        'demo/ir.exports.line.csv',
     ],
     "qweb": [
     ]
