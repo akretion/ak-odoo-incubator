@@ -105,11 +105,17 @@ class DenormalizedProductSupplier(models.AbstractModel):
                     'supplier_%s_price_%s' % (idx, qty_idx), field_price)
         return super(DenormalizedProductSupplier, cls)._add_magic_fields()
 
+    @api.multi
+    def _get_specific_supplier(self):
+        self.ensure_one()
+        return self.seller_ids
+
     def _compute_supplier(self):
         sup_export = config.get('supplier_export_nbr', 3)
         qty_export = config.get('supplier_qty_export_nbr', 3)
         for record in self:
-            for idx, supplier in enumerate(record.seller_ids):
+            suppliers = record._get_specific_supplier()
+            for idx, supplier in enumerate(suppliers):
                 if idx >= sup_export:
                     break
                 s_idx = idx + 1
@@ -141,7 +147,11 @@ class DenormalizedProductSupplier(models.AbstractModel):
 
     @api.model
     def _prepare_supplier_vals(self, vals):
+        vals['name'] = vals['name'].id
         return vals
+
+    def _get_sequence(self, idx):
+        return idx * 10
 
     @api.multi
     def _set_supplier(self):
@@ -151,7 +161,7 @@ class DenormalizedProductSupplier(models.AbstractModel):
                 if not record['supplier_%s_name' % idx]:
                     continue
                 suppliers |= record._update_create_supplier({
-                    'sequence': idx * 10,
+                    'sequence': self._get_sequence(idx),
                     'name': record['supplier_%s_name' % idx],
                     'product_name': record['supplier_%s_product_name' % idx],
                     'product_code': record['supplier_%s_product_code' % idx],
@@ -162,7 +172,7 @@ class DenormalizedProductSupplier(models.AbstractModel):
                     'qty_3': record['supplier_%s_qty_3' % idx],
                     'price_3': record['supplier_%s_price_3' % idx],
                     })
-            for supplier in record.seller_ids:
+            for supplier in record._get_specific_supplier():
                 if not supplier in suppliers:
                     supplier.unlink()
 
@@ -173,8 +183,25 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def _prepare_supplier_vals(self, vals):
+        vals = super(ProductTemplate, self)._prepare_supplier_vals(vals)
         vals['product_tmpl_id'] = self.id
         return vals
+
+    @api.multi
+    def _get_specific_supplier(self):
+        self.ensure_one()
+        return [supplier for supplier in self.seller_ids
+                if not supplier.product_id]
+    @api.multi
+    def _get_supplier(self, partner):
+        self.ensure_one()
+        for seller in self.seller_ids:
+            if partner == seller.name and not seller.product_id:
+                return seller
+        return None
+
+    def _get_sequence(self, idx):
+        return 1000 + idx * 10
 
 
 class ProductProduct(models.Model):
@@ -183,14 +210,23 @@ class ProductProduct(models.Model):
 
     @api.multi
     def _prepare_supplier_vals(self, vals):
+        vals = super(ProductProduct, self)._prepare_supplier_vals(vals)
         vals.update({
             'product_id': self.id,
             'product_tmpl_id': self.product_tmpl_id.id,
             })
         return vals
 
+    @api.multi
     def _get_supplier(self, partner):
+        self.ensure_one()
         for seller in self.seller_ids:
-            if partner == seller.name:
+            if partner == seller.name and seller.product_id:
                 return seller
         return None
+
+    @api.multi
+    def _get_specific_supplier(self):
+        self.ensure_one()
+        return [supplier for supplier in self.seller_ids
+                if supplier.product_id]
