@@ -15,9 +15,12 @@ class ProductProduct(models.Model):
     @api.multi
     def _compute_variant_configuration(self):
         for record in self:
-            record.variant_configuration = "\n".join([
-                ":".join([value.attribute_id.name, value.name])
-                for value in record.attribute_value_ids])
+            if record.attribute_value_ids:
+                record.variant_configuration = "\n".join([
+                    ":".join([value.attribute_id.name, value.name])
+                    for value in record.attribute_value_ids])
+            else:
+                record.variant_configuration = 'default'
 
     @api.multi
     def _set_variant_configuration(self):
@@ -50,9 +53,15 @@ class ProductProduct(models.Model):
     def _export_rows(self, fields):
         data = super(ProductProduct, self)._export_rows(fields)
         if (['variant_configuration'] in fields
-                and self._context.get('from_template_id')
-                and len(self) > 1):
+                and self._context.get('from_template_id')):
             default_fields = self._get_default_fields(fields)
+            if len(self) == 1:
+                # TODO WARNING
+                # If there is only one variant we drop the variant value
+                # in order to use only the template value
+                # We should forbid mixing field that exist on both model
+                # And field that believe to only one model
+                data.pop()
             if default_fields:
                 default = self._get_default_row(fields, default_fields)
                 data.insert(0, default)
@@ -75,18 +84,22 @@ class ProductTemplate(models.Model):
     @api.model
     def _get_variant_id_from_configuration(
             self, tmpl_id, variant_configuration):
-        product_obj = self.env['product.product']
-        domain = [('product_tmpl_id', '=', tmpl_id)]
-        value_obj = self.env['product.attribute.value']
-        for option in variant_configuration.split('\n'):
-            attribute_name, value_name = option.split(':')
-            value = value_obj.search([
-                ('attribute_id', '=', attribute_name),
-                ('name', '=', value_name),
-                ])
-            domain.append(('attribute_value_ids', '=', value.id))
-        product = product_obj.search(domain)
-        return product.id
+        tmpl = self.browse(tmpl_id)
+        if len(tmpl.product_variant_ids) == 1:
+            return tmpl.product_variant_ids[0].id
+        else:
+            product_obj = self.env['product.product']
+            domain = [('product_tmpl_id', '=', tmpl_id)]
+            value_obj = self.env['product.attribute.value']
+            for option in variant_configuration.split('\n'):
+                attribute_name, value_name = option.split(':')
+                value = value_obj.search([
+                    ('attribute_id', '=', attribute_name),
+                    ('name', '=', value_name),
+                    ])
+                domain.append(('attribute_value_ids', '=', value.id))
+            product = product_obj.search(domain)
+            return product.id
 
     @api.model
     def _update_product_ids_from_configuration(self, record):
