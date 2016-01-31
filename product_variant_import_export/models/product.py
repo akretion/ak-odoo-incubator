@@ -139,5 +139,8 @@ class ProductTemplate(models.Model):
                     and not ['product_variant_ids', 'id'] in fields_
                     and not ['product_variant_ids', 'id'] in fields_):
                 self._process_default_template_value(record)
-                self._update_product_ids_from_configuration(record)
+                if record['product_variant_ids']:
+                    self._update_product_ids_from_configuration(record)
+                else:
+                    record.pop('product_variant_ids')
             yield record, rows
