@@ -37,18 +37,39 @@ class AccountTaxTemplate(models.Model):
 
     @api.multi
     def _generate_tax(self, tax_templates, tax_code_template_ref, company_id):
-        import pdb;pdb.set_trace()
-        tax_template_ref = (super(AccountTaxTemplate, self).
-                            _generate_tax(tax_templates,
-                                          tax_code_template_ref, company_id))
-        # TODO mettre la taxe_template sur chaque taxe pour chaque société
+        tax_template_ref = super(AccountTaxTemplate, self)._generate_tax(
+            tax_templates, tax_code_template_ref, company_id)
+        for key, value in tax_template_ref.iteritems():
+            tax = self.env['account.tax'].browse(value)
+            tax.write({'tax_tmpl_id': key})
         return tax_template_ref
 
     @api.model
     def create(self, vals):
-        import pdb;pdb.set_trace()
-        tax_account_template = super(AccountAccountTemplate, self).create(vals)
+        tax_account_template = super(AccountTaxTemplate, self).create(vals)
+        if 'install_mode' not in self._context:
+            chart_template = tax_account_template.chart_template_id
+            for company in self.env['res.company'].search([]):
+                tax_code_tmpl_obj = self.env['account.tax.code.template']
+                tax_code_template_ref = tax_code_tmpl_obj\
+                    .suspend_security()\
+                    .generate_tax_code(
+                        chart_template.tax_code_root_id, company.id)
+                self.suspend_security()._generate_tax(
+                    tax_account_template, tax_code_template_ref,
+                    company.id)
         return tax_account_template
+
+    @api.multi
+    def write(self, vals):
+        field_list = ['name', 'description', 'type', 'type_tax_use', 'amount']
+        tax_vals = {}
+        for field in field_list:
+            if field in vals:
+                tax_vals[field] = vals[field]
+        if self.tax_ids and tax_vals != {}:
+            self.tax_ids.suspend_security().write(tax_vals)
+        return super(AccountAccountTemplate, self).write(vals)
 
 
 class AccountAccount(models.Model):
@@ -71,30 +92,30 @@ class AccountAccountTemplate(models.Model):
             .generate_account(
                 chart_template_id, tax_template_ref, acc_template_ref,
                 code_digits, company_id)
-        import pdb;pdb.set_trace()
-        for key, value in acc_template_ref:
-            account = self.env['account.account'].browse(
-                acc_template_ref.values())
-            account.write({'tmpl_id': acc_template_ref.keys()})
+        for key, value in acc_template_ref.iteritems():
+            account = self.env['account.account'].browse(value)
+            account.write({'tmpl_id': key})
         return acc_template_ref
 
     @api.model
     def create(self, vals):
         account_template = super(AccountAccountTemplate, self).create(vals)
         if 'install_mode' not in self._context:
-            for account in account_template.parent_id.account_ids:
-                company_id = account.company_id.id
+            for company in self.env['res.company'].search([]):
+                acc_template_ref = {}
+                for account in account_template.parent_id.account_ids:
+                    acc_template_ref[account_template.id] = account.id
+                    code_digits = len(account.code)
                 tax_template_ref = {}
                 for tax_template in account_template.tax_ids:
                     for tax in tax_template.tax_ids:
                         tax_template_ref[tax_template.id] = tax.id
-                acc_template_ref = {account_template.id: account.id}
-                code_digits = len(account.code)
                 chart_template_id = account_template.chart_template_id.id
                 self.suspend_security().with_context(
-                    force_id_for_search=account_template.id).generate_account(
-                        chart_template_id, tax_template_ref, acc_template_ref,
-                        code_digits, company_id)
+                    force_id_for_search=account_template.id)\
+                    .generate_account(
+                        chart_template_id, tax_template_ref,
+                        acc_template_ref, code_digits, company.id)
         return account_template
 
     @api.multi
