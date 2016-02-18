@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="base_edi_partner_view_form" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="edi_transfer_method"/>
+                <field name="edi_repository_id"
+                       attrs="{'invisible': [('edi_transfer_method', '!=', 'repository')]}"/>
+                <field name="edi_mail_template_id"
+                       attrs="{'invisible': [('edi_transfer_method', '!=', 'mail')]}"/>
+                <field name="edi_empty_file"
+                       attrs="{'invisible': [('edi_transfer_method', 'not in', ('mail', 'repository'))]}"/>
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>
