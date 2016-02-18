@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="purchase_edi_profile_view_form" model="ir.ui.view">
+        <field name="name">purchase.edi.profile.form.view</field>
+        <field name="model">purchase.edi.profile</field>
+        <field name="arch" type="xml">
+            <form string="Edi Profile" version="7.0">
+                <group name="base" col="2">
+                    <field name="export_id" string="Export"/>
+                    <field name="file_format"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="purchase_line_export_action" model="ir.actions.act_window">
+        <field name="name">Purchase Line Export</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="purchase_line_export_menu" name="Purchase Line Export"
+              parent="base_export_customization.ir_exports_configuration_menu"
+              action="purchase_line_export_action" sequence="5"/>
+
+
+</data>
+</openerp>
