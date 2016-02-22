@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+<record id="view_picking_out_form" model="ir.ui.view">
+    <field name="model">stock.picking.out</field>
+    <field name="inherit_id" ref="stock.view_picking_out_form"/>
+    <field name="arch" type="xml">
+        <button name="button_cancel" position="after">
+            <button name="%(action_stock_picking_refund_backorder)d"
+                    string="Cancel and Refund"
+                    type="action"
+                    states="assigned,confirmed,draft"
+                    groups="base.group_user"
+                    attrs="{'invisible': [('backorder_id', '=', False)]}"/>
+        </button>
+    </field>
+</record>
+
+    </data>
+</openerp>
