@@ -11,9 +11,28 @@ from openerp.tools.translate import _
 class StockPickingRefundBackorder(orm.TransientModel):
     _name = "stock.picking.refund.backorder"
 
+    def _generate_refund(self, cr, uid, picking_id, invoice_id, context=None):
+        #Refund the cancelled picking
+        refund_obj = self.pool['account.invoice.refund']
+        ctx = context.copy()
+        ctx.update({
+            'active_ids': [invoice_id],
+            'cancel_backorder_id': picking_id,
+            })
+        refund_vals = refund_obj.default_get(
+            cr, uid, ['date', 'journal_id', 'filter_refund', 'description'],
+            context=ctx)
+        refund_id = refund_obj.create(cr, uid, refund_vals, context=ctx)
+        res = refund_obj.invoice_refund(cr, uid, [refund_id], context=ctx)
+        for arg in res['domain']:
+            if arg[0] == 'id':
+                return res, arg[2][0]
+	raise orm.except_orm(
+	    _('Dev ERROR'),
+	    _('invoice method must return the id'))
+
     def process_cancellation(self, cr, uid, ids, context=None):
         wf_service = netsvc.LocalService("workflow")
-        refund_obj = self.pool['account.invoice.refund']
         picking = self.pool['stock.picking.out'].browse(
             cr, uid, context['active_id'], context=context)
         wf_service.trg_validate(
@@ -34,27 +53,14 @@ class StockPickingRefundBackorder(orm.TransientModel):
 
         wf_service.trg_validate(
             uid, 'account.invoice', invoice.id, 'invoice_open', cr)
-
-        #Refund the cancelled picking
-        ctx = context.copy()
-        ctx.update({
-            'active_ids': [invoice.id],
-            'cancel_backorder_id': picking.id,
-            })
-        refund_vals = refund_obj.default_get(
-            cr, uid, ['date', 'journal_id', 'filter_refund', 'description'],
-            context=ctx)
-        refund_id = refund_obj.create(cr, uid, refund_vals, context=ctx)
-        res = refund_obj.invoice_refund(cr, uid, [refund_id], context=ctx)
-        for arg in res['domain']:
-            if arg[0] == 'id':
-                inv_ids = arg[2]
+        action, refund_id = self._generate_refund(
+            cr, uid, picking.id, invoice.id, context=context)
         refund = self.pool['account.invoice'].browse(
-            cr, uid, inv_ids[0], context=context)
+            cr, uid, refund_id, context=context)
         wf_service.trg_validate(
             uid, 'account.invoice', refund.id, 'invoice_open', cr)
-        res.update({
+        action.update({
             'domain': [('id', 'in', [refund.id, invoice.id])],
             'name': _('Customer Invoice and Refund'),
             })
-        return res
+        return action
