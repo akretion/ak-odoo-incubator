@@ -35,6 +35,7 @@
     'data': ['account_view.xml',
              'security/account_security.xml',
              'security/ir.rule.csv',
+             'security/ir.model.access.csv',
             ],
     'installable': True,
 }

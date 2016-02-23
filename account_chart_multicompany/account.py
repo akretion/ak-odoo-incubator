@@ -51,7 +51,8 @@ class AccountTaxTemplate(models.Model):
         if 'install_mode' not in self._context:
             chart_template = tax_account_template.chart_template_id
             tax_code_tmpl_obj = self.env['account.tax.code.template']
-            for tax in chart_template.tax_template_ids[0].tax_ids:
+            for tax in chart_template.tax_template_ids[0].suspend_security()\
+                    .tax_ids:
                 tax_code_template_ref = tax_code_tmpl_obj\
                     .suspend_security()\
                     .generate_tax_code(
@@ -68,8 +69,8 @@ class AccountTaxTemplate(models.Model):
         for field in field_list:
             if field in vals:
                 tax_vals[field] = vals[field]
-        if tax_vals and self.tax_ids:
-            self.tax_ids.suspend_security().write(tax_vals)
+        if tax_vals and self.suspend_security().tax_ids:
+            self.suspend_security().tax_ids.write(tax_vals)
         return super(AccountTaxTemplate, self).write(vals)
 
 
@@ -104,8 +105,7 @@ class AccountAccountTemplate(models.Model):
         if 'install_mode' not in self._context:
             acc_template_ref = {}
             parent_id = account_template.parent_id
-            for account in parent_id.account_ids:
-                acc_template_ref[account_template.id] = account.id
+            for account in parent_id.suspend_security().account_ids:
                 acc_template_ref[parent_id.id] = account.id
                 code_digits = len(account.code)
                 tax_template_ref = {}
@@ -129,8 +129,8 @@ class AccountAccountTemplate(models.Model):
         for field in field_list:
             if field in vals:
                 account_vals[field] = vals[field]
-        if account_vals and self.account_ids:
-            self.account_ids.suspend_security().write(account_vals)
+        if account_vals and self.suspend_security().account_ids:
+            self.suspend_security().account_ids.write(account_vals)
         return super(AccountAccountTemplate, self).write(vals)
 
     def search(self, cr, uid, domain,
