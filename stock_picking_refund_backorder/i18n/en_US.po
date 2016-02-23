@@ -1,0 +1,647 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* stock_picking_refund_backorder
+#	* stock
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-23 13:56+0000\n"
+"PO-Revision-Date: 2016-02-23 13:56+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock
+#: code:addons/stock/stock.py:2616
+#, python-format
+msgid "%s %s %s has been <b>moved to</b> scrap."
+msgstr "%s %s %s has been <b>moved to</b> scrap."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_return_picking.py:179
+#, python-format
+msgid "%s-%s-return"
+msgstr "%s-%s-return"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_change_product_qty.py:92
+#, python-format
+msgid "Active ID is not set in Context"
+msgstr "Active ID is not set in Context"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_change_standard_price.py:107
+#, python-format
+msgid "Active ID is not set in Context."
+msgstr "Active ID is not set in Context."
+
+#. module: stock
+#: code:addons/stock/stock.py:1370
+#, python-format
+msgid "Back order <em>%s</em> has been <b>created</b>."
+msgstr "Back order <em>%s</em> has been <b>created</b>."
+
+#. module: stock
+#: code:addons/stock/stock.py:1892
+#, python-format
+msgid "By changing this quantity here, you accept the new quantity as complete: OpenERP will not automatically generate a back order."
+msgstr "By changing this quantity here, you accept the new quantity as complete: OpenERP will not automatically generate a back order."
+
+#. module: stock
+#: code:addons/stock/stock.py:2705
+#, python-format
+msgid "Cannot consume a move with negative or zero quantity."
+msgstr "Cannot consume a move with negative or zero quantity."
+
+#. module: stock
+#: code:addons/stock/stock.py:2315
+#, python-format
+msgid "Cannot create Journal Entry, Input Account of this product and Valuation account on category of this product are same."
+msgstr "Cannot create Journal Entry, Input Account of this product and Valuation account on category of this product are same."
+
+#. module: stock
+#: code:addons/stock/stock.py:2312
+#, python-format
+msgid "Cannot create Journal Entry, Output Account of this product and Valuation account on category of this product are same."
+msgstr "Cannot create Journal Entry, Output Account of this product and Valuation account on category of this product are same."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_location_product.py:49
+#, python-format
+msgid "Current Inventory"
+msgstr "Current Inventory"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:64
+#, python-format
+msgid "Customer Invoice and Refund"
+msgstr "Customer Invoice and Refund"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:114
+#, python-format
+msgid "Deliver Products"
+msgstr "Deliver Products"
+
+#. module: stock
+#: code:addons/stock/product.py:464
+#, python-format
+msgid "Delivered Qty"
+msgstr "Delivered Qty"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:31
+#, python-format
+msgid "Dev ERROR"
+msgstr "Dev ERROR"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_traceability.py:54
+#, python-format
+msgid "Downstream Traceability"
+msgstr "Downstream Traceability"
+
+#. modules: stock_picking_refund_backorder, stock
+#: code:addons/stock/stock.py:1687
+#: code:addons/stock/stock.py:1689
+#: code:addons/stock_picking_refund_backorder/models/account.py:28
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:45
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:49
+#, python-format
+msgid "Error"
+msgstr "Error"
+
+#. module: stock
+#: code:addons/stock/product.py:100
+#: code:addons/stock/product.py:112
+#: code:addons/stock/product.py:115
+#: code:addons/stock/product.py:122
+#: code:addons/stock/product.py:143
+#: code:addons/stock/product.py:169
+#: code:addons/stock/report/report_stock.py:78
+#: code:addons/stock/report/report_stock.py:134
+#: code:addons/stock/stock.py:543
+#: code:addons/stock/stock.py:812
+#: code:addons/stock/stock.py:1227
+#: code:addons/stock/stock.py:1238
+#: code:addons/stock/stock.py:2312
+#: code:addons/stock/stock.py:2315
+#: code:addons/stock/stock.py:2318
+#: code:addons/stock/stock.py:2321
+#: code:addons/stock/stock.py:2324
+#: code:addons/stock/stock.py:2327
+#: code:addons/stock/stock.py:2596
+#: code:addons/stock/stock.py:2705
+#: code:addons/stock/wizard/stock_fill_inventory.py:66
+#: code:addons/stock/wizard/stock_invoice_onshipping.py:113
+#: code:addons/stock/wizard/stock_splitinto.py:53
+#, python-format
+msgid "Error!"
+msgstr "Error!"
+
+#. module: stock
+#: code:addons/stock/stock.py:1157
+#, python-format
+msgid "Error, no partner!"
+msgstr "Error, no partner!"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:46
+#, python-format
+msgid "Failed to generated the invoice"
+msgstr "Failed to generated the invoice"
+
+#. module: stock
+#: code:addons/stock/stock.py:2596
+#, python-format
+msgid "Forbidden operation: it is not allowed to scrap products from a virtual location."
+msgstr "Forbidden operation: it is not allowed to scrap products from a virtual location."
+
+#. module: stock
+#: code:addons/stock/product.py:462
+#, python-format
+msgid "Future Deliveries"
+msgstr "Future Deliveries"
+
+#. module: stock
+#: code:addons/stock/product.py:468
+#, python-format
+msgid "Future P&L"
+msgstr "Future P&L"
+
+#. module: stock
+#: code:addons/stock/product.py:480
+#, python-format
+msgid "Future Productions"
+msgstr "Future Productions"
+
+#. module: stock
+#: code:addons/stock/product.py:474
+#, python-format
+msgid "Future Qty"
+msgstr "Future Qty"
+
+#. module: stock
+#: code:addons/stock/product.py:452
+#, python-format
+msgid "Future Receptions"
+msgstr "Future Receptions"
+
+#. module: stock
+#: code:addons/stock/product.py:458
+#, python-format
+msgid "Future Stock"
+msgstr "Future Stock"
+
+#. module: stock
+#: code:addons/stock/stock.py:2910
+#, python-format
+msgid "INV:"
+msgstr "INV:"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_change_product_qty.py:102
+#, python-format
+msgid "INV: %s"
+msgstr "INV: %s"
+
+#. module: stock
+#: code:addons/stock/stock.py:2958
+#, python-format
+msgid "In order to cancel this inventory, you must first unpost related journal entries."
+msgstr "In order to cancel this inventory, you must first unpost related journal entries."
+
+#. module: stock
+#: code:addons/stock/stock.py:1891
+#, python-format
+msgid "Information"
+msgstr "Information"
+
+#. module: stock
+#: code:addons/stock/stock.py:1860
+#, python-format
+msgid "Insufficient Stock for Serial Number !"
+msgstr "Insufficient Stock for Serial Number !"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_inventory_merge.py:64
+#, python-format
+msgid "Merging is only allowed on draft inventories."
+msgstr "Merging is only allowed on draft inventories."
+
+#. module: stock
+#: code:addons/stock/stock.py:2765
+#, python-format
+msgid "Missing partial picking data for move #%s."
+msgstr "Missing partial picking data for move #%s."
+
+#. module: stock
+#: code:addons/stock/product.py:112
+#, python-format
+msgid "No difference between standard price and new price!"
+msgstr "No difference between standard price and new price!"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_fill_inventory.py:140
+#, python-format
+msgid "No product in this location. Please select a location in the product form."
+msgstr "No product in this location. Please select a location in the product form."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_return_picking.py:112
+#, python-format
+msgid "No products to return (only lines in Done state and not fully returned yet can be returned)!"
+msgstr "No products to return (only lines in Done state and not fully returned yet can be returned)!"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_invoice_onshipping.py:99
+#, python-format
+msgid "None of these picking lists require invoicing."
+msgstr "None of these picking lists require invoicing."
+
+#. module: stock
+#: code:addons/stock/stock.py:790
+#, python-format
+msgid "Not enough stock, unable to reserve the products."
+msgstr "Not enough stock, unable to reserve the products."
+
+#. module: stock
+#: code:addons/stock/stock.py:1812
+#, python-format
+msgid "Operation Forbidden!"
+msgstr "Operation Forbidden!"
+
+#. module: stock
+#: code:addons/stock/product.py:470
+#, python-format
+msgid "P&L Qty"
+msgstr "P&L Qty"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:240
+#, python-format
+msgid "Partial Delivery"
+msgstr "Partial Delivery"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_invoice_onshipping.py:113
+#, python-format
+msgid "Please create Invoices."
+msgstr "Please create Invoices."
+
+#. module: stock
+#: code:addons/stock/stock.py:2327
+#, python-format
+msgid "Please define inventory valuation account on the product category: \"%s\" (id: %d)"
+msgstr "Please define inventory valuation account on the product category: \"%s\" (id: %d)"
+
+#. module: stock
+#: code:addons/stock/stock.py:2324
+#, python-format
+msgid "Please define journal on the product category: \"%s\" (id: %d)"
+msgstr "Please define journal on the product category: \"%s\" (id: %d)"
+
+#. module: stock
+#: code:addons/stock/product.py:123
+#, python-format
+msgid "Please define journal on the product category: \"%s\" (id: %d)."
+msgstr "Please define journal on the product category: \"%s\" (id: %d)."
+
+#. module: stock
+#: code:addons/stock/stock.py:2318
+#, python-format
+msgid "Please define stock input account for this product or its category: \"%s\" (id: %d)"
+msgstr "Please define stock input account for this product or its category: \"%s\" (id: %d)"
+
+#. module: stock
+#: code:addons/stock/product.py:144
+#, python-format
+msgid "Please define stock input account for this product: \"%s\" (id: %d)."
+msgstr "Please define stock input account for this product: \"%s\" (id: %d)."
+
+#. module: stock
+#: code:addons/stock/stock.py:2321
+#, python-format
+msgid "Please define stock output account for this product or its category: \"%s\" (id: %d)"
+msgstr "Please define stock output account for this product or its category: \"%s\" (id: %d)"
+
+#. module: stock
+#: code:addons/stock/product.py:170
+#, python-format
+msgid "Please define stock output account for this product: \"%s\" (id: %d)."
+msgstr "Please define stock output account for this product: \"%s\" (id: %d)."
+
+#. module: stock
+#: code:addons/stock/stock.py:2588
+#, python-format
+msgid "Please provide a positive quantity to scrap."
+msgstr "Please provide a positive quantity to scrap."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:190
+#, python-format
+msgid "Please provide proper Quantity."
+msgstr "Please provide proper Quantity."
+
+#. module: stock
+#: code:addons/stock/stock.py:2639
+#: code:addons/stock/stock.py:2700
+#, python-format
+msgid "Please provide proper quantity."
+msgstr "Please provide proper quantity."
+
+#. module: stock
+#: code:addons/stock/stock.py:1158
+#, python-format
+msgid "Please put a partner on the picking list if you want to generate invoice."
+msgstr "Please put a partner on the picking list if you want to generate invoice."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_inventory_merge.py:44
+#, python-format
+msgid "Please select multiple physical inventories to merge in the list view."
+msgstr "Please select multiple physical inventories to merge in the list view."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_return_picking.py:217
+#, python-format
+msgid "Please specify at least one non-zero quantity."
+msgstr "Please specify at least one non-zero quantity."
+
+#. module: stock
+#: code:addons/stock/product.py:115
+#, python-format
+msgid "Please specify company in Location."
+msgstr "Please specify company in Location."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_move.py:214
+#, python-format
+msgid "Processing Error!"
+msgstr "Processing Error!"
+
+#. module: stock
+#: code:addons/stock/product.py:482
+#, python-format
+msgid "Produced Qty"
+msgstr "Produced Qty"
+
+#. module: stock
+#: code:addons/stock/stock.py:1572
+#, python-format
+msgid "Products to Process"
+msgstr "Products to Process"
+
+#. module: stock
+#: code:addons/stock/product.py:197
+#, python-format
+msgid "Products: "
+msgstr "Products: "
+
+#. module: stock
+#: code:addons/stock/stock.py:1813
+#, python-format
+msgid "Quantities, Units of Measure, Products and Locations cannot be modified on stock moves that have already been processed (except by the Administrator)."
+msgstr "Quantities, Units of Measure, Products and Locations cannot be modified on stock moves that have already been processed (except by the Administrator)."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_change_product_qty.py:101
+#, python-format
+msgid "Quantity cannot be negative."
+msgstr "Quantity cannot be negative."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:112
+#, python-format
+msgid "Receive Products"
+msgstr "Receive Products"
+
+#. module: stock
+#: code:addons/stock/product.py:454
+#, python-format
+msgid "Received Qty"
+msgstr "Received Qty"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_return_picking.py:231
+#, python-format
+msgid "Returned Picking"
+msgstr "Returned Picking"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/models/account.py:29
+#, python-format
+msgid "Same product must have the same price"
+msgstr "Same product must have the same price"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_move.py:214
+#, python-format
+msgid "Serial number quantity %d of %s is larger than available quantity (%d)!"
+msgstr "Serial number quantity %d of %s is larger than available quantity (%d)!"
+
+#. module: stock
+#: code:addons/stock/product.py:100
+#, python-format
+msgid "Specify valuation Account for Product Category: %s."
+msgstr "Specify valuation Account for Product Category: %s."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:79
+#, python-format
+msgid "The proposed cost is made based on %s"
+msgstr "The proposed cost is made based on %s"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:208
+#, python-format
+msgid "The rounding of the initial uom does not allow you to ship \"%s %s\", as it would let a quantity of \"%s %s\" to ship and only rounding of \"%s %s\" is accepted by the uom."
+msgstr "The rounding of the initial uom does not allow you to ship \"%s %s\", as it would let a quantity of \"%s %s\" to ship and only rounding of \"%s %s\" is accepted by the uom."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:197
+#, python-format
+msgid "The unit of measure rounding does not allow you to ship \"%s %s\", only rounding of \"%s %s\" is accepted by the Unit of Measure."
+msgstr "The unit of measure rounding does not allow you to ship \"%s %s\", only rounding of \"%s %s\" is accepted by the Unit of Measure."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_invoice_onshipping.py:97
+#, python-format
+msgid "This picking list does not require invoicing."
+msgstr "This picking list does not require invoicing."
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:50
+#, python-format
+msgid "Too many invoice found"
+msgstr "Too many invoice found"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_splitinto.py:53
+#, python-format
+msgid "Total quantity after split exceeds the quantity to split for this product: \"%s\" (id: %d)."
+msgstr "Total quantity after split exceeds the quantity to split for this product: \"%s\" (id: %d)."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_move.py:223
+#, python-format
+msgid "Unable to assign all lots to this move!"
+msgstr "Unable to assign all lots to this move!"
+
+#. module: stock
+#: code:addons/stock/product.py:476
+#, python-format
+msgid "Unplanned Qty"
+msgstr "Unplanned Qty"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_traceability.py:54
+#, python-format
+msgid "Upstream Traceability"
+msgstr "Upstream Traceability"
+
+#. module: stock
+#: code:addons/stock/stock.py:2563
+#: code:addons/stock/stock.py:2957
+#, python-format
+msgid "User Error!"
+msgstr "User Error!"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_move.py:72
+#: code:addons/stock/wizard/stock_return_picking.py:193
+#, python-format
+msgid "Warning !"
+msgstr "Warning !"
+
+#. module: stock
+#: code:addons/stock/stock.py:790
+#: code:addons/stock/stock.py:2588
+#: code:addons/stock/stock.py:2639
+#: code:addons/stock/stock.py:2700
+#: code:addons/stock/wizard/stock_change_product_qty.py:101
+#: code:addons/stock/wizard/stock_fill_inventory.py:140
+#: code:addons/stock/wizard/stock_inventory_merge.py:43
+#: code:addons/stock/wizard/stock_inventory_merge.py:63
+#: code:addons/stock/wizard/stock_invoice_onshipping.py:97
+#: code:addons/stock/wizard/stock_invoice_onshipping.py:99
+#: code:addons/stock/wizard/stock_partial_picking.py:190
+#: code:addons/stock/wizard/stock_partial_picking.py:197
+#: code:addons/stock/wizard/stock_partial_picking.py:208
+#: code:addons/stock/wizard/stock_return_picking.py:68
+#: code:addons/stock/wizard/stock_return_picking.py:105
+#: code:addons/stock/wizard/stock_return_picking.py:112
+#: code:addons/stock/wizard/stock_return_picking.py:217
+#, python-format
+msgid "Warning!"
+msgstr "Warning!"
+
+#. module: stock
+#: code:addons/stock/stock.py:1861
+#, python-format
+msgid "You are moving %.2f %s but only %.2f %s available for this serial number."
+msgstr "You are moving %.2f %s but only %.2f %s available for this serial number."
+
+#. module: stock
+#: code:addons/stock/stock.py:2563
+#, python-format
+msgid "You can only delete draft moves."
+msgstr "You can only delete draft moves."
+
+#. module: stock
+#: code:addons/stock/stock.py:1227
+#, python-format
+msgid "You cannot cancel the picking as some moves have been done. You should cancel the picking lines."
+msgstr "You cannot cancel the picking as some moves have been done. You should cancel the picking lines."
+
+#. module: stock
+#: code:addons/stock/report/report_stock.py:78
+#: code:addons/stock/report/report_stock.py:134
+#, python-format
+msgid "You cannot delete any record!"
+msgstr "You cannot delete any record!"
+
+#. module: stock
+#: code:addons/stock/stock.py:1687
+#, python-format
+msgid "You cannot move product %s from a location of type view %s."
+msgstr "You cannot move product %s from a location of type view %s."
+
+#. module: stock
+#: code:addons/stock/stock.py:1689
+#, python-format
+msgid "You cannot move product %s to a location of type view %s."
+msgstr "You cannot move product %s to a location of type view %s."
+
+#. module: stock
+#: code:addons/stock/wizard/stock_fill_inventory.py:66
+#, python-format
+msgid "You cannot perform this operation on more than one Stock Inventories."
+msgstr "You cannot perform this operation on more than one Stock Inventories."
+
+#. module: stock
+#: code:addons/stock/stock.py:812
+#, python-format
+msgid "You cannot process picking without stock moves."
+msgstr "You cannot process picking without stock moves."
+
+#. module: stock
+#: code:addons/stock/stock.py:543
+#, python-format
+msgid "You cannot remove a lot line."
+msgstr "You cannot remove a lot line."
+
+#. module: stock
+#: code:addons/stock/stock.py:1238
+#, python-format
+msgid "You cannot remove the picking which is in %s state!"
+msgstr "You cannot remove the picking which is in %s state!"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_move.py:72
+#: code:addons/stock/wizard/stock_return_picking.py:193
+#, python-format
+msgid "You have manually created product lines, please delete them to proceed"
+msgstr "You have manually created product lines, please delete them to proceed"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_return_picking.py:68
+#, python-format
+msgid "You may only return one picking at a time!"
+msgstr "You may only return one picking at a time!"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_return_picking.py:105
+#, python-format
+msgid "You may only return pickings that are Confirmed, Available or Done!"
+msgstr "You may only return pickings that are Confirmed, Available or Done!"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:109
+#, python-format
+msgid "_Deliver"
+msgstr "_Deliver"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:107
+#, python-format
+msgid "_Receive"
+msgstr "_Receive"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:32
+#, python-format
+msgid "invoice method must return the id"
+msgstr "invoice method must return the id"
+
+#. module: stock
+#: code:addons/stock/wizard/stock_partial_picking.py:80
+#, python-format
+msgid "standard prices set on the products"
+msgstr "standard prices set on the products"
+

@@ -1,0 +1,61 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* stock_picking_refund_backorder
+#	* stock
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-23 13:56+0000\n"
+"PO-Revision-Date: 2016-02-23 13:56+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:64
+#, python-format
+msgid "Customer Invoice and Refund"
+msgstr "Facture et Avoir Client"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:31
+#, python-format
+msgid "Dev ERROR"
+msgstr "Dev ERROR"
+
+#. modules: stock_picking_refund_backorder, stock
+#: code:addons/stock_picking_refund_backorder/models/account.py:28
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:45
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:49
+#, python-format
+msgid "Error"
+msgstr "Erreur"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:46
+#, python-format
+msgid "Failed to generated the invoice"
+msgstr "Impossible de générer la facture"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/models/account.py:29
+#, python-format
+msgid "Same product must have the same price"
+msgstr "Des produits identique n'ont pas le même prix"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:50
+#, python-format
+msgid "Too many invoice found"
+msgstr "Trop de facture trouvé"
+
+#. module: stock_picking_refund_backorder
+#: code:addons/stock_picking_refund_backorder/wizards/stock_picking_refund_backorder.py:32
+#, python-format
+msgid "Invoice method must return the id"
+msgstr "Invoice method must return the id"

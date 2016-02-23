@@ -29,7 +29,7 @@ class StockPickingRefundBackorder(orm.TransientModel):
                 return res, arg[2][0]
 	raise orm.except_orm(
 	    _('Dev ERROR'),
-	    _('invoice method must return the id'))
+	    _('Invoice method must return the id'))
 
     def process_cancellation(self, cr, uid, ids, context=None):
         wf_service = netsvc.LocalService("workflow")
