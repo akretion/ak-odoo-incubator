@@ -39,9 +39,10 @@ class AccountTaxTemplate(models.Model):
     def _generate_tax(self, tax_templates, tax_code_template_ref, company_id):
         tax_template_ref = super(AccountTaxTemplate, self)._generate_tax(
             tax_templates, tax_code_template_ref, company_id)
-        for key, value in tax_template_ref['tax_template_to_tax'].iteritems():
-            tax = self.env['account.tax'].browse(value)
-            tax.write({'tax_tmpl_id': key})
+        for tax_tmpl_id, tax_id in tax_template_ref['tax_template_to_tax']\
+                .iteritems():
+            tax = self.env['account.tax'].browse(tax_id)
+            tax.write({'tax_tmpl_id': tax_tmpl_id})
         return tax_template_ref
 
     @api.model
@@ -49,8 +50,8 @@ class AccountTaxTemplate(models.Model):
         tax_account_template = super(AccountTaxTemplate, self).create(vals)
         if 'install_mode' not in self._context:
             chart_template = tax_account_template.chart_template_id
+            tax_code_tmpl_obj = self.env['account.tax.code.template']
             for tax in chart_template.tax_template_ids[0].tax_ids:
-                tax_code_tmpl_obj = self.env['account.tax.code.template']
                 tax_code_template_ref = tax_code_tmpl_obj\
                     .suspend_security()\
                     .generate_tax_code(
@@ -67,7 +68,7 @@ class AccountTaxTemplate(models.Model):
         for field in field_list:
             if field in vals:
                 tax_vals[field] = vals[field]
-        if self.tax_ids and tax_vals != {}:
+        if tax_vals and self.tax_ids:
             self.tax_ids.suspend_security().write(tax_vals)
         return super(AccountTaxTemplate, self).write(vals)
 
@@ -75,14 +76,14 @@ class AccountTaxTemplate(models.Model):
 class AccountAccount(models.Model):
     _inherit = 'account.account'
 
-    tmpl_id = fields.Many2one('account.account.template',
-                              string='Account Template')
+    account_tmpl_id = fields.Many2one('account.account.template',
+                                      string='Account Template')
 
 
 class AccountAccountTemplate(models.Model):
     _inherit = 'account.account.template'
 
-    account_ids = fields.One2many('account.account', 'tmpl_id',
+    account_ids = fields.One2many('account.account', 'account_tmpl_id',
                                   string='Account List')
 
     @api.model
@@ -92,9 +93,9 @@ class AccountAccountTemplate(models.Model):
             .generate_account(
                 chart_template_id, tax_template_ref, acc_template_ref,
                 code_digits, company_id)
-        for key, value in acc_template_ref.iteritems():
-            account = self.env['account.account'].browse(value)
-            account.write({'tmpl_id': key})
+        for account_tmpl_id, account_id in acc_template_ref.iteritems():
+            account = self.env['account.account'].browse(account_id)
+            account.write({'account_tmpl_id': account_tmpl_id})
         return acc_template_ref
 
     @api.model
@@ -128,15 +129,15 @@ class AccountAccountTemplate(models.Model):
         for field in field_list:
             if field in vals:
                 account_vals[field] = vals[field]
-        if self.account_ids and account_vals != {}:
+        if account_vals and self.account_ids:
             self.account_ids.suspend_security().write(account_vals)
         return super(AccountAccountTemplate, self).write(vals)
 
-    def search(self, cr, user, args,
+    def search(self, cr, uid, domain,
                offset=0, limit=None, order=None, context=None, count=False):
         context = dict(context or {})
         if context.get('force_id_for_search'):
-            args = [('id', '=', context.get('force_id_for_search'))]
+            domain = [('id', '=', context.get('force_id_for_search'))]
         return super(AccountAccountTemplate, self).search(
-            cr, user, args, offset=offset, limit=limit, order=order,
+            cr, uid, domain, offset=offset, limit=limit, order=order,
             context=context, count=count)

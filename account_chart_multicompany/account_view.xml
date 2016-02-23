@@ -21,7 +21,7 @@
             <field name="inherit_id" ref="account.view_account_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='tax_ids']" position="before">
-                    <field name="tmpl_id"/>
+                    <field name="account_tmpl_id"/>
                 </xpath>
             </field>
         </record>
