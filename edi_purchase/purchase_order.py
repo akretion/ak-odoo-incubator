@@ -32,9 +32,9 @@ class PurchaseOrder(Model):
     _inherit = ['purchase.order']
 
     def generate_purchase_edi_file(self, cr, uid, edi_profile, line_ids,
-            purchase, edi_transfer, context=None):
+            purchase, partner, edi_transfer, context=None):
         purchase_line_obj = self.pool['purchase.order.line']
-        if not line_ids and not purchase.partner_id.edi_empty_file:
+        if not line_ids and not partner.edi_empty_file:
             return False
         fields, fields_name = purchase_line_obj.get_fields_from_export(
             cr, uid, edi_profile.export_id.id, context=context)
@@ -42,9 +42,32 @@ class PurchaseOrder(Model):
             cr, uid, line_ids, fields, fields_name,
             edi_profile.file_format, context=context)
         attachment_id = purchase_line_obj.create_edi_file(
-            cr, uid, datas, purchase.partner_id.edi_transfer_method, 
+            cr, uid, datas, partner.edi_transfer_method, 
             edi_transfer, edi_profile, purchase)
         return attachment_id
+
+    def send_edi_files(self, cr, uid, profile_lines_dict, purchase, partner,
+                       edi_transfer, context=None):
+        attachment_ids = []
+        for edi_profile, line_ids in profile_lines_dict.iteritems():
+            attachment_id = self.generate_purchase_edi_file(
+                cr, uid, edi_profile, line_ids, purchase, partner,
+                edi_transfer, context=context)
+            if attachment_id:
+                attachment_ids.append(attachment_id)
+
+        #TODO FIXME if we want to send empty files for this partner because
+        # no orders have been created, we can't give purchase to mail template...
+        # Maybe add optional template on partner for this special case?
+        if partner.edi_transfer_method == 'mail' and attachment_ids:
+            template_obj = self.pool['email.template']
+            values = template_obj.generate_email(
+                cr, uid, edi_transfer.id, purchase.id, context=context)
+            if values['attachment_ids']:
+                attachment_ids += values['attachment_ids']
+            values['attachment_ids'] = [(6, 0, attachment_ids)]
+            mail_id = self.pool['mail.mail'].create(
+                cr, uid, values, context=context)
 
     def wkf_approve_order(self, cr, uid, ids, context=None):
         if context is None:
@@ -73,22 +96,7 @@ class PurchaseOrder(Model):
                     raise orm.except_orm(
                         _('Warning!'),
                         _("Some products don't have edi profile configured : %s") % (product.default_code,))
-            attachment_ids = []
-            for edi_profile, line_ids in profile_lines_dict.iteritems():
-                attachment_id = self.generate_purchase_edi_file(
-                    cr, uid, edi_profile, line_ids, purchase, edi_transfer,
-                    context=context)
-                if attachment_id:
-                    attachment_ids.append(attachment_id)
-
-            if partner.edi_transfer_method == 'mail' and attachment_ids:
-                template_obj = self.pool['email.template']
-                values = template_obj.generate_email(
-                    cr, uid, edi_transfer.id, purchase.id, context=context)
-                if values['attachment_ids']:
-                    attachment_ids += values['attachment_ids']
-                values['attachment_ids'] = [(6, 0, attachment_ids)]
-                mail_id = self.pool['mail.mail'].create(
-                    cr, uid, values, context=context)
+            self.send_edi_files(cr, uid, profile_lines_dict, purchase,
+                purchase.partner_id, edi_transfer, context=context)
         return True
 
