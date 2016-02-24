@@ -12,7 +12,7 @@
                     type="action"
                     states="assigned,confirmed,draft"
                     groups="base.group_user"
-                    attrs="{'invisible': [('backorder_id', '=', False)]}"/>
+                    attrs="{'invisible': ['|', ('backorder_id', '=', False)]}"/>
         </button>
     </field>
 </record>
