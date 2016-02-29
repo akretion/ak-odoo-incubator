@@ -16,6 +16,17 @@
         </field>
     </record>
 
+    <record id="purchase_edi_profile_action" model="ir.actions.act_window">
+        <field name="name">Purchase Edi Profile</field>
+        <field name="res_model">purchase.edi.profile</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="purchase_edi_profile_menu" name="Purchase Edi Profile"
+              parent="base_export_customization.ir_exports_configuration_menu"
+              action="purchase_edi_profile_action" sequence="4"/>
+
     <record id="purchase_line_export_action" model="ir.actions.act_window">
         <field name="name">Purchase Line Export</field>
         <field name="res_model">purchase.order.line</field>
