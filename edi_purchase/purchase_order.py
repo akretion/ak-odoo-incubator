@@ -56,24 +56,22 @@ class PurchaseOrder(Model):
             if attachment_id:
                 attachment_ids.append(attachment_id)
 
-        #TODO FIXME if we want to send empty files for this partner because
-        # no orders have been created, we can't give purchase to mail template...
-        # Maybe add optional template on partner for this special case?
+        # TODO FIXME we are forced to send mail from template on partner
+        # Because in the case we want to send empty files, there are not
+        # po.Maybe pass po_id in context if we rly need it in mail
+        # template. Or find a better way ton send mail in both cases
         if partner.edi_transfer_method == 'mail' and attachment_ids:
             template_obj = self.pool['email.template']
             values = template_obj.generate_email(
-                cr, uid, edi_transfer.id, purchase.id, context=context)
+                cr, uid, edi_transfer.id, purchase.partner_id.id,
+                context=context)
             if values['attachment_ids']:
                 attachment_ids += values['attachment_ids']
             values['attachment_ids'] = [(6, 0, attachment_ids)]
             mail_id = self.pool['mail.mail'].create(
                 cr, uid, values, context=context)
 
-    def wkf_approve_order(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        res = super(PurchaseOrder, self).wkf_approve_order(
-            cr, uid, ids, context=context)
+    def generate_and_send_edi_files(self, cr, uid, ids, context=None):
         purchase_line_obj = self.pool['purchase.order.line']
         for purchase in self.browse(cr, uid, ids, context=context):
             partner = purchase.partner_id
@@ -98,5 +96,13 @@ class PurchaseOrder(Model):
                         _("Some products don't have edi profile configured : %s") % (product.default_code,))
             self.send_edi_files(cr, uid, profile_lines_dict, purchase,
                 purchase.partner_id, edi_transfer, context=context)
-        return True
+        return
+
+    def wkf_approve_order(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        res = super(PurchaseOrder, self).wkf_approve_order(
+            cr, uid, ids, context=context)
+        self.generate_and_send_edi_files(cr, uid, ids, context=context)
+        return res
 

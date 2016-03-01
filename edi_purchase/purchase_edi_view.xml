@@ -2,6 +2,10 @@
 <openerp>
 <data>
 
+    <menuitem id="edi_purchase_configuration_menu" name="Edi Configuration"
+              parent="purchase.menu_purchase_config_purchase"
+              sequence="40"/>
+
 
     <record id="purchase_edi_profile_view_form" model="ir.ui.view">
         <field name="name">purchase.edi.profile.form.view</field>
@@ -24,20 +28,8 @@
     </record>
 
     <menuitem id="purchase_edi_profile_menu" name="Purchase Edi Profile"
-              parent="base_export_customization.ir_exports_configuration_menu"
+              parent="edi_purchase.edi_purchase_configuration_menu"
               action="purchase_edi_profile_action" sequence="4"/>
-
-    <record id="purchase_line_export_action" model="ir.actions.act_window">
-        <field name="name">Purchase Line Export</field>
-        <field name="res_model">purchase.order.line</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree</field>
-    </record>
-
-    <menuitem id="purchase_line_export_menu" name="Purchase Line Export"
-              parent="base_export_customization.ir_exports_configuration_menu"
-              action="purchase_line_export_action" sequence="5"/>
-
 
 </data>
 </openerp>
