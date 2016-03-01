@@ -20,6 +20,17 @@
         </field>
     </record>
 
+    <record id="purchase_edi_profile_view_tree" model="ir.ui.view">
+        <field name="name">purchase.edi.profile.tree.view</field>
+        <field name="model">purchase.edi.profile</field>
+        <field name="arch" type="xml">
+            <tree string="Edi Profile" version="7.0">
+                <field name="export_id" string="Export"/>
+                <field name="file_format"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="purchase_edi_profile_action" model="ir.actions.act_window">
         <field name="name">Purchase Edi Profile</field>
         <field name="res_model">purchase.edi.profile</field>
