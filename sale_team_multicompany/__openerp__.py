@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# © <2016> <chafique.delli@akretion.com>
+# © 2016 Chafique DELLI @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     'name': 'Sale Team Multicompany',
@@ -20,6 +20,7 @@
         'sales_team',
     ],
     'data': [
+        'sale_team_view.xml',
         'security/ir.rule.csv',
     ],
     'demo': [
