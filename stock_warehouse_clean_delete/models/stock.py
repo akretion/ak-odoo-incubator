@@ -1,28 +1,67 @@
 # -*- coding: utf-8 -*-
-from openerp.osv import orm, fields
+# © 2016 Akretion (http://www.akretion.com)
+# Sébastien BEAU <sebastien.beau@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-class StockWarehouse(orm.Model):
-    _inherit = "stock.warehouse"
+from openerp import models
 
-    def unlink(self, cr, uid, ids, context=None):
-        stock_obj = self.pool['stock.location']
-        seq_obj = self.pool['ir.sequence']
-        type_obj = self.pool['stock.picking.type']
-        route_obj = self.pool['stock.location.route']
-        for warehouse in self.browse(cr, uid, ids, context=context):
-            loc = stock_obj.search(cr, uid, [('name', '=', warehouse.name)])
-            if loc:
-                children = stock_obj.search(cr, uid, [('location_id', '=', loc[0])])
-            else:
-                chldren = []
-            prefixes = ['IN', 'OUT', 'PACK', 'PICK', 'INT']
-            for prefix in prefixes:
-                seqs = seq_obj.search(cr, uid, [('prefix', 'ilike', "%s/%s/" % (warehouse.name, prefix))])
-            types = type_obj.search(cr, uid, [('warehouse_id', '=', warehouse.id)])
-            routes = route_obj.search(cr, uid, [('name', 'ilike', "%s:" % (warehouse.name,))])
-        res = super(StockWarehouse, self).unlink(cr, uid, ids, context)
-        stock_obj.unlink(cr, uid, loc + children)
-        type_obj.unlink(cr, uid, types)
-        seq_obj.unlink(cr, uid, seqs)
-        route_obj.unlink(cr, uid, routes)
+
+class AbstractUnlink(models.AbstractModel):
+    _name = "abstract.unlink"
+    _unlink_before = None
+    _unlink_after = None
+
+    def unlink(self):
+        for record in self:
+            for field_to_delete in self._unlink_before:
+                record[field_to_delete].unlink()
+        record_to_delete = set()
+        for record in self:
+            for field_to_delete in self._unlink_after:
+                record_to_delete.add(record[field_to_delete])
+        res = super(AbstractUnlink, self).unlink()
+        for record in record_to_delete:
+            record.unlink()
         return res
+
+
+class StockWarehouse(models.Model):
+    _inherit = ["stock.warehouse", "abstract.unlink"]
+    _name = "stock.warehouse"
+
+    _unlink_before = [
+        'pick_type_id',
+        'pack_type_id',
+        'out_type_id',
+        'in_type_id',
+        'int_type_id',
+    ]
+
+    _unlink_after = [
+        'view_location_id',
+        'lot_stock_id',
+        'wh_input_stock_loc_id',
+        'wh_qc_stock_loc_id',
+        'wh_output_stock_loc_id',
+        'wh_pack_stock_loc_id',
+        'crossdock_route_id',
+        'reception_route_id',
+        'delivery_route_id',
+        ]
+
+    def unlink(self):
+        rules = self.env['procurement.rule'].search([
+            ('warehouse_id', 'in', self.ids),
+            ])
+        rules.unlink()
+        return super(StockWarehouse, self).unlink()
+
+
+class StockPickingType(models.Model):
+    _inherit = ["stock.picking.type", "abstract.unlink"]
+    _name = "stock.picking.type"
+
+    _unlink_before = []
+    _unlink_after = [
+        'sequence_id',
+        ]

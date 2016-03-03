@@ -12,12 +12,10 @@ class DeleteWarehouse(TransactionCase):
     def test_warehouse_clean_delete(self):
         model_to_check = [
             'stock.location',
-            'ir.sequence',
             'stock.picking.type',
             'stock.location.route',
             'procurement.rule',
-            'stock.location.route',
-            'procurement.rule',
+            'ir.sequence',
             ]
 
         record_number = {}
