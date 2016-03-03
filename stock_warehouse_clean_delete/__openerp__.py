@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
+# © 2016 Akretion (http://www.akretion.com)
+# Sébastien BEAU <sebastien.beau@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
 {
     'name': "Clean Warehouse delete",
-
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
     'description': """
         Remote records related to a warehouse when you delete it (routes, sequences etc...)
     """,
