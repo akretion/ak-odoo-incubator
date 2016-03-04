@@ -14,11 +14,13 @@ class AbstractUnlink(models.AbstractModel):
     def unlink(self):
         for record in self:
             for field_to_delete in self._unlink_before:
-                record[field_to_delete].unlink()
+                if record[field_to_delete]:
+                    record[field_to_delete].unlink()
         record_to_delete = set()
         for record in self:
             for field_to_delete in self._unlink_after:
-                record_to_delete.add(record[field_to_delete])
+                if record[field_to_delete]:
+                    record_to_delete.add(record[field_to_delete])
         res = super(AbstractUnlink, self).unlink()
         for record in record_to_delete:
             record.unlink()
