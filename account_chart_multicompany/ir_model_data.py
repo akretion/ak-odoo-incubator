@@ -32,14 +32,6 @@ class IrModelData(models.Model):
             model in ('ir.rule') and
                 xml_id == 'account.account_comp_rule'):
             mode = 'init'
-        if (module == 'account_chart_multicompany' and
-            model in ('ir.model.access') and
-                xml_id == 'account.access_account_account_template'):
-            mode = 'init'
-        if (module == 'account_chart_multicompany' and
-            model in ('ir.model.access') and
-                xml_id == 'account.access_account_tax_template'):
-            mode = 'init'
         return super(IrModelData, self)._update(
             cr, uid, model, module, values, xml_id=xml_id, store=store,
             noupdate=noupdate, mode=mode, res_id=res_id, context=context)
