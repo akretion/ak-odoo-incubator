@@ -32,6 +32,8 @@ class StockWarehouse(models.Model):
     _inherit = ["stock.warehouse", "abstract.unlink"]
     _name = "stock.warehouse"
 
+    # if you want to add some field here you can modify this list
+    # with the __init__ method
     _unlink_before = [
         'pick_type_id',
         'pack_type_id',
