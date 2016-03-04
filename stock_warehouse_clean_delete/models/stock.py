@@ -23,7 +23,8 @@ class AbstractUnlink(models.AbstractModel):
                     record_to_delete.add(record[field_to_delete])
         res = super(AbstractUnlink, self).unlink()
         for record in record_to_delete:
-            record.unlink()
+            if record.exists():
+                record.unlink()
         return res
 
 
