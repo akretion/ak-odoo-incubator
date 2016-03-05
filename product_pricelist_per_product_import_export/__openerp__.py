@@ -11,19 +11,9 @@
     "author": "Akretion, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,
-    "installable": True,
-    "external_dependencies": {
-        "python": [],
-        "bin": [],
-    },
+    "installable": False,
     "depends": [
         "product_supplierinfo_variant",
         "product_variant_import_export",
     ],
-    "data": [
-    ],
-    "demo": [
-    ],
-    "qweb": [
-    ]
 }

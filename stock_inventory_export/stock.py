@@ -36,11 +36,15 @@ class StockInventory(models.Model):
                     prod_lot_id = import_line[2]['prod_lot_id']
                     product_qty = import_line[2]['product_qty']
                     for inventory_line in inventory.line_ids:
-                        if (inventory_line.product_uom_id.id == product_uom_id
-                            and inventory_line.location_id.id == location_id
-                            and inventory_line.product_id.id == product_id
-                            and inventory_line.prod_lot_id.id == prod_lot_id
-                                and inventory_line.product_qty != product_qty):
+                        if inventory_line.product_uom_id.id\
+                                == product_uom_id and\
+                                inventory_line.location_id.id\
+                                == location_id and\
+                                inventory_line.product_id.id\
+                                == product_id and\
+                                inventory_line.prod_lot_id.id\
+                                == prod_lot_id and\
+                                inventory_line.product_qty != product_qty:
                             inventory_line.write({'product_qty': product_qty})
             del vals['line_ids']
         return super(StockInventory, self).write(vals)

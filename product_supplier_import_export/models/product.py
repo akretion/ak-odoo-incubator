@@ -47,7 +47,7 @@ class ProductSupplierInfo(models.Model):
                 pvals['suppinfo_id'] = self.id
                 pricelists |= pricelist_obj.create(pvals)
         for p in self.pricelist_ids:
-            if not p in pricelists:
+            if p not in pricelists:
                 p.unlink()
 
     @api.model
@@ -173,7 +173,7 @@ class DenormalizedProductSupplier(models.AbstractModel):
                     'price_3': record['supplier_%s_price_3' % idx],
                     })
             for supplier in record._get_specific_supplier():
-                if not supplier in suppliers:
+                if supplier not in suppliers:
                     supplier.unlink()
 
 
@@ -192,6 +192,7 @@ class ProductTemplate(models.Model):
         self.ensure_one()
         return [supplier for supplier in self.seller_ids
                 if not supplier.product_id]
+
     @api.multi
     def _get_supplier(self, partner):
         self.ensure_one()

@@ -32,9 +32,9 @@ class ProductProduct(models.Model):
         template_fields = self.env['product.template']._fields
         default_fields = []
         for field in fields:
-            if (len(field) == 1
-                    and field[0] in template_fields
-                    and field[0] != 'id'):
+            if (len(field) == 1 and
+                    field[0] in template_fields and
+                    field[0] != 'id'):
                 default_fields.append(field)
         return default_fields
 
@@ -42,7 +42,7 @@ class ProductProduct(models.Model):
     def _get_default_row(self, fields, default_fields):
         row = self[0].product_tmpl_id._export_rows(default_fields)[0]
         for idx, field in enumerate(fields):
-            if not field in default_fields:
+            if field not in default_fields:
                 if field and field[0] == 'variant_configuration':
                     row.insert(idx, 'default')
                 else:
@@ -52,8 +52,8 @@ class ProductProduct(models.Model):
     @api.multi
     def _export_rows(self, fields):
         data = super(ProductProduct, self)._export_rows(fields)
-        if (['variant_configuration'] in fields
-                and self._context.get('from_template_id')):
+        if (['variant_configuration'] in fields and
+                self._context.get('from_template_id')):
             default_fields = self._get_default_fields(fields)
             if len(self) == 1:
                 # TODO WARNING
@@ -107,7 +107,7 @@ class ProductTemplate(models.Model):
             tmpl_id = record['.id']
         elif record.get('id'):
             xml_id = record['id']
-            if not '.' in xml_id:
+            if '.' not in xml_id:
                 xml_id = u'.' + xml_id
             __, __, tmpl_id = self.env['ir.model.data'].xmlid_lookup(xml_id)
         else:
@@ -134,10 +134,13 @@ class ProductTemplate(models.Model):
                          context=None, log=lambda a: None):
         for record, rows in super(ProductTemplate, self)._extract_records(
                 fields_, data, context=context, log=log):
-            if (['product_variant_ids', 'variant_configuration'] in fields_
-                    and (['id'] in fields_ or ['.id'] in fields_)
-                    and not ['product_variant_ids', 'id'] in fields_
-                    and not ['product_variant_ids', 'id'] in fields_):
+            if (['product_variant_ids', 'variant_configuration'] in fields_ and
+                    (['id'] in fields_ or ['.id'] in fields_) and not
+                    ['product_variant_ids', 'id'] in fields_ and not
+                    ['product_variant_ids', 'id'] in fields_):
                 self._process_default_template_value(record)
-                self._update_product_ids_from_configuration(record)
+                if record['product_variant_ids']:
+                    self._update_product_ids_from_configuration(record)
+                else:
+                    record.pop('product_variant_ids')
             yield record, rows

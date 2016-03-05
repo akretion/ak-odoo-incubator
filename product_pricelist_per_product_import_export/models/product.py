@@ -4,7 +4,6 @@
 
 from openerp import api, fields, models
 import openerp.addons.decimal_precision as dp
-from openerp.tools.config import config
 from openerp.tools import ustr
 from openerp.tools.translate import _
 from unidecode import unidecode  # Debian package python-unidecode
@@ -87,9 +86,10 @@ class DenormalizedProductPricelist(models.AbstractModel):
 
     @api.multi
     def _compute_price(self):
-        field_names = [field_name for field_name in self._fields
-                       if (hasattr(self._fields[field_name], '_dynamic_price')
-                           and self._fields[field_name]._dynamic_price)]
+        field_names = [
+            field_name for field_name in self._fields
+            if (hasattr(self._fields[field_name], '_dynamic_price') and
+                self._fields[field_name]._dynamic_price)]
         for record in self:
             for field_name in field_names:
                 item = record._get_pricelist_grid_item(field_name)
@@ -136,10 +136,12 @@ class DenormalizedProductPricelist(models.AbstractModel):
     @api.multi
     def _set_price(self):
         self.ensure_one()
-        field_names = [field_name for field_name in self._fields
-                       if (hasattr(self._fields[field_name], '_dynamic_price')
-                           and self._fields[field_name]._dynamic_price
-                           and field_name in self._context['write_keys'])]
+        # FIXME Refactor with line 90
+        field_names = [
+            field_name for field_name in self._fields
+            if (hasattr(self._fields[field_name], '_dynamic_price') and
+                self._fields[field_name]._dynamic_price and
+                field_name in self._context['write_keys'])]
         for field_name in field_names:
             self._update_pricelist_item(field_name)
 

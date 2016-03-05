@@ -25,10 +25,10 @@ def merge_duplicate(self, record_ids):
             AND att2.attrelid = cl2.oid
             AND con.contype = 'f'""", (self._table,))
     for table, field in self._cr.fetchall():
-        self._cr.execute(
-            ("UPDATE " + table
-            + " SET " + field + "= %s "
-            + "WHERE " + field + " in %s"),
+        self._cr.execute((
+            "UPDATE " + table +
+            " SET " + field + "= %s " +
+            "WHERE " + field + " in %s"),
             (self.id, tuple(record_ids)))
     self.browse(record_ids).unlink()
 
