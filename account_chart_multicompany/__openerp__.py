@@ -18,24 +18,23 @@
 #
 ##############################################################################
 
-
-{
-    'name': 'Account Chart MultiCompany',
-    'version': '8.0.0.1.0',
-    'category': 'Generic Modules/Others',
-    'license': 'AGPL-3',
-    'description': """""",
-    'author': 'Akretion, Odoo Community Association (OCA)',
-    'website': 'http://www.akretion.com',
-    'depends': [
-        'account',
-        'base',
-        'base_suspend_security',
-    ],
-    'data': ['account_view.xml',
-             'security/account_security.xml',
-             'security/ir.rule.csv',
-             'security/ir.model.access.csv',
-            ],
-    'installable': True,
-}
+{'name': 'Account Chart MultiCompany',
+ 'version': '8.0.0.1.0',
+ 'category': 'Generic Modules/Others',
+ 'license': 'AGPL-3',
+ 'description': """""",
+ 'author': 'Akretion, Odoo Community Association (OCA)',
+ 'website': 'http://www.akretion.com',
+ 'depends': [
+     'account',
+     'base',
+     'base_suspend_security',
+ ],
+ 'data': [
+     'account_view.xml',
+     'security/account_security.xml',
+     'security/ir.rule.csv',
+     'security/ir.model.access.csv',
+ ],
+ 'installable': True,
+ }
