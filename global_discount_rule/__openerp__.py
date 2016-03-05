@@ -19,7 +19,7 @@ Define discount rules
     'data': [
         'price_rule_view.xml',
         # 'setting_view.xml',
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
 }
