@@ -24,6 +24,10 @@
         'security/ir.rule.csv',
     ],
     'demo': [
+        'demo/companies.csv',
+        'demo/partners.csv',
+        'demo/users.csv',
+        'demo/sales_team.csv',
     ],
     'qweb': [
     ]
