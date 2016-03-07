@@ -1,4 +1,0 @@
-id,name,company_ids/ids
-sales_team_company1,Sales Team from company 1,"[(6, 0, [ref('base.company1')])]"
-sales_team_company2,Sales Team from company 2,"[(6, 0, [ref('base.company2')])]"
-sales_team_company_both,Sales Team for both companies,"[(6, 0, [ref('base.company1'), ref('base.company2')])]"

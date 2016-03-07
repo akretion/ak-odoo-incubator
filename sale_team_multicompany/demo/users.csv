@@ -1,3 +1,0 @@
-id,name,login,groups_id/id,company_id/id,company_ids/ids
-user_company1,User company 1,user_company1,"[(4,ref('base.group_sale_manager'))]",company1,"[(6, 0, [ref('base.company1')])]"
-user_company2,User company 2,user_company2,"[(4,ref('base.group_sale_manager'))]",company2,"[(6, 0, [ref('base.company2')])]"
