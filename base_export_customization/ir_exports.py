@@ -26,18 +26,18 @@ class IrExports(Model):
     _inherit = "ir.exports"
 
     _columns = {
-        'export_database_id': fields.boolean('Export Database ID'),
+        'export_database_ext_id': fields.boolean('Export Database Ext ID'),
     }
 
     def add_remove_id_field_line(self, cr, uid, ids, action, context=None):
         line_obj = self.pool['ir.exports.line']
         for id in ids:
             id_line_ids = line_obj.search(
-                cr, uid, [('name', '=', '.id')], context=context)
+                cr, uid, [('name', '=', 'id')], context=context)
             if not id_line_ids and action == 'add':
                 vals = {
                     'export_id': id,
-                    'name': '.id',
+                    'name': 'id',
                 }
                 line_obj.create(cr, uid, vals, context=context)
             elif id_line_ids and action== 'remove':
@@ -47,8 +47,8 @@ class IrExports(Model):
     def write(self, cr, uid, ids, vals, context=None):
         res = super(IrExports, self).write(
             cr, uid, ids,  vals, context=context)
-        if 'export_database_id' in vals:
-            if vals['export_database_id']:
+        if 'export_database_ext_id' in vals:
+            if vals['export_database_ext_id']:
                 self.add_remove_id_field_line(
                     cr, uid, ids, 'add', context=context)
             else:
