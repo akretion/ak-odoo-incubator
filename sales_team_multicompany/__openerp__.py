@@ -2,9 +2,9 @@
 # © 2016 Chafique DELLI @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    'name': 'Sale Team Multicompany',
+    'name': 'Sales Team Multicompany',
     'summary': 'Add companies in sales team and '
-    'filter the sales team from the company',
+               'filter the sales team from the company',
     'version': '8.0.0.1.0',
     'category': 'Sales Management',
     'website': 'http://akretion.com',
@@ -20,7 +20,7 @@
         'sale',
     ],
     'data': [
-        'sale_team_view.xml',
+        'sales_team_view.xml',
         'security/ir.rule.csv',
         'config/sale_config.yml',
     ],

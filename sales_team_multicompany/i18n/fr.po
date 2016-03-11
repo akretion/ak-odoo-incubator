@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* sale_team_multicompany
+#	* sales_team_multicompany
 #
 msgid ""
 msgstr ""
@@ -15,17 +15,17 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: sale_team_multicompany
-#: model:ir.model,name:sale_team_multicompany.model_crm_case_section
+#. module: sales_team_multicompany
+#: model:ir.model,name:sales_team_multicompany.model_crm_case_section
 msgid "Sales Teams"
 msgstr "Équipes commerciales"
 
-#. module: sale_team_multicompany
+#. module: sales_team_multicompany
 #: field:crm.case.section,company_ids:0
 msgid "Companies"
 msgstr "Sociétés"
 
-#. module: sale_team_multicompany
+#. module: sales_team_multicompany
 #: help:crm.case.section,company_ids:0
 msgid "Add the companies concerned by this market."
 msgstr "Ajouter les sociétés concernées par ce marché"
