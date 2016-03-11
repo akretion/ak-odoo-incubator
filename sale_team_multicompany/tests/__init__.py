@@ -1,1 +1,1 @@
-from . import test_sales_team_multicompany
+from . import test_sale_team_multicompany

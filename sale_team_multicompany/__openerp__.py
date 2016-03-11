@@ -17,11 +17,12 @@
         'bin': [],
     },
     'depends': [
-        'sales_team',
+        'sale',
     ],
     'data': [
         'sale_team_view.xml',
         'security/ir.rule.csv',
+        'config/sale_config.yml',
     ],
     'demo': [
         'demo/res.company.csv',
