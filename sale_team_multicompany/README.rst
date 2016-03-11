@@ -29,7 +29,19 @@ sale_team_multicompany%0Aversion:%20
 
 Credits
 =======
-@@ -21,3 +45,17 @@ Maintainer
+
+Contributors
+------------
+
+* Chafique Delli (chafique.delli@akretion.com)
+
+Maintainer
+----------
+
+.. image:: http://odoo-community.org/logo.png
+   :alt: Odoo Community Association
+   :target: http://odoo-community.org
+   
 This module is maintained by the OCA.
 
 OCA, or the Odoo Community Association, is a nonprofit organization whose mission is to support the collaborative development of Odoo features and promote its  widespread use.
