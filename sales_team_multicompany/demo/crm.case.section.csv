@@ -1,4 +1,4 @@
 id,name,company_ids/id
 crm_case_section1,Sales Team from company 1,res_company1
 crm_case_section2,Sales Team from company 2,res_company2
-crm_case_section_both,Sales Team for both companies,"res_company1,res_company2"
+crm_case_section_both,Sales Team for both companies,

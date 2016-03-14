@@ -5,23 +5,19 @@
     'name': 'Sales Team Multicompany',
     'summary': 'Add companies in sales team and '
                'filter the sales team from the company',
-    'version': '8.0.0.1.0',
+    'version': '8.0.1.0.0',
     'category': 'Sales Management',
     'website': 'http://akretion.com',
     'author': 'Akretion',
     'license': 'AGPL-3',
     'application': False,
     'installable': True,
-    'external_dependencies': {
-        'python': [],
-        'bin': [],
-    },
     'depends': [
         'sale',
     ],
     'data': [
         'sales_team_view.xml',
-        'security/ir.rule.csv',
+        'security/multi_company.xml',
         'config/sale_config.yml',
     ],
     'demo': [
@@ -30,6 +26,4 @@
         'demo/res.users.csv',
         'demo/crm.case.section.csv',
     ],
-    'qweb': [
-    ]
 }
