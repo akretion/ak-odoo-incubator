@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+# © 2016 Akretion (http://www.akretion.com)
+# Sébastien BEAU <sebastien.beau@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+from openerp.osv import fields, orm
+
+
+class AccountAccount(orm.Model):
+    _inherit = 'account.account'
+
+    _columns = {
+        'voucher_account': fields.boolean(
+            'Voucher Account',
+            help=('Voucher Account for customer credit. The balance of the '
+                  'Account must positive and the partner on line is '
+                  'required')),
+    }
+
+
+class AccountMoveLine(orm.Model):
+    _inherit = 'account.move.line'
+
+    def _check_positif_balance(self, cr, uid, ids, context=None):
+        lines = self.read_group(cr, uid, [
+            ('account_id.voucher_account', 'in', True),
+            ('id', 'in', ids),
+            ], ['partner_id', 'debit', 'credit'], ['partner_id'], context=context)
+        for line in lines:
+            if line['credit'] - line['debit'] < 0:
+                raise orm.except_orm(
+                    _('User Error'),
+                    _("Le partenaire %s n'a que %s de credit client."
+                      "Montant insuffisant"))
+        import pdb; pdb.set_trace()
+#        print 'lines', lines
+        return True
+
+    _constraints = [
+        (_check_positif_balance, 'Error', ['account_id', 'debit', 'credit'])
+    ]
