@@ -6,16 +6,16 @@ from openerp.tests.common import TransactionCase
 from openerp.exceptions import AccessError
 
 
-class TestSaleTeamMultiCompany(TransactionCase):
+class TestSalesTeamMultiCompany(TransactionCase):
     def test_create_sale_order_with_sale_team(self):
-        res_users1 = self.env.ref('sale_team_multicompany.res_users1')
-        res_users2 = self.env.ref('sale_team_multicompany.res_users2')
-        res_partner1 = self.env.ref('sale_team_multicompany.res_partner1')
-        res_partner2 = self.env.ref('sale_team_multicompany.res_partner2')
+        res_users1 = self.env.ref('sales_team_multicompany.res_users1')
+        res_users2 = self.env.ref('sales_team_multicompany.res_users2')
+        res_partner1 = self.env.ref('sales_team_multicompany.res_partner1')
+        res_partner2 = self.env.ref('sales_team_multicompany.res_partner2')
         crm_case_section2 = self.env.ref(
-            'sale_team_multicompany.crm_case_section2')
+            'sales_team_multicompany.crm_case_section2')
         crm_case_section_both = self.env.ref(
-            'sale_team_multicompany.crm_case_section_both')
+            'sales_team_multicompany.crm_case_section_both')
         # All of this should be allowed
         self.env['sale.order'].create(
             {'name': 'TEST 1',
