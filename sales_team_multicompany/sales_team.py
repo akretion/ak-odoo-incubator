@@ -11,4 +11,4 @@ class CrmCaseSection(models.Model):
     company_ids = fields.Many2many(
         'res.company',
         string='Companies',
-        help="Add the companies concerned by this market.")
+        help="Company to which the sales team belongs")
