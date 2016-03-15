@@ -44,12 +44,14 @@ class StockPickingRefundBackorder(orm.TransientModel):
             raise orm.except_orm(
                 _('Error'),
                 _('Failed to generated the invoice'))
-        if len(sale.invoice_ids) > 1:
+        invoices = [inv for inv in sale.invoice_ids
+                   if inv.type == 'out_invoice']
+        if len(invoices) > 1:
             raise orm.except_orm(
                 _('Error'),
                 _('Too many invoice found'))
 
-        invoice = sale.invoice_ids[0]
+        invoice = invoices[0]
 
         wf_service.trg_validate(
             uid, 'account.invoice', invoice.id, 'invoice_open', cr)
