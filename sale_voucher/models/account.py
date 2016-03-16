@@ -32,16 +32,10 @@ class AccountMoveLine(orm.Model):
         p_ids = [l['partner_id'][0] for l in lines]
         for partner in partner_obj.browse(cr, uid, p_ids, context=context):
             if partner.voucher_amount < 0:
-                if context and context.get('check_voucher_amount_no_rollback'):
-                    raise orm.except_orm(
-                        _('Error'),
-                        _('No Credit Available'))
-                cr.rollback()
-                p = partner_obj.browse(cr, uid, partner.id, context=context)
                 raise orm.except_orm(
                     _('User Error'),
-                    u"Le partenaire %s n'a que %s € de crédit client. "
-                    u"Montant insuffisant" % (p.name, p.voucher_amount))
+                    _("The customer %s do not have enought customer voucher")
+                    % partner.name)
         return True
 
     _constraints = [
