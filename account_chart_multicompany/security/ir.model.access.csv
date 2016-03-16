@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_template_read,Read account_template multi-company,account.model_account_account_template,base.group_user,1,0,0,0
+access_account_tax_template_read,Read account_tax_template multi-company,account.model_account_tax_template,base.group_user,1,0,0,0
+account.access_account_account_template,account.account.template,model_account_account_template,account_chart_multicompany.group_account_and_tax_template_manager,0,1,1,1
+account.access_account_tax_template,account.tax.template,model_account_tax_template,account_chart_multicompany.group_account_and_tax_template_manager,0,1,1,1

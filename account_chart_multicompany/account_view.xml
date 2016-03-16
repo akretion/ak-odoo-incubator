@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="view_account_template_form" model="ir.ui.view">
+            <field name="model">account.account.template</field>
+            <field name="inherit_id" ref="account.view_account_template_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//separator[@string='Default Taxes']" position="before">
+                    <separator string="Accounts List"/>
+                    <field name="account_ids" widget="many2many_tags"/>
+                </xpath>
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="attrs">{'required': True}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_form" model="ir.ui.view">
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='tax_ids']" position="before">
+                    <field name="account_tmpl_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_tax_template_form" model="ir.ui.view">
+            <field name="model">account.tax.template</field>
+            <field name="inherit_id" ref="account.view_account_tax_template_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="before">
+                    <separator string="Tax Accounts List"/>
+                    <field name="tax_ids" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_tax_form" model="ir.ui.view">
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='description']" position="after">
+                    <field name="tax_tmpl_id"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
