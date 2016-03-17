@@ -17,7 +17,7 @@
     ],
     'data': [
         'sales_team_view.xml',
-        'security/multi_company.xml',
+        'security/sales_team_multicompany_security.xml',
         'config/sale_config.yml',
     ],
     'demo': [
