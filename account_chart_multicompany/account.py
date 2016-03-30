@@ -45,10 +45,9 @@ class AccountTaxTemplate(models.Model):
             tax.write({'tax_tmpl_id': tax_tmpl_id})
         return tax_template_ref
 
-    @api.model
-    def create(self, vals):
-        tax_account_template = super(AccountTaxTemplate, self).create(vals)
-        if 'install_mode' not in self._context:
+    @api.multi
+    def force_generate_tax(self):
+        for tax_account_template in self:
             chart_template = tax_account_template.chart_template_id
             tax_code_tmpl_obj = self.env['account.tax.code.template']
             for tax in chart_template.tax_template_ids[0].suspend_security()\
@@ -60,6 +59,12 @@ class AccountTaxTemplate(models.Model):
                 self.suspend_security()._generate_tax(
                     tax_account_template, tax_code_template_ref,
                     tax.company_id.id)
+
+    @api.model
+    def create(self, vals):
+        tax_account_template = super(AccountTaxTemplate, self).create(vals)
+        if 'install_mode' not in self._context:
+            tax_account_template.force_generate_tax()
         return tax_account_template
 
     @api.multi
