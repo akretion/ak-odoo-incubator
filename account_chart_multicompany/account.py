@@ -20,6 +20,8 @@
 ###############################################################################
 
 from openerp import models, fields, api
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class AccountTax(models.Model):
@@ -84,6 +86,43 @@ class AccountAccount(models.Model):
 
     account_tmpl_id = fields.Many2one('account.account.template',
                                       string='Account Template')
+    @api.cr
+    def _parent_store_compute(self, cr):
+        if hasattr(cr, 'skip_parent_recompute') and cr.skip_parent_recompute:
+            _logger.info("SKIP PARENT LEFT/RIGHT RECOMPUTATION FOR ACCOUNT")
+            return True
+        _logger.info("MASSIVE SQL PARENT LEFT/RIGHT RECOMPUTATION FOR ACCOUNT")
+        import pdb; pdb.set_trace()
+        cr.execute("""WITH RECURSIVE compute_parent(id, pleft, prigth) AS (
+            SELECT id, 1::INT AS pleft, company_id * 10000::INT AS prigth
+                FROM account_account
+                WHERE parent_id IS NULL
+                UNION ALL
+                SELECT
+                    c.id,
+                    ct.pleft + (
+                        (ct.prigth - ct.pleft) *
+                            (1- row_number() OVER (
+                                PARTITION BY c.parent_id
+                                ORDER BY c.parent_id asc)::FLOAT
+                            / sum(1) OVER (
+                                PARTITION BY c.parent_id
+                                ORDER BY c.parent_id desc)))::INT + 1 AS pleft,
+                    ct.pleft + (
+                        (ct.prigth - ct.pleft) *
+                             (1-(row_number() OVER (
+                                PARTITION BY c.parent_id
+                                ORDER BY c.parent_id asc)-1)::FLOAT
+                            / sum(1) OVER (
+                                PARTITION BY c.parent_id
+                                ORDER BY c.parent_id desc)))::INT -1 AS pright
+                FROM account_account c
+                JOIN compute_parent ct ON ct.id = c.parent_id
+            ) UPDATE account_account
+              SET parent_right=prigth, parent_left=pleft
+              FROM compute_parent
+              WHERE compute_parent.id = account_account.id""")
+        return True
 
 
 class AccountAccountTemplate(models.Model):
@@ -108,6 +147,8 @@ class AccountAccountTemplate(models.Model):
     def create(self, vals):
         account_template = super(AccountAccountTemplate, self).create(vals)
         if 'install_mode' not in self._context:
+            # HACK on cursor for avoiding multi parent recompute
+            setattr(self._cr, 'skip_parent_recompute', True)
             acc_template_ref = {}
             parent_id = account_template.parent_id
             for account in parent_id.suspend_security().account_ids:
@@ -124,6 +165,8 @@ class AccountAccountTemplate(models.Model):
                     .generate_account(
                         chart_template_id, tax_template_ref,
                         acc_template_ref, code_digits, account.company_id.id)
+            setattr(self._cr, 'skip_parent_recompute', False)
+            self.env['account.account']._parent_store_compute()
         return account_template
 
     @api.multi
