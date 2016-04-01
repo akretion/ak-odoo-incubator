@@ -86,6 +86,7 @@ class AccountAccount(models.Model):
 
     account_tmpl_id = fields.Many2one('account.account.template',
                                       string='Account Template')
+
     @api.cr
     def _parent_store_compute(self, cr):
         if hasattr(cr, 'skip_parent_recompute') and cr.skip_parent_recompute:
