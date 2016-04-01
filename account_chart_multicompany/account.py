@@ -92,7 +92,6 @@ class AccountAccount(models.Model):
             _logger.info("SKIP PARENT LEFT/RIGHT RECOMPUTATION FOR ACCOUNT")
             return True
         _logger.info("MASSIVE SQL PARENT LEFT/RIGHT RECOMPUTATION FOR ACCOUNT")
-        import pdb; pdb.set_trace()
         cr.execute("""WITH RECURSIVE compute_parent(id, pleft, prigth) AS (
             SELECT id, 1::INT AS pleft, company_id * 10000::INT AS prigth
                 FROM account_account
@@ -189,3 +188,10 @@ class AccountAccountTemplate(models.Model):
         return super(AccountAccountTemplate, self).search(
             cr, uid, domain, offset=offset, limit=limit, order=order,
             context=context, count=count)
+
+    @api.multi
+    def unlink(self):
+        for record in self:
+            for account in record.suspend_security().account_ids:
+                account.unlink()
+        return super(AccountAccountTemplate, self).unlink()
