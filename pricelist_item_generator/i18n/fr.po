@@ -1,0 +1,531 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* pricelist_builder
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-14 19:12+0200\n"
+"PO-Revision-Date: 2016-04-14 19:12+0200\n"
+"Last-Translator: David Béal <david.beal@akretion.com>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.8.4\n"
+
+#. module: pricelist_item_generator
+#: code:addons/pricelist_item_generator/pricelist.py:309
+#, python-format
+msgid "'Discount' or 'Surcharge' must be different of 0."
+msgstr "'Remise' ou 'Complément' doivent être différent de 0."
+
+#. module: pricelist_item_generator
+#: model:ir.actions.act_window,help:pricelist_item_generator.pricelist_item_generator_action
+msgid ""
+"<p class=\"oe_view_nocontent_create\">\n"
+"            Click to add a Pricelist Item Generator.\n"
+"          </p>\n"
+"          <p>\n"
+"                Pricelist Item Generator allow you to build price rules in a "
+"massive way:\n"
+"                <ol>\n"
+"                    <li>Define price elements templates</li>\n"
+"                    <li>Define criterias which determines which products are "
+"implied</li>\n"
+"                    <li>Click to update pricelist</li>\n"
+"                </ol>\n"
+"                <div><u>Settings</u> : define an appropriate 'Next execution "
+"date' 'Scheduled action'\n"
+"    according to your local time for 'Pricelist Item Generator'</div>\n"
+"          </p>\n"
+"        "
+msgstr ""
+
+#. module: pricelist_item_generator
+#: model:ir.model,name:pricelist_item_generator.model_abstract_pricelist_item_generator
+msgid "Abstract Pricelist Items Generator"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Activate"
+msgstr "Activer"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,active:0
+msgid "Active"
+msgstr "Activer"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,already_used:0
+msgid "Already used"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:product.pricelist.item,auto:0
+msgid "Auto"
+msgstr "Auto "
+
+#. module: pricelist_item_generator
+#: help:product.pricelist.version,item_auto_ids:0
+msgid "Automatic built items"
+msgstr "Items construit automatiquement"
+
+#. module: pricelist_item_generator
+#: view:product.pricelist.version:pricelist_item_generator.product_pricelist_version_form_view
+msgid "Automatically created rules"
+msgstr "Règles créées automatiquement"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Base price"
+msgstr "Prix de base"
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.template,base:0
+msgid "Base price for computation."
+msgstr "Base price for computation."
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.template,base:0
+msgid "Based on"
+msgstr "Basé sur"
+
+#. module: pricelist_item_generator
+#: field:pricelist.product.condition,categ_id:0
+msgid "Category"
+msgstr "Catégorie"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,company_id:0
+msgid "Company"
+msgstr "Société"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Computation method : New price ="
+msgstr "Méthode de calcul : Nouveau prix ="
+
+#. module: pricelist_item_generator
+#: help:product.pricelist.item,hashkey:0
+msgid ""
+"Contains all price element values from Pricelist generator.It allows to "
+"avoid to update price element when it's not necessary"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,create_uid:0
+#: field:pricelist.item.template,create_uid:0
+#: field:pricelist.product.condition,create_uid:0
+msgid "Created by"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,create_date:0
+#: field:pricelist.item.template,create_date:0
+#: field:pricelist.product.condition,create_date:0
+msgid "Created on"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Deactivate"
+msgstr "Désactiver"
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.generator,trace:0
+msgid ""
+"Describe what modifications where happened on 'Pricelist Items' the last "
+"time you valid modifications (click on 'Build pricelist' button)'"
+msgstr ""
+"Décrit quelles modifications se sont produites sur les 'Items de liste de "
+"prix' la dernière fois que vous avez validez des modifications (cliqué sur "
+"le bouton 'Mettre à jour liste de prix')"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+#: view:product.pricelist.version:pricelist_item_generator.product_pricelist_version_form_view
+msgid "Discount"
+msgstr "Remise"
+
+#. module: pricelist_item_generator
+#: code:addons/pricelist_item_generator/pricelist.py:371
+#, python-format
+msgid "Error! The minimum margin should be lower than the maximum margin."
+msgstr "Erreur ! La marge minimum doit être inférieure à la marge maximum."
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.generator,to_update:0
+msgid "Flag if the pricelist items needs to be build"
+msgstr "Indique si la liste de prix doit être généré"
+
+#. module: pricelist_item_generator
+#: field:abstract.pricelist.item.generator,price_generator_id:0
+#: field:pricelist.item.template,price_generator_id:0
+#: field:pricelist.product.condition,price_generator_id:0
+#: field:product.pricelist.item,price_generator_id:0
+msgid "Generator"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.template,sequence:0
+msgid ""
+"Gives the order in which the pricelist items will be checkedby the ERP.\n"
+"The evaluation gives highest priority to lowest sequence and stops as soon "
+"as a matching price item is found."
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:product.pricelist.item,hashkey:0
+msgid "Hashkey"
+msgstr "Hashkey"
+
+#. module: pricelist_item_generator
+#: field:abstract.pricelist.item.generator,id:0
+#: field:pricelist.item.generator,id:0 field:pricelist.item.template,id:0
+#: field:pricelist.product.condition,id:0
+msgid "ID"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "If activated, all pricelist item rules will be synchronised"
+msgstr ""
+"Si activé, toutes les règles d'item de liste de prix seront synchronisé"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "If desactivated, all pricelist item rules will be erased"
+msgstr ""
+"Si désactivé, toutes les règles d'item de listes de prix seront effacées"
+
+#. module: pricelist_item_generator
+#: help:pricelist.product.condition,product_id:0
+#: help:pricelist.product.condition,product_tmpl_id:0
+msgid "If product is selected, no other criterias can be take account"
+msgstr ""
+"Si le produit est sélectionné, aucun autre critère ne peut être prise ne "
+"compte"
+
+#. module: pricelist_item_generator
+#: help:product.pricelist.item,auto:0
+msgid "If true, the item pricelist was built automatically with Pricelist"
+msgstr ""
+"Si vrai, l'élément de liste de prix a été généré automatiquement avec la "
+"liste de prix"
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.generator,product_condition_ids:0
+msgid "In which products are applied the price elements"
+msgstr "Dans quels produits sont appliqués les éléments de prix"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Involved products"
+msgstr "Produits concernés"
+
+#. module: pricelist_item_generator
+#: field:product.pricelist.item,item_template_id:0
+msgid "Item template"
+msgstr "Modèle d'item"
+
+#. module: pricelist_item_generator
+#: model:ir.ui.menu,name:pricelist_item_generator.menu_pricelist_item_generator
+msgid "Items Generator"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,write_uid:0
+#: field:pricelist.item.template,write_uid:0
+#: field:pricelist.product.condition,write_uid:0
+msgid "Last Updated by"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,write_date:0
+#: field:pricelist.item.template,write_date:0
+#: field:pricelist.product.condition,write_date:0
+msgid "Last Updated on"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,trace:0
+msgid "Last update"
+msgstr "Dernière mise à jour"
+
+#. module: pricelist_item_generator
+#: view:product.pricelist.version:pricelist_item_generator.product_pricelist_version_form_view
+msgid "Manual rules"
+msgstr "Règles manuelles"
+
+#. module: pricelist_item_generator
+#: help:product.pricelist.version,item_manual_ids:0
+msgid "Manually created items"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.template,price_max_margin:0
+msgid "Max. Price Margin"
+msgstr "Marge de prix max."
+
+#. module: pricelist_item_generator
+#: field:abstract.pricelist.item.generator,min_quantity:0
+#: field:pricelist.item.template,min_quantity:0
+msgid "Min quantity"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.template,price_min_margin:0
+msgid "Min. Price Margin"
+msgstr "Marge min."
+
+#. module: pricelist_item_generator
+#: view:product.pricelist.version:pricelist_item_generator.product_pricelist_version_form_view
+msgid "Min. qty"
+msgstr "Qté min"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,name:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.generator,price_version_id:0
+msgid "Only pricelist of 'Sale' type"
+msgstr "Seulement les listes de prix de type 'Vente'"
+
+#. module: pricelist_item_generator
+#: model:ir.actions.client,name:pricelist_item_generator.action_open_adhoc_menu
+msgid "Open Menu"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.template,price_discount:0
+msgid "Price Discount"
+msgstr "Remise de prix"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.template,price_round:0
+msgid "Price Rounding"
+msgstr "Prix Arrondi"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.template,price_surcharge:0
+msgid "Price Surcharge"
+msgstr "Complément de prix"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Price elements"
+msgstr "Eléments de prix"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_tree_view
+msgid "Pricelist Generator"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: model:ir.actions.act_window,name:pricelist_item_generator.pricelist_item_generator_action
+msgid "Pricelist Item Generator"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: model:ir.model,name:pricelist_item_generator.model_product_pricelist_version
+msgid "Pricelist Version"
+msgstr "Version liste de prix"
+
+#. module: pricelist_item_generator
+#: model:ir.model,name:pricelist_item_generator.model_product_pricelist_item
+msgid "Pricelist item"
+msgstr "Item de liste de prix"
+
+#. module: pricelist_item_generator
+#: model:ir.model,name:pricelist_item_generator.model_pricelist_item_template
+#: help:pricelist.item.generator,item_template_ids:0
+msgid "Pricelist item template"
+msgstr "Modèles d'items de liste de prix"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,item_template_ids:0
+msgid "Pricelist item templates"
+msgstr "Modèles d'items de liste de prix"
+
+#. module: pricelist_item_generator
+#: field:product.pricelist.version,item_auto_ids:0
+msgid "Pricelist items auto"
+msgstr "Item de liste de prix auto"
+
+#. module: pricelist_item_generator
+#: field:product.pricelist.version,item_manual_ids:0
+msgid "Pricelist items manual"
+msgstr "Item de liste de prix manuels"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,price_version_id:0
+msgid "Pricelist version"
+msgstr "Version liste de prix"
+
+#. module: pricelist_item_generator
+#: field:pricelist.product.condition,product_tmpl_id:0
+msgid "Product"
+msgstr "Produit"
+
+#. module: pricelist_item_generator
+#: field:pricelist.product.condition,product_id:0
+msgid "Product Variant"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,product_condition_ids:0
+msgid "Product conditions"
+msgstr "Conditions du produit"
+
+#. module: pricelist_item_generator
+#: help:pricelist.product.condition,categ_id:0
+msgid "Products of the category or products of children categories"
+msgstr "Products of the category or products of children categories"
+
+#. module: pricelist_item_generator
+#: model:ir.model,name:pricelist_item_generator.model_pricelist_product_condition
+msgid "Products selection by criterias"
+msgstr "Sélection de produits par critères"
+
+#. module: pricelist_item_generator
+#: code:addons/pricelist_item_generator/pricelist.py:378
+#, python-format
+msgid "Public Price"
+msgstr "Public Price"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+#: view:product.pricelist.version:pricelist_item_generator.product_pricelist_version_form_view
+msgid "Round."
+msgstr "Arrond."
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Rule name"
+msgstr "Nom de la règle"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Seq."
+msgstr "Seq."
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,sequence:0
+#: field:pricelist.item.template,sequence:0
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.template,price_round:0
+msgid ""
+"Sets the price so that it is a multiple of this value.\n"
+"Rounding is applied after the discount and before the surcharge.\n"
+" To have prices that end in 9.99, set rounding 10, surcharge -0.01"
+msgstr ""
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.template,price_surcharge:0
+msgid ""
+"Specify the fixed amount to add or substract(if negative) to the amount "
+"calculated with the discount."
+msgstr ""
+"Défini le montant fixé pour ajouter ou soustraire (si "
+"négatif)                  au montant calculé avec la remise."
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.template,price_max_margin:0
+msgid "Specify the maximum amount of margin over the base price."
+msgstr "Specify the maximum amount of margin over the base price."
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.template,price_min_margin:0
+msgid "Specify the minimum amount of margin over the base price."
+msgstr "Specify the minimum amount of margin over the base price."
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+#: view:product.pricelist.version:pricelist_item_generator.product_pricelist_version_form_view
+msgid "Surcharge"
+msgstr "Complément"
+
+#. module: pricelist_item_generator
+#: field:pricelist.item.generator,to_update:0
+msgid "To update"
+msgstr "A mettre à jour"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "Update pricelist"
+msgstr "Mettre à jour les listes de prix"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "X ( 1 +"
+msgstr "X ( 1 +"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid ""
+"You may click on this button to update impact of these rules if for example "
+"you have modified attributes in products or categories in products"
+msgstr ""
+"You pouvez cliquer sur ce bouton pour mettre à jour l'impact de ces règles "
+"si par exemple vous avez modifié les attributs des produits ou les "
+"catégories des produits"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "You need to click here to synchronize pricelists"
+msgstr "Vous devez cliquer ici pour synchroniser les listes de prix"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "You need to click to synchronize these pricelists"
+msgstr "Vous devez cliquer ici pour synchroniser les listes de prix"
+
+#. module: pricelist_item_generator
+#: code:addons/pricelist_item_generator/pricelist.py:228
+#, python-format
+msgid "created"
+msgstr "créés"
+
+#. module: pricelist_item_generator
+#: code:addons/pricelist_item_generator/pricelist.py:231
+#, python-format
+msgid "deleted"
+msgstr "effacés"
+
+#. module: pricelist_item_generator
+#: help:pricelist.item.generator,active:0
+msgid "if checked, rules are exported towards 'Product pricelist items'"
+msgstr "Si coché, les règles sont exportées vers 'Products pricelist items'"
+
+#. module: pricelist_item_generator
+#: view:pricelist.item.generator:pricelist_item_generator.pricelist_item_generator_form_view
+msgid "min qty"
+msgstr "qté min"
+
+#. module: pricelist_item_generator
+#: code:addons/pricelist_item_generator/pricelist.py:229
+#, python-format
+msgid "modified"
+msgstr "mis à jour"
+
+#. module: pricelist_item_generator
+#: code:addons/pricelist_item_generator/pricelist.py:230
+#, python-format
+msgid "untouched"
+msgstr "non affectés"
+
+#. module: pricelist_item_generator
+#: view:product.pricelist.version:pricelist_item_generator.product_pricelist_version_form_view
+msgid "{'invisible': True}"
+msgstr ""
+
