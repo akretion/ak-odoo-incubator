@@ -89,8 +89,9 @@
                     <field name="item_template_ids" nolabel="1"
                            attrs="{'readonly': ['|',('name', '=', False),('price_version_id', '=', False)]}">
                         <tree name="item" editable="bottom">
-                            <field name="sequence" string="Seq."/>
-                            <field name="min_quantity" string="min qty"/>
+                            <field name="id"/>
+                            <field name="sequence"/>
+                            <field name="min_quantity" string="Min qty"/>
                             <field name="price_discount" string="Discount"/>
                             <field name="price_surcharge" string="Surcharge" />
                             <field name="price_round" string="Round."/>
@@ -103,14 +104,10 @@
                     <field name="product_condition_ids" nolabel="1"
                         attrs="{'readonly': ['|',('name', '=', False),('price_version_id', '=', False)]}">
                         <tree name="condition" editable="bottom">
-                            <field name="product_id"
-                                   attrs="{'invisible': [
-                                       ('categ_id', '!=', False),
-                                     ]}"/>
-                            <field name="product_tmpl_id"
-                                   attrs="{'invisible': [('categ_id', '!=', False)]}"/>
-                            <field name="categ_id"
-                                   attrs="{'invisible': [('product_id', '!=', False)]}"/>
+                            <field name="id"/>
+                            <field name="product_id"/>
+                            <field name="product_tmpl_id"/>
+                            <field name="categ_id"/>
                         </tree>
                     </field>
                 </group>

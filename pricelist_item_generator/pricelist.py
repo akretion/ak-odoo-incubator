@@ -61,7 +61,7 @@ class PricelistGenerator(models.Model):
         for gen in self:
             item_tpls = {}
             hashkeys = {}
-            products = gen.get_products_from_condition()
+            product_elms = gen.get_products_from_condition()
             for item_tpl in gen.item_template_ids:
                 # sequence is compose of two parts
                 self.env['pricelist.item.template']._set_tpl_sequence(
@@ -70,16 +70,16 @@ class PricelistGenerator(models.Model):
                 hashkeys[item_tpl.id] = gen._get_hashkey(item_tpl)
                 # get datas for write purpose
                 item_tpls[item_tpl.id] = gen._prepare_item_vals(item_tpl)
-            if products:
-                products = self.product_filter(products)
+            if product_elms:
+                product_elms = self.filter_products(product_elms)
                 # synchronization with 'product.pricelist.item'
                 actions_count = gen._update_product_pricel_items(
-                    item_tpls, products, hashkeys)
+                    item_tpls, product_elms, hashkeys)
             else:
                 actions_count = {}
                 # delete all pricelist.item
                 actions_count['deleted'] = (
-                    gen._unlink_product_pricel_items(item_tpls, products))
+                    gen._unlink_product_pricel_items(item_tpls, product_elms))
             gen.write({'to_update': False})
             # traceability of changes
             trace = self._set_traceability(actions_count)
@@ -97,7 +97,7 @@ class PricelistGenerator(models.Model):
         return products
 
     @api.model
-    def product_filter(self, products):
+    def filter_products(self, products):
         "You may inherit this method to filter this list"
         return products
 
@@ -144,11 +144,11 @@ class PricelistGenerator(models.Model):
     @api.multi
     def _update_product_pricel_items(self, item_tpls_dict, products, hashkeys):
         self.ensure_one()
+        print 'item_tpls_dict', item_tpls_dict
         item_m = self.env['product.pricelist.item']
-        item_tpl_ids = item_m.search([('price_generator_id', '=', self.id)])
-        price_items = item_tpl_ids.read(
+        item_tpls = item_m.search([('price_generator_id', '=', self.id)])
+        price_items = item_tpls.read(
             ['hashkey', 'item_template_id', 'product_id'])
-        # print '\nitem_tpls_dict', item_tpls_dict, '\nitem_tpl_ids', item_tpl_ids, '\nprice_items', price_items
         price_item_infos = {}
         for item in price_items:
             item_key = "%s - %s" % (item['product_id'][0],
@@ -157,6 +157,7 @@ class PricelistGenerator(models.Model):
                 'id': item['id'],
                 'hashkey': item['hashkey'],
             }
+        print 'price_item_infos', price_item_infos
         actions_count = {
             'created': 0,
             'modified': 0,
