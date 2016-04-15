@@ -18,6 +18,7 @@
     },
     "depends": [
         "product_supplierinfo_variant",
+        "pricelist_per_product",
         "product_variant_import_export",
     ],
     "data": [
