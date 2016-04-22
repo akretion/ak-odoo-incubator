@@ -1,0 +1,59 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* purchase_supplier_delay
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-21 14:26+0000\n"
+"PO-Revision-Date: 2016-04-21 14:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: purchase_supplier_delay
+#: model:ir.model.fields,field_description:purchase_supplier_delay.field_res_partner_delivery_delay
+#: field:res.partner,delivery_delay:0
+msgid "Delivery Delay"
+msgstr "Délai de livraison"
+
+#. module: purchase_supplier_delay
+#: help:res.company,incoming_shippment_number_delay:0
+msgid "number of Incoming shipment taking into account for theproduct supplier delay calculation"
+msgstr "Nombre de bon de réception pris en compte pour le calcul du délai de livraison du produit"
+
+#. module: purchase_supplier_delay
+#: model:ir.model.fields,field_description:purchase_supplier_delay.field_res_company_incoming_shippment_number_delay
+#: field:res.company,incoming_shippment_number_delay:0
+msgid "Incoming Shippment Number Delay"
+msgstr "Nb de BR pour le calcul du délai de réception"
+
+#. module: purchase_supplier_delay
+#: model:ir.model,name:purchase_supplier_delay.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: purchase_supplier_delay
+#: model:ir.model,name:purchase_supplier_delay.model_purchase_order
+msgid "Purchase Order"
+msgstr "Bon de commande"
+
+#. module: purchase_supplier_delay
+#: model:ir.model,name:purchase_supplier_delay.model_product_supplierinfo
+msgid "Information about a product supplier"
+msgstr "Information sur le fournisseur de l'article"
+
+#. module: purchase_supplier_delay
+#: model:ir.model,name:purchase_supplier_delay.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+.
+#. module: purchase_supplier_delay
+#: help:res.partner,delivery_delay:0
+msgid "This delay will be used to calculate the planned date onincoming shipment if there is not historic for a product"
+msgstr "Ce délai sera utilisé pour calculer la date prévue des bons de réceptions si il n'y a pas d'historique pour le produit"
+
