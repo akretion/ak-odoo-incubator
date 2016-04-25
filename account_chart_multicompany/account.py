@@ -94,7 +94,7 @@ class AccountAccount(models.Model):
             return True
         _logger.info("MASSIVE SQL PARENT LEFT/RIGHT RECOMPUTATION FOR ACCOUNT")
         cr.execute("""WITH RECURSIVE compute_parent(id, pleft, prigth) AS (
-            SELECT id, 1::INT AS pleft, company_id * 10000::INT AS prigth
+            SELECT id, 1::INT AS pleft, company_id * 100000::INT AS prigth
                 FROM account_account
                 WHERE parent_id IS NULL
                 UNION ALL
