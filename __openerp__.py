@@ -33,6 +33,7 @@
  'data': [
      'sale_view.xml',
      'mrp_view.xml',
+     'config.yml',
      'security/ir.model.access.csv',
  ],
   'demo': [

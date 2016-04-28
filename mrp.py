@@ -23,7 +23,7 @@
 from openerp import fields, api, models
 
 
-class BomOption(models.Model):
+class MrpBomLineOption(models.Model):
     _name = "mrp.bom.line.option"
 
     @api.model
@@ -40,13 +40,36 @@ class BomOption(models.Model):
     type = fields.Selection('_get_type')
 
 
-class BomLine(models.Model):
+class MrpBomLine(models.Model):
     _inherit = "mrp.bom.line"
 
     option_id = fields.Many2one('mrp.bom.line.option', 'Option')
 
+    # porting to new api when it'll be generalised in core (v10 ?)
+    def search(self, cr, uid, domain, offset=0, limit=None,
+               order=None, context=None, count=False):
+        new_domain = []
+        new_domain = list(domain)
+        if context and 'bom_from_sale_option' in context:
+            new_domain = self._filter_bom_lines_for_sale_option(
+                cr, uid, product_id=context.get(
+                'bom_from_sale_option'), context=context)
+        return super(MrpBomLine, self).search(
+            cr, uid, new_domain,
+            offset=offset, limit=limit, order=order, context=context,
+            count=count)
 
-class Bom(models.Model):
+    @api.model
+    def _filter_bom_lines_for_sale_option(self, product_id=None):
+        domain = []
+        if product_id:
+            product = self.env['product.product'].browse(product_id)
+            domain.append(('bom_id.product_tmpl_id', '=', product.product_tmpl_id.id))
+        print domain
+        return domain
+
+
+class MrpBom(models.Model):
     _inherit = "mrp.bom"
 
     @api.model
@@ -71,6 +94,7 @@ class Bom(models.Model):
             if option.bom_line_id == bom_line:
                 vals['product_qty'] = vals['product_qty'] * option.qty
         return vals
+
 
 class StockProductionLot(models.Model):
     _inherit = 'stock.production.lot'

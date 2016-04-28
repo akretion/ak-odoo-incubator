@@ -97,12 +97,22 @@ class SaleOrderLineOption(models.Model):
     _name = 'sale.order.line.option'
 
     sale_line_id = fields.Many2one(
-        'sale.order.line',
+        comodel_name='sale.order.line',
         required=True,
-        ondelete='cascade',)
-    bom_line_id = fields.Many2one('mrp.bom.line', 'Bom line', required=True)
+        ondelete='cascade')
+    bom_line_id = fields.Many2one(
+        comodel_name='mrp.bom.line', string='Bom Line')
+    product_id = fields.Many2one(
+        comodel_name='product.product', string='Product',
+        required=True, readonly=True)
     qty = fields.Integer(default=1)
     line_price = fields.Float(compute='_compute_price', store=True)
+
+    @api.onchange('bom_line_id')
+    def update_sale_option(self):
+        if self.bom_line_id:
+            self.product_id = self.bom_line_id.product_id.id
+            self.qty = self.bom_line_id.product_qty
 
     @api.one
     @api.depends('bom_line_id', 'qty')
@@ -113,8 +123,9 @@ class SaleOrderLineOption(models.Model):
                 {
                     'uom': self.bom_line_id.product_uom.id,
                     'date': self.sale_line_id.order_id.date_order,
-                    'with_rm': self.sale_line_id.price_with_material,
-                    'urgent': self.sale_line_id.order_id.urgent
+                    # TODO: move these 2 lines to custom
+                    # 'with_rm': self.sale_line_id.price_with_material,
+                    # 'urgent': self.sale_line_id.order_id.urgent
                 }).price_get(
                 self.bom_line_id.product_id.id,
                 self.bom_line_id.product_qty or 1.0,
