@@ -1,24 +1,6 @@
-# -*- coding: utf-8 -*-
-###############################################################################
-#
-#   Module for Odoo
-#   Copyright (C) 2015 Akretion (http://www.akretion.com).
-#   @author Valentin CHEMIERE <valentin.chemiere@akretion.com>
-#
-#   This program is free software: you can redistribute it and/or modify
-#   it under the terms of the GNU Affero General Public License as
-#   published by the Free Software Foundation, either version 3 of the
-#   License, or (at your option) any later version.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU Affero General Public License for more details.
-#
-#   You should have received a copy of the GNU Affero General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-###############################################################################
+# coding: utf-8
+# © 2015 Akretion, Valentin CHEMIERE <valentin.chemiere@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import fields, api, models
 
@@ -54,7 +36,24 @@ class SaleOrderLine(models.Model):
             fiscal_position, flag, context)
         if product:
             res['value']['base_price_unit'] = res['value']['price_unit']
+            res['value']['optional_bom_line_ids'] = self._set_optional_lines(
+                cr, uid, product, context=context)
         return res
+
+    @api.model
+    def _set_optional_lines(self, product_id):
+        lines = []
+        bom_lines = self.env['mrp.bom.line'].with_context(
+            filter_bom_with_product_id=product_id).search([])
+        for bline in bom_lines:
+            if bline.default_qty:
+                # TODO refactor with update_sale_option() below
+                vals = {'bom_line_id': bline.id,
+                        'product_id': bline.product_id.id,
+                        'qty': bline.default_qty}
+                lines.append((0, 0, vals))  # create
+        if lines:
+            return lines
 
     @api.multi
     def _onchange_eval(self, field_name, onchange, result):
@@ -85,8 +84,8 @@ class SaleOrder(models.Model):
 
     @api.model
     def _prepare_vals_lot_number(self, order_line, index_lot):
-        res = super(SaleOrder, self)._prepare_vals_lot_number(order_line,
-                                                              index_lot)
+        res = super(SaleOrder, self)._prepare_vals_lot_number(
+            order_line, index_lot)
         res['optional_bom_line_ids'] = [
             (6, 0, [line.id for line in order_line.optional_bom_line_ids])
         ]
@@ -103,8 +102,10 @@ class SaleOrderLineOption(models.Model):
     bom_line_id = fields.Many2one(
         comodel_name='mrp.bom.line', string='Bom Line')
     product_id = fields.Many2one(
+        comodel_name='product.product', string='Product', required=True)
+    product_id_rel = fields.Many2one(
         comodel_name='product.product', string='Product',
-        required=True, readonly=True)
+        related='product_id', readonly=True)
     qty = fields.Integer(default=1)
     line_price = fields.Float(compute='_compute_price', store=True)
 
@@ -112,7 +113,7 @@ class SaleOrderLineOption(models.Model):
     def update_sale_option(self):
         if self.bom_line_id:
             self.product_id = self.bom_line_id.product_id.id
-            self.qty = self.bom_line_id.product_qty
+            self.qty = self.bom_line_id.default_qty or 1
 
     @api.one
     @api.depends('bom_line_id', 'qty')

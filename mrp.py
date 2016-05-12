@@ -1,24 +1,6 @@
-# -*- coding: utf-8 -*-
-###############################################################################
-#
-#   Module for Odoo
-#   Copyright (C) 2015 Akretion (http://www.akretion.com).
-#   @author Valentin CHEMIERE <valentin.chemiere@akretion.com>
-#
-#   This program is free software: you can redistribute it and/or modify
-#   it under the terms of the GNU Affero General Public License as
-#   published by the Free Software Foundation, either version 3 of the
-#   License, or (at your option) any later version.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU Affero General Public License for more details.
-#
-#   You should have received a copy of the GNU Affero General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-###############################################################################
+# coding: utf-8
+# © 2015 Akretion, Valentin CHEMIERE <valentin.chemiere@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import fields, api, models
 
@@ -42,31 +24,48 @@ class MrpBomLineOption(models.Model):
 
 class MrpBomLine(models.Model):
     _inherit = "mrp.bom.line"
+    _rec_name = 'name'
 
     option_id = fields.Many2one('mrp.bom.line.option', 'Option')
+    name = fields.Char(compute='_compute_name', store=True)
+    default_qty = fields.Integer(string="Default Quantity")
 
-    # porting to new api when it'll be generalised in core (v10 ?)
-    def search(self, cr, uid, domain, offset=0, limit=None,
-               order=None, context=None, count=False):
-        new_domain = []
-        new_domain = list(domain)
-        if context and 'bom_from_sale_option' in context:
-            new_domain = self._filter_bom_lines_for_sale_option(
-                cr, uid, product_id=context.get(
-                'bom_from_sale_option'), context=context)
-        return super(MrpBomLine, self).search(
-            cr, uid, new_domain,
-            offset=offset, limit=limit, order=order, context=context,
-            count=count)
+    @api.multi
+    @api.depends('product_id')
+    def _compute_name(self):
+        for rec in self:
+            rec.name = rec.product_id.name
 
     @api.model
-    def _filter_bom_lines_for_sale_option(self, product_id=None):
-        domain = []
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        new_domain = self._filter_bom_lines_for_sale_option(args)
+        res = super(MrpBomLine, self).name_search(
+            name=name, args=new_domain, operator=operator, limit=limit)
+        return res
+
+    # porting to new api when it'll be generalised in core (v10)
+    def search(self, cr, uid, domain, offset=0, limit=None,
+               order=None, context=None, count=False):
+        new_domain = self._filter_bom_lines_for_sale_option(
+            cr, uid, domain, context=context)
+        return super(MrpBomLine, self).search(
+            cr, uid, new_domain, offset=offset, limit=limit, order=order,
+            context=context, count=count)
+
+    @api.model
+    def _filter_bom_lines_for_sale_option(self, domain):
+        product_id = self._context.get('filter_bom_with_product_id')
+        new_domain = list(domain)
         if product_id:
-            product = self.env['product.product'].browse(product_id)
-            domain.append(('bom_id.product_tmpl_id', '=', product.product_tmpl_id.id))
-        print domain
-        return domain
+            new_domain = [
+                '|',
+                '&', 
+                ('bom_id.product_tmpl_id.product_variant_ids',
+                    '=', product_id),
+                    ('bom_id.product_id', '=', False),
+                ('bom_id.product_id', '=', product_id),
+                ('option_id', '!=', False)]
+        return new_domain
 
 
 class MrpBom(models.Model):
@@ -74,7 +73,7 @@ class MrpBom(models.Model):
 
     @api.model
     def _skip_bom_line(self, line, product):
-        res = super(Bom, self)._skip_bom_line(line, product)
+        res = super(MrpBom, self)._skip_bom_line(line, product)
         prod_id = self.env.context['production_id']
         prod = self.env['mrp.production'].browse(prod_id)
         bom_lines = [option.bom_line_id
@@ -88,8 +87,10 @@ class MrpBom(models.Model):
 
     @api.model
     def _prepare_conssumed_line(self, bom_line, quantity, product_uos_qty):
-        vals = super(Bom, self)._prepare_conssumed_line(bom_line, quantity, product_uos_qty)
-        prod = self.env['mrp.production'].browse(self.env.context['production_id'])
+        vals = super(MrpBom, self)._prepare_conssumed_line(
+            bom_line, quantity, product_uos_qty)
+        prod = self.env['mrp.production'].browse(
+            self.env.context['production_id'])
         for option in prod.lot_id.optional_bom_line_ids:
             if option.bom_line_id == bom_line:
                 vals['product_qty'] = vals['product_qty'] * option.qty
@@ -100,7 +101,7 @@ class StockProductionLot(models.Model):
     _inherit = 'stock.production.lot'
 
     optional_bom_line_ids = fields.Many2many('sale.order.line.option',
-                                              'option_lot_rel',
-                                              'lot_id',
-                                              'option_id',
-                                              'optional bom lines')
+                                             'option_lot_rel',
+                                             'lot_id',
+                                             'option_id',
+                                             'optional bom lines')
