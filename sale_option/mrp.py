@@ -59,10 +59,10 @@ class MrpBomLine(models.Model):
         if product_id:
             new_domain = [
                 '|',
-                '&', 
+                '&',
                 ('bom_id.product_tmpl_id.product_variant_ids',
                     '=', product_id),
-                    ('bom_id.product_id', '=', False),
+                ('bom_id.product_id', '=', False),
                 ('bom_id.product_id', '=', product_id),
                 ('option_id', '!=', False)]
         return new_domain

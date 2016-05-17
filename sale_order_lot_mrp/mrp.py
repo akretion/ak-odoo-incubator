@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#  licence AGPL version 3 or later
-#  see licence in __openerp__.py or http://www.gnu.org/licenses/agpl-3.0.txt
-#  Copyright (C) 2014 Akretion (http://www.akretion.com).
-#  @author David BEAL <david.beal@akretion.com>
-#          Sébastien Beau <sebastien.beau@akretion.com>
-#
-##############################################################################
+# coding: utf-8
+# © 2016 David BEAL @ Akretion <david.beal@akretion.com>
+#        Sébastien Beau <sebastien.beau@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, api, fields
 
@@ -55,7 +49,7 @@ class ProcurementOrder(models.Model):
             res.update({
                 'lot_id': procurement.lot_id.id,
                 'name': procurement.lot_id.name,
-                })
+            })
         return res
 
 
