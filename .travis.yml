@@ -16,7 +16,6 @@ env:
   - VERSION="8.0" TESTS="1" LINT_CHECK="0"
 
   matrix:
-  - TESTS="0" LINT_CHECK="1"
   - ODOO_REPO="odoo/odoo"
   - ODOO_REPO="OCA/OCB"
   - UNIT_TEST="1" ODOO_REPO="odoo/odoo"
