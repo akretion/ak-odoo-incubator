@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data>
+
+    <record id="tracked_product" model="product.product">
+        <field name="name">Tracked Product</field>
+        <field name="type">product</field>
+        <field name="route_ids" eval="[(6, 0, [ref('stock.route_warehouse0_mto'),ref('mrp.route_warehouse0_manufacture')])]"/>
+        <field name="auto_generate_prodlot" eval="1"/>
+    </record>
+
+    <record id="bom_tracked_product" model="mrp.bom">
+        <field name="name">Tracked product bom</field>
+        <field name="product_tmpl_id" 
+               eval="ref('sale_order_lot_mrp.tracked_product_product_template')"/>
+    </record>
+    <record id="bom_tracked_product_component" model="mrp.bom.line">
+        <field name="bom_id" 
+               eval="ref('sale_order_lot_mrp.bom_tracked_product')"/>
+        <field name="product_id" eval="ref('product.product_product_14')"/>
+    </record>
+
+  </data>
+</openerp>
