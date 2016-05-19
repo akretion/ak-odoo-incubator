@@ -16,12 +16,12 @@
     'data': [
         'sale_view.xml',
         'mrp_view.xml',
-        'config.yml',
         'install.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [
         'demo/product_demo.xml',
+        'demo/config.yml',
     ],
     'installable': True,
     'application': False,

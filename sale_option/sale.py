@@ -115,22 +115,24 @@ class SaleOrderLineOption(models.Model):
             self.product_id = self.bom_line_id.product_id.id
             self.qty = self.bom_line_id.default_qty or 1
 
-    @api.one
+    @api.multi
+    def _get_bom_line_price(self):
+        self.ensure_one()
+        pricelist = self.sale_line_id.pricelist_id.with_context({
+            'uom': self.bom_line_id.product_uom.id,
+            'date': self.sale_line_id.order_id.date_order,
+        })
+        price = pricelist.price_get(
+            self.bom_line_id.product_id.id,
+            self.bom_line_id.product_qty or 1.0,
+            self.sale_line_id.order_id.partner_id.id)
+        return price[pricelist.id] * self.bom_line_id.product_qty * self.qty
+
+    @api.multi
     @api.depends('bom_line_id', 'qty')
     def _compute_price(self):
-        option_price = 0
-        if self.bom_line_id and self.sale_line_id.pricelist_id:
-            option_price = self.sale_line_id.pricelist_id.with_context(
-                {
-                    'uom': self.bom_line_id.product_uom.id,
-                    'date': self.sale_line_id.order_id.date_order,
-                    # TODO: move these 2 lines to custom
-                    # 'with_rm': self.sale_line_id.price_with_material,
-                    # 'urgent': self.sale_line_id.order_id.urgent
-                }).price_get(
-                self.bom_line_id.product_id.id,
-                self.bom_line_id.product_qty or 1.0,
-                self.sale_line_id.order_id.partner_id.id
-            )[self.sale_line_id.pricelist_id.id]
-            option_price *= self.bom_line_id.product_qty * self.qty
-        self.line_price = option_price
+        for record in self:
+            if record.bom_line_id and record.sale_line_id.pricelist_id:
+                record.line_price = record._get_bom_line_price()
+            else:
+                record.line_price = 0

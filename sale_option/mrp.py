@@ -31,7 +31,7 @@ class MrpBomLine(models.Model):
     default_qty = fields.Integer(string="Default Quantity")
 
     @api.multi
-    @api.depends('product_id')
+    @api.depends('product_id', 'product_id.product_tmpl_id.name')
     def _compute_name(self):
         for rec in self:
             rec.name = rec.product_id.name
