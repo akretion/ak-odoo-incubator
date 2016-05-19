@@ -4,12 +4,16 @@
 
 {
     'name': 'sale_order_lot_mrp',
-    'version': '1.0',
-    'category': 'Generic Modules',
+    'version': '8.0.0.1.1',
+    'category': 'Manufacturing',
     'description': """
+Allow you to attach a lot in manufacturing order
+that was defined by sale_order_lot_generator module
+for all concerned products (Lot Generation Auto field)
+Name of the MO is also based on sale name
     """,
     'author': 'Akretion',
-    'website': '',
+    'website': 'www.akretion.com',
     'depends': [
         'mrp_production_note',
         'sale_order_lot_generator',
@@ -17,7 +21,9 @@
     'data': [
         'mrp_view.xml',
     ],
+    'demo': [
+        'demo/product_demo.xml',
+        'demo/config.yml',
+    ],
     'installable': True,
-    'auto_install': False,
-    'application': False,
 }
