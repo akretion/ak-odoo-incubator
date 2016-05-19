@@ -16,7 +16,7 @@ class MrpProduction(models.Model):
     @api.multi
     def _action_compute_lines(self, properties=None):
         """
-        We passe the production.id in the context so you can easily get
+        We pass the production_id in the context so you can easily get
         retrieve the production information during the process that generate
         the line of needed for the production order. For exemple, you can in
         the function bom_explod read the information of the production order
