@@ -27,7 +27,7 @@ class MrpBomLine(models.Model):
     _rec_name = 'name'
 
     option_id = fields.Many2one('mrp.bom.line.option', 'Option')
-    name = fields.Char(compute='_compute_name', store=True)
+    name = fields.Char(compute='_compute_name', store=True, index=True)
     default_qty = fields.Integer(string="Default Quantity")
 
     @api.multi
@@ -57,11 +57,11 @@ class MrpBomLine(models.Model):
         product_id = self._context.get('filter_bom_with_product_id')
         new_domain = list(domain)
         if product_id:
+            product = self.env['product.product'].browse(product_id)
             new_domain = [
                 '|',
                 '&',
-                ('bom_id.product_tmpl_id.product_variant_ids',
-                    '=', product_id),
+                ('bom_id.product_tmpl_id', '=', product.product_tmpl_id.id),
                 ('bom_id.product_id', '=', False),
                 ('bom_id.product_id', '=', product_id),
                 ('option_id', '!=', False)]
