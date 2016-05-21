@@ -16,6 +16,7 @@ env:
   - VERSION="8.0" TESTS="1" LINT_CHECK="0"
 
   matrix:
+  - TESTS="0" LINT_CHECK="1"
   - ODOO_REPO="odoo/odoo"
   - ODOO_REPO="OCA/OCB"
   - UNIT_TEST="1" ODOO_REPO="odoo/odoo"
@@ -29,6 +30,9 @@ install:
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
   - printf '[options]\n\nrunning_env = dev\n' > ${HOME}/.openerp_serverrc
+  - git clone https://github.com/akretion/akretion-quality-tools ${HOME}/akretion-quality-tools
+  - export PATH=${HOME}/akretion-quality-tools/travis:${PATH}
+  - travis_configure
 
 script:
   - travis_run_tests
