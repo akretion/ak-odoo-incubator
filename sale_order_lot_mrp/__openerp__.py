@@ -14,6 +14,7 @@ Name of the MO is also based on sale name
     """,
     'author': 'Akretion',
     'website': 'www.akretion.com',
+    'license': 'AGPL-3',
     'depends': [
         'mrp_production_note',
         'sale_order_lot_generator',

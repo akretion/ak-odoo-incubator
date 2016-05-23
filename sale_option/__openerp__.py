@@ -4,7 +4,7 @@
 
 {
     'name': 'Sale option',
-    'version': '0.0.1',
+    'version': '8.0.0.0.1',
     'author': 'Akretion',
     'website': 'www.akretion.com',
     'license': 'AGPL-3',
