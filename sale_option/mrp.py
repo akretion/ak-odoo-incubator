@@ -55,7 +55,6 @@ class MrpBomLine(models.Model):
     @api.model
     def _filter_bom_lines_for_sale_option(self, domain):
         product_id = self._context.get('filter_bom_with_product_id')
-        new_domain = list(domain)
         if product_id:
             product = self.env['product.product'].browse(product_id)
             new_domain = [
@@ -65,7 +64,8 @@ class MrpBomLine(models.Model):
                 ('bom_id.product_id', '=', False),
                 ('bom_id.product_id', '=', product_id),
                 ('option_id', '!=', False)]
-        return new_domain
+            domain += new_domain
+        return domain
 
 
 class MrpBom(models.Model):
@@ -79,7 +79,7 @@ class MrpBom(models.Model):
         bom_lines = [option.bom_line_id
                      for option in prod.lot_id.optional_bom_line_ids]
         if not line.option_id\
-                or line.option_id.type == 'required'\
+                or line.option_id.type == 'required' \
                 or line in bom_lines:
             return res
         else:

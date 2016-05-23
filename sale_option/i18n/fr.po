@@ -41,6 +41,11 @@ msgid "Bom Line"
 msgstr "Ligne de nomenclature"
 
 #. module: sale_option
+#: view:mrp.bom.line:sale_option.view_mrp_bom_line_filter
+msgid "Component name"
+msgstr "Nom du composant"
+
+#. module: sale_option
 #: field:mrp.bom.line.option,create_uid:0
 #: field:sale.order.line.option,create_uid:0
 msgid "Created by"
@@ -139,3 +144,5 @@ msgstr "Type"
 #: view:sale.order:sale_option.view_sale_line_form
 msgid "{'default_pricelist_id': pricelist_id}"
 msgstr "{'default_pricelist_id': pricelist_id}"
+
+

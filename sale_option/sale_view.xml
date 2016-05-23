@@ -22,8 +22,7 @@
                             <field name="bom_line_id"
                                    context="{'filter_bom_with_product_id': parent.product_id}"/>
                             <field name="product_id_rel"/>
-                            <field name="product_id" invisible="1"
-                                   context="{'product_from_sale_option': parent.product_id}"/>
+                            <field name="product_id" invisible="1"/>
                             <field name="qty"/>
                             <field name="line_price"/>
                         </tree>
