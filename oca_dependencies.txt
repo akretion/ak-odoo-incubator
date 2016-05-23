@@ -1,2 +1,4 @@
 server-tools
 product-attribute
+sale-workflow
+manufacture
