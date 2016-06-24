@@ -6,7 +6,7 @@ from openerp import api, models
 import base64
 
 
-class ProxyActionHelper(models.Model):
+class ProxyActionHelper(models.AbstractModel):
     _name = "proxy.action.helper"
     _description = "Forward HTTP actions to front-end proxy"
 
@@ -19,11 +19,14 @@ class ProxyActionHelper(models.Model):
             copies=1,
             host='https://localhost'):
         """ Prepare a PyWebdriver.print action """
+
+        # remove copies from v9 api, log warning in case of use
+        copie = copies
         if to_encode64:
             data = base64.b64encode(data)
         kwargs = {'options': {}}
-        if copies > 1:
-            kwargs['options']['copie'] = copies
+        if copie > 1:
+            kwargs['options']['copie'] = copie
         if raw:
             kwargs['options']['raw'] = True
         return {
