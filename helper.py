@@ -8,7 +8,7 @@ import base64
 
 class ProxyActionHelper(models.Model):
     _name = "proxy.action.helper"
-    _description = "Use this object to collect action to send to servers"
+    _description = "Forward HTTP actions to front-end proxy"
 
     @api.model
     def get_print_data_action(
@@ -18,9 +18,7 @@ class ProxyActionHelper(models.Model):
             to_encode64=False,
             copies=1,
             host='https://localhost'):
-        """ Method to send send print action tu cups
-            In Odoo to populate pdf data use:
-            self.env['report'].get_pdf(object_ids, report_name)"""
+        """ Prepare a PyWebdriver.print action """
         if to_encode64:
             data = base64.b64encode(data)
         kwargs = {'options': {}}
@@ -37,7 +35,7 @@ class ProxyActionHelper(models.Model):
             }
 
     def send_proxy(self, todo):
-        """ @param todo: list of requests to send to servers
+        """ @param todo: list of requests
                          (printings, webservices)
         """
         return {
