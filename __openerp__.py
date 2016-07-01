@@ -15,6 +15,7 @@
      'base',
  ],
  'data': [
+    'static/src/xml/view.xml',
  ],
  'js': [
      'static/src/js/view.js'
