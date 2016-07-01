@@ -18,7 +18,6 @@
     'static/src/xml/view.xml',
  ],
  'js': [
-     'static/src/js/view.js'
  ],
  'installable': True,
  }
