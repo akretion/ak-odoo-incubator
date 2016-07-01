@@ -3,7 +3,7 @@
     <data>
         <template id="assets_backend" name="any assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
-                <script type="text/javascript" src="/proxy_action/static/src/js/views.js"></script>
+                <script type="text/javascript" src="/proxy_action/static/src/js/proxy_view.js"></script>
             </xpath>
         </template>
     </data>
