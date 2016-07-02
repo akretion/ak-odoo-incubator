@@ -1,0 +1,111 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* product_variant_weight
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-07-02 18:04+0200\n"
+"PO-Revision-Date: 2016-07-02 18:12+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#. module: product_variant_weight
+#: model:ir.model,name:product_variant_weight.model_product_product
+msgid "Product"
+msgstr "Article"
+
+#. module: product_variant_weight
+#: model:ir.model,name:product_variant_weight.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'Article "
+
+#. module: product_variant_weight
+#: field:product.product,purchase_line_warn:0
+msgid "Purchase Order Line"
+msgstr "Ligne de commande d'achat"
+
+#. module: product_variant_weight
+#: field:product.product,sale_line_warn:0
+msgid "Sales Order Line"
+msgstr "Ligne de commande de vente"
+
+#. module: product_variant_weight
+#: field:product.product,weight_tmpl:0 field:product.template,weight_tmpl:0
+msgid "Template Gross Weight"
+msgstr "Poids brut du modèle"
+
+#. module: product_variant_weight
+#: field:product.product,weight_net_tmpl:0
+#: field:product.template,weight_net_tmpl:0
+msgid "Template Net Weight"
+msgstr "Poids net du modèle"
+
+#. module: product_variant_weight
+#: help:product.product,weight_net_variant:0
+msgid "The addtionnal part of net weight in Kg on variant."
+msgstr "Le poids net additionnel  en kg sur la variante."
+
+#. module: product_variant_weight
+#: help:product.product,weight_variant:0
+msgid "The addtionnal part of weight in Kg on variant."
+msgstr "Le poids additionnel  en kg sur la variante."
+
+#. module: product_variant_weight
+#: help:product.product,weight_tmpl:0 help:product.template,weight_tmpl:0
+msgid "The gross weight in Kg of the product template."
+msgstr "Le poids brut en kg du modèle."
+
+#. module: product_variant_weight
+#: help:product.product,weight_net_tmpl:0
+#: help:product.template,weight_net_tmpl:0
+msgid "The net weight in Kg of the product template."
+msgstr "Le poids net en kg du modèle."
+
+#. module: product_variant_weight
+#: field:product.product,weight_net_variant:0
+msgid "Variant Net Weight"
+msgstr "Poids net de la variante"
+
+#. module: product_variant_weight
+#: field:product.product,weight_variant:0
+msgid "Variant Weight"
+msgstr "Poids de la variante"
+
+#. module: product_variant_weight
+#: code:addons/product_variant_weight/product.py:26
+#, python-format
+msgid ""
+"Weight fields must come from product.product model.This constraint has been "
+"added by 'Product Variant Weight' module.Please call you support team."
+msgstr ""
+"Les champ de poids doivent venir de la variante. Cette contrainte a été "
+"ajouté par le module 'Product Variant Weight'. Contactez votre équipe "
+"support."
+
+#. module: product_variant_weight
+#: view:product.product:product_variant_weight.product_normal_form_view
+msgid "Weight of attributes parts"
+msgstr "Poids relatif aux attributs"
+
+#~ msgid "Message for Purchase Order Line"
+#~ msgstr "Message for Purchase Order Line"
+
+#~ msgid "Message for Sales Order Line"
+#~ msgstr "Message for Sales Order Line"
+
+#~ msgid ""
+#~ "Selecting the \"Warning\" option will notify user with the message, "
+#~ "Selecting \"Blocking Message\" will throw an exception with the message "
+#~ "and block the flow. The Message has to be written in the next field."
+#~ msgstr ""
+#~ "Selecting the \"Warning\" option will notify user with the message, "
+#~ "Selecting \"Blocking Message\" will throw an exception with the message "
+#~ "and block the flow. The Message has to be written in the next field."
