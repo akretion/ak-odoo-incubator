@@ -13,3 +13,7 @@ class ResCompany(models.Model):
         help="Coefficient between weight net and weight gross.\n"
              "i.e. if I set 1.05, default weight gross is 5 % upper "
              "than weight net")
+    weight_gross_base = fields.Float(
+        string='Weight Gross Base',
+        help="Constant part of weight used to calculate weight gross "
+             "with weight net")
