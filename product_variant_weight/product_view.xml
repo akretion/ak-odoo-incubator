@@ -38,7 +38,7 @@
                     <u>Weight of attributes parts</u></span>:<newline/>
                 <field name="weight_variant"/>
                 <field name="weight_net_variant"/>
-                    <i>If weight are set in product template and variant, both weights are added.</i>
+                    <i>If weight is set in product template and variant, both weights are added.</i>
             </field>
         </field>
     </record>
