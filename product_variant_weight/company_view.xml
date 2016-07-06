@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data>
+
+
+    <record id="mrp_company" model="ir.ui.view">
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="procurement.mrp_company"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='logistics_grp']" position="inside">
+                <field name="weight_ratio"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</data>
+</openerp>

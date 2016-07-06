@@ -7,6 +7,12 @@ from openerp.exceptions import Warning as UserError
 import openerp.addons.decimal_precision as dp
 
 
+def get_weight_ratio(self):
+    ResCompany = self.env['res.company']
+    company_id = ResCompany._company_default_get(object=self._name)
+    return ResCompany.browse(company_id).weight_ratio or 0
+
+
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
@@ -20,6 +26,12 @@ class ProductTemplate(models.Model):
         string='Template Net Weight',
         digits_compute=dp.get_precision('Stock Weight'),
         help="The net weight in Kg of the product template.")
+
+    @api.onchange('weight_net_tmpl')
+    def onchange_net_weight(self):
+        # TODO make it works in multicompany
+        if not self.weight_tmpl:
+            self.weight_tmpl = self.weight_net_tmpl * get_weight_ratio(self)
 
     @api.model
     def _raise_me(self):
@@ -49,6 +61,13 @@ class ProductProduct(models.Model):
         string='Variant Net Weight',
         digits_compute=dp.get_precision('Stock Weight'),
         help="The addtionnal part of net weight in Kg on variant.")
+
+    @api.onchange('weight_net_variant')
+    def onchange_net_weight(self):
+        # TODO make it works in multicompany
+        if not self.weight_variant:
+            self.weight_variant = (
+                self.weight_net_variant * get_weight_ratio(self))
 
     @api.multi
     @api.depends('weight_variant',

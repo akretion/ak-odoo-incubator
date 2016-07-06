@@ -6,15 +6,17 @@
     'name': 'Product Variant Weight',
     'summary': 'Split weight in 2 fields',
     'description': "Split weight in 2 fields: template and product",
-    'version': '0.1',
+    'version': '8.0.0.0.2',
+    'category': 'Product',
     'author': 'Akretion',
     'category': 'product',
     'depends': [
-        'product',
+        'procurement',
     ],
     'website': 'http://www.akretion.com/',
     'data': [
-        'view.xml',
+        'product_view.xml',
+        'company_view.xml',
     ],
     'license': 'AGPL-3',
 }

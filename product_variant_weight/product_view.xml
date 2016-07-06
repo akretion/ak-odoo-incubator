@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data>
+
+
+    <record id="product_template_only_form_view" model="ir.ui.view">
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="volume" position="after">
+                <field name="weight_tmpl"/>
+                <field name="weight_net_tmpl"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <!-- Replaced fields should be removed after odoo or community modules action -->
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+            <!--This module move these fields to product.product-->
+            <field name="weight" position="replace"/>
+            <field name="weight_net" position="replace"/>
+        </field>
+    </record>
+
+    <record id="product_normal_form_view" model="ir.ui.view">
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <field name="volume" position="after">
+                <field name="weight"/>
+                <field name="weight_net"/>
+                <span title="If product has variant part, fields below are the variant weight (attributes combination)">
+                    <u>Weight of attributes parts</u></span>:<newline/>
+                <field name="weight_variant"/>
+                <field name="weight_net_variant"/>
+                    <i>If weight are set in product template and variant, both weights are added.</i>
+            </field>
+        </field>
+    </record>
+
+
+</data>
+</openerp>
