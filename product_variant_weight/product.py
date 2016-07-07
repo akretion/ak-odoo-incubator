@@ -21,11 +21,11 @@ class ProductTemplate(models.Model):
     weight_net = fields.Float(compute='_raise_me')
     weight_tmpl = fields.Float(
         string="Template Gross Weight",
-        digits_compute=dp.get_precision('Stock Weight'),
+        digits=dp.get_precision('Stock Weight'),
         help="The gross weight in Kg of the product template.")
     weight_net_tmpl = fields.Float(
         string='Template Net Weight',
-        digits_compute=dp.get_precision('Stock Weight'),
+        digits=dp.get_precision('Stock Weight'),
         help="The net weight in Kg of the product template.")
 
     @api.onchange('weight_net_tmpl')
