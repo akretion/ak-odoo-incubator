@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="act_start" model="workflow.activity">
+            <field name="wkf_id" ref="stock.wkf_picking"/>
+            <field name="name">start</field>
+            <field name="kind">function</field>
+            <field name="action">write({"state":"started"})</field>
+        </record>
+
+        <record id="trans_start_2_move" model="workflow.transition">
+            <field name="act_from" ref="act_start"/>
+            <field name="act_to" ref="stock.act_move"/>
+            <field name="signal">button_done</field>
+        </record>
+
+        <record id="trans_assigned_start" model="workflow.transition">
+            <field name="act_from" ref="stock.act_assigned"/>
+            <field name="act_to" ref="act_start"/>
+            <field name="signal">button_start</field>
+        </record>
+
+        <record id="trans_start_assigned" model="workflow.transition">
+            <field name="act_from" ref="act_start"/>
+            <field name="act_to" ref="stock.act_assigned"/>
+            <field name="signal">button_unstart</field>
+        </record>
+
+    </data>
+</openerp>

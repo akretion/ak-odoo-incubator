@@ -1,0 +1,94 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* stock_delivery_prepare
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-22 12:05+0000\n"
+"PO-Revision-Date: 2014-04-22 12:05+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.out:0
+msgid "started"
+msgstr "livraison en cours"
+
+#. module: stock_delivery_prepare
+#: field:stock.picking.preparation,file:0
+msgid "Delivery Orders File"
+msgstr "Fichier des Bons de Livraisons"
+
+#. module: stock_delivery_prepare
+#: code:addons/stock_delivery_prepare/wizard/stock_picking_validation.py:46
+#, python-format
+msgid "Error !"
+msgstr "Erreur !"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.out:0
+msgid "Undo Start Picking"
+msgstr "Annuler le lancement de la Préparation de Commandes"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.out:0
+msgid "Started"
+msgstr "Livraison en cours"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.out:0
+msgid "Start Picking"
+msgstr "Lancer la Préparation de Commandes"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.preparation:0
+msgid "Start"
+msgstr "Démarrer"
+
+#. module: stock_delivery_prepare
+#: code:addons/stock_delivery_prepare/wizard/stock_picking_validation.py:46
+#, python-format
+msgid "The delivery orders %s are not in the state Assigned"
+msgstr "Les Bons de Livraison %s ne sont pas dans l'état 'Prêt à Livrer'"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.out:0
+msgid "Started Delivery Orders"
+msgstr "Bons de Livraison en cours de préparation"
+
+#. module: stock_delivery_prepare
+#: model:ir.model,name:stock_delivery_prepare.model_stock_picking_preparation
+msgid "stock.picking.preparation"
+msgstr "stock.picking.preparation"
+
+#. module: stock_delivery_prepare
+#: model:ir.model,name:stock_delivery_prepare.model_stock_picking
+msgid "Picking List"
+msgstr "Liste des Préparations de Commandes"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.preparation:0
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: stock_delivery_prepare
+#: view:stock.picking.preparation:0
+msgid "Close"
+msgstr "Fermer"
+
+#. module: stock_delivery_prepare
+#: model:ir.model,name:stock_delivery_prepare.model_stock_picking_out
+msgid "Delivery Orders"
+msgstr "Bons de livraisons"
+
+#. module: stock_delivery_prepare
+#: model:ir.actions.act_window,name:stock_delivery_prepare.action_stock_picking_preparation
+#: view:stock.picking.preparation:0
+msgid "Massive Preparation"
+msgstr "Préparation en Masse"
