@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_picking_out_search" model="ir.ui.view">
+            <field name="model">stock.picking.out</field>
+            <field name="inherit_id" ref="stock.view_picking_out_search"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <filter icon="terp-camera_test" position="after">
+                    <filter icon="terp-locked" name="started" string="Started" domain="[('state','=','started')]" help="Started Delivery Orders"/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="view_picking_out_form" model="ir.ui.view">
+            <field name="model">stock.picking.out</field>
+            <field name="inherit_id" ref="stock.view_picking_out_form"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <button name="action_process" position="attributes">
+                    <attribute name="states">started</attribute>
+                </button>
+                <button name="action_process" position="before">
+                    <button name="unstart" states="started"
+                            string="Undo Start Picking" type="object"/>
+                    <button name="start" states="assigned" string="Start Picking"
+                            class="oe_highlight" type="object"/>
+                </button>
+            </field>
+        </record>
+
+    </data>
+</openerp>

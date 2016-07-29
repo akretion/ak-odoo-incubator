@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  stock_delivery_prepare module for OpenERP
+  Copyright (C) 2014 Chafique DELLI <chafique.delli@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+<!-- Stock Delivery Prepare Wizard -->
+        <record id="stock_picking_preparation_form" model="ir.ui.view">
+            <field name="model">stock.picking.preparation</field>
+            <field name="arch" type="xml">
+                <form string="Massive Preparation">
+                    <field name="force_availability"/>
+                    <group colspan="4" attrs="{'invisible': [('file', '!=', False)]}">
+                        <button icon="gtk-cancel"
+                                special="cancel"
+                                string="Cancel"
+                                />
+                        <button icon="gtk-ok"
+                                name="start_preparation"
+                                string="Start"
+                                type="object"
+                                />
+                    </group>
+                    <group colspan="2" attrs="{'invisible': [('file', '==', False)]}">
+                        <field name="file" filename="filename"/>
+                        <field name="filename" attrs="{'invisible': True}"/>
+                        <button icon="gtk-close"
+                                name="ir.actions.act_window_close"
+                                string="Close"
+                                type="objet"
+                                />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_stock_picking_preparation" model="ir.actions.act_window">
+            <field name="name">Massive Preparation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking.preparation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="ir_action_stock_picking_preparation" model="ir.values">
+            <field name="key2">client_action_multi</field>
+            <field name="model">stock.picking.out</field>
+            <field name="name">Massive Preparation</field>
+            <field eval="'ir.actions.act_window,%d'%action_stock_picking_preparation" name="value"/>
+            <field eval="True" name="object"/>
+        </record>
+    </data>
+</openerp>
