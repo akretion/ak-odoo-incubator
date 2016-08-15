@@ -12,7 +12,7 @@ configuration also add the posibility to set the default field""",
     'author': "Akretion",
     'license': "AGPL-3",
     'application': False,
-    'installable': True,
+    'installable': False,
     'depends': [
         "product",
     ],

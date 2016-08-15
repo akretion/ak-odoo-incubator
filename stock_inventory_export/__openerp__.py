@@ -35,5 +35,5 @@
     'data': [
         'stock_inventory_export_data.xml',
     ],
-    'installable': True,
+    'installable': False,
 }

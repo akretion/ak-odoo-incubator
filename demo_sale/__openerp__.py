@@ -17,6 +17,6 @@
     'data': [
         'res.partner.csv',
     ],
-    'installable': True,
+    'installable': False,
     'license': 'AGPL-3',
 }

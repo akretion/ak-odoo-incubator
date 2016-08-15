@@ -15,4 +15,5 @@ Remote records related to a warehouse when you delete it
     'depends': [
         'stock',
     ],
+    'installable': False,
 }

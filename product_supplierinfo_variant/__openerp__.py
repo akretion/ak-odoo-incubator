@@ -39,7 +39,7 @@
     'demo': [
     ],
     'tests': [],
-    'installable': True,
+    'installable': False,
     'license': 'AGPL-3',
     'external_dependencies': {
         'python': [],

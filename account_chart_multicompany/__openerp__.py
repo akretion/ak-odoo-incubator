@@ -36,5 +36,5 @@
      'security/ir.rule.csv',
      'security/ir.model.access.csv',
  ],
- 'installable': True,
+ 'installable': False,
  }
