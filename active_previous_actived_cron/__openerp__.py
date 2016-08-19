@@ -15,7 +15,8 @@ You should stop the automatical tasks to understand what is the real problem.
 
 * Install this module: all tasks (crons) are now inactive
 * Fix the issue
-* Uninstall this module: all tasks previously active, and only them, are now active.
+* Uninstall this module: all tasks previously active, and only them,
+  are now active.
 
 
 When the production is repaired, you may forget to active one or more crons.

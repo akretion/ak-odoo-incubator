@@ -9,7 +9,6 @@
     'version': '8.0.0.0.2',
     'category': 'Product',
     'author': 'Akretion',
-    'category': 'product',
     'depends': [
         'procurement',
     ],
