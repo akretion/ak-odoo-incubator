@@ -19,30 +19,22 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import Model
-from openerp.osv import fields, orm
+from openerp import fields, models
 
 
-class ResPartner(Model):
+class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    def _get_edi_transfer_method(self, cr, uid, context=None):
-        return [
-            ('no_edi', 'No Edi Transfer'),
-            ('mail', 'E-mail'),
-            ('repository', 'SFTP/FTP'),
-        ]
-
-    _columns = {
-        'edi_transfer_method': fields.selection(
-            _get_edi_transfer_method,
-            string='Edi Transfer Method'),
-        'edi_repository_id': fields.many2one(
+    edi_transfer_method = fields.Selection(
+        selection=[('no_edi', 'No Edi Transfer'),
+                   ('mail', 'E-mail'),
+                   ('external_location', 'SFTP/FTP')]
+        string='Edi Transfer Method'),
+    edi_repository_id = fields.Many2one(
             'file.repository',
             string='FTP/SFTP Repository'),
-        'edi_mail_template_id': fields.many2one(
+    edi_mail_template_id = fields.Many2one(
             'email.template',
             string='Edi Mail Template'),
-        'edi_empty_file': fields.boolean('Send EDI empty file'),
-    }
+    edi_empty_file = fields.Boolean('Send EDI empty file'),
 

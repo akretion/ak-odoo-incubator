@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-<data>
-
 
     <record id="base_edi_partner_view_form" model="ir.ui.view">
         <field name="model">res.partner</field>
@@ -19,5 +17,4 @@
         </field>
     </record>
 
-</data>
 </openerp>

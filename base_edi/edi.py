@@ -19,17 +19,17 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import BaseModel, Model
+from openerp import models, api, fields, exceptions
 from openerp.addons.web.controllers.main import CSVExport, ExcelExport
 import base64
 from datetime import datetime
 
 
-class EdiMixin(BaseModel):
+class EdiMixin(models.Model):
     _name = 'edi.mixin'
 
-    def _get_edi_attachment_vals(self, cr, uid, datas, edi_profile, 
-                                 res_record, context=None):
+    @api.model
+    def _get_edi_attachment_vals(self, datas, edi_profile, res_record):
         today = datetime.now().strftime('%Y-%m-%d')
         name = '%s_%s.%s' % (today, edi_profile.name, edi_profile.file_format)
 
@@ -43,58 +43,56 @@ class EdiMixin(BaseModel):
             'res_id': res_id,
         }
 
-    def _get_edi_file_document_vals(self, cr, uid, datas, repository,
-                                    attach_id, context=None):
-        tasks = [t for t in repository.task_ids if t.direction == 'out']
-        task_id = tasks[0]._model._name+','+str(tasks[0].id)
+    @api.model
+    def _get_edi_metadata_attachment_vals(self, datas, location,
+                                          attach_id):
+        tasks = [t for t in location.task_ids if t.method_type == 'export']
+        task = tasks[0]
         return {
-            'file_type': 'export',
-            'repository_id': repository.id,
+            'file_type': task.file_type,
             'task_id': task_id,
             'active': True,
-            'direction': 'output',
             'attachment_id': attach_id,
         }        
 
-    def create_edi_file(self, cr, uid, datas, transfer_method,
-                           edi_transfer, edi_profile, res_record, context=None):
+    @api.model
+    def create_edi_file(self, datas, transfer_method,
+                           edi_transfer, edi_profile, res_record):
         attach_vals = self._get_edi_attachment_vals(
-                cr, uid, datas, edi_profile,
-                res_record,context=context)
-        attach_id = self.pool['ir.attachment'].create(
-                cr, uid, attach_vals, context=context)
-        if transfer_method == 'repository':
-            vals = self._get_edi_file_document_vals(
-                cr, uid, datas, edi_transfer, attach_id, context=context)
-            self.pool['file.document'].create(cr, uid, vals, context=context)
-        return attach_id
+                datas, edi_profile, res_record)
+        attach = self.env['ir.attachment'].create(
+                attach_vals)
+        if transfer_method == 'external_location':
+            vals = self._get_edi_metadata_attachment_vals(
+                datas, edi_transfer, attach_id)
+            self.env['file.document'].create(vals)
+        return attach
 
-    def get_edi_datas(self, cr, uid, ids, fields, fields_names,
-                      file_format, context=None):
-        rows = self.export_data(cr, uid, ids, fields, context=context).get('datas',[])
+    @api.multi
+    def get_edi_datas(self, fields, fields_names,
+                      file_format):
+        rows = self.export_data(fields).get('datas',[])
         if file_format == 'csv':
             datas = CSVExport().from_data(fields_names, rows)
         elif file_format == 'xls':
             datas = ExcelExport().from_data(fields_names, rows)
         else:
-            raise orm.except_orm(
-                _('Warning!'),
+            raise exceptions.UserError(
                 _("The file format is not defined."))
         return datas
 
 
-    def get_fields_from_export(self, cr, uid, export_id, context=None):
-        export = self.pool["ir.exports"].read(cr, uid, [export_id], context=context)[0]
-        export_lines = self.pool["ir.exports.line"].read(cr, uid,
-            export['export_fields'], context=context)
+    @api.model
+    def get_fields_from_export(self, export_id):
+        export = self.env["ir.exports"].browse(export_id)
         fields = []
         fields_name = []
-        if export.get('export_database_ext_id', False):
+        if export.export_database_ext_id:
             fields.append('id')
             fields_name.append('Ext Id')
-        for line in export_lines:
-            fields.append(line['name'])
-            fields_name.append(line['display_name'] or line['name'])
+        for line in export.export_fields:
+            fields.append(line.name
+            fields_name.append(line.display_name or line.name)
         return fields, fields_name
         
         

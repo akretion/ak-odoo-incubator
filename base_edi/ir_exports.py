@@ -19,22 +19,16 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import Model
-from openerp.osv import fields, orm
+from openerp import models, fields
 
 
-class IrExports(Model):
+class IrExports(models.Model):
     _inherit = "ir.exports"
 
-    _columns = {
-        'export_database_ext_id': fields.boolean('Export Database Ext ID'),
-    }
+    export_database_ext_id = fields.Boolean()
 
 
-class IrExportsLine(Model):
+class IrExportsLine(models.Model):
     _inherit = "ir.exports.line"
 
-    _columns = {
-        'display_name': fields.char('Display Name'),
-    }
-
+    display_name = fields.Char()
