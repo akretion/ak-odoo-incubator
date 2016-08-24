@@ -49,8 +49,8 @@ class EdiMixin(models.Model):
         tasks = [t for t in location.task_ids if t.method_type == 'export']
         task = tasks[0]
         return {
-            'file_type': task.file_type,
-            'task_id': task_id,
+            'file_type': 'export_external_location',
+            'task_id': task.id,
             'active': True,
             'attachment_id': attach_id,
         }        
@@ -64,8 +64,8 @@ class EdiMixin(models.Model):
                 attach_vals)
         if transfer_method == 'external_location':
             vals = self._get_edi_metadata_attachment_vals(
-                datas, edi_transfer, attach_id)
-            self.env['file.document'].create(vals)
+                datas, edi_transfer, attach.id)
+            self.env['ir.attachment.metadata'].create(vals)
         return attach
 
     @api.multi
@@ -91,7 +91,7 @@ class EdiMixin(models.Model):
             fields.append('id')
             fields_name.append('Ext Id')
         for line in export.export_fields:
-            fields.append(line.name
+            fields.append(line.name)
             fields_name.append(line.display_name or line.name)
         return fields, fields_name
         

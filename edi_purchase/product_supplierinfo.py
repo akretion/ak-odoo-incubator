@@ -19,23 +19,13 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import Model
-from openerp.osv import fields, orm
+from openerp import models, fields
 
 
-class ProductSupplierinfo(Model):
+class ProductSupplierinfo(models.Model):
     _inherit = 'product.supplierinfo'
 
-
-    def _get_edi_file_format(self, cr, uid, context=None):
-        return [
-            ('csv', 'CSV'),
-            ('xls', 'Excel'),
-        ]
-
-    _columns = {
-        'purchase_edi_id': fields.many2one(
-            'purchase.edi.profile',
-            'Edi Profile'),
-    }
+    purchase_edi_id = fields.Many2one(
+        'purchase.edi.profile',
+        'Edi Profile')
 

@@ -19,32 +19,35 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import Model
-from openerp.osv import fields, orm
+from openerp import models, api, fields
 
 
-class ResPartner(Model):
+class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    def _get_edi_purchase_profile_ids(
-            self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        for id in ids:
-            cr.execute("""
+    @api.multi
+    def _get_edi_purchase_profile_ids(self):
+        for partner in self:
+            self.env.cr.execute("""
                 SELECT DISTINCT purchase_edi_id
                 FROM product_supplierinfo
                 WHERE name = %s
-            """, (id,))
-            ids_sql = cr.fetchall()
+            """, (partner.id,))
+            ids_sql = self.env.cr.fetchall()
             profile_ids = [profile[0] for profile in ids_sql if profile[0]]
-            res[id] = profile_ids
-            return res
+            partner = self.browse(cr, uid, id, context=context)
+            if partner.default_purchase_profile_id and \
+                    partner.default_purchase_profile_id.id not in profile_ids:
+                profile_ids.append(partner.default_purchase_profile_id.id)
+            partner.edi_purchase_profile_ids = profile_ids
 
-    _columns = {
-        'edi_purchase_profile_ids': fields.function(
-            _get_edi_purchase_profile_ids,
-            string='Edi Purchase Profiles',
-            type='one2many',
-            obj='purchase.edi.profile'),
-    }
+    edi_purchase_profile_ids = fields.One2many(
+        'purchase.edi.profile',
+        compute='_get_edi_purchase_profile_ids',
+        string='Edi Purchase Profiles')
+    default_purchase_profile_id = fields.Many2one(
+        'purchase.edi.profile',
+        string="Default Purchase Profile",
+        help="If no profile is configured on product, this default "
+             "profile will be used.")
 

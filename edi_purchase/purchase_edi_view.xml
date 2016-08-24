@@ -3,7 +3,7 @@
 <data>
 
     <menuitem id="edi_purchase_configuration_menu" name="Edi Configuration"
-              parent="purchase.menu_purchase_config_purchase"
+              parent="purchase.menu_purchase_config"
               sequence="40"/>
 
 

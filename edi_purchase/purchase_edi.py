@@ -19,34 +19,23 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import Model
-from openerp.osv import fields, orm
+from openerp import models, fields
 
 
-class PurchaseEdiProfile(Model):
+class PurchaseEdiProfile(models.Model):
     _name = "purchase.edi.profile"
     _inherits = {'ir.exports': 'export_id'}
 
-
-    def _get_edi_file_format(self, cr, uid, context=None):
-        return [
-            ('csv', 'CSV'),
-            ('xls', 'Excel'),
-        ]
-
-    _columns = {
-        'suppplier_info_ids': fields.one2many(
-            'product.supplierinfo',
-            'purchase_edi_id',
-            'Suppliers Info'),
-        'file_format': fields.selection(
-            _get_edi_file_format,
+    suppplier_info_ids = fields.One2many(
+        'product.supplierinfo',
+        'purchase_edi_id',
+        'Suppliers Info')
+    file_format = fields.Selection(
+            selection=[('csv', 'CSV'), ('xls', 'Excel')],
             required=True,
-            string='File Format'),
-        'export_id': fields.many2one(
-            'ir.exports',
-            'Export',
-            required=True,
-            ondelete='restrict'),
-    }
-
+            string='File Format')
+    export_id = fields.Many2one(
+        'ir.exports',
+        'Export',
+        required=True,
+        ondelete='restrict')

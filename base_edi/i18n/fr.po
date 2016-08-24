@@ -1,0 +1,118 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* base_edi
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-24 16:33+0000\n"
+"PO-Revision-Date: 2016-08-24 16:33+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_edi_mixin_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_edi_mixin_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_edi_mixin_display_name
+msgid "Display Name"
+msgstr "Afficher le nom"
+
+#. module: base_edi
+#: selection:res.partner,edi_transfer_method:0
+msgid "E-mail"
+msgstr "E-mail"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_res_partner_edi_mail_template_id
+msgid "Edi Mail Template"
+msgstr "Modèle de mail EDI"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_res_partner_edi_transfer_method
+msgid "Edi Transfer Method"
+msgstr "Méthode de transfert de fichier EDI"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_ir_exports_export_database_ext_id
+msgid "Export database ext id"
+msgstr "Exporter l'id externe"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_res_partner_edi_external_location_id
+msgid "FTP/SFTP Location"
+msgstr "FTP/SFTP Emplacement"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_edi_mixin_id
+msgid "ID"
+msgstr "ID du cas"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_edi_mixin___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_edi_mixin_write_uid
+msgid "Last Updated by"
+msgstr "Dernière modification par"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_edi_mixin_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: base_edi
+#: selection:res.partner,edi_transfer_method:0
+msgid "No Edi Transfer"
+msgstr "Pas de transfert EDI"
+
+#. module: base_edi
+#: model:ir.model,name:base_edi.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: base_edi
+#: selection:res.partner,edi_transfer_method:0
+msgid "SFTP/FTP"
+msgstr "SFTP/FTP"
+
+#. module: base_edi
+#: model:ir.model.fields,field_description:base_edi.field_res_partner_edi_empty_file
+msgid "Send EDI empty file"
+msgstr "Envoyer un fichier vide"
+
+#. module: base_edi
+#: code:addons/base_edi/edi.py:81
+#, python-format
+msgid "The file format is not defined."
+msgstr "Le format du fichier n'est pas défini"
+
+#. module: base_edi
+#: model:ir.model,name:base_edi.model_edi_mixin
+msgid "edi.mixin"
+msgstr "edi.mixin"
+
+#. module: base_edi
+#: model:ir.model,name:base_edi.model_ir_exports
+msgid "ir.exports"
+msgstr "ir.exports"
+
+#. module: base_edi
+#: model:ir.model,name:base_edi.model_ir_exports_line
+msgid "ir.exports.line"
+msgstr "ir.exports.line"
+

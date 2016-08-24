@@ -28,13 +28,13 @@ class ResPartner(models.Model):
     edi_transfer_method = fields.Selection(
         selection=[('no_edi', 'No Edi Transfer'),
                    ('mail', 'E-mail'),
-                   ('external_location', 'SFTP/FTP')]
-        string='Edi Transfer Method'),
-    edi_repository_id = fields.Many2one(
-            'file.repository',
-            string='FTP/SFTP Repository'),
+                   ('external_location', 'SFTP/FTP')],
+        string='Edi Transfer Method')
+    edi_external_location_id = fields.Many2one(
+            'external.file.location',
+            string='FTP/SFTP Location')
     edi_mail_template_id = fields.Many2one(
             'email.template',
-            string='Edi Mail Template'),
-    edi_empty_file = fields.Boolean('Send EDI empty file'),
+            string='Edi Mail Template')
+    edi_empty_file = fields.Boolean('Send EDI empty file')
 

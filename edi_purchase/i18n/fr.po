@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 #	* edi_purchase
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0\n"
+"Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-18 12:27+0000\n"
-"PO-Revision-Date: 2016-02-18 12:27+0000\n"
+"POT-Creation-Date: 2016-08-24 16:34+0000\n"
+"PO-Revision-Date: 2016-08-24 16:34+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,40 +16,114 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: edi_purchase
-#: field:product.supplierinfo,purchase_edi_id:0
-#: view:purchase.edi.profile:0
+#: selection:purchase.edi.profile,file_format:0
+msgid "CSV"
+msgstr "CSV"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_display_name
+msgid "Display Name"
+msgstr "Afficher le nom"
+
+#. module: edi_purchase
+#: model:ir.ui.menu,name:edi_purchase.edi_purchase_configuration_menu
+msgid "Edi Configuration"
+msgstr "Configuration EDI"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_product_supplierinfo_purchase_edi_id
+#: model:ir.ui.view,arch_db:edi_purchase.purchase_edi_profile_view_form
+#: model:ir.ui.view,arch_db:edi_purchase.purchase_edi_profile_view_tree
 msgid "Edi Profile"
 msgstr "Profil EDI"
 
 #. module: edi_purchase
-#: field:res.partner,edi_purchase_profile_ids:0
+#: model:ir.model.fields,field_description:edi_purchase.field_res_partner_edi_purchase_profile_ids
 msgid "Edi Purchase Profiles"
 msgstr "Profiles d'achat EDI"
 
 #. module: edi_purchase
-#: view:purchase.edi.profile:0
-#: field:purchase.edi.profile,export_id:0
+#: selection:purchase.edi.profile,file_format:0
+msgid "Excel"
+msgstr "Excel"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_export_id
+#: model:ir.ui.view,arch_db:edi_purchase.purchase_edi_profile_view_form
+#: model:ir.ui.view,arch_db:edi_purchase.purchase_edi_profile_view_tree
 msgid "Export"
-msgstr "Export"
+msgstr "Exporter"
 
 #. module: edi_purchase
-#: field:purchase.edi.profile,file_format:0
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_export_fields
+msgid "Export ID"
+msgstr "ID d'export"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_name
+msgid "Export Name"
+msgstr "Nom de l'export"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_export_database_ext_id
+msgid "Export database ext id"
+msgstr "Exporter l'id externe"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_file_format
 msgid "File Format"
-msgstr "Format fichier"
+msgstr "Format de fichier"
 
 #. module: edi_purchase
-#: code:_description:0
+#: model:ir.ui.view,arch_db:edi_purchase.view_purchase_form
+msgid "Generate EDI"
+msgstr "Génerer les fichiers EDI"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_id
+msgid "ID"
+msgstr "ID du cas"
+
+#. module: edi_purchase
 #: model:ir.model,name:edi_purchase.model_product_supplierinfo
-#, python-format
 msgid "Information about a product supplier"
 msgstr "Information sur le fournisseur du produit"
 
 #. module: edi_purchase
-#: code:_description:0
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_write_uid
+msgid "Last Updated by"
+msgstr "Dernière modification par"
+
+#. module: edi_purchase
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: edi_purchase
 #: model:ir.model,name:edi_purchase.model_res_partner
-#, python-format
 msgid "Partner"
 msgstr "Partenaire"
+
+#. module: edi_purchase
+#: model:ir.actions.act_window,name:edi_purchase.purchase_edi_profile_action
+#: model:ir.ui.menu,name:edi_purchase.purchase_edi_profile_menu
+msgid "Purchase Edi Profile"
+msgstr "Profil d'achat EDI"
 
 #. module: edi_purchase
 #: model:ir.actions.act_window,name:edi_purchase.purchase_line_export_action
@@ -58,40 +132,33 @@ msgid "Purchase Line Export"
 msgstr "Export de lignes de commande"
 
 #. module: edi_purchase
-#: code:_description:0
 #: model:ir.model,name:edi_purchase.model_purchase_order
-#, python-format
 msgid "Purchase Order"
 msgstr "Bon de commande"
 
 #. module: edi_purchase
-#: code:_description:0
 #: model:ir.model,name:edi_purchase.model_purchase_order_line
-#, python-format
 msgid "Purchase Order Line"
 msgstr "Ligne de commande d'achat"
 
 #. module: edi_purchase
-#: code:addons/edi_purchase/purchase_order.py:75
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_resource
+msgid "Resource"
+msgstr "Ressource"
+
+#. module: edi_purchase
+#: code:addons/edi_purchase/purchase_order.py:95
 #, python-format
 msgid "Some products don't have edi profile configured : %s"
 msgstr "Des produits n'ont aucun profile EDI configurés : %s"
 
 #. module: edi_purchase
-#: field:purchase.edi.profile,suppplier_info_ids:0
+#: model:ir.model.fields,field_description:edi_purchase.field_purchase_edi_profile_suppplier_info_ids
 msgid "Suppliers Info"
-msgstr "Suppliers Info"
+msgstr "Infos fournisseurs"
 
 #. module: edi_purchase
-#: code:addons/edi_purchase/purchase_order.py:74
-#, python-format
-msgid "Warning!"
-msgstr "Attention!"
-
-#. module: edi_purchase
-#: code:_description:0
 #: model:ir.model,name:edi_purchase.model_purchase_edi_profile
-#, python-format
 msgid "purchase.edi.profile"
 msgstr "purchase.edi.profile"
 

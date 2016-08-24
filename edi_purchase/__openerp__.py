@@ -20,11 +20,9 @@
 ##############################################################################
 
 {'name': 'Purchase Edi',
- 'version': '0.1',
+ 'version': '9.0.1.0.0',
  'author': 'Akretion,Odoo Community Association (OCA)',
  'website': 'http://www.akretion.com',
- 'description': """
- """,
  'license': 'AGPL-3',
  'category': 'Generic Modules/Others',
  'summary': 'Export',
@@ -35,6 +33,7 @@
       'product_supplierinfo_view.xml',
       'purchase_edi_view.xml',
       'purchase_view.xml',
+      'partner_view.xml',
  ],
  'installable': True,
  }
