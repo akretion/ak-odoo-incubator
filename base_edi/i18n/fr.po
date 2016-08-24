@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-18 11:58+0000\n"
-"PO-Revision-Date: 2016-02-18 11:58+0000\n"
+"POT-Creation-Date: 2016-08-24 14:23+0000\n"
+"PO-Revision-Date: 2016-08-24 14:23+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -29,6 +29,11 @@ msgstr "Modèle de mail EDI"
 #: field:res.partner,edi_transfer_method:0
 msgid "Edi Transfer Method"
 msgstr "Méthode de transfert EDI"
+
+#. module: base_edi
+#: field:ir.exports,export_database_ext_id:0
+msgid "Export Database Ext ID"
+msgstr "Exporter l'identifiant externe"
 
 #. module: base_edi
 #: field:res.partner,edi_repository_id:0
@@ -65,6 +70,13 @@ msgstr "Attention!"
 #, python-format
 msgid "edi.mixin"
 msgstr "edi.mixin"
+
+#. module: base_edi
+#: code:_description:0
+#: model:ir.model,name:base_edi.model_ir_exports
+#, python-format
+msgid "ir.exports"
+msgstr "ir.exports"
 
 #. module: base_edi
 #: code:_description:0

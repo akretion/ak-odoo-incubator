@@ -28,7 +28,7 @@
  'license': 'AGPL-3',
  'category': 'Generic Modules/Others',
  'summary': 'Export',
- 'depends': ['base_export_customization',
+ 'depends': ['base_export_reorder',
              'file_repository',
              ],
  'data': [
