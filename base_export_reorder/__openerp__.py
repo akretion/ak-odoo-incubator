@@ -19,21 +19,17 @@
 #
 ##############################################################################
 
-{'name': 'Base EDI',
+{'name': 'Base Export Reorder',
  'version': '0.1',
  'author': 'Akretion,Odoo Community Association (OCA)',
  'website': 'http://www.akretion.com',
- 'description': """
- """,
  'license': 'AGPL-3',
  'category': 'Generic Modules/Others',
  'summary': 'Export',
- 'depends': ['base_export_reorder',
-             'file_repository',
+ 'depends': ['base',
              ],
  'data': [
       'ir_exports_view.xml',
-      'partner_view.xml',
  ],
  'installable': True,
  }

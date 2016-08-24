@@ -5,8 +5,11 @@
 
     <record id="base_edi_ir_export_view_form" model="ir.ui.view">
         <field name="model">ir.exports</field>
-        <field name="inherit_id" ref="base_export_customization.ir_exports_view_form"/>
+        <field name="inherit_id" ref="base_export_reorder.ir_exports_view_form"/>
         <field name="arch" type="xml">
+            <field name="resource" position="after">
+                <field name="export_database_ext_id"/>
+            </field>
             <xpath expr="//field[@name='export_fields']/tree/field[@name='name']" position="after">
                 <field name="display_name"/>
             </xpath>

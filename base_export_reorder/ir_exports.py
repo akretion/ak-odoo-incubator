@@ -19,19 +19,14 @@
 #
 ##############################################################################
 
-{'name': 'Base Export Customization',
- 'version': '0.1',
- 'author': 'Akretion,Odoo Community Association (OCA)',
- 'website': 'http://www.akretion.com',
- 'description': """
- """,
- 'license': 'AGPL-3',
- 'category': 'Generic Modules/Others',
- 'summary': 'Export',
- 'depends': ['base',
-             ],
- 'data': [
-      'ir_exports_view.xml',
- ],
- 'installable': True,
- }
+from openerp.osv.orm import Model
+from openerp.osv import fields
+
+
+class IrExportsLine(Model):
+    _inherit = "ir.exports.line"
+    _order = 'sequence asc'
+
+    _columns = {
+        'sequence': fields.integer('Sequence'),
+    }

@@ -23,6 +23,14 @@ from openerp.osv.orm import Model
 from openerp.osv import fields, orm
 
 
+class IrExports(Model):
+    _inherit = "ir.exports"
+
+    _columns = {
+        'export_database_ext_id': fields.boolean('Export Database Ext ID'),
+    }
+
+
 class IrExportsLine(Model):
     _inherit = "ir.exports.line"
 

@@ -89,6 +89,9 @@ class EdiMixin(BaseModel):
             export['export_fields'], context=context)
         fields = []
         fields_name = []
+        if export.get('export_database_ext_id', False):
+            fields.append('id')
+            fields_name.append('Ext Id')
         for line in export_lines:
             fields.append(line['name'])
             fields_name.append(line['display_name'] or line['name'])
