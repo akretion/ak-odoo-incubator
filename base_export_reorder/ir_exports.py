@@ -19,14 +19,11 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import Model
-from openerp.osv import fields
+from openerp import models, fields
 
 
-class IrExportsLine(Model):
+class IrExportsLine(models.Model):
     _inherit = "ir.exports.line"
     _order = 'sequence asc'
 
-    _columns = {
-        'sequence': fields.integer('Sequence'),
-    }
+    sequence = fields.Integer()
