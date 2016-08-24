@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="purchase_edi_supplierinfo_form_view" model="ir.ui.view">
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+        <field name="arch" type="xml">
+            <field name="delay" position="after">
+                <field name="purchase_edi_id" domain="[('resource', '=', 'purchase.order.line')]"/>
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>

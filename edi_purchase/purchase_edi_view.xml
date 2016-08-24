@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <menuitem id="edi_purchase_configuration_menu" name="Edi Configuration"
+              parent="purchase.menu_purchase_config_purchase"
+              sequence="40"/>
+
+
+    <record id="purchase_edi_profile_view_form" model="ir.ui.view">
+        <field name="name">purchase.edi.profile.form.view</field>
+        <field name="model">purchase.edi.profile</field>
+        <field name="arch" type="xml">
+            <form string="Edi Profile" version="7.0">
+                <group name="base" col="2">
+                    <field name="export_id" string="Export"/>
+                    <field name="file_format"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="purchase_edi_profile_view_tree" model="ir.ui.view">
+        <field name="name">purchase.edi.profile.tree.view</field>
+        <field name="model">purchase.edi.profile</field>
+        <field name="arch" type="xml">
+            <tree string="Edi Profile" version="7.0">
+                <field name="export_id" string="Export"/>
+                <field name="file_format"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="purchase_edi_profile_action" model="ir.actions.act_window">
+        <field name="name">Purchase Edi Profile</field>
+        <field name="res_model">purchase.edi.profile</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="purchase_edi_profile_menu" name="Purchase Edi Profile"
+              parent="edi_purchase.edi_purchase_configuration_menu"
+              action="purchase_edi_profile_action" sequence="4"/>
+
+</data>
+</openerp>
