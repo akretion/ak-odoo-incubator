@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="ir_exports_view_form" model="ir.ui.view">
+        <field name="name">ir.exports.form.view</field>
+        <field name="model">ir.exports</field>
+        <field name="arch" type="xml">
+            <form string="Exports" version="7.0">
+                <group col="2">
+                    <field name="name" string="Name"/>
+                    <field name="resource" readonly="1"/>
+                </group>
+                <separator string="Exports Fields"/>
+                <field name="export_fields" nolabel="1">
+                    <tree editable="top">
+                        <field name="name" readonly="1"/>
+                        <field name="sequence"/>
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="ir_exports_view_tree" model="ir.ui.view">
+        <field name="name">ir.exports.tree.view</field>
+        <field name="model">ir.exports</field>
+        <field name="arch" type="xml">
+            <tree string="Exports">
+                    <field name="name"/>
+                    <field name="resource"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="ir_exports_action" model="ir.actions.act_window">
+        <field name="name">Export Configuration</field>
+        <field name="res_model">ir.exports</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="ir_exports_configuration_menu" name="Export Configuration"
+              parent="base.menu_custom" sequence="60"/>
+
+    <menuitem id="ir_exports_menu" name="Export Configuration"
+              parent="ir_exports_configuration_menu" action="ir_exports_action"
+              sequence="1"/>
+
+
+</data>
+</openerp>
