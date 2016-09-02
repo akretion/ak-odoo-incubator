@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* product_variant_weight
+# 	* product_weight_variant
 #
 msgid ""
 msgstr ""
@@ -17,83 +17,83 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#. module: product_variant_weight
-#: model:ir.model,name:product_variant_weight.model_res_company
+#. module: product_weight_variant
+#: model:ir.model,name:product_weight_variant.model_res_company
 msgid "Companies"
 msgstr "Sociétés"
 
-#. module: product_variant_weight
-#: view:product.product:product_variant_weight.product_normal_form_view
+#. module: product_weight_variant
+#: view:product.product:product_weight_variant.product_normal_form_view
 msgid ""
 "If weight is set in product template and variant, both weights are added."
 msgstr ""
 "Si le poids est défini sur le modèle d'article et la variante, les 2 poids "
 "sont ajoutés."
 
-#. module: product_variant_weight
-#: model:ir.model,name:product_variant_weight.model_product_product
+#. module: product_weight_variant
+#: model:ir.model,name:product_weight_variant.model_product_product
 msgid "Product"
 msgstr "Product"
 
-#. module: product_variant_weight
-#: model:ir.model,name:product_variant_weight.model_product_template
+#. module: product_weight_variant
+#: model:ir.model,name:product_weight_variant.model_product_template
 msgid "Product Template"
 msgstr "Product Template"
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: field:product.product,purchase_line_warn:0
 msgid "Purchase Order Line"
 msgstr "Ligne de commande d'achat"
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: field:product.product,sale_line_warn:0
 msgid "Sales Order Line"
 msgstr "Ligne de commande de vente"
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: field:product.product,weight_tmpl:0 field:product.template,weight_tmpl:0
 msgid "Template Gross Weight"
 msgstr "Poids brut du modèle"
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: field:product.product,weight_net_tmpl:0
 #: field:product.template,weight_net_tmpl:0
 msgid "Template Net Weight"
 msgstr "Poids net du modèle"
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: help:product.product,weight_net_variant:0
 msgid "The addtionnal part of net weight in Kg on variant."
 msgstr "Le poids net additionnel  en kg sur la variante."
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: help:product.product,weight_variant:0
 msgid "The addtionnal part of weight in Kg on variant."
 msgstr "Le poids additionnel  en kg sur la variante."
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: help:product.product,weight_tmpl:0 help:product.template,weight_tmpl:0
 msgid "The gross weight in Kg of the product template."
 msgstr "Le poids brut en kg du modèle."
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: help:product.product,weight_net_tmpl:0
 #: help:product.template,weight_net_tmpl:0
 msgid "The net weight in Kg of the product template."
 msgstr "Le poids net en kg du modèle."
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: field:product.product,weight_net_variant:0
 msgid "Variant Net Weight"
 msgstr "Poids net de la variante"
 
-#. module: product_variant_weight
+#. module: product_weight_variant
 #: field:product.product,weight_variant:0
 msgid "Variant Weight"
 msgstr "Poids de la variante"
 
-#. module: product_variant_weight
-#: code:addons/product_variant_weight/product.py:38
+#. module: product_weight_variant
+#: code:addons/product_weight_variant/product.py:38
 #, python-format
 msgid ""
 "Weight fields must come from product.product model.This constraint has been "
@@ -103,8 +103,8 @@ msgstr ""
 "ajouté par le module 'Product Variant Weight'. Contactez votre équipe "
 "support."
 
-#. module: product_variant_weight
-#: view:product.product:product_variant_weight.product_normal_form_view
+#. module: product_weight_variant
+#: view:product.product:product_weight_variant.product_normal_form_view
 msgid "Weight of attributes parts"
 msgstr "Poids relatif aux attributs"
 
