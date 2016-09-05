@@ -37,6 +37,10 @@ class ResPartner(Model):
             """, (id,))
             ids_sql = cr.fetchall()
             profile_ids = [profile[0] for profile in ids_sql if profile[0]]
+            partner = self.browse(cr, uid, id, context=context)
+            if partner.default_purchase_profile_id and \
+                    partner.default_purchase_profile_id.id not in profile_ids:
+                profile_ids.append(partner.default_purchase_profile_id.id)
             res[id] = profile_ids
             return res
 
@@ -46,5 +50,10 @@ class ResPartner(Model):
             string='Edi Purchase Profiles',
             type='one2many',
             obj='purchase.edi.profile'),
+        'default_purchase_profile_id': fields.many2one(
+            'purchase.edi.profile',
+            string="Default Purchase Profile",
+            help="If no profile is configured on product, this default "
+                 "profile will be used.")
     }
 

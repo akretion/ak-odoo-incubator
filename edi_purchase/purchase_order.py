@@ -90,6 +90,10 @@ class PurchaseOrder(Model):
                     purchase_edi_id = seller.purchase_edi_id or False
                 if purchase_edi_id:
                     profile_lines_dict[purchase_edi_id].append(line.id)
+                elif partner.default_purchase_profile_id:
+                    profile_id = partner.default_purchase_profile_id.id
+                    profile_lines_dict[partner.default_purchase_profile_id].\
+                        append(line.id)
                 else:
                     raise orm.except_orm(
                         _('Warning!'),

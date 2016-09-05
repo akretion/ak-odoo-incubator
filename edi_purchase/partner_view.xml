@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="purchase_edi_partner_view_form" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base_edi.base_edi_partner_view_form"/>
+        <field name="arch" type="xml">
+            <field name="edi_transfer_method" position="after">
+                <field name="default_purchase_profile_id"
+                       attrs="{'invisible': [('edi_transfer_method', 'not in', ('repository', 'mail'))]}"/>
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>

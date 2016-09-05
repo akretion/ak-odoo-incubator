@@ -35,6 +35,7 @@
       'product_supplierinfo_view.xml',
       'purchase_edi_view.xml',
       'purchase_view.xml',
+      'partner_view.xml',
  ],
  'installable': True,
  }
