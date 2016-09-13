@@ -172,13 +172,25 @@ class AccountAccountTemplate(models.Model):
     @api.multi
     def write(self, vals):
         field_list = ['name', 'code', 'type', 'currency_id',
-                      'user_type', 'reconcile', 'parent_id']
+                      'user_type', 'reconcile']
         account_vals = {}
         for field in field_list:
             if field in vals:
                 account_vals[field] = vals[field]
         if account_vals and self.suspend_security().account_ids:
             self.suspend_security().account_ids.write(account_vals)
+        if 'parent_id' in vals:
+            accounts = self.suspend_security().with_context(
+                defer_parent_store_computation=True).account_ids
+            for account in accounts:
+                parent_account = self.env['account.account'].search([
+                    ('company_id', '=', account.company_id.id),
+                    ('account_tmpl_id', '=', vals['parent_id']),
+                    ])
+                self._cr.execute("""UPDATE account_account
+                    SET parent_id = %s
+                    WHERE id = %s""", (parent_account.id, account.id))
+            self.env['account.account']._parent_store_compute()
         return super(AccountAccountTemplate, self).write(vals)
 
     def search(self, cr, uid, domain,
