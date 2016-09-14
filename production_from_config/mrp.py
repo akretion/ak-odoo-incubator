@@ -21,8 +21,8 @@ class MrpBom(models.Model):
     def _bom_explode(self, bom, product, factor, properties=None, level=0,
                      routing_id=False, previous_products=None,
                      master_bom=None):
-        product_lines, workcenter_lines = super(MrpBom, self).\
-            with_context(subcall=True)._bom_explode(
+        product_lines, workcenter_lines = super(
+            MrpBom, self.with_context(subcall=True))._bom_explode(
                 bom, product, factor,
                 properties=properties, level=level,
                 routing_id=routing_id, previous_products=previous_products,
