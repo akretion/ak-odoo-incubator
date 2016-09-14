@@ -30,12 +30,13 @@ class PurchaseEdiProfile(models.Model):
         'product.supplierinfo',
         'purchase_edi_id',
         'Suppliers Info')
-    file_format = fields.Selection(
-            selection=[('csv', 'CSV'), ('xls', 'Excel')],
-            required=True,
-            string='File Format')
     export_id = fields.Many2one(
         'ir.exports',
         'Export',
         required=True,
-        ondelete='restrict')
+        ondelete='restrict',
+        domain=[('resource', '=', 'purchase.order.line')])
+    file_format = fields.Selection(
+            selection=[('csv', 'CSV'), ('xls', 'Excel')],
+            required=True,
+            string='File Format')

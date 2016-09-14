@@ -34,7 +34,7 @@ class ResPartner(models.Model):
             'external.file.location',
             string='FTP/SFTP Location')
     edi_mail_template_id = fields.Many2one(
-            'email.template',
+            'mail.template',
             string='Edi Mail Template')
     edi_empty_file = fields.Boolean('Send EDI empty file')
 

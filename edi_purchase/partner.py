@@ -35,7 +35,6 @@ class ResPartner(models.Model):
             """, (partner.id,))
             ids_sql = self.env.cr.fetchall()
             profile_ids = [profile[0] for profile in ids_sql if profile[0]]
-            partner = self.browse(cr, uid, id, context=context)
             if partner.default_purchase_profile_id and \
                     partner.default_purchase_profile_id.id not in profile_ids:
                 profile_ids.append(partner.default_purchase_profile_id.id)

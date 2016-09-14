@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
             <field name="edi_transfer_method" position="after">
                 <field name="default_purchase_profile_id"
-                       attrs="{'invisible': [('edi_transfer_method', 'not in', ('repository', 'mail'))]}"/>
+                       attrs="{'invisible': [('edi_transfer_method', 'not in', ('external_location', 'mail'))]}"/>
             </field>
         </field>
     </record>

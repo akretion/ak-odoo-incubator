@@ -15,7 +15,16 @@
                 <group name="base" col="2">
                     <field name="export_id" string="Export"/>
                     <field name="file_format"/>
+                    <field name="filename"/>
                 </group>
+                <separator string="Exports Fields"/>
+                <field name="export_fields" nolabel="1">
+                    <tree editable="top">
+                        <field name="name" readonly="1"/>
+                        <field name="display_name"/>
+                        <field name="sequence"/>
+                    </tree>
+                </field>
             </form>
         </field>
     </record>
