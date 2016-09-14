@@ -47,6 +47,7 @@ class PurchaseEdiProfile(Model):
             'ir.exports',
             'Export',
             required=True,
-            ondelete='restrict'),
+            ondelete='restrict',
+            domain=[('resource', '=', 'purchase.order.line')]),
     }
 

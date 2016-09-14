@@ -21,8 +21,44 @@
 
 from openerp.osv.orm import BaseModel, Model
 from openerp.addons.web.controllers.main import CSVExport, ExcelExport
+from openerp import tools
 import base64
 from datetime import datetime
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
+try:
+    # We use a jinja2 sandboxed environment to render mako templates.
+    # Note that the rendering does not cover all the mako syntax, in particular
+    # arbitrary Python statements are not accepted, and not all expressions are
+    # allowed: only "public" attributes (not starting with '_') of objects may
+    # be accessed.
+    # This is done on purpose: it prevents incidental or malicious execution of
+    # Python code that may break the security of the server.
+    from jinja2.sandbox import SandboxedEnvironment
+    mako_template_env = SandboxedEnvironment(
+        variable_start_string="${",
+        variable_end_string="}",
+        line_statement_prefix="%",
+        trim_blocks=True,               # do not output newline after blocks
+    )
+    mako_template_env.globals.update({
+        'str': str,
+        'datetime': datetime,
+        'len': len,
+        'abs': abs,
+        'min': min,
+        'max': max,
+        'sum': sum,
+        'filter': filter,
+        'reduce': reduce,
+        'map': map,
+        'round': round,
+    })
+except ImportError:
+    _logger.warning("jinja2 not available, templating features will not work!")
 
 
 class EdiMixin(BaseModel):
@@ -31,7 +67,12 @@ class EdiMixin(BaseModel):
     def _get_edi_attachment_vals(self, cr, uid, datas, edi_profile, 
                                  res_record, context=None):
         today = datetime.now().strftime('%Y-%m-%d')
-        name = '%s_%s.%s' % (today, edi_profile.name, edi_profile.file_format)
+        if edi_profile.filename:
+            name = self._template_render(cr, uid, edi_profile.filename,
+                                         res_record, context=context)
+        else:
+            name = '%s_%s.%s' % (today, edi_profile.name,
+                                 edi_profile.file_format)
 
         model = res_record and res_record._name or False
         res_id = res_record and res_record.id or False
@@ -96,7 +137,20 @@ class EdiMixin(BaseModel):
             fields.append(line['name'])
             fields_name.append(line['display_name'] or line['name'])
         return fields, fields_name
-        
-        
 
-
+    def _template_render(self, cr, uid, template, record, context=None):
+        try:
+            template = mako_template_env.from_string(tools.ustr(template))
+        except Exception:
+            _logger.exception("Failed to load template %r", template)
+        variables = {'obj': record}
+        try:
+            render_result = template.render(variables)
+        except Exception:
+            _logger.exception(
+                "Failed to render template %r using values %r" %
+                (template, variables))
+            render_result = u""
+        if render_result == u"False":
+            render_result = u""
+        return render_result

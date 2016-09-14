@@ -28,6 +28,11 @@ class IrExports(Model):
 
     _columns = {
         'export_database_ext_id': fields.boolean('Export Database Ext ID'),
+        'filename': fields.char(string='File Name', size=256,
+        help='Exported File will be renamed to this name '
+             'Name can use mako template where obj depend on the export '
+             'it could be a purchase order, a sale order...'
+             ' Example : ${obj.name}-${obj.create_date}.csv')
     }
 
 
