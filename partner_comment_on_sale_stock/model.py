@@ -10,7 +10,8 @@ class AbstractPartnerInfo(models.AbstractModel):
 
     partner_comment = fields.Text(
         compute='_compute_partner_comment',
-        help="Display info from partner or partner parent in sale and picking")
+        help="Display comment from partner or partner parent "
+             "in sale and picking")
 
     @api.multi
     def _compute_partner_comment(self):

@@ -1,0 +1,55 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* partner_comment_on_sale_stock
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-14 17:23+0000\n"
+"PO-Revision-Date: 2016-09-14 19:26+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: fr\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#. module: partner_comment_on_sale_stock
+#: field:abstract.partner.comment,display_name:0
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: partner_comment_on_sale_stock
+#: help:abstract.partner.comment,partner_comment:0
+#: help:sale.order,partner_comment:0 help:stock.picking,partner_comment:0
+msgid "Display comment from partner or partner parent in sale and picking"
+msgstr "Affiche le champ commentaire du partenaire ou du partenaire parent dans les ventes et les stocks"
+
+#. module: partner_comment_on_sale_stock
+#: field:abstract.partner.comment,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: partner_comment_on_sale_stock
+#: field:abstract.partner.comment,__last_update:0
+msgid "Last Modified on"
+msgstr "Modifié le"
+
+#. module: partner_comment_on_sale_stock
+#: field:abstract.partner.comment,partner_comment:0
+#: field:sale.order,partner_comment:0 field:stock.picking,partner_comment:0
+msgid "Partner comment"
+msgstr "Commentaire du partenaire"
+
+#. module: partner_comment_on_sale_stock
+#: model:ir.model,name:partner_comment_on_sale_stock.model_stock_picking
+msgid "Picking List"
+msgstr "Liste de livraison"
+
+#. module: partner_comment_on_sale_stock
+#: model:ir.model,name:partner_comment_on_sale_stock.model_sale_order
+msgid "Sales Order"
+msgstr "Bon de commande"
