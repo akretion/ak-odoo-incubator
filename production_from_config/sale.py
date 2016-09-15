@@ -19,7 +19,8 @@ class SaleOrderLine(models.Model):
     @api.multi
     def _set_configuration(self):
         for line in self:
-            line.config = simplejson.loads(self.config_text)
+            if self.config_text:
+                line.config = simplejson.loads(self.config_text)
 
     config = fields.Serialized(
         'Configuration',
