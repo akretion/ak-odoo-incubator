@@ -36,6 +36,7 @@
       'purchase_edi_view.xml',
       'purchase_view.xml',
       'partner_view.xml',
+      'security/ir.model.access.csv',
  ],
  'installable': True,
  }
