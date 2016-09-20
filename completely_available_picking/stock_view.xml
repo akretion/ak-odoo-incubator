@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data>
+
+
+    <record id="vpicktree" model="ir.ui.view">
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="picking_ready"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_picking_internal_search" model="ir.ui.view">
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <filter name="available" position="after">
+                <filter name="outgoing_pick" string="Picking List"
+                        domain="[('picking_type_id.code','=','outgoing')]"/>
+                <separator/>
+                <filter name="all_available" string="Completely available" 
+                        domain="[('state','=','assigned')]" 
+                        help="All products are available in the picking"/>
+            </filter>
+        </field>
+    </record>
+
+
+    <record id="action_picking_tree_ready_all" model="ir.actions.act_window">
+        <field name="name">Completely available picking list</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="domain"></field>
+        <field name="context">{
+                'contact_display': 'partner_address',
+                'search_default_outgoing_pick': 1,
+                'search_default_all_available': 1,
+        }
+        </field>
+        <field name="search_view_id" ref="view_picking_internal_search"/>
+    </record>
+
+    <menuitem id="menu_action_picking_tree_ready_all" sequence="20"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_picking_tree_ready_all"/>
+
+</data>
+</openerp>
