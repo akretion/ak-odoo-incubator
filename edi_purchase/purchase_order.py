@@ -56,14 +56,19 @@ class PurchaseOrder(Model):
             if attachment_id:
                 attachment_ids.append(attachment_id)
 
-        # TODO FIXME we are forced to send mail from template on partner
-        # Because in the case we want to send empty files, there are not
-        # po.Maybe pass po_id in context if we rly need it in mail
-        # template. Or find a better way ton send mail in both cases
         if partner.edi_transfer_method == 'mail' and attachment_ids:
             template_obj = self.pool['email.template']
+            if edi_transfer.model_id.model == 'res.partner':
+                record = partner
+            elif edi_transfer.model_id.model == 'purchase.order':
+                record = purchase
+            else:
+                raise orm.except_orm(
+                    _('Warning!'),
+                    _("The mail template configured on supplier must be link "
+                      "to res partner or purchase order"))
             values = template_obj.generate_email(
-                cr, uid, edi_transfer.id, purchase.partner_id.id,
+                cr, uid, edi_transfer.id, record.id,
                 context=context)
             if values['attachment_ids']:
                 attachment_ids += values['attachment_ids']
