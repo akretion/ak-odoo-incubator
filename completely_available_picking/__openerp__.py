@@ -13,6 +13,8 @@
 - Display in a separate menu 'Ready to transfert' pickings out
   and their available date
 - Allow to order by picking list by this available date.
+
+Author: David BEAL <david.beal@akretion.com>
 """,
     'depends': [
         'stock',
