@@ -64,15 +64,21 @@ except ImportError:
 class EdiMixin(BaseModel):
     _name = 'edi.mixin'
 
+    def _get_edi_file_name(self, cr, uid, edi_profile, res_record,
+                           context=None):
+        today = datetime.now().strftime('%Y-%m-%d')
+        filename = '%s_%s.%s' % (today, edi_profile.name,
+                                 edi_profile.file_format)
+        return filename
+
     def _get_edi_attachment_vals(self, cr, uid, datas, edi_profile, 
                                  res_record, context=None):
-        today = datetime.now().strftime('%Y-%m-%d')
         if edi_profile.filename:
             name = self._template_render(cr, uid, edi_profile.filename,
                                          res_record, context=context)
         else:
-            name = '%s_%s.%s' % (today, edi_profile.name,
-                                 edi_profile.file_format)
+            name = self._get_edi_file_name(cr, uid, edi_profile, res_record,
+                                           context=context)
 
         model = res_record and res_record._name or False
         res_id = res_record and res_record.id or False
