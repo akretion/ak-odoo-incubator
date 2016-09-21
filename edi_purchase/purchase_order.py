@@ -63,6 +63,14 @@ class PurchaseOrder(models.Model):
         # template. Or find a better way ton send mail in both cases
         if partner.edi_transfer_method == 'mail' and attachment_ids:
             template_obj = self.env['email.template']
+            if edi_transfer.model_id.model == 'res.partner':
+                record = purchase.partner_id
+            elif edi_transfer.model_id.model == 'purchase.order':
+                record = purchase
+            else:
+                raise exceptions.UserError(
+                    _("The mail template should be linked to partner or "
+                      "purchase order."))
             values = template_obj.generate_email(
                 edi_transfer.id, purchase.partner_id.id)
             if values['attachment_ids']:

@@ -65,13 +65,18 @@ class EdiMixin(models.Model):
     _name = 'edi.mixin'
 
     @api.model
-    def _get_edi_attachment_vals(self, datas, edi_profile, res_record):
+    def _get_edi_file_name(self, edi_profile, res_record):
         today = datetime.now().strftime('%Y-%m-%d')
+        filename = '%s_%s.%s' % (today, edi_profile.name,
+                                 edi_profile.file_format)
+        return filename
+
+    @api.model
+    def _get_edi_attachment_vals(self, datas, edi_profile, res_record):
         if edi_profile.filename:
             name = self._template_render(edi_profile.filename, res_record)
         else:
-            name = '%s_%s.%s' % (today, edi_profile.name,
-                                 edi_profile.file_format)
+            name = self._get_edi_file_name(edi_profile, res_record)
 
         model = res_record and res_record._name or False
         res_id = res_record and res_record.id or False
@@ -91,7 +96,6 @@ class EdiMixin(models.Model):
         return {
             'file_type': 'export_external_location',
             'task_id': task.id,
-            'active': True,
             'attachment_id': attach_id,
         }        
 
@@ -109,9 +113,16 @@ class EdiMixin(models.Model):
         return attach
 
     @api.multi
+    def _get_additional_rows(self, rows, fields_names):
+        "Surcharge if you have to perform some action before creating the "
+        " definitive file "
+        return rows, fields_names
+
+    @api.multi
     def get_edi_datas(self, fields, fields_names,
                       file_format):
         rows = self.export_data(fields).get('datas',[])
+        rows, fields_names = self._get_additional_rows(rows, fields_names)
         if file_format == 'csv':
             datas = CSVExport().from_data(fields_names, rows)
         elif file_format == 'xls':
