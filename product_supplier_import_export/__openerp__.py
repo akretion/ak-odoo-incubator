@@ -17,7 +17,7 @@
         "bin": [],
     },
     "depends": [
-        "product_supplierinfo_variant",
+        "product_variant_supplierinfo",
         "product_variant_import_export",
     ],
     "data": [
