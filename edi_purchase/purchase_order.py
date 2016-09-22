@@ -71,8 +71,7 @@ class PurchaseOrder(models.Model):
                 raise exceptions.UserError(
                     _("The mail template should be linked to partner or "
                       "purchase order."))
-            values = template_obj.generate_email(
-                edi_transfer.id, purchase.partner_id.id)
+            values = edi_transfer.generate_email(record.id)
             if values['attachment_ids']:
                 attachment_ids += values['attachment_ids']
             values['attachment_ids'] = [(6, 0, attachment_ids)]
