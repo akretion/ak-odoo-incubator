@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <report
+        string="Module statisticals"
+        id="report_module_module"
+        model="ir.module.module"
+        report_type="qweb-html"
+        file="module_report.report_module"
+        name="module_report.report_module_stats"/>
+
+    <template id="report_module_stats">
+        <div class="page">
+            <div class="oe_structure"/>
+                <div>Modules count: <span class="strong" t-esc="docs._module_count()"/></div>
+                <hr/>
+                <t t-set="modules" t-value="docs._get_authors()"/>
+                <table class="table table-condensed">
+                    <caption>Contributors on modules</caption>
+                    <tr><th>Company</th><th>Module Quantity</th></tr>
+                <t t-foreach="modules" t-as="m">
+                    <tr>
+                        <td><span t-esc="m"/></td>
+                        <td><span t-esc="modules[m]"/></td>
+                    </tr>
+                </t>
+                </table>
+        </div>
+    </template>
+
+</data>
+</openerp>
