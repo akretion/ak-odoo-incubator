@@ -38,6 +38,17 @@ class MrpProduction(models.Model):
             move.write({'restrict_lot_id': line.lot_id.id})
         return move_id
 
+    @api.model
+    def _make_production_produce_line(self, production):
+        res = super(MrpProduction, self)._make_production_produce_line(
+            production)
+        if isinstance(res, int):
+            ids = [res]
+        for move in self.env['stock.move'].browse(ids):
+            if move.procurement_id.lot_id:
+                move.write({'restrict_lot_id': move.procurement_id.lot_id.id})
+        return res
+
 
 class ProcurementOrder(models.Model):
     _inherit = 'procurement.order'
@@ -109,3 +120,20 @@ class StockProductionLot(models.Model):
             for mo in lot.mrp_production_ids:
                 mo.unlink()
         return super(StockProductionLot, self).unlink()
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    # Without this trick, restrict_lot_id is erased from stock move...
+    # We need it when we process the production order without the wizard.
+    @api.multi
+    def action_consume(self, product_qty, location_id=False,
+                       restrict_lot_id=False, restrict_partner_id=False,
+                       consumed_for=False):
+        if len(self) == 1 and not restrict_lot_id:
+            if self.restrict_lot_id:
+                restrict_lot_id = self.restrict_lot_id.id
+        return super(StockMove, self).action_consume(
+            product_qty, location_id=location_id,
+            restrict_lot_id=restrict_lot_id,
+            restrict_partner_id=restrict_partner_id,consumed_for=consumed_for)
