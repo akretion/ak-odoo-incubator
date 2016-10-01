@@ -26,8 +26,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     edi_transfer_method = fields.Selection(
-        selection=[('no_edi', 'No Edi Transfer'),
-                   ('mail', 'E-mail'),
+        selection=[('mail', 'E-mail'),
                    ('external_location', 'SFTP/FTP')],
         string='Edi Transfer Method')
     edi_external_location_id = fields.Many2one(
