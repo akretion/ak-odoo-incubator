@@ -28,7 +28,6 @@ class ResPartner(Model):
 
     def _get_edi_transfer_method(self, cr, uid, context=None):
         return [
-            ('no_edi', 'No Edi Transfer'),
             ('mail', 'E-mail'),
             ('repository', 'SFTP/FTP'),
         ]
