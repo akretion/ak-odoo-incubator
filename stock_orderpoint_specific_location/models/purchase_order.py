@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2016 Akretion (<http://www.akretion.com>).
+#    Copyright (C) 2015 Akretion (<http://www.akretion.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,24 +19,21 @@
 #
 ##############################################################################
 
-{'name': 'Stock Orderpoint Specific Location',
- 'version': '0.1',
- 'author': 'Akretion,Odoo Community Association (OCA)',
- 'website': 'http://www.akretion.com',
- 'description': """
-    Allow to create reception in a sublocation of the location's orderpoint
-    Warning : need to patch Odoo purchase module to make it work.
-    https://github.com/akretion/odoo/tree/9.0-hooks
- """,
- 'license': 'AGPL-3',
- 'category': 'Generic Modules/Others',
- 'summary': 'Export',
- 'depends': ['stock',
-             'purchase'
-             ],
- 'data': [
-      'views/stock_orderpoint_view.xml',
-      'views/purchase_order_view.xml',
- ],
- 'installable': True,
- }
+from openerp import api, fields, models
+
+
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"
+
+    specific_location_id = fields.Many2one(
+        'stock.location', string='Specific Location')
+
+    @api.multi
+    def _get_destination_location(self):
+        self.ensure_one()
+        if self.specific_location_id:
+            return self.specific_location_id.id
+        else:
+            return super(PurchaseOrder, self)._get_destination_location()
+
+

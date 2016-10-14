@@ -19,17 +19,12 @@
 #
 ##############################################################################
 
-from openerp.osv.orm import Model
+from openerp import fields, models
 
 
-class ProcurementOrder(Model):
-    _inherit = "procurement.order"
+class StockWarehouseOrderpoint(models.Model):
+    _inherit = "stock.warehouse.orderpoint"
 
-    def _prepare_orderpoint_procurement(self, cr, uid, orderpoint,
-                                        product_qty, context=None):
-        vals = super(ProcurementOrder, self)._prepare_orderpoint_procurement(
-            cr, uid, orderpoint, product_qty, context=context)
-        if orderpoint.location_destination_id:
-            vals['location_id'] = orderpoint.location_destination_id.id
-        return vals
+    location_destination_id = fields.Many2one(
+        'stock.location', 'Destination Location')
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+
+    <record id="purchase_order_specific_location_form_view" model="ir.ui.view">
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <field name="picking_type_id" position="after">
+                <field name="specific_location_id" readonly="1" attrs="{'invisible': [('specific_location_id', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>
