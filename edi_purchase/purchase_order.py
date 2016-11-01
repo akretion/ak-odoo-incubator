@@ -76,15 +76,23 @@ class PurchaseOrder(Model):
             mail_id = self.pool['mail.mail'].create(
                 cr, uid, values, context=context)
 
+    def should_generate_edi_files(self, cr, uid, purchase, partner,
+                                  context=None):
+        edi_transfer = partner.edi_repository_id or \
+                       partner.edi_mail_template_id or \
+                       False
+        return edi_transfer and True or False
+
     def generate_and_send_edi_files(self, cr, uid, ids, context=None):
         purchase_line_obj = self.pool['purchase.order.line']
         for purchase in self.browse(cr, uid, ids, context=context):
             partner = purchase.partner_id
-            edi_transfer = partner.edi_repository_id or \
-                           partner.edi_mail_template_id or \
-                           False
-            if not edi_transfer:
+            if not self.should_generate_edi_files(cr, uid, purchase, partner,
+                                                  context=context):
                 continue
+            edi_transfer = partner.edi_repository_id or \
+                   partner.edi_mail_template_id or \
+                   False
             profile_lines_dict = {key: [] for key in purchase.partner_id.edi_purchase_profile_ids}
             for line in purchase.order_line:
                 product = line.product_id
