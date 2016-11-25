@@ -87,6 +87,33 @@ class AccountAccount(models.Model):
     account_tmpl_id = fields.Many2one('account.account.template',
                                       string='Account Template')
 
+    def _create(self, cr, uid, vals, context=None):
+        if context is None:
+            context = {}
+        defered = False
+        if 'parent_id' in vals:
+            defered = True
+            ctx = context.copy()
+            ctx['defer_parent_store_computation'] = True
+        res = super(AccountAccount, self)._create(cr, uid, vals, context=ctx)
+        if defered:
+            self._parent_store_compute(cr)
+        return res
+
+    def _write(self, cr, uid, ids, vals, context=None):
+        if context is None:
+            context = {}
+        defered = False
+        if 'parent_id' in vals:
+            defered = True
+            ctx = context.copy()
+            ctx['defer_parent_store_computation'] = True
+        res = super(AccountAccount, self)._write(
+            cr, uid, ids, vals, context=ctx)
+        if defered:
+            self._parent_store_compute(cr)
+        return res
+
     @api.cr
     def _parent_store_compute(self, cr):
         if hasattr(cr, 'skip_parent_recompute') and cr.skip_parent_recompute:
@@ -94,7 +121,7 @@ class AccountAccount(models.Model):
             return True
         _logger.info("MASSIVE SQL PARENT LEFT/RIGHT RECOMPUTATION FOR ACCOUNT")
         cr.execute("""WITH RECURSIVE compute_parent(id, pleft, prigth) AS (
-            SELECT id, 1::INT AS pleft, company_id * 100000::INT AS prigth
+            SELECT id, 1::INT AS pleft, company_id * 1000000::INT AS prigth
                 FROM account_account
                 WHERE parent_id IS NULL
                 UNION ALL
