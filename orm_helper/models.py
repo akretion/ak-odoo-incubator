@@ -32,4 +32,5 @@ def merge_duplicate(self, record_ids):
             (self.id, tuple(record_ids)))
     self.browse(record_ids).unlink()
 
+
 models.Model.merge_duplicate = merge_duplicate
