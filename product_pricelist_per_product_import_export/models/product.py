@@ -2,12 +2,19 @@
 # © <YEAR(S)> <AUTHOR(S)>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import logging
+import re
+
 from openerp import api, fields, models
 import openerp.addons.decimal_precision as dp
 from openerp.tools import ustr
 from openerp.tools.translate import _
-from unidecode import unidecode  # Debian package python-unidecode
-import re
+
+_logger = logging.getLogger(__name__)
+try:
+    from unidecode import unidecode  # Debian package python-unidecode
+except (ImportError, IOError) as err:
+        _logger.debug(err)
 
 
 def safe_column_name(string):
