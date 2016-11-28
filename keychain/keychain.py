@@ -3,19 +3,23 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from functools import wraps
 
-from openerp import models, fields, api
-from openerp.exceptions import ValidationError
-import openerp.tools.config as config
-
-from cryptography.fernet import Fernet, InvalidToken
-
 import logging
 import json
 
+from openerp import models, fields, api
+from openerp.exceptions import ValidationError
+from openerp.tools.config import config
+
 _logger = logging.getLogger(__name__)
+
+try:
+    from cryptography.fernet import Fernet, InvalidToken
+except ImportError as err:
+    _logger.debug(err)
 
 
 def implemented_by_keychain(func):
+    """Call a prefixed function based on 'namespace'."""
     @wraps(func)
     def wrapper(cls, *args, **kwargs):
         fun_name = func.__name__
@@ -27,15 +31,15 @@ def implemented_by_keychain(func):
 
 
 class AccountModel(models.Model):
+    """Manage all accounts of external systems in one place."""
+
     _name = 'keychain.account'
 
     name = fields.Char(required=True, help="Humain readable label")
     technical_name = fields.Char(
         required=True,
         help="Technical name. Must be unique")
-
     namespace = fields.Selection([], help="Type of account", required=True)
-
     login = fields.Char(help="Login")
     clear_password = fields.Char(
         help="Password. Leave empty if no changes",
@@ -45,13 +49,14 @@ class AccountModel(models.Model):
     password = fields.Char(
         help="Password is derived from clear_password",
         readonly=True)
-
     data = fields.Text(help="Additionnal data as json")
 
     def _compute_password(self):
+        # Only needed in v8 for _description_searchable issues
         return True
 
     def get_password(self):
+        """Password in clear text."""
         try:
             return self._decode_password(self.password)
         except Warning as warn:
@@ -63,7 +68,8 @@ class AccountModel(models.Model):
                 )
             )
 
-    def _get_data(self):
+    def get_data(self):
+        """Data in dict form."""
         return self._parse_data(self.data)
 
     @api.constrains('data')
@@ -76,6 +82,8 @@ class AccountModel(models.Model):
                     raise ValidationError("Data not valid")
 
     def _set_password(self):
+        """Encode password from clear text."""
+        # inverse function
         for rec in self:
             rec.password = rec._encode_password(rec.clear_password)
 
