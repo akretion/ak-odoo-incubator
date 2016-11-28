@@ -40,12 +40,16 @@ class AccountModel(models.Model):
     clear_password = fields.Char(
         help="Password. Leave empty if no changes",
         inverse='_set_password',
+        compute='_compute_password',
         store=False)
     password = fields.Char(
         help="Password is derived from clear_password",
         readonly=True)
 
     data = fields.Text(help="Additionnal data as json")
+
+    def _compute_password(self):
+        return True
 
     def get_password(self):
         try:
