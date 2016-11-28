@@ -15,19 +15,17 @@ class AccountProduct(models.Model):
         selection_add=[('roulier_laposte', 'Laposte')])
 
     def _roulier_laposte_init_data(self):
-        print "laposte"
         return {
             "codeAgence": "",
             "bim": "boum"
         }
 
     def _roulier_laposte_validate_data(self, data):
-        print "on valide data"
         # on aurait pu utiliser Cerberus ici
         return 'codeAgence' in data
 
 
-#class LaposteProduct(models.Model):
+# class LaposteProduct(models.Model):
 #   _inherit = 'product.product'
 #   account = fields.Many2one(
 #       'keychain.account',
