@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
+	<data>
 		<record model="ir.ui.view" id="keychain_account_id">
 			<field name="model">keychain.account</field>
 			<field name="arch" type="xml">
@@ -43,4 +44,5 @@
 		<menuitem id="keychain_menu" name="Keychain"
 				  parent="base.menu_config"
 				  action="keychain_list_action"/>
+	</data>
 </openerp>
