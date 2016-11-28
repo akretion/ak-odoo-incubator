@@ -7,7 +7,8 @@ from openerp import models, fields, api
 from openerp.exceptions import ValidationError
 import openerp.tools.config as config
 
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
+
 import logging
 import json
 
@@ -41,14 +42,22 @@ class AccountModel(models.Model):
         inverse='_set_password',
         store=False)
     password = fields.Char(
-        name="Encrypted password",
         help="Password is derived from clear_password",
         readonly=True)
 
     data = fields.Text(help="Additionnal data as json")
 
     def get_password(self):
-        return self._decode_password(self.password)
+        try:
+            return self._decode_password(self.password)
+        except Warning as warn:
+            raise Warning(
+                "%s \n"
+                "Account: %s %s %s " % (
+                    warn,
+                    self.login, self.name, self.technical_name
+                )
+            )
 
     def _get_data(self):
         return self._parse_data(self.data)
@@ -100,9 +109,22 @@ class AccountModel(models.Model):
     @classmethod
     def _decode_password(cls, data):
         cipher = cls._get_cipher()
-        return cipher.decrypt(str(data))
+        try:
+            return cipher.decrypt(str(data))
+        except InvalidToken:
+            raise Warning(
+                "Password has been encrypted with a different "
+                "key. Unless you can recover the previous key, "
+                "this password unreadable."
+            )
 
     @staticmethod
     def _get_cipher():
-        key = config['keychain_key']
+        try:
+            key = config['keychain_key']
+        except:
+            raise Warning(
+                "No 'keychain_key' entry found in config file. "
+                "Use a key like : %s" % Fernet.generate_key()
+            )
         return Fernet(key)
