@@ -127,7 +127,6 @@ Go to *settings / keychain*, create a record with the following
 Known issues / Roadmap
 ======================
 
-* ...
 
 Bug Tracker
 ===========
