@@ -116,13 +116,13 @@ class AccountModel(models.Model):
     @classmethod
     def _encode_password(cls, data):
         cipher = cls._get_cipher()
-        return cipher.encrypt(str(data))
+        return cipher.encrypt(str(data.encode('UTF-8')))
 
     @classmethod
     def _decode_password(cls, data):
         cipher = cls._get_cipher()
         try:
-            return cipher.decrypt(str(data))
+            return unicode(cipher.decrypt(str(data)), 'UTF-8')
         except InvalidToken:
             raise Warning(
                 "Password has been encrypted with a different "
