@@ -37,7 +37,7 @@ Configuration
 =============
 
 After the installation of this module, you need to add an entry in odoo's config file : 
-(_etc/openerp.cfg_) :
+(etc/openerp.cfg) :
 > keychain_key = fyeMIx9XVPBBky5XZeLDxVc9dFKy7Uzas3AoyMarHPA=
 
 You can generate keys with `python keychain/bin/generate_key.py`
@@ -49,10 +49,10 @@ Usage (for module dev)
 ======================
 
 
-*) Add this keychain as a dependency in __openerp__.py
+* Add this keychain as a dependency in __openerp__.py
+* Subclass `keychain.account` and add your module in namespaces : `(see after for the name of namespace )`
 
-*) Subclass `keychain.account` and add your module in namespaces : 
-(see after for the name of namespace )
+.. code:: python
 
     class LaposteAccount(models.Model):
         _inherit = 'keychain.account'
@@ -60,7 +60,10 @@ Usage (for module dev)
         namespace = fields.Selection(
             selection_add=[('roulier_laposte', 'Laposte')])
 
-*) Add the default data (as dict):
+* Add the default data (as dict):
+
+.. code:: python
+
     class LaposteAccount(models.Model):
         # ...
         def _roulier_laposte_init_data(self):
@@ -69,13 +72,18 @@ Usage (for module dev)
                 "recommandationLevel": "R1"
             }
 
-*) Implement validation of user entered data:
+* Implement validation of user entered data:
+
+.. code:: python
+
     class LaposteAccount(models.Model):
         # ...
         def _roulier_laposte_validate_data(self, data):
             return len(data.get("agencyCode") > 3)
 
-*) In your code, fetch the account :
+* In your code, fetch the account :
+
+.. code:: python
 
     def get_auth(self):
         import random
@@ -98,13 +106,14 @@ Usage (for user)
 ================
 
 Go to *settings / keychain*, create a record with the following 
-- Namespace: type of account (ie: Laposte)
-- Name : human readable label "Warehouse 1"
-- Technical Name: name used by a consumer module, should be unique for this module (like "wharehouse_1")
-- Login: login of the account
-- Password_clear : For entering the password in clear text (not stored unecrypted)
-- Password : password encrypted, unreadable without the key (in config)
-- data: a JSON string for additionnal values (additionnal config for the account, like : {"agencyCode": "Lyon", "insuranceLevel": "R1"})
+
+* Namespace: type of account (ie: Laposte)
+* Name : human readable label "Warehouse 1"
+* Technical Name: name used by a consumer module, should be unique for this module (like "wharehouse_1")
+* Login: login of the account
+* Password_clear : For entering the password in clear text (not stored unecrypted)
+* Password : password encrypted, unreadable without the key (in config)
+* data: a JSON string for additionnal values (additionnal config for the account, like : `{"agencyCode": "Lyon", "insuranceLevel": "R1"})`
 
 
 
