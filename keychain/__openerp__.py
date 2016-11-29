@@ -21,6 +21,7 @@
         "product",  # only for example
     ],
     "data": [
+        "security/ir.model.access.csv",
         'keychain_view.xml'
     ],
 }
