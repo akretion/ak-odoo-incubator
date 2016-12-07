@@ -6,24 +6,23 @@
 Keychain Account
 ================
 
-This module allows you to store credentials to external systems.
+This module allows you to store credentials of external systems.
 
-All the crendentials are stored in one place: easier to manage and to
-audit.
+* All the crendentials are stored in one place: easier to manage and to audit.
+* Multi-account made possible without effort.
+* Store additionnal data for each account. 
+* Validation rules for additional data
 
-Passwords are encrypted with a key stored in odoo config.
+
+By default passwords are encrypted with a key stored in odoo config.
 It's far from an ideal password storage setup, but it's way better 
-than password in clear text in the database. 
-
-Multi-account made possible without effort.
-
-Store additionnal data for each account. 
-Validation rules for additional data
+than password in clear text in the database.
+It can be easily replaced with another system. See "Security" chapter below.
 
 Accounts may be: market places (Amazon, Cdisount, ...), carriers (Laposte, UPS, ...) or any third party system called from odoo.
 
 This module is usefull for developers.
-The logic to choose between accounts is done in dependant modules.
+The logic to choose between accounts or environement (like dev or prod) is done in dependant modules.
 
 
 ==========
@@ -126,6 +125,21 @@ Go to *settings / keychain*, create a record with the following
 
 Known issues / Roadmap
 ======================
+
+
+Security
+========
+Common sense : Odoo is not a safe place for storing any sensitive data.
+
+By default, passwords are stored encrypted in the db using symetric encryption [Fernet : https://cryptography.io/en/latest/fernet/]. The encryption key is stored in openerp.tools.config.
+
+Threats :
+
+- unauthorized odoo user want to access data: access is rejected by odoo security rules
+ - db is stolen : without the key it's currently pretty hard to recover the password
+ - odoo is compromised: hacker can do what he wants with odoo : passwords can be easily decrypted
+
+If you want something more secure, don't store any sensitive data in odoo, use an external system as a proxy, you can still use this module for storing all other data related to your accounts.
 
 
 Bug Tracker
