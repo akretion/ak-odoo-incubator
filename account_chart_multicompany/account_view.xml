@@ -23,6 +23,9 @@
                 <xpath expr="//field[@name='tax_ids']" position="before">
                     <field name="account_tmpl_id"/>
                 </xpath>
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="attrs">{'required': True}</attribute>
+                </xpath>
             </field>
         </record>
 

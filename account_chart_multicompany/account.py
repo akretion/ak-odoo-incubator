@@ -91,9 +91,9 @@ class AccountAccount(models.Model):
         if context is None:
             context = {}
         defered = False
+        ctx = context.copy()
         if 'parent_id' in vals:
             defered = True
-            ctx = context.copy()
             ctx['defer_parent_store_computation'] = True
         res = super(AccountAccount, self)._create(cr, uid, vals, context=ctx)
         if defered:
@@ -104,9 +104,9 @@ class AccountAccount(models.Model):
         if context is None:
             context = {}
         defered = False
+        ctx = context.copy()
         if 'parent_id' in vals:
             defered = True
-            ctx = context.copy()
             ctx['defer_parent_store_computation'] = True
         res = super(AccountAccount, self)._write(
             cr, uid, ids, vals, context=ctx)
@@ -214,9 +214,10 @@ class AccountAccountTemplate(models.Model):
                     ('company_id', '=', account.company_id.id),
                     ('account_tmpl_id', '=', vals['parent_id']),
                     ])
-                self._cr.execute("""UPDATE account_account
-                    SET parent_id = %s
-                    WHERE id = %s""", (parent_account.id, account.id))
+                if parent_account:
+                    self._cr.execute("""UPDATE account_account
+                        SET parent_id = %s
+                        WHERE id = %s""", (parent_account.id, account.id))
             self.env['account.account']._parent_store_compute()
         return super(AccountAccountTemplate, self).write(vals)
 
