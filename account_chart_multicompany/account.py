@@ -19,7 +19,8 @@
 #
 ###############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
+from openerp.exceptions import Warning as ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -213,11 +214,21 @@ class AccountAccountTemplate(models.Model):
                 parent_account = self.env['account.account'].search([
                     ('company_id', '=', account.company_id.id),
                     ('account_tmpl_id', '=', vals['parent_id']),
-                    ])
+                ])
                 if parent_account:
                     self._cr.execute("""UPDATE account_account
                         SET parent_id = %s
                         WHERE id = %s""", (parent_account.id, account.id))
+                else:
+                    acc_tmpl_obj = self.env['account.account.template']
+                    parent_account_template = acc_tmpl_obj.browse(
+                        vals['parent_id'])
+                    raise ValidationError(_(
+                        "The parent account template '%s %s' that you have "
+                        "selected, does not have an associated account."
+                        "Please contact your Administrator !"
+                        % (parent_account_template.code,
+                           parent_account_template.name)))
             self.env['account.account']._parent_store_compute()
         return super(AccountAccountTemplate, self).write(vals)
 
