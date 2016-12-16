@@ -23,7 +23,8 @@ class DatadogCollect(orm.TransientModel):
         total = 0
         for func_string, state, count in cr.fetchall():
             func_string_shorted = func_string.replace('(', '.')\
-                .replace("'", '').replace('openerp.addons.', '')
+                .replace("'", '').replace('openerp.addons.', '')\
+                .replace('_', '.')
             res["%s.%s" % (func_string_shorted, state)] = count
             total += count
         res['job.total'] = total
