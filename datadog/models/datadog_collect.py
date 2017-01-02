@@ -6,6 +6,7 @@
 
 from openerp.osv import orm
 from datadog import statsd
+from collections import defaultdict
 
 
 class DatadogCollect(orm.TransientModel):
@@ -13,25 +14,23 @@ class DatadogCollect(orm.TransientModel):
 
     def _collect_data_on_job(self, cr, uid):
         cr.execute("""SELECT
-            split_part(func_string, ',', 1) AS nbr,
+            model_name,
             state,
             count(id)
         FROM queue_job
         WHERE state != 'done'
-        GROUP BY state, split_part(func_string, ',', 1)""")
+        GROUP BY state, model_name""")
         res = {}
-        total = 0
-        for func_string, state, count in cr.fetchall():
-            func_string_shorted = func_string.replace('(', '.')\
-                .replace("'", '').replace('openerp.addons.', '')
-            res["%s.%s" % (func_string_shorted, state)] = count
-            total += count
-        res['job.total'] = total
+        total = defaultdict(int)
+        for model, state, count in cr.fetchall():
+            for prefix in ['magento.', 'prestashop.']:
+                model = model.replace(prefix, '')
+            statsd.histogram('job.%s' % state, count, tags=[model])
+            total['total'] += count
+            total['job.%s' % state] += count
+        for key, value in total.items():
+            statsd.histogram(key, value)
         return res
 
-    def _send(self, method, data):
-        for key in data:
-            method(key, data[key])
-
     def _run(self, cr, uid):
-        self._send(statsd.histogram, self._collect_data_on_job(cr, uid))
+        self._collect_data_on_job(cr, uid)
