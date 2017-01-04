@@ -6,7 +6,7 @@
 Accounts on sale shop
 =====================
 
-This module allows you to attach carrier accounts to sales shop.
+This module allows you to attach (delivery) carrier accounts to sales shop.
 For each shop, you can now choose which account will be used.
 
 

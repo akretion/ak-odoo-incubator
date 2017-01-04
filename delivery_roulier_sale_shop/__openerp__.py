@@ -3,10 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Delivery accounts on Shop',
+    'name': 'Delivery accounts on Shops',
     'version': '9.0.0.0.0',
     'author': 'Akretion',
-    'summary': 'Set an account for delivery on shop',
+    'summary': 'Set a delivery account for each shop',
     'maintainer': 'Akretion, Odoo Community Association (OCA)',
     'category': 'Warehouse',
     'depends': [
