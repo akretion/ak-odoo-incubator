@@ -62,7 +62,7 @@ class PurchaseOrder(models.Model):
         # po.Maybe pass po_id in context if we rly need it in mail
         # template. Or find a better way ton send mail in both cases
         if partner.edi_transfer_method == 'mail' and attachment_ids:
-            template_obj = self.env['email.template']
+            template_obj = self.env['mail.template']
             if edi_transfer.model_id.model == 'res.partner':
                 record = purchase.partner_id
             elif edi_transfer.model_id.model == 'purchase.order':
