@@ -26,7 +26,7 @@ class DatadogCollect(orm.TransientModel):
             for prefix in ['magento.', 'prestashop.']:
                 model = model.replace(prefix, '')
             statsd.histogram('job.%s' % state, count, tags=[model])
-            total['total'] += count
+            total['job.total'] += count
             total['job.%s' % state] += count
         for key, value in total.items():
             statsd.histogram(key, value)
