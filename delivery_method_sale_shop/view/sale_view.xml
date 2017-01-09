@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+ <record id="sale_shop_method_form_view" model="ir.ui.view">
+            <field name="model">sale.shop</field>
+            <field name="inherit_id" ref="sale_shop.view_sale_shop_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='logo']" position="after">
+                	<p>Biim</p>
+                    <field name="shop_methods"/>
+                </xpath>
+            </field>
+</record>
+
+</data>
+</openerp>
