@@ -27,9 +27,6 @@ class StockPicking(models.Model):
         shop = self.sale_id.shop_id
         method = self.carrier_id
 
-        import pdb
-        pdb.set_trace()
-
         sale_shop_method = self.env['sale.shop.method'].search(
             [
                 ['shop', '=', shop.id],
