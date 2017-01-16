@@ -56,7 +56,6 @@ class PurchaseOrder(models.Model):
                 edi_transfer)
             if attachment:
                 attachment_ids.append(attachment.id)
-
         # TODO FIXME we are forced to send mail from template on partner
         # Because in the case we want to send empty files, there are not
         # po.Maybe pass po_id in context if we rly need it in mail
@@ -107,7 +106,7 @@ class PurchaseOrder(models.Model):
                 purchase.partner_id, edi_transfer)
 
     @api.multi
-    def button_confirm(self):
-        res = super(PurchaseOrder, self).button_confirm()
+    def button_approve(self):
+        res = super(PurchaseOrder, self).button_approve()
         self.generate_and_send_edi_files()
         return res
