@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2017 Akretion (https://www.akretion.com).
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+<data>
+
+<record id="view_picking_withcarrier_out_form" model="ir.ui.view">
+    <field name="model">stock.picking</field>
+    <field name="inherit_id"
+            ref="base_delivery_carrier_label.view_picking_withcarrier_out_form" />
+    <field name="arch" type="xml">
+        <button name="action_generate_carrier_label" position="after">
+            <button name="open_tracking_url" string="Trackings"
+                    type="object" states="done"/>
+        </button>
+    </field>
+</record>
+
+</data>
+</openerp>
