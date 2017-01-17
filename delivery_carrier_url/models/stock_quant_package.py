@@ -21,7 +21,8 @@ class StockQuantPackage(models.Model):
     def _get_picking_from_package(self):
         operation_obj = self.env['stock.pack.operation']
         if self._context.get('picking_id', False):
-            picking = self.env['stock.picking'].browse(self._context['picking_id'])
+            picking = self.env['stock.picking'].browse(
+                self._context['picking_id'])
         else:
             picking_type = self.env.ref('stock.picking_type_out')
             operations = operation_obj.search(
@@ -43,7 +44,8 @@ class StockQuantPackage(models.Model):
         tracking_url = self._get_tracking_url(picking)
         if not tracking_url:
             raise UserError(
-                _('No tracking url for the carrier %s.' % picking.carrier_id.name))
+                _('No tracking url for the carrier %s.'
+                  % picking.carrier_id.name))
         client_action = {
             'type': 'ir.actions.act_url',
             'name': "Shipment Tracking Page",

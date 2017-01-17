@@ -19,8 +19,11 @@ class StockPicking(models.Model):
             action = self.env.ref('stock.action_package_view')
             client_action = action.read()[0]
             client_action['res_id'] = packages.ids
-            client_action['domain'] = "[('id','in',[" + ','.join(map(str, packages.ids)) + "])]"
+            client_action['domain'] = \
+                "[('id','in',[" + ','.join(map(str, packages.ids)) + "])]"
             client_action['context'] = "{'picking_id': " + str(self.id) + "}"
         else:
-            client_action = packages.with_context(picking=self).open_tracking_url()
+            client_action = packages.with_context(
+                picking=self
+            ).open_tracking_url()
         return client_action
