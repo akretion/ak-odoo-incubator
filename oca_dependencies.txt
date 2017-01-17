@@ -1,4 +1,4 @@
 server-tools
 product-attribute
 product-variant
-delivery_carrier
+delivery-carrier
