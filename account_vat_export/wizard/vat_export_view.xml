@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="account_vat_export_view">
+            <field name="name">account.vat.export.view</field>
+            <field name="model">account.vat.export</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="VAT Export">
+                    <group string="Periods">
+                        <field name="period_ids" nolabel="1"/>
+                    </group>
+                    <group col="2" colspan="4">
+                        <field name="country_id"/>
+                        <field name="invoice_file" filename="invoice_name" readonly="1"/>
+                        <field name="refund_file" filename="refund_name" readonly="1"/>
+                    </group>
+                    <group col="2" colspan="4">
+                        <button icon="gtk-cancel" special="cancel" string="Cancel"/>
+                        <button icon="gtk-ok" name="export_vat" string="Export" type="object"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_vat_export" model="ir.actions.act_window">
+            <field name="name">Account VAT Export</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.vat.export</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="VAT Export"
+            parent="account.menu_tax_report"
+            action="action_account_vat_export"
+            id="menu_account_vat_export"
+            icon="STOCK_PRINT"/>
+
+    </data>
+</openerp>
