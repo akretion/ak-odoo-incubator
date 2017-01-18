@@ -2,9 +2,9 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="vat_export_view">
-            <field name="name">vat.export.view</field>
-            <field name="model">vat.export</field>
+        <record model="ir.ui.view" id="account_vat_export_view">
+            <field name="name">account.vat.export.view</field>
+            <field name="model">account.vat.export</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="VAT Export">
@@ -24,12 +24,21 @@
             </field>
         </record>
 
-         <act_window name="VAT Export"
-            res_model="vat.export"
-            src_model="account.invoice"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="action_vat_export"/>
+        <record id="action_account_vat_export" model="ir.actions.act_window">
+            <field name="name">Account VAT Export</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.vat.export</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="VAT Export"
+            parent="account.menu_tax_report"
+            action="action_account_vat_export"
+            id="menu_account_vat_export"
+            icon="STOCK_PRINT"/>
+
     </data>
 </openerp>

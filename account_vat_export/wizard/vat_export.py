@@ -17,8 +17,8 @@ HEADER = [
     'Taux TVA', 'Montant Net', 'Montant TVA']
 
 
-class VATExport(orm.Model):
-    _name = 'vat.export'
+class AccountVATExport(orm.TransientModel):
+    _name = 'account.vat.export'
     _description = "Wizard to export VAT"
 
     _columns = {
@@ -113,7 +113,7 @@ class VATExport(orm.Model):
             'name': 'Export',
             'view_type': 'form',
             'view_mode': 'form',
-            'res_model': 'vat.export',
+            'res_model': 'account.vat.export',
             'res_id': ids[0],
             'type': 'ir.actions.act_window',
             'target': 'new',
