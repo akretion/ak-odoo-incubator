@@ -11,7 +11,7 @@ class StockMove(models.Model):
     @api.multi
     def _get_lot_vals(self, old_lot, index):
         self.ensure_one()
-        lot_number = "%s-%03d" % (
+        lot_number = "%s-%d" % (
             old_lot.name, index)
         return {
             'name': lot_number,
