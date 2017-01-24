@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <record id="production_release_form" model="ir.ui.view">
+        <field name="model">production.release</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="create_date"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="production_release_tree" model="ir.ui.view">
+        <field name="model">production.release</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="production_release_action" model="ir.actions.act_window">
+        <field name="name">Production Release</field>
+        <field name="res_model">production.release</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="production_release_menu" action="production_release_action"
+              parent="base.next_id_9" sequence="50"/>
+
+
+</data>
+</openerp>
