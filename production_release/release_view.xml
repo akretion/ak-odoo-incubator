@@ -8,7 +8,7 @@
             <form>
                 <group>
                     <field name="name"/>
-                    <field name="create_date"/>
+                    <field name="date"/>
                 </group>
             </form>
         </field>
@@ -19,7 +19,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="create_date"/>
+                <field name="date"/>
             </tree>
         </field>
     </record>
