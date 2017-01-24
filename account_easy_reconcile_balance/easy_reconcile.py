@@ -5,6 +5,8 @@
 
 
 from openerp.osv import fields, osv, orm
+import logging
+
 _logger = logging.getLogger(__name__)
 
 
@@ -16,6 +18,7 @@ class AccountEasyReconcileMethod(orm.Model):
             cr, uid, context=context)
         res.append(
             ('easy.reconcile.all.move.partner', 'All move per Partner'))
+        return res
 
 
 class EasyReconcileAllMovePartner(orm.TransientModel):
@@ -30,12 +33,13 @@ class EasyReconcileAllMovePartner(orm.TransientModel):
         """SELECT partner_id FROM account_move_line
             WHERE account_id=%s AND reconcile_id is NULL
             GROUP BY partner_id
-            HAVING  sum(debit) = sum(credit)
+            HAVING sum(debit) = sum(credit) AND count(id) > 1
         """
         move_line_obj = self.pool['account.move.line']
         params = (rec.account_id.id,)
         cr.execute(query, params)
         partner_ids = cr.fetchall()
+        commit_count = 0
         for partner_id in partner_ids:
             line_ids = move_line_obj.search(cr, uid, [
                 ('partner_id', '=', partner_id[0]),
@@ -50,10 +54,10 @@ class EasyReconcileAllMovePartner(orm.TransientModel):
                     type='auto',
                     context=context)
                 res += line_ids
-                if context['commit_every']\
-                        and commit_count % context['commit_every'] == 0):
+                if context['commit_every'] \
+                        and commit_count % context['commit_every'] == 0:
                     cr.commit()
                     _logger.info(
                         "Commit the reconciliations after %d lines",
-                        count)
+                        commit_count)
         return res, []
