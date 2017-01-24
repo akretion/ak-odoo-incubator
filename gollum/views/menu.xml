@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+<record id="action_open_wiki" model="ir.actions.act_url">
+    <field name="name">Wiki</field>
+    <field name="url">/wiki/home</field>
+    <field name="target">new</field>
+</record>
+
+<menuitem
+    action="action_open_wiki"
+    id="menu_open_wiki"
+    name="Wiki"
+    sequence="190"/>
+
+    </data>
+</openerp>
