@@ -3,6 +3,11 @@
 # Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+try:
+    from unidecode import unidecode
+except:
+    _logger.debug('Cannot `import unidecode`.')
+
 from werkzeug.exceptions import Unauthorized
 from openerp.http import request
 from openerp import http
@@ -28,7 +33,7 @@ class GollumController(http.Controller):
             access = 'read'
         headers = {
             'access': access,
-            'user': user.name,
+            'user': unidecode(user.name),
             'email': user.email,
             }
         if method == 'GET':
