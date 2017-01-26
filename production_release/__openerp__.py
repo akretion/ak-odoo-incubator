@@ -4,13 +4,11 @@
 
 {
     'name': "Production Release",
-    'description': """
-Record each new production stage
-    """,
     'author': "Akretion",
     'website': "http://www.akretion.com",
     'category': 'Tools',
     'version': '8.0.1.0.1',
+    'licence': 'AGPL-3',
     'depends': [
     ],
     'data': [
