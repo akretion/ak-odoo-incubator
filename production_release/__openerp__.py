@@ -8,7 +8,7 @@
     'website': "http://www.akretion.com",
     'category': 'Tools',
     'version': '8.0.1.0.1',
-    'licence': 'AGPL-3',
+    'license': 'AGPL-3',
     'depends': [
     ],
     'data': [

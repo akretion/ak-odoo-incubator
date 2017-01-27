@@ -25,15 +25,13 @@ class ProductionRelease(models.Model):
     @api.multi
     def unlink(self):
         self._log_prod_release('unlink')
+        super(ProductionRelease, self).unlink()
         raise UserError(
             _("Production Release can't be deleted from this database"))
-        # useless line because never reach, but required by maintainer-tools
-        return super(ProductionRelease, self).unlink()
 
     @api.multi
     def write(self, vals):
         self._log_prod_release('write')
+        super(ProductionRelease, self).write(vals)
         raise UserError(
             _("Production Release can't be updated by manual entry"))
-        # useless line because never reach, but required by maintainer-tools
-        return super(ProductionRelease, self).write(vals)
