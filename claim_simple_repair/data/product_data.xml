@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+
+<record id="product_template_repair" model="product.template">
+    <field name="name">Reparation sous garantie</field>
+    <field name="categ_id" ref="product.product_category_1"/>
+    <field name="type">consu</field>
+    <field name="uom_id" ref="product.product_uom_unit"/>
+    <field name="uom_po_id" ref="product.product_uom_unit"/>
+</record>
+<record id="product_product_repair" model="product.product">
+    <field name="product_tmpl_id" ref="product_template_repair"/>
+    <field name="default_code">SAV</field>
+</record>
+
+    </data>
+</openerp>

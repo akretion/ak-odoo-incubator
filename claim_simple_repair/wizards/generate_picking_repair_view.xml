@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+<record id="view_generate_picking_repair_view" model="ir.ui.view">
+    <field name="model">generate.picking.repair</field>
+    <field name="arch" type="xml">
+        <form string="Generate Repair" version="7.0">
+            <group>
+                <field name="product_id"/>
+                <field name="description"/>
+            </group>
+            <footer>
+                <button name="validate" string="Validate" type="object" class="oe_highlight"/>
+                or
+                <button string="Cancel" class="oe_link" special="cancel" />
+            </footer>
+       </form>
+    </field>
+</record>
+
+
+<record id="action_repair" model="ir.actions.act_window">
+    <field name="name">Repair</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">generate.picking.repair</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_generate_picking_repair_view"/>
+    <field name="target">new</field>
+    <field name="multi">True</field>
+</record>
+
+    </data>
+</openerp>
