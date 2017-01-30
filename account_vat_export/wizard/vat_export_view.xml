@@ -16,6 +16,7 @@
                         <field name="invoice_file" filename="invoice_name" readonly="1"/>
                         <field name="refund_file" filename="refund_name" readonly="1"/>
                     </group>
+                    <separator string="You need to had manually the OD journal items !"/>
                     <group col="2" colspan="4">
                         <button icon="gtk-cancel" special="cancel" string="Cancel"/>
                         <button icon="gtk-ok" name="export_vat" string="Export" type="object"/>
