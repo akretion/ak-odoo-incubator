@@ -8,7 +8,8 @@
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
             <field name="picking_type_id" position="after">
-                <field name="specific_location_id" readonly="1" attrs="{'invisible': [('specific_location_id', '=', False)]}"/>
+                <field name="default_location_dest_id" invisible="1"/>
+                <field name="specific_location_id" attrs="{'invisible': [('picking_type_id', '=', False)]}" domain="[('id', 'child_of', default_location_dest_id)]"/>
             </field>
         </field>
     </record>
