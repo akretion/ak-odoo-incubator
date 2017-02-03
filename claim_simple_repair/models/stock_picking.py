@@ -5,6 +5,8 @@
 
 
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
+
 
 class StockPicking(orm.Model):
     _inherit = 'stock.picking'
@@ -13,21 +15,21 @@ class StockPicking(orm.Model):
         'repair_sale_id': fields.many2one('sale.order', string='Sale')
         }
 
-
-class StockPickingOut(orm.Model):
-    _inherit = 'stock.picking.out'
-
-    _columns = {
-        'repair_sale_id': fields.many2one('sale.order', string='Sale')
-        }
+    def action_done(self, cr, uid, ids, context=None):
+        res = super(StockPicking, self).action_done(
+            cr, uid, ids, context=context)
+        if self.pool.get('magento.sale.comment'):
+            for picking in self.browse(cr, uid, ids, context=context):
+                self._notify_magento(cr, uid, picking, context=context)
+        return res
 
     def _notify_magento(self, cr, uid, picking, context=None):
         sale = picking.repair_sale_id
         if sale and sale.magento_bind_ids:
             for magento_bind in sale.magento_bind_ids:
-                message = (
-                    u"Votre commande à été réparé et expédié, le numéro de "
-                    u"suivi est le suivant %s" % picking.carrier_tracking_ref)
+                message = _(
+                    'Your order have been repaired and sent.'
+                    'The tracking number is %s') % picking.carrier_tracking_ref
                 vals = {
                     'is_visible_on_front': True,
                     'is_customer_notified': True,
@@ -39,10 +41,10 @@ class StockPickingOut(orm.Model):
                 self.pool['magento.sale.comment'].create(
                     cr, uid, vals, context=context)
 
-    def action_done(self, cr, uid, ids, context=None):
-        res = super(StockPickingOut, self).action_done(
-            cr, uid, ids, context=context)
-        if self.pool.get('magento.sale.comment'):
-            for picking in self.browse(cr, uid, ids, context=context):
-                self._notify_magento(cr, uid, picking, context=context)
-        return res
+
+class StockPickingOut(orm.Model):
+    _inherit = 'stock.picking.out'
+
+    _columns = {
+        'repair_sale_id': fields.many2one('sale.order', string='Sale')
+        }

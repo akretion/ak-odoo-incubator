@@ -6,9 +6,10 @@
 
 from openerp.osv import fields, orm
 from openerp import netsvc
+from openerp.tools.translate import _
 
 
-class GeneratePickingRepair(orm.Model):
+class GeneratePickingRepair(orm.TransientModel):
     _name = 'generate.picking.repair'
     _description = 'Generate Picking Repair'
 
@@ -19,8 +20,7 @@ class GeneratePickingRepair(orm.Model):
             required=True,
             readonly=True),
         'description': fields.char(
-            string='Description',
-            required=True),
+            string='Description'),
         }
 
     def _get_default_product(self, cr, uid, context=None):
@@ -37,7 +37,7 @@ class GeneratePickingRepair(orm.Model):
         location_id = order.shop_id.warehouse_id.lot_stock_id.id
         output_id = order.shop_id.warehouse_id.lot_output_id.id
         return {
-            'name': wizard.description,
+            'name': wizard.description or wizard.product.name,
             'product_id': wizard.product_id.id,
             'product_qty': 1,
             'product_uom': wizard.product_id.uom_id.id,
@@ -57,7 +57,7 @@ class GeneratePickingRepair(orm.Model):
                     'is_customer_notified': True,
                     'magento_sale_order_id': magento_bind.id,
                     'status': 'started',
-                    'body': u'Votre commande est en cours de réparation',
+                    'body': _('Your order is being repaired'),
                     'type': 'notification',
                     }
                 self.pool['magento.sale.comment'].create(
