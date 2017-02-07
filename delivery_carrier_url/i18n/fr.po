@@ -1,0 +1,50 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* delivery_carrier_url
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-20 10:49+0000\n"
+"PO-Revision-Date: 2017-01-20 10:49+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: delivery_carrier_url
+#: code:addons/delivery_carrier_url/models/stock_quant_package.py:47
+#, python-format
+msgid "No tracking url for the carrier %s."
+msgstr "Pas d'url de suivi pour le transporteur %s."
+
+#. module: delivery_carrier_url
+#: model:ir.model,name:delivery_carrier_url.model_stock_quant_package
+msgid "Physical Packages"
+msgstr "Colis physiques"
+
+#. module: delivery_carrier_url
+#: model:ir.model,name:delivery_carrier_url.model_stock_picking
+msgid "Picking List"
+msgstr "Opération de manutention"
+
+#. module: delivery_carrier_url
+#: code:addons/delivery_carrier_url/models/stock_picking.py:17
+#, python-format
+msgid "This shipping has no packages."
+msgstr "Cette expédition n'a pas de colis."
+
+#. module: delivery_carrier_url
+#: view:stock.quant.package:delivery_carrier_url.view_quant_package_form
+#: view:stock.quant.package:delivery_carrier_url.view_quant_package_tree
+msgid "Tracking"
+msgstr "Suivi livraison"
+
+#. module: delivery_carrier_url
+#: view:stock.picking:delivery_carrier_url.view_picking_withcarrier_out_form
+msgid "Trackings"
+msgstr "Suivi livraison"
+
