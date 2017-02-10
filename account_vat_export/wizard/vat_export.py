@@ -50,9 +50,9 @@ class AccountVATExport(orm.TransientModel):
             tax_rate = invoice.invoice_line[0].invoice_line_tax_id and invoice.invoice_line[0].invoice_line_tax_id[0].amount or 0
             row = [
                 address.name.encode('utf-8'),
-                address.street.encode('utf-8'),
-                address.zip.encode('utf-8'),
-                address.city.encode('utf-8'),
+                address.street and address.street.encode('utf-8') or '',
+                address.zip and address.zip.encode('utf-8') or '',
+                address.city and address.city.encode('utf-8') or '',
                 address.country_id.name,
                 invoice.number,
                 invoice.date_invoice,
