@@ -7,7 +7,6 @@
             <field name="inherit_id" ref="sale_shop.view_sale_shop_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='logo']" position="after">
-                	<p>Biim</p>
                     <field name="shop_methods"/>
                 </xpath>
             </field>
