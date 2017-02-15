@@ -27,7 +27,8 @@ class ResPartner(models.Model):
 
     edi_transfer_method = fields.Selection(
         selection=[('mail', 'E-mail'),
-                   ('external_location', 'SFTP/FTP')],
+                   ('external_location', 'SFTP/FTP'),
+                   ('manual', 'Manual')],
         string='Edi Transfer Method')
     edi_external_location_id = fields.Many2one(
             'external.file.location',

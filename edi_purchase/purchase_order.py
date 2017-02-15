@@ -83,7 +83,8 @@ class PurchaseOrder(models.Model):
             partner = purchase.partner_id
             edi_transfer = partner.edi_external_location_id or \
                            partner.edi_mail_template_id or \
-                           False
+                           partner.edi_transfer_method == 'manual' and 'manual' or \
+                            False
             if not edi_transfer:
                 continue
             profile_lines_dict = {key: [] for key in purchase.partner_id.edi_purchase_profile_ids}
