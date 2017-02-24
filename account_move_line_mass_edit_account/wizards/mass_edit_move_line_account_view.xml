@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+<record id="mass_edit_accout_view_form" model="ir.ui.view">
+    <field name="model">mass.edit.move.line.account</field>
+    <field name="arch" type="xml">
+        <form string="Mass Edit Account">
+                Please select the new account to set
+                <field name="account_id"/>
+            <footer>
+                <button name="change_account"
+                        string="Confirm"
+                        type="object"/>
+                or
+                <button string="Cancel" class="oe_link" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+<act_window
+	id="act_mass_edit_account"
+    name="Mass Edit account"
+    src_model="account.move.line"
+    res_model="mass.edit.move.line.account"
+    view_mode="form"
+    target="new"
+    key2="client_action_multi"/>
+
+    </data>
+</openerp>
