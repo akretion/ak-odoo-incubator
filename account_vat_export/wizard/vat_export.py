@@ -34,9 +34,7 @@ class AccountVATExport(orm.TransientModel):
             string='Country',
             required=True),
         'invoice_file': fields.binary(string='Invoice File'),
-        'refund_file': fields.binary(string='Refund File'),
         'invoice_name': fields.char(string='Invoice File Name'),
-        'refund_name': fields.char(string='Refund File Name'),
         }
 
     def _get_invoice_datas(self, cr, uid, invoice_ids, context=None):
@@ -48,6 +46,11 @@ class AccountVATExport(orm.TransientModel):
             address = invoice.address_shipping_id
             payment_date = invoice.payment_ids and min([x.date for x in invoice.payment_ids]) or invoice.date_invoice
             tax_rate = invoice.invoice_line[0].invoice_line_tax_id and invoice.invoice_line[0].invoice_line_tax_id[0].amount or 0
+            amount_untaxed = invoice.amount_untaxed
+            amount_tax = invoice.amount_tax
+            if invoice.type == 'out_refund':
+                amount_untaxed = - invoice.amount_untaxed
+                amount_tax = - invoice.amount_tax
             row = [
                 address.name.encode('utf-8'),
                 address.street and address.street.encode('utf-8') or '',
@@ -60,8 +63,8 @@ class AccountVATExport(orm.TransientModel):
                 payment_date,
                 invoice.currency_id.name,
                 tax_rate,
-                invoice.amount_untaxed,
-                invoice.amount_tax,
+                amount_untaxed,
+                amount_tax,
             ]
             try:
                 writer.writerow(row)
@@ -92,23 +95,14 @@ class AccountVATExport(orm.TransientModel):
                 ('period_id', 'in', period_ids),
                 ('country_shipping_id', '=', wizard.country_id.id),
                 ('state', 'in', ['open', 'paid']),
-                ('type', '=', 'out_invoice')], context=context)
+                ('type', 'in', ['out_invoice', 'out_refund'])], context=context)
         invoice_datas = self._get_invoice_datas(
             cr, uid, invoice_ids, context=context)
 
-        refund_ids = inv_obj.search(
-            cr, uid, [
-                ('period_id', 'in', period_ids),
-                ('country_shipping_id', '=', wizard.country_id.id),
-                ('state', 'in', ['open', 'paid']),
-                ('type', '=', 'out_refund')], context=context)
-        refund_datas = self._get_invoice_datas(
-            cr, uid, refund_ids, context=context)
         self.write(cr, uid, ids, {
             'invoice_file': invoice_datas,
-            'invoice_name': invoice_name,
-            'refund_file': refund_datas,
-            'refund_name': refund_name}, context=context)
+            'invoice_name': invoice_name
+        }, context=context)
         return {
             'name': 'Export',
             'view_type': 'form',
