@@ -13,6 +13,29 @@ _logger = logging.getLogger(__name__)
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
+    @api.multi
+    def write(self, vals):
+        if 'uom_id' in vals or 'uom_po_id' in vals:
+            # We perform a more complex check only if applied to one record
+            if len(self._ids) == 1:
+                self._uom_category_check(vals)
+            # Otherwise standard _check_uom() is finally called
+        return super(ProductTemplate, self).write(vals)
+
+    def _uom_category_check(self, vals):
+        # here is the equivalent to standard _check_uom()
+        # but before the write operation
+        uom = self.env['product.uom'].browse(
+            vals.get('uom_id', self.uom_id.id))
+        uom_po = self.env['product.uom'].browse(
+            vals.get('uom_po_id', self.uom_po_id.id))
+        # We now have in uom and uom_po the final value of these fields
+        if uom.category_id != uom_po.category_id:
+            # Standard check fails, we switch to a clever check.
+            self._set_new_uom(
+                # By removing these keys we bypass standard check
+                vals.pop('uom_id', None), vals.pop('uom_po_id', None))
+
     def _set_new_uom(self, uom_id, uom_po_id):
         product_in_model = self._products_used_in_db()
         if product_in_model:
@@ -33,12 +56,6 @@ class ProductTemplate(models.Model):
         self._cr.execute(query, params)
         _logger.info(" >>> Update product unit %s, %s" % (query, params))
         self.invalidate_cache()
-
-    @api.multi
-    def write(self, vals):
-        if 'uom_id' in vals or 'uom_po_id' in vals:
-            self._set_new_uom(vals.pop('uom_id'), vals.pop('uom_po_id'))
-        return super(ProductTemplate, self).write(vals)
 
     @api.multi
     def _products_used_in_db(self):
