@@ -6,8 +6,17 @@
 Product Unit of Measure Update
 ==============================
 
-Allow to change unit of measure of a product if this product
-is not used in the database.
+Odoo Standard prevent to update units of measure in this condition:
+
+"New Unit of Measure must belong to same Unit of Measure category
+ as of old Unit of Measure".
+
+This module allow to update units of measure of a product
+in some extra conditions:
+
+* if the product is not used in the database except in Product tables.
+* if the product unit of measure (uom_id, uom_po_id) are in the same
+  category (physical dimension).
 
 
 Usage

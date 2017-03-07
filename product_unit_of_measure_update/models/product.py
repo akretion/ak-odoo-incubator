@@ -10,15 +10,32 @@ from openerp.exceptions import Warning as UserError
 _logger = logging.getLogger(__name__)
 
 
+PRD_IN_MODEL = """
+This product is used in '%s' model.
+Impossible to modify the unit of measure.
+Delete records containing this data, to go on with your changes: '%s'"""
+
+
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     @api.multi
     def write(self, vals):
         if 'uom_id' in vals or 'uom_po_id' in vals:
-            # We perform a more complex check only if applied to one record
+            # We perform a more complex check on units
+            # only if applied to one record
             if len(self._ids) == 1:
-                self._uom_category_check(vals)
+                product_in_model, record = self._products_used_in_db()
+                if product_in_model:
+                    raise UserError(_(PRD_IN_MODEL % (
+                        product_in_model.name, record)))
+                else:
+                    # We check consistency in uom categories
+                    if self._uom_category_check(vals):
+                        # We now can update unit in a secure way
+                        # By removing these keys we bypass standard check
+                        self._set_new_uom(vals.pop('uom_id', None),
+                                          vals.pop('uom_po_id', None))
             # Otherwise standard _check_uom() is finally called
         return super(ProductTemplate, self).write(vals)
 
@@ -30,27 +47,23 @@ class ProductTemplate(models.Model):
         uom_po = self.env['product.uom'].browse(
             vals.get('uom_po_id', self.uom_po_id.id))
         # We now have in uom and uom_po the final value of these fields
-        if uom.category_id != uom_po.category_id:
-            # Standard check fails, we switch to a clever check.
-            self._set_new_uom(
-                # By removing these keys we bypass standard check
-                vals.pop('uom_id', None), vals.pop('uom_po_id', None))
+        if uom.category_id == uom_po.category_id:
+            return True
+        # Standard check fails, we switch to a clever check.
+        return False
 
     def _set_new_uom(self, uom_id, uom_po_id):
-        product_in_model = self._products_used_in_db()
-        if product_in_model:
-            raise UserError(_(
-                "This product is used in '%s' model.\nImpossible "
-                "to modify the unit of measure." % product_in_model.name))
         sql_set_fields = []
         params = []
+        # sql parameter preparation
         if uom_id:
             sql_set_fields.append("uom_id=%s")
             params.append(uom_id)
-        elif uom_po_id:
+        if uom_po_id:
             sql_set_fields.append("uom_po_id=%s")
             params.append(uom_po_id)
         params.append(tuple(self.ids),)
+        # data update
         query = """UPDATE product_template SET {} WHERE id in %s""".format(
             ", ".join(sql_set_fields))
         self._cr.execute(query, params)
@@ -74,13 +87,13 @@ class ProductTemplate(models.Model):
             # erp_fields contains all m2o to product.template
             for field in erp_fields:
                 # we search in all tables using this m2o
-                res = self.env[field.model_id.model].search(
+                record = self.env[field.model_id.model].search(
                     [(field.name, 'in', product.product_variant_ids.ids)])
-                used_products = used_products or len(res)
+                used_products = used_products or len(record)
                 if used_products:
                     # product used once is sufficient to stop checking
-                    return field.model_id
-        return False
+                    return (field.model_id, record)
+        return (False, False)
 
     @api.model
     def _exclude_models_with_product_foreign_key(self):
