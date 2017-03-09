@@ -14,6 +14,7 @@
     ],
     'website': 'http://www.akretion.com/',
     'data': [
+        'views/sale_view.xml',
     ],
     'installable': True,
     'license': 'AGPL-3',

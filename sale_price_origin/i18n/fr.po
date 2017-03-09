@@ -1,0 +1,33 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_price_origin
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-09 15:44+0000\n"
+"PO-Revision-Date: 2017-03-09 16:47+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: fr\n"
+"X-Generator: Poedit 1.8.9\n"
+
+#. module: sale_price_origin
+#: help:sale.order.line,price_origin:0
+msgid "Define which product pricelist item has been used to compute the price unit"
+msgstr "Définit quel élément de la liste de prix a été utilisé pour calculer le prix unitaire."
+
+#. module: sale_price_origin
+#: field:sale.order.line,price_origin:0
+msgid "Price Origin"
+msgstr "Origine du prix"
+
+#. module: sale_price_origin
+#: model:ir.model,name:sale_price_origin.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de commandes de vente"
