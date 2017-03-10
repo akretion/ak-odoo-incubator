@@ -43,3 +43,6 @@ Contributors
 * David BEAL <david.beal@akretion.com>
 
 .. image:: sale_price_origin/static/description/akretion.png
+   :alt:
+.. image:: static/description/akretion.png
+   :alt:
