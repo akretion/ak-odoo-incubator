@@ -102,3 +102,7 @@ msgstr "Export TVA"
 msgid "Wizard to export VAT"
 msgstr "Assistant d'export de la TVA"
 
+#. module: account_vat_export
+#: view:account.vat.export:0
+msgid "You need to had manually the OD journal items !"
+msgstr "Attention, pensez à ajouter manuellement les écritures du journal d'opérations diverses !"
