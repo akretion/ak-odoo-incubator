@@ -18,7 +18,7 @@ class GeneratePickingRepair(orm.TransientModel):
             'product.product',
             string='Produit',
             required=True,
-            readonly=True),
+            domain=[('rma', '=', True)]),
         'description': fields.char(
             string='Description'),
         }
@@ -37,7 +37,7 @@ class GeneratePickingRepair(orm.TransientModel):
         location_id = order.shop_id.warehouse_id.lot_stock_id.id
         output_id = order.shop_id.warehouse_id.lot_output_id.id
         return {
-            'name': wizard.description or wizard.product.name,
+            'name': wizard.description or wizard.product_id.name,
             'product_id': wizard.product_id.id,
             'product_qty': 1,
             'product_uom': wizard.product_id.uom_id.id,
@@ -49,7 +49,11 @@ class GeneratePickingRepair(orm.TransientModel):
             'company_id': order.company_id.id,
         }
 
-    def _notify_magento(self, cr, uid, sale, context=None):
+    def _notify_magento(self, cr, uid, ids, sale, context=None):
+        wizard = self.browse(cr, uid, ids[0], context=context)
+        product = self.pool['product.product'].browse(
+            cr, uid, wizard.product_id.id, {'lang': sale.partner_id.lang})
+        message = product.rma_in_description
         if sale.magento_bind_ids:
             for magento_bind in sale.magento_bind_ids:
                 vals = {
@@ -57,7 +61,7 @@ class GeneratePickingRepair(orm.TransientModel):
                     'is_customer_notified': True,
                     'magento_sale_order_id': magento_bind.id,
                     'status': 'started',
-                    'body': _('Your order is being repaired'),
+                    'body': message,
                     'type': 'notification',
                     }
                 self.pool['magento.sale.comment'].create(
@@ -82,7 +86,7 @@ class GeneratePickingRepair(orm.TransientModel):
         picking_obj.force_assign(cr, uid, [picking_id], context)
         # notify magento if installed
         if self.pool.get('magento.sale.comment'):
-            self._notify_magento(cr, uid, sale, context=context)
+            self._notify_magento(cr, uid, ids, sale, context=context)
         __, action_id = self.pool['ir.model.data'].get_object_reference(
             cr, uid, 'stock', 'action_picking_tree')
         action = self.pool['ir.actions.act_window'].read(

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+<record id="product_normal_form_view" model="ir.ui.view">
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_normal_form_view"/>
+    <field name="arch" type="xml">
+        <div name="options" position="inside">
+            <field name="rma"/>
+            <label for="rma"/>
+        </div>
+        <field name="description" position="after">
+            <field name="rma_in_description" attrs="{'invisible': [('rma', '=', False)]}"/>
+            <field name="rma_out_description" attrs="{'invisible': [('rma', '=', False)]}"/>
+        </field>
+    </field>
+</record>
+
+    </data>
+</openerp>
+

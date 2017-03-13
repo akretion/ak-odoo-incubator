@@ -26,10 +26,13 @@ class StockPicking(orm.Model):
     def _notify_magento(self, cr, uid, picking, context=None):
         sale = picking.repair_sale_id
         if sale and sale.magento_bind_ids:
+            product = self.pool['product.product'].browse(
+                cr, uid, picking.move_lines[0].product.id,
+                {'lang': sale.partner_id.lang})
+            message = product.rma_out_description
             for magento_bind in sale.magento_bind_ids:
-                message = _(
-                    'Your order have been repaired and sent.'
-                    'The tracking number is %s') % picking.carrier_tracking_ref
+                if '%s' in message:
+                    message = message % picking.carrier_tracking_ref
                 vals = {
                     'is_visible_on_front': True,
                     'is_customer_notified': True,

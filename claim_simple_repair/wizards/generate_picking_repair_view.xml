@@ -7,7 +7,7 @@
     <field name="arch" type="xml">
         <form string="Generate Repair" version="7.0">
             <group>
-                <field name="product_id"/>
+                <field name="product_id" widget="selection"/>
                 <field name="description"/>
             </group>
             <footer>

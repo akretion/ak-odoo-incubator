@@ -18,6 +18,7 @@
     'data': [
         'wizards/generate_picking_repair_view.xml',
         'views/sale_view.xml',
+        'views/product_view.xml',
         'data/product_data.xml',
         ],
     'demo': [],
