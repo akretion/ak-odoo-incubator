@@ -11,7 +11,7 @@ class SaleOrderLine(models.Model):
     pricelist_item_id = fields.Many2one(
         comodel_name='product.pricelist.item', string="Price Origin",
         compute='_compute_price_item', store=True,
-        readonly=True, ondelete='cascade',
+        readonly=True, ondelete='set null',
         help="Define which product pricelist item has been used "
              "to compute the price unit")
 
