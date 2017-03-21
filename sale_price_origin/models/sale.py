@@ -28,5 +28,5 @@ class SaleOrderLine(models.Model):
                 if isinstance(infos, dict):
                     # infos i.e. {1: (239.4, 4430)}
                     price, item = infos[infos.keys()[0]]
-                    if round(line.price_unit, 2) == round(price, 2):
+                    if abs(line.price_unit - price) < 0.01:
                         line.pricelist_item_id = item
