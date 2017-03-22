@@ -2,7 +2,7 @@
 
 import json
 
-from odoo import fields
+from openerp import fields
 
 
 def monkey_patch(cls):
@@ -34,8 +34,9 @@ fields.Field.__doc__ += """
 """
 
 @monkey_patch(fields.Field)
-def _get_attrs(self, model, name):
-    attrs = _get_attrs.super(self, model, name)
+def set_class_name(self, cls, name):
+    set_class_name.super(self, cls, name)
+    attrs = self._attrs
     if attrs.get('sparse'):
         # by default, sparse fields are not stored and not copied
         attrs['store'] = False
@@ -43,7 +44,8 @@ def _get_attrs(self, model, name):
         attrs['compute'] = self._compute_sparse
         if not attrs.get('readonly'):
             attrs['inverse'] = self._inverse_sparse
-    return attrs
+    for key in attrs:
+        setattr(self, key, attrs[key])
 
 @monkey_patch(fields.Field)
 def _compute_sparse(self, records):
@@ -58,7 +60,7 @@ def _compute_sparse(self, records):
 def _inverse_sparse(self, records):
     for record in records:
         values = record[self.sparse]
-        value = self.convert_to_read(record[self.name], record, use_name_get=False)
+        value = self.convert_to_read(record[self.name], use_name_get=False)
         if value:
             if values.get(self.name) != value:
                 values[self.name] = value
