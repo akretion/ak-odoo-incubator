@@ -1,16 +1,25 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Sparse Fields",
-    'summary': """Implementation of sparse fields.""",
-    'description': """
-        The purpose of this module is to implement "sparse" fields, i.e., fields
-        that are mostly null. This implementation circumvents the PostgreSQL
-        limitation on the number of columns in a table. The values of all sparse
-        fields are stored in a "serialized" field in the form of a JSON mapping.
-    """,
+    "name": "Sparse Fields",
+    "summary": "New Api of sparse fields",
+    "version": "8.0.1.0.0",
     'category': 'Technical Settings',
-    'version': '1.0',
-    'depends': ['base'],
-    'data': [
+    "website": "www.akretion.com",
+    "author": " Akretion",
+    "license": "AGPL-3",
+    "application": False,
+    "installable": True,
+    "external_dependencies": {
+        "python": [],
+        "bin": [],
+    },
+    "depends": [
+        "base",
     ],
+    "data": [
+    ],
+    "demo": [
+    ],
+    "qweb": [
+    ]
 }

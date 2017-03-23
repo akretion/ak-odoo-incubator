@@ -10,28 +10,26 @@ This module allows you to store credentials of external systems.
 
 * All the crendentials are stored in one place: easier to manage and to audit.
 * Multi-account made possible without effort.
-* Store additionnal data for each account. 
+* Store additionnal data for each account.
 * Validation rules for additional data.
 * Have different account for different environments (prod / test / env / etc).
 
 
 By default, passwords are encrypted with a key stored in Odoo config.
-It's far from an ideal password storage setup, but it's way better 
+It's far from an ideal password storage setup, but it's way better
 than password in clear text in the database.
 It can be easily replaced by another system. See "Security" chapter below.
 
-Accounts may be: market places (Amazon, Cdiscount, ...), carriers (Laposte, UPS, ...) 
+Accounts may be: market places (Amazon, Cdiscount, ...), carriers (Laposte, UPS, ...)
 or any third party system called from Odoo.
 
 This module is aimed for developers.
 The logic to choose between accounts will be achieved in dependent modules.
 
-
-==========
 Uses cases
 ==========
 
-Possible use case for deliveries: you need multiple accounts for the same carrier. 
+Possible use case for deliveries: you need multiple accounts for the same carrier.
 It can be for instance due to carrier restrictions (immutable sender address),
 or business rules (each warehouse use a different account).
 
@@ -115,7 +113,7 @@ Usage (for module dev)
         }
 
 
-In this example, an account is randomly picked. Usually this is set according 
+In this example, an account is randomly picked. Usually this is set according
 to rules specific for each client.
 
 You have to restrict user access of your methods with suspend_security().
@@ -133,7 +131,7 @@ You may adopt one of the following strategies:
 * import your dev accounts with your own migration/cleanup script
 * etc.
 
-Note: only the password field is unreadable without the proper key, login and data fields 
+Note: only the password field is unreadable without the proper key, login and data fields
 are available on all environments.
 
 You may also use a same `technical_name` and different `environment` for choosing at runtime
@@ -142,7 +140,7 @@ between accounts.
 Usage (for user)
 ================
 
-Go to *settings / keychain*, create a record with the following 
+Go to *settings / keychain*, create a record with the following
 
 * Namespace: type of account (ie: Laposte)
 * Name: human readable label "Warehouse 1"
@@ -172,8 +170,8 @@ Security
 
 This discussion: https://github.com/OCA/server-tools/pull/644 may help you decide if this module is suitable for your needs or not.
 
-Common sense: Odoo is not a safe place for storing sensitive data. 
-But sometimes you don't have any other possibilities. 
+Common sense: Odoo is not a safe place for storing sensitive data.
+But sometimes you don't have any other possibilities.
 This module is designed to store credentials of data like carrier account, smtp, api keys...
 but definitively not for credits cards number, medical records, etc.
 

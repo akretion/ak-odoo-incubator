@@ -8,7 +8,7 @@ import hashlib
 from .common import TestConnection, ContextualStringIO
 from .mock_server import server_mock_sftp
 from .mock_server import MultiResponse
-from openerp.exceptions import UserError
+from openerp.exceptions import Warning as UserError
 
 
 _logger = logging.getLogger(__name__)

@@ -1,1 +1,4 @@
 unidecode
+fs==0.5.4
+paramiko
+mock
