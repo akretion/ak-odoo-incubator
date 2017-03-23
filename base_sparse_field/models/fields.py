@@ -25,13 +25,14 @@ fields.Field.__doc__ += """
 
         .. rubric:: Sparse fields
 
-        Sparse fields have a very small probability of being not null. Therefore
-        many such fields can be serialized compactly into a common location, the
-        latter being a so-called "serialized" field.
+        Sparse fields have a very small probability of being not null.
+        Therefore many such fields can be serialized compactly into a common
+        location, the latter being a so-called "serialized" field.
 
         :param sparse: the name of the field where the value of this field must
             be stored.
 """
+
 
 @monkey_patch(fields.Field)
 def set_class_name(self, cls, name):
@@ -47,6 +48,7 @@ def set_class_name(self, cls, name):
     for key in attrs:
         setattr(self, key, attrs[key])
 
+
 @monkey_patch(fields.Field)
 def _compute_sparse(self, records):
     for record in records:
@@ -55,6 +57,7 @@ def _compute_sparse(self, records):
     if self.relational:
         for record in records:
             record[self.name] = record[self.name].exists()
+
 
 @monkey_patch(fields.Field)
 def _inverse_sparse(self, records):
@@ -90,5 +93,6 @@ class Serialized(fields.Field):
         # cache format: dict
         value = value or {}
         return value if isinstance(value, dict) else json.loads(value)
+
 
 fields.Serialized = Serialized
