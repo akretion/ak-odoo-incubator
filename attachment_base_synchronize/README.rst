@@ -3,9 +3,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-====================
-Attachment Metadata
-====================
+===========================
+Attachment Base Synchronize
+===========================
 
 This module extend ir.attachment model with some new fields for a better control
 for import and export of files.
