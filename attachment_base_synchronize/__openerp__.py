@@ -10,7 +10,6 @@
     'license': 'AGPL-3',
     'category': 'Generic Modules',
     'depends': [
-        'base',
         'mail',
     ],
     'data': [

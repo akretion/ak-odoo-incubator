@@ -38,7 +38,7 @@ class IrAttachmentMetadata(models.Model):
         ('pending', 'Pending'),
         ('failed', 'Failed'),
         ('done', 'Done'),
-        ], readonly=False, required=True, default='pending')
+    ], readonly=False, required=True, default='pending')
     state_message = fields.Text()
 
     @api.depends('datas', 'external_hash')
