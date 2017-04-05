@@ -22,6 +22,11 @@
 
 from openerp import models
 
+XML_ID_TO_UPDATE = [
+    'account.account_comp_rule',
+    'account.tax_comp_rule',
+    ]
+
 
 class IrModelData(models.Model):
     _inherit = 'ir.model.data'
@@ -29,8 +34,7 @@ class IrModelData(models.Model):
     def _update(self, cr, uid, model, module, values, xml_id=False, store=True,
                 noupdate=False, mode='init', res_id=False, context=None):
         if (module == 'account_chart_multicompany' and
-            model in ('ir.rule') and
-                xml_id == 'account.account_comp_rule'):
+                xml_id in XML_ID_TO_UPDATE):
             mode = 'init'
         return super(IrModelData, self)._update(
             cr, uid, model, module, values, xml_id=xml_id, store=store,
