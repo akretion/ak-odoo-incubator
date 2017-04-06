@@ -5,15 +5,10 @@
 from openerp import api, fields, models
 import openerp.addons.decimal_precision as dp
 from openerp.tools.config import config
-from openerp.tools import ustr
 
 
 class FloatNullEmpty(fields.Float):
-
-    def convert_to_export(self, value, env):
-        if value:
-            return value if env.context.get('export_raw_data') else ustr(value)
-        return ''
+    """Float Null Empty, when exporting a field it's empty instead of False"""
 
 
 class ProductSupplierInfo(models.Model):
@@ -125,7 +120,7 @@ class DenormalizedProductSupplier(models.AbstractModel):
                 record['supplier_%s_product_code' % s_idx] =\
                     supplier.product_code
                 for idx2, pricelist in enumerate(supplier.pricelist_ids):
-                    if idx >= qty_export:
+                    if idx2 >= qty_export:
                         break
                     p_idx = idx2 + 1
                     record['supplier_%s_qty_%s' % (s_idx, p_idx)] =\
@@ -175,6 +170,28 @@ class DenormalizedProductSupplier(models.AbstractModel):
             for supplier in record._get_specific_supplier():
                 if supplier not in suppliers:
                     supplier.unlink()
+
+    @api.multi
+    def export_data(self, fields_to_export, raw_data=False):
+        res = super(DenormalizedProductSupplier, self).export_data(
+            fields_to_export, raw_data=raw_data)
+
+        def is_null_empty(self, fields):
+            if len(fields) == 1:
+                return isinstance(self._fields[fields[0]], FloatNullEmpty)
+            else:
+                model = self.env[self._fields[fields[0]].comodel_name]
+                return is_null_empty(model, fields[1:])
+
+        float_null_empty_idx = []
+        for idx, field in enumerate(fields_to_export):
+            if is_null_empty(self, field.split('/')):
+                float_null_empty_idx.append(idx)
+        for line in res['datas']:
+            for idx in float_null_empty_idx:
+                if line[idx] == 'False':
+                    line[idx] = ''
+        return res
 
 
 class ProductTemplate(models.Model):
