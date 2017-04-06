@@ -3,20 +3,20 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Sale option',
+    'name': 'Sale Option',
     'version': '8.0.0.0.1',
     'author': 'Akretion',
     'website': 'www.akretion.com',
     'license': 'AGPL-3',
-    'category': 'Generic Modules',
+    'category': 'Sales',
     'depends': [
         'sale_order_lot_generator',
         'sale_order_lot_mrp',
     ],
     'data': [
-        'sale_view.xml',
-        'mrp_view.xml',
-        'install.xml',
+        'views/sale_view.xml',
+        'views/mrp_view.xml',
+        'views/install.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [
@@ -24,5 +24,4 @@
         'demo/config.yml',
     ],
     'installable': True,
-    'application': False,
 }

@@ -3,15 +3,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'sale_order_lot_mrp',
+    'name': 'Sale Order Lot Mrp',
     'version': '8.0.0.1.1',
     'category': 'Manufacturing',
-    'description': """
-Allow you to attach a lot in manufacturing order
-that was defined by sale_order_lot_generator module
-for all concerned products (Lot Generation Auto field)
-Name of the MO is also based on sale name
-    """,
     'author': 'Akretion',
     'website': 'www.akretion.com',
     'license': 'AGPL-3',
@@ -20,7 +14,7 @@ Name of the MO is also based on sale name
         'sale_order_lot_generator',
     ],
     'data': [
-        'mrp_view.xml',
+        'views/mrp_view.xml',
     ],
     'demo': [
         'demo/product_demo.xml',

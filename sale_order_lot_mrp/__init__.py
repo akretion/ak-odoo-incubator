@@ -1,2 +1,2 @@
-from . import mrp
+from . import models
 from . import wizard
