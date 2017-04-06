@@ -11,7 +11,8 @@ class MrpProduction(models.Model):
     """
     _inherit = 'mrp.production'
 
-    lot_id = fields.Many2one('stock.production.lot', 'Lot')
+    lot_id = fields.Many2one(
+        comodel_name='stock.production.lot', string='Lot', index=True)
 
     @api.multi
     def _action_compute_lines(self, properties=None):
