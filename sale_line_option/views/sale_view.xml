@@ -16,13 +16,13 @@
             </xpath>
             <xpath expr="//field[@name='order_line']/form/field[@name='name']" position="after">
                 <div>
-                    <label for="optional_bom_line_ids"/>
-                    <field name="optional_bom_line_ids">
+                    <label for="option_ids"/>
+                    <field name="option_ids">
                         <tree editable="bottom">
-                            <field name="bom_line_id"
-                                   context="{'filter_bom_with_product_id': parent.product_id}"/>
-                            <field name="product_id_rel"/>
-                            <field name="product_id" invisible="1"/>
+                            <!-- <field name="bom_line_id" -->
+                                   <!-- context="{'filter_bom_with_product_id': parent.product_id}"/> -->
+                            <!-- <field name="product_id_rel"/> -->
+                            <field name="product_id"/>
                             <field name="qty"/>
                             <field name="line_price"/>
                         </tree>
@@ -30,7 +30,7 @@
                 </div>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
-                <field name="optional_bom_line_ids"/>
+                <field name="option_ids"/>
             </xpath>
         </field>
     </record>

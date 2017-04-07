@@ -3,14 +3,13 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Sale Option',
+    'name': 'Sale Line Option',
     'version': '8.0.0.0.1',
     'author': 'Akretion',
     'website': 'www.akretion.com',
     'license': 'AGPL-3',
     'category': 'Sales',
     'depends': [
-        'sale_order_lot_generator',
         'sale_order_lot_mrp',
     ],
     'data': [

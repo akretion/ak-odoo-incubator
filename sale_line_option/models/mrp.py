@@ -38,7 +38,7 @@ class MrpBomLine(models.Model):
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
-        new_domain = self._filter_bom_lines_for_sale_option(args)
+        new_domain = self._filter_bom_lines_for_sale_line_option(args)
         res = super(MrpBomLine, self).name_search(
             name=name, args=new_domain, operator=operator, limit=limit)
         return res
@@ -46,14 +46,14 @@ class MrpBomLine(models.Model):
     # porting to new api when it'll be generalised in core (v10)
     def search(self, cr, uid, domain, offset=0, limit=None,
                order=None, context=None, count=False):
-        new_domain = self._filter_bom_lines_for_sale_option(
+        new_domain = self._filter_bom_lines_for_sale_line_option(
             cr, uid, domain, context=context)
         return super(MrpBomLine, self).search(
             cr, uid, new_domain, offset=offset, limit=limit, order=order,
             context=context, count=count)
 
     @api.model
-    def _filter_bom_lines_for_sale_option(self, domain):
+    def _filter_bom_lines_for_sale_line_option(self, domain):
         product_id = self._context.get('filter_bom_with_product_id')
         if product_id:
             product = self.env['product.product'].browse(product_id)
@@ -77,7 +77,7 @@ class MrpBom(models.Model):
         prod_id = self.env.context['production_id']
         prod = self.env['mrp.production'].browse(prod_id)
         bom_lines = [option.bom_line_id
-                     for option in prod.lot_id.optional_bom_line_ids]
+                     for option in prod.lot_id.option_ids]
         if not line.option_id\
                 or line.option_id.type == 'required' \
                 or line in bom_lines:
@@ -91,7 +91,7 @@ class MrpBom(models.Model):
             bom_line, quantity, product_uos_qty)
         prod = self.env['mrp.production'].browse(
             self.env.context['production_id'])
-        for option in prod.lot_id.optional_bom_line_ids:
+        for option in prod.lot_id.option_ids:
             if option.bom_line_id == bom_line:
                 vals['product_qty'] = vals['product_qty'] * option.qty
         return vals
@@ -100,8 +100,7 @@ class MrpBom(models.Model):
 class StockProductionLot(models.Model):
     _inherit = 'stock.production.lot'
 
-    optional_bom_line_ids = fields.Many2many('sale.order.line.option',
-                                             'option_lot_rel',
-                                             'lot_id',
-                                             'option_id',
-                                             'optional bom lines')
+    option_ids = fields.Many2many(
+        comodel_name='sale.order.line.option',
+        relation='option_lot_rel', column1='lot_id', column2='option_id',
+        string='Option lines', oldname='optional_bom_line_ids')

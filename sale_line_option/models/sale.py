@@ -11,11 +11,9 @@ class SaleOrderLine(models.Model):
     base_price_unit = fields.Float()
     pricelist_id = fields.Many2one(
         related="order_id.pricelist_id", readonly=True)
-    optional_bom_line_ids = fields.One2many(
-        'sale.order.line.option',
-        'sale_line_id',
-        string='optional BoM Line',
-        copy=True)
+    option_ids = fields.One2many(
+        comodel_name='sale.order.line.option',
+        inverse_name='sale_line_id', string='Option Lines', copy=True)
 
     def product_id_change(self, cr, uid, ids, pricelist, product,
                           qty=0,
@@ -37,18 +35,18 @@ class SaleOrderLine(models.Model):
             fiscal_position, flag, context)
         if product:
             res['value']['base_price_unit'] = res['value']['price_unit']
-            res['value']['optional_bom_line_ids'] = self._set_optional_lines(
+            res['value']['option_ids'] = self._set_option_lines(
                 cr, uid, product, context=context)
         return res
 
     @api.model
-    def _set_optional_lines(self, product_id):
+    def _set_option_lines(self, product_id):
         lines = []
         bom_lines = self.env['mrp.bom.line'].with_context(
             filter_bom_with_product_id=product_id).search([])
         for bline in bom_lines:
             if bline.default_qty:
-                # TODO refactor with update_sale_option() below
+                # TODO refactor with update_sale_line_option() below
                 vals = {'bom_line_id': bline.id,
                         'product_id': bline.product_id.id,
                         'qty': bline.default_qty}
@@ -67,15 +65,15 @@ class SaleOrderLine(models.Model):
         # For some strange reason changing the qty of the product in the
         # option will not recompute the price unit
         # in order to be sure to recompute the price for it here
-        if field_name == 'optional_bom_line_ids':
+        if field_name == 'option_ids':
             self._onchange_option()
 
     @api.onchange(
-        'optional_bom_line_ids',
+        'option_ids',
         'base_price_unit')
     def _onchange_option(self):
         final_options_price = 0
-        for option in self.optional_bom_line_ids:
+        for option in self.option_ids:
             final_options_price += option.line_price
             self.price_unit = final_options_price + self.base_price_unit
 
@@ -87,8 +85,8 @@ class SaleOrder(models.Model):
     def _prepare_vals_lot_number(self, order_line, index_lot):
         res = super(SaleOrder, self)._prepare_vals_lot_number(
             order_line, index_lot)
-        res['optional_bom_line_ids'] = [
-            (6, 0, [line.id for line in order_line.optional_bom_line_ids])
+        res['option_ids'] = [
+            (6, 0, [line.id for line in order_line.option_ids])
         ]
         return res
 
@@ -104,17 +102,17 @@ class SaleOrderLineOption(models.Model):
         comodel_name='mrp.bom.line', string='Bom Line')
     product_id = fields.Many2one(
         comodel_name='product.product', string='Product', required=True)
-    product_id_rel = fields.Many2one(
-        comodel_name='product.product', string='Product',
-        related='product_id', readonly=True)
+    # product_id_rel = fields.Many2one(
+    #     comodel_name='product.product', string='Product',
+    #     related='product_id', readonly=True)
     qty = fields.Integer(default=1)
     line_price = fields.Float(compute='_compute_price', store=True)
 
-    @api.onchange('bom_line_id')
-    def update_sale_option(self):
-        if self.bom_line_id:
-            self.product_id = self.bom_line_id.product_id.id
-            self.qty = self.bom_line_id.default_qty or 1
+    # @api.onchange('bom_line_id')
+    # def update_sale_line_option(self):
+    #     if self.bom_line_id:
+    #         self.product_id = self.bom_line_id.product_id.id
+    #         self.qty = self.bom_line_id.default_qty or 1
 
     @api.multi
     def _get_bom_line_price(self):
@@ -130,7 +128,7 @@ class SaleOrderLineOption(models.Model):
         return price[pricelist.id] * self.bom_line_id.product_qty * self.qty
 
     @api.multi
-    @api.depends('bom_line_id', 'qty')
+    @api.depends('qty')
     def _compute_price(self):
         for record in self:
             if record.bom_line_id and record.sale_line_id.pricelist_id:
