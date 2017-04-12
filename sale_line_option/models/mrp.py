@@ -17,9 +17,9 @@ class MrpBomLineOption(models.Model):
         )
         return selection
 
-    name = fields.Char()
+    name = fields.Char(required=True)
     sequence = fields.Integer()
-    type = fields.Selection('_get_type')
+    type = fields.Selection(selection='_get_type', required=True)
 
 
 class MrpBomLine(models.Model):

@@ -7,8 +7,8 @@
         <field name="model">mrp.bom.line.option</field>
         <field name="arch" type="xml">
             <tree string="BoM Option">
+                <field name="sequence" widget="handle"/>
                 <field name="name"/>
-                <field name="sequence"/>
                 <field name="type"/>
             </tree>
         </field>
@@ -19,11 +19,15 @@
         <field name="arch" type="xml">
             <form string="BoM Option">
                 <sheet>
+                    <div>
+                        <h1>
+                            <field name="name" select="1"/>
+                        </h1>
+                    </div>
                     <group col="6">
-                    <field name="name" select="1"/>
-                    <field name="sequence"/>
-                    <field name="type"/>
-            </group>
+                        <field name="type"/>
+                        <field name="sequence"/>
+                    </group>
                 </sheet>
             </form>
         </field>

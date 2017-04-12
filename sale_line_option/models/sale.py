@@ -8,7 +8,7 @@ from openerp import fields, api, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    base_price_unit = fields.Float()
+    base_price_unit = fields.Float(string='Base Price Unit')
     pricelist_id = fields.Many2one(
         related="order_id.pricelist_id", readonly=True)
     option_ids = fields.One2many(
@@ -46,8 +46,9 @@ class SaleOrderLine(models.Model):
             filter_bom_with_product_id=product_id).search([])
         for bline in bom_lines:
             if bline.default_qty:
-                # TODO refactor with update_sale_line_option() below
+                # TODO refactor v10 with update_sale_line_option() below
                 vals = {'bom_line_id': bline.id,
+                        'bom_id': bline.bom_id.id,
                         'product_id': bline.product_id.id,
                         'qty': bline.default_qty}
                 lines.append((0, 0, vals))  # create
@@ -100,19 +101,22 @@ class SaleOrderLineOption(models.Model):
         ondelete='cascade')
     bom_line_id = fields.Many2one(
         comodel_name='mrp.bom.line', string='Bom Line')
+    product_ids = fields.Many2many(
+        comodel_name='product.product', compute='_compute_opt_products')
+    bom_id = fields.Many2one(
+        comodel_name='mrp.bom', string='Bom')
     product_id = fields.Many2one(
         comodel_name='product.product', string='Product', required=True)
-    # product_id_rel = fields.Many2one(
-    #     comodel_name='product.product', string='Product',
-    #     related='product_id', readonly=True)
     qty = fields.Integer(default=1)
     line_price = fields.Float(compute='_compute_price', store=True)
 
-    # @api.onchange('bom_line_id')
-    # def update_sale_line_option(self):
-    #     if self.bom_line_id:
-    #         self.product_id = self.bom_line_id.product_id.id
-    #         self.qty = self.bom_line_id.default_qty or 1
+    @api.multi
+    def _compute_opt_products(self):
+        prd_ids = [x.product_id.id
+                   for x in self[0].bom_line_id.bom_id.bom_line_ids]
+        computed_product_ids = [(4, x) for x in prd_ids]
+        for rec in self:
+            rec.product_ids = computed_product_ids
 
     @api.multi
     def _get_bom_line_price(self):

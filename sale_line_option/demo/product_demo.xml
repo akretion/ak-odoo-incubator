@@ -3,11 +3,11 @@
 <data>
 
     <record id="product_pc_assmb_option1" model="product.product">
-        <field name="name">Config with opts 1</field>
+        <field name="name">Config with opts1</field>
         <field name="default_code">CFG1</field>
     </record>
     <record id="product_pc_assmb_option2" model="product.product">
-        <field name="name">Config with opts 2</field>
+        <field name="name">Config with opts2</field>
         <field name="default_code">CFG2</field>
     </record>
     <record id="option_type" model="mrp.bom.line.option">
