@@ -17,10 +17,9 @@ env:
 
   matrix:
   - TESTS="0" LINT_CHECK="1"
-  - ODOO_REPO="odoo/odoo"
   - ODOO_REPO="OCA/OCB"
-  - UNIT_TEST="1" ODOO_REPO="odoo/odoo"
   - UNIT_TEST="1" ODOO_REPO="OCA/OCB"
+  - UNIT_TEST="1" ODOO_REPO="odoo/odoo"
 
 virtualenv:
   system_site_packages: true
