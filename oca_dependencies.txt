@@ -2,3 +2,5 @@ server-tools
 product-attribute
 product-variant
 delivery-carrier
+sale-workflow
+manufacture

@@ -13,7 +13,7 @@ class SaleOrderLine(models.Model):
         related="order_id.pricelist_id", readonly=True)
     option_ids = fields.One2many(
         comodel_name='sale.order.line.option',
-        inverse_name='sale_line_id', string='Option Lines', copy=True)
+        inverse_name='sale_line_id', string='Options', copy=True)
 
     def product_id_change(self, cr, uid, ids, pricelist, product,
                           qty=0,
@@ -48,7 +48,6 @@ class SaleOrderLine(models.Model):
             if bline.default_qty:
                 # TODO refactor v10 with update_sale_line_option() below
                 vals = {'bom_line_id': bline.id,
-                        'bom_id': bline.bom_id.id,
                         'product_id': bline.product_id.id,
                         'qty': bline.default_qty}
                 lines.append((0, 0, vals))  # create
@@ -95,6 +94,19 @@ class SaleOrder(models.Model):
 class SaleOrderLineOption(models.Model):
     _name = 'sale.order.line.option'
 
+    @api.model
+    def default_get(self, fields):
+        res = super(SaleOrderLineOption, self).default_get(fields)
+        sale_line_id = self.env.context.get('active_id')
+        if sale_line_id:
+            sale_line = self.env['sale.order.line'].browse(sale_line_id)
+            if sale_line.product_id:
+                product_id = sale_line.product_id.id
+                bom_lines = self.env['mrp.bom.line'].with_context(
+                    filter_bom_with_product_id=product_id).search([])
+                res['product_ids'] = [x.product_id.id for x in bom_lines]
+        return res
+
     sale_line_id = fields.Many2one(
         comodel_name='sale.order.line',
         required=True,
@@ -103,8 +115,6 @@ class SaleOrderLineOption(models.Model):
         comodel_name='mrp.bom.line', string='Bom Line')
     product_ids = fields.Many2many(
         comodel_name='product.product', compute='_compute_opt_products')
-    bom_id = fields.Many2one(
-        comodel_name='mrp.bom', string='Bom')
     product_id = fields.Many2one(
         comodel_name='product.product', string='Product', required=True)
     qty = fields.Integer(default=1)
@@ -114,9 +124,8 @@ class SaleOrderLineOption(models.Model):
     def _compute_opt_products(self):
         prd_ids = [x.product_id.id
                    for x in self[0].bom_line_id.bom_id.bom_line_ids]
-        computed_product_ids = [(4, x) for x in prd_ids]
         for rec in self:
-            rec.product_ids = computed_product_ids
+            rec.product_ids = prd_ids
 
     @api.multi
     def _get_bom_line_price(self):
