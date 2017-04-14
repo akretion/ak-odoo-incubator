@@ -22,6 +22,8 @@
         'views/voucher_expiration_view.xml',
         'wizard/voucher_reverse_view.xml',
         'data.xml',
+        'security/rule.xml',
+        'security/ir.model.access.csv',
     ],
     'demo': [],
     'installable': True,
