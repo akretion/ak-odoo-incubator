@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_expired_voucher_user,expired.voucher user,model_expired_voucher,account.group_account_user,1,0,0,0
+access_expired_voucher_manager,expired.voucher manager,model_expired_voucher,account.group_account_manager,1,1,0,0
