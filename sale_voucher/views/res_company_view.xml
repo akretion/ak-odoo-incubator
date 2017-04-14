@@ -8,6 +8,9 @@
     <field name="arch" type="xml">
         <group name="account_grp" position="inside">
             <field name="voucher_account_id"/>
+            <field name="voucher_reverse_account_id"/>
+            <field name="voucher_validity_time"/>
+            <field name="voucher_warning_time"/>
         </group>
     </field>
 </record>

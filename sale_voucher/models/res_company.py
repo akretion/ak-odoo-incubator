@@ -11,5 +11,15 @@ class ResCompany(orm.Model):
 
     _columns = {
         'voucher_account_id': fields.many2one(
-            'account.account', string='Voucher Account')
+            'account.account', string='Voucher Account'),
+        'voucher_reverse_account_id': fields.many2one(
+            'account.account', string='Voucher Expiration Account'),
+        'voucher_validity_time': fields.integer(
+            'Voucher validity time (months)'),
+        'voucher_warning_time': fields.integer(
+            'Voucher warning time (days',
+            help='It defines the date when the partner will be notified that '
+            'his voucher will expire. it is the number of days before '
+            'the expiration date.')
+
     }
