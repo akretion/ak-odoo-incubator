@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="voucher_expiration_search" model="ir.ui.view">
+            <field name="name">voucher.expiration.search</field>
+            <field name="model">expired.voucher</field>
+            <field name="arch" type="xml">
+                <search string="Expired vouchers">
+                    <field name="partner_id"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="voucher_expiration_tree" model="ir.ui.view">
+            <field name="name">voucher.expiration.tree</field>
+            <field name="model">expired.voucher</field>
+            <field name="arch" type="xml">
+                <tree string="Expired vouchers" create="0" editable="top">
+                    <field name="partner_id" readonly="1"/>
+                    <field name="debit" readonly="1"/>
+                    <field name="credit" readonly="1"/>
+                    <field name="balance" readonly="1"/>
+                    <field name="voucher_date" readonly="1"/>
+                    <field name="last_use_date" readonly="1"/>
+                    <field name="expiration_date" readonly="1"/>
+                    <field name="extension_date"/>
+                    <field name="state" readonly="1"/>
+                    <button name="open_move_lines"
+                            type="object"
+                            icon="gtk-go-forward"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_voucher_expiration" model="ir.actions.act_window">
+            <field name="name">Manage Voucher Expiration</field>
+            <field name="res_model">expired.voucher</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="voucher_expiration_search"/>
+        </record>
+
+        <menuitem
+            name="Voucher Expiration"
+            id="menu_voucher_expiration"
+            parent="account.menu_finance_periodical_processing"
+            sequence="20"/>
+
+        <menuitem
+            name="Voucher Expiration"
+            action="action_voucher_expiration"
+            id="menu_voucher_expiration_wizard"
+            parent="menu_voucher_expiration"
+            sequence="20"/>
+
+    </data>
+</openerp>

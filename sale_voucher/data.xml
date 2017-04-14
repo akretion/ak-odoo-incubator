@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record forcecreate="True" id="ir_cron_create_expired_voucher" model="ir.cron">
+            <field name="name">Create expired voucher</field>
+            <field eval="False" name="active"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'expired.voucher'" name="model"/>
+            <field eval="'_create_expired_voucher'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+
+        <record id="voucher_expiration_reminder_template" model="email.template">
+            <field name="name">Voucher expiration reminder</field>
+            <field name="email_from"></field>
+            <field name="email_to">${object.email or ''}</field>
+            <field name="subject">Your sale voucher if expiring next month</field>
+            <field name="model_id" ref="sale_voucher.model_expired_voucher"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+            ]]></field>
+        </record>
+
+    </data>
+</openerp>
