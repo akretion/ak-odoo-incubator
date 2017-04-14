@@ -7,8 +7,12 @@
             <field name="arch" type="xml">
                 <search string="Expired vouchers">
                     <field name="partner_id"/>
+                    <field name="state"/>
+                    <filter name="reversed" string="Reversed" domain="[('state','=','reversed')]"/>
+                    <filter name="todo" string="Todo" domain="[('state','!=','reversed')]"/>
                     <group expand="0" string="Group By...">
                         <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="State" domain="[]" context="{'group_by':'state'}"/>
                     </group>
                 </search>
             </field>
@@ -42,6 +46,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree</field>
             <field name="search_view_id" ref="voucher_expiration_search"/>
+            <field name="context">{'search_default_todo':1}</field>
         </record>
 
         <menuitem

@@ -113,7 +113,7 @@ class ExpiredVoucher(orm.Model):
         lines = cr.dictfetchall()
         validity_time = company.voucher_validity_time
         warning_time = company.voucher_warning_time
-        line_ids = []
+        notify_ids = []
         for line_vals in lines:
             last_date = datetime.strptime(line_vals['last_use_date'],
                                           DEFAULT_SERVER_DATE_FORMAT)
@@ -136,6 +136,9 @@ class ExpiredVoucher(orm.Model):
                 line_vals['state'] = 'expired'
             if voucher_ids:
                 self.write(cr, uid, voucher_ids[0], line_vals, context=context)
+                notify_ids.append(voucher_ids[0])
             else:
-                self.create(cr, uid, line_vals, context=context)
+                voucher_id = self.create(cr, uid, line_vals, context=context)
+                notify_ids.append(voucher_id)
+        self.expiration_warning(cr, uid, notify_ids, context=context)
         return True

@@ -37,6 +37,8 @@ class ReverseExpiredVoucher(orm.TransientModel):
         journal_id = self.pool['account.journal'].search(cr, uid, [
             ('default_credit_account_id', '=', voucher_account_id),
             ], context=context)[0]
+        __, template_id = self.pool['ir.model.data'].get_object_reference(
+            cr, uid, 'sale_voucher', 'expired_voucher_template')
         f = StringIO()
         writer = csv.writer(f)
         writer.writerow(['Client', 'Email', 'Montant'])
@@ -129,6 +131,9 @@ class ReverseExpiredVoucher(orm.TransientModel):
                 voucher.partner_id.name.encode('utf-8'),
                 voucher.partner_id.email.encode('utf-8'),
                 balance])
+            self.pool['email.template'].send_mail(
+                cr, uid, template_id, voucher.id, force_send=False,
+                context=context)
         summary_file = base64.b64encode(f.getvalue())
         file_name = "voucher_reversed.csv"
         self.write(
