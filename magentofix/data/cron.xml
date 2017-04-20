@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data>
+
+<record forcecreate="True" id="ir_cron_fix_mag_stock" model="ir.cron">
+    <field name="name">Fix stock level in magento</field>
+    <field eval="False" name="active"/>
+    <field name="user_id" ref="base.user_root"/>
+    <field name="interval_number">7</field>
+    <field name="interval_type">days</field>
+    <field name="numbercall">-1</field>
+    <field eval="False" name="doall"/>
+    <field eval="'magento.backend'" name="model"/>
+    <field eval="'_check_stock_leveg'" name="function"/>
+    <field eval="'()'" name="args"/>
+</record>
+
+</data>
+</openerp>
