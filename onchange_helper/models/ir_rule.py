@@ -9,7 +9,6 @@ def get_new_values(model, record, on_change_result):
     new_values = {}
     for fieldname, value in vals.iteritems():
         if fieldname not in record:
-            column = model._fields[fieldname]
             new_values[fieldname] = value
     return new_values
 
