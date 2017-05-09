@@ -1,5 +1,6 @@
 # coding: utf-8
 # Copyright 2014 Sébastien BEAU <sebastien.beau@akretion.com>
+# Copyright 2017 Sylvain CALADOR <sylvain.calador@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import api, models
@@ -31,6 +32,19 @@ class ProxyActionHelper(models.AbstractModel):
             'params': {
                 'args': [printer_name, data],
                 'kwargs': kwargs,
+                }
+            }
+
+    @api.model
+    def get_print_xml_receipt_action(
+            self, receipt,
+            host='https://localhost'):
+        """ Prepare a PyWebdriver.print action """
+
+        return {
+            'url': '%s/hw_proxy/print_xml_receipt' % host,
+            'params' : {
+                'args': [receipt],
                 }
             }
 
