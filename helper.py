@@ -43,9 +43,7 @@ class ProxyActionHelper(models.AbstractModel):
 
         return {
             'url': '%s/hw_proxy/print_xml_receipt' % host,
-            'params' : {
-                'args': [receipt],
-                }
+            'params' : {'params': {'receipt': receipt}},
             }
 
     def send_proxy(self, todo):
