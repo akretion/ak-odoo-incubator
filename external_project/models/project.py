@@ -40,7 +40,8 @@ class ExternalTask(models.Model):
         """ Inherit this method to add more models depending of your
             modules dependencies
         """
-        models = self.env['ir.model'].search([('model', '!=', 'external.task')])
+        models = self.env['ir.model'].search(
+            [('model', '!=', 'external.task')])
         return [(x.model, x.name) for x in models]
 
     action_id = fields.Many2one(
@@ -119,7 +120,8 @@ class ExternalTask(models.Model):
         return self
 
     def read(
-            self, cr, uid, ids, fields=None, context=None, load='_classic_read'):
+            self, cr, uid, ids, fields=None, context=None,
+            load='_classic_read'):
         method = 'get'
         payload = {
             'method': 'read',
@@ -169,11 +171,11 @@ class ExternalTask(models.Model):
 
     @api.cr_uid_ids_context
     def message_post(
-            self, cr, uid, thread_id, body='', subject=None, type='notification',
-            subtype=None, parent_id=False, attachments=None, context=None,
-            content_subtype='html', **kwargs):
+            self, cr, uid, thread_id, body='', subject=None,
+            type='notification', subtype=None, parent_id=False,
+            attachments=None, context=None, content_subtype='html', **kwargs):
         method = 'post'
-        payload= {
+        payload = {
             'thread_id': thread_id or 0,
             'body': body,
             'subject': subject or '',
@@ -200,7 +202,6 @@ class ExternalTask(models.Model):
                 node.set('options', json.dumps(options))
             res['arch'] = etree.tostring(doc)
         return res
-
 
     @api.model
     def default_get(self, fields):
