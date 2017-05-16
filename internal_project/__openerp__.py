@@ -20,9 +20,8 @@
 {
     'name': 'Internal Project Akretion',
     'summary': 'Custom for Akretion',
-    'version': '0.1',
+    "version": "8.0.1.0.0",
     "category": "Project Management",
-    'description': "",
     'author': "Akretion",
     'website': '',
     'license': 'AGPL-3',

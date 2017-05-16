@@ -4,6 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models
+from openerp.exceptions import Warning as UserError
 import logging
 import functools
 import json
@@ -49,7 +50,7 @@ class TaskService(models.AbstractModel):
         if not v.errors and v.validate(secure_params):
             return secure_params
         _logger.error("BadRequest %s", v.errors)
-        raise BadRequest("BadRequest %s" % v.errors)
+        raise UserError("BadRequest %s" % v.errors)
 
     @secure_params
     def list(self, params):
@@ -196,7 +197,7 @@ class TaskService(models.AbstractModel):
             'description': {'type': 'string', 'required': True},
             'external_reviewer_id': {
                 'type': 'integer', 'nullable': True, 'default': 0},
-            'external_user_id': {'type': 'integer', 'required':True},
+            'external_user_id': {'type': 'integer', 'required': True},
             'contact_email': {'type': 'string', 'required': True},
             'contact_mobile': {'type': 'string', 'nullable': True},
             'model_reference': {'type': 'string'},

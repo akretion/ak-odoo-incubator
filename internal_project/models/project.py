@@ -31,7 +31,7 @@ class ProjectTask(models.Model):
     _inherit = 'project.task'
 
     stage_name = fields.Char(
-        'Stage', compute='_compute_stage_name', inverse='_set_stage_name',
+        'Stage', compute='_compute_stage_name', inverse='_inverse_stage_name',
         store=True)
     contact_mobile = fields.Char(string='Mobile')
     contact_email = fields.Char(string='Email')
@@ -42,13 +42,12 @@ class ProjectTask(models.Model):
     assignee_name = fields.Char(
         'Assignee name', related='user_id.name', store=True)
 
-
     @api.depends('stage_id')
     def _compute_stage_name(self):
         for task in self:
             task.stage_name = task.stage_id.name
 
-    def _set_stage_name(self):
+    def _inverse_stage_name(self):
         for task in self:
             stages = self.env['project.task.type'].search([
                 ('project_ids', 'in', [task.project_id.id]),
