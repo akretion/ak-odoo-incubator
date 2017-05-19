@@ -4,7 +4,7 @@
 
 {'name': 'Product Unsmart Button',
  'version': '8.0.1.0.0',
- 'author': 'Akretion,Odoo Community Association (OCA)',
+ 'author': 'Akretion',
  'website': 'http://www.akretion.com',
  'license': 'AGPL-3',
  'category': 'Sales',
