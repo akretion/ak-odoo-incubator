@@ -10,6 +10,10 @@
         <field name="name">Config with opts2</field>
         <field name="default_code">CFG2</field>
     </record>
+    <record id="product_assmb_option3" model="product.product">
+        <field name="name">Config with opts3</field>
+        <field name="default_code">CFG3</field>
+    </record>
     <record id="option_type" model="mrp.bom.line.option">
         <field name="name">Test</field>
         <field name="type">select</field>
@@ -59,6 +63,24 @@
         <field name="bom_id" eval="ref('sale_line_option.bom_pc_assmb_option2')"/>
         <field name="product_id" eval="ref('product.product_product_13')"/>
         <field name="default_qty">4</field>
+        <field name="option_id" eval="ref('sale_line_option.option_type')"/>
+    </record>
+
+    <record id="bom_assmb_option3" model="mrp.bom">
+        <field name="name">Config with Option 3</field>
+        <field name="product_tmpl_id"
+               eval="ref('sale_line_option.product_assmb_option3_product_template')"/>
+    </record>
+    <record id="bom_line_assmb_option31" model="mrp.bom.line">
+        <field name="bom_id" eval="ref('sale_line_option.bom_assmb_option3')"/>
+        <field name="product_id" eval="ref('stock.product_icecream')"/>
+        <field name="default_qty">2</field>
+        <field name="option_id" eval="ref('sale_line_option.option_type')"/>
+    </record>
+    <record id="bom_line_assmb_option32" model="mrp.bom.line">
+        <field name="bom_id" eval="ref('sale_line_option.bom_assmb_option3')"/>
+        <field name="product_id" eval="ref('product.product_product_39')"/>
+        <field name="default_qty">1</field>
         <field name="option_id" eval="ref('sale_line_option.option_type')"/>
     </record>
 

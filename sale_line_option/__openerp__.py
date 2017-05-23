@@ -8,7 +8,7 @@
     'author': 'Akretion',
     'website': 'www.akretion.com',
     'license': 'AGPL-3',
-    'category': 'Sales',
+    'category': 'Sale',
     'depends': [
         'sale_order_lot_mrp',
     ],
