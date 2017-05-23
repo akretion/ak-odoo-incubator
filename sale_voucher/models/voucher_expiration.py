@@ -13,7 +13,7 @@ from dateutil.relativedelta import relativedelta
 
 class ExpiredVoucher(orm.Model):
     _name = 'expired.voucher'
-    _description = 'Voucher that will be expired soon ro already expired'
+    _description = 'Voucher that will be expired soon or already expired'
 
     _order = 'voucher_date'
 

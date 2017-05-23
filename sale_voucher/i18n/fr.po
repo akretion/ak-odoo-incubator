@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-16 09:28+0000\n"
-"PO-Revision-Date: 2016-03-16 09:28+0000\n"
+"POT-Creation-Date: 2017-05-23 10:34+0000\n"
+"PO-Revision-Date: 2017-05-23 10:34+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,156 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_voucher
+#: model:ir.model,name:sale_voucher.model_account_account
+msgid "Account"
+msgstr "Compte"
+
+#. module: sale_voucher
+#: field:expired.voucher,balance:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_balance
+msgid "Balance"
+msgstr "Balance"
+
+#. module: sale_voucher
+#: view:reverse.expired.voucher:0
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: sale_voucher
+#: model:ir.model,name:sale_voucher.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: sale_voucher
+#: field:expired.voucher,company_id:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_company_id
+msgid "Company"
+msgstr "Société"
+
+#. module: sale_voucher
+#: field:expired.voucher,credit:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_credit
+msgid "Credit"
+msgstr "Crédit"
+
+#. module: sale_voucher
+#: field:expired.voucher,debit:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_debit
+msgid "Debit"
+msgstr "Débit"
+
+#. module: sale_voucher
 #: constraint:account.move.line:0
+#: constraint:expired.voucher:0
 msgid "Error"
 msgstr "Erreur"
+
+#. module: sale_voucher
+#: field:expired.voucher,expiration_date:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_expiration_date
+msgid "Expiration date"
+msgstr "Date d'expiration"
+
+#. module: sale_voucher
+#: selection:expired.voucher,state:0
+msgid "Expire Soon"
+msgstr "Bientôt périmé"
+
+#. module: sale_voucher
+#: selection:expired.voucher,state:0
+msgid "Expired"
+msgstr "Périmé"
+
+#. module: sale_voucher
+#: view:expired.voucher:0
+msgid "Expired vouchers"
+msgstr "Avoirs périmés"
+
+#. module: sale_voucher
+#: field:expired.voucher,extension_date:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_extension_date
+msgid "Extension date"
+msgstr "Délai accordé"
+
+#. module: sale_voucher
+#: model:ir.model.fields,field_description:sale_voucher.field_reverse_expired_voucher_summary_file_name
+#: field:reverse.expired.voucher,summary_file_name:0
+msgid "File name"
+msgstr "Nom"
+
+#. module: sale_voucher
+#: view:expired.voucher:0
+msgid "Group By..."
+msgstr "Grouper par..."
+
+#. module: sale_voucher
+#: help:res.company,voucher_warning_time:0
+msgid "It defines the date when the partner will be notified that his voucher will expire. it is the number of days before the expiration date."
+msgstr "Nombre de jours avant la date d'expiration servant à définir quand le client sera notifié de l'expiration de son avoir."
+
+#. module: sale_voucher
+#: model:ir.model,name:sale_voucher.model_account_move_line
+msgid "Journal Items"
+msgstr "Écritures comptables"
+
+#. module: sale_voucher
+#: field:expired.voucher,last_use_date:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_last_use_date
+msgid "Last use date"
+msgstr "Date de dernière utilisation"
+
+#. module: sale_voucher
+#: model:ir.actions.act_window,name:sale_voucher.action_voucher_expiration
+msgid "Manage Voucher Expiration"
+msgstr "Gestion des avoirs périmés"
+
+#. module: sale_voucher
+#: view:expired.voucher:0
+#: field:expired.voucher,partner_id:0
+#: model:ir.model,name:sale_voucher.model_res_partner
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_partner_id
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: sale_voucher
+#: field:expired.voucher,partner_notified:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_partner_notified
+msgid "Partner notified"
+msgstr "Partenaire informé"
+
+#. module: sale_voucher
+#: view:reverse.expired.voucher:0
+msgid "Reverse"
+msgstr "Extourner"
+
+#. module: sale_voucher
+#: model:ir.actions.act_window,name:sale_voucher.action_reverse_voucher
+msgid "Reverse Expired Vouchers"
+msgstr "Extourner les avoirs périmés"
+
+#. module: sale_voucher
+#: view:reverse.expired.voucher:0
+msgid "Reverse expired voucher"
+msgstr "Extourner l'avoir périmé"
+
+#. module: sale_voucher
+#: view:expired.voucher:0
+#: selection:expired.voucher,state:0
+msgid "Reversed"
+msgstr "Extourné"
+
+#. module: sale_voucher
+#: view:expired.voucher:0
+#: field:expired.voucher,state:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_state
+msgid "State"
+msgstr "Etat"
+
+#. module: sale_voucher
+#: model:ir.model.fields,field_description:sale_voucher.field_reverse_expired_voucher_summary_file
+#: field:reverse.expired.voucher,summary_file:0
+msgid "Summary file"
+msgstr "Fichier récapitulatif"
 
 #. module: sale_voucher
 #: code:addons/sale_voucher/models/account.py:37
@@ -27,13 +174,26 @@ msgid "The customer %s do not have enought customer voucher"
 msgstr "Le client %s n'a pas assez de crédit magasin"
 
 #. module: sale_voucher
+#: view:reverse.expired.voucher:0
+msgid "This wizard allows you to reverse expired sale vouchers previously selected. A summary of the reversed vouchers will be created"
+msgstr "Cet assistant vous permet d'extourner les avoirs périmés sélectionnés. Un fichier récapitulatif se créé."
+
+#. module: sale_voucher
+#: view:expired.voucher:0
+msgid "Todo"
+msgstr "A faire"
+
+#. module: sale_voucher
 #: code:addons/sale_voucher/models/account.py:36
+#: code:addons/sale_voucher/models/voucher_expiration.py:52
 #, python-format
 msgid "User Error"
 msgstr "Erreur Utilisateur"
 
 #. module: sale_voucher
 #: field:account.account,voucher_account:0
+#: model:ir.model.fields,field_description:sale_voucher.field_account_account_voucher_account
+#: model:ir.model.fields,field_description:sale_voucher.field_res_company_voucher_account_id
 #: field:res.company,voucher_account_id:0
 msgid "Voucher Account"
 msgstr "Compte de Crédit Magasin"
@@ -44,7 +204,80 @@ msgid "Voucher Account for customer credit. The balance of the Account must posi
 msgstr "Compte de crédit magasin. La balance de ce compte est obligatoirement positive et le champs client est requis"
 
 #. module: sale_voucher
+#: model:ir.model.fields,field_description:sale_voucher.field_res_partner_voucher_amount
 #: field:res.partner,voucher_amount:0
 msgid "Voucher Amount"
 msgstr "Montant Avoir"
+
+#. module: sale_voucher
+#: model:ir.ui.menu,name:sale_voucher.menu_voucher_expiration
+#: model:ir.ui.menu,name:sale_voucher.menu_voucher_expiration_wizard
+msgid "Voucher Expiration"
+msgstr "Avoirs périmés"
+
+#. module: sale_voucher
+#: model:ir.model.fields,field_description:sale_voucher.field_res_company_voucher_reverse_account_id
+#: field:res.company,voucher_reverse_account_id:0
+msgid "Voucher Expiration Account"
+msgstr "Compte des avoirs périmés"
+
+#. module: sale_voucher
+#: model:ir.model.fields,field_description:sale_voucher.field_res_company_voucher_reverse_journal_id
+#: field:res.company,voucher_reverse_journal_id:0
+msgid "Voucher Expiration Journal"
+msgstr "Journal des avoirs périmés"
+
+#. module: sale_voucher
+#: field:expired.voucher,voucher_date:0
+#: model:ir.model.fields,field_description:sale_voucher.field_expired_voucher_voucher_date
+msgid "Voucher date"
+msgstr "Date de l'avoir"
+
+#. module: sale_voucher
+#: model:ir.model,name:sale_voucher.model_expired_voucher
+msgid "Voucher that will be expired soon or already expired"
+msgstr "Avoirs périmés ou bientôt périmés"
+
+#. module: sale_voucher
+#: model:ir.model.fields,field_description:sale_voucher.field_res_company_voucher_validity_time
+#: field:res.company,voucher_validity_time:0
+msgid "Voucher validity time (months)"
+msgstr "Durée de validité des avoirs (mois)"
+
+#. module: sale_voucher
+#: model:ir.model.fields,field_description:sale_voucher.field_res_company_voucher_warning_time
+#: field:res.company,voucher_warning_time:0
+msgid "Voucher warning time (days)"
+msgstr "Durée de notification d'expiration (jours)"
+
+#. module: sale_voucher
+#: model:ir.model,name:sale_voucher.model_reverse_expired_voucher
+msgid "Wizard to reverse expired vouchers"
+msgstr "Assistant d'extourne des avoirs périmés"
+
+#. module: sale_voucher
+#: code:addons/sale_voucher/models/voucher_expiration.py:53
+#, python-format
+msgid "You can only have one voucher in state different than 'reversed' for the partner %s"
+msgstr "Il ne peut y avoir qu'un seul avoir dans un état différent d'extourné pour le partenaire %s"
+
+#. module: sale_voucher
+#: model:email.template,subject:sale_voucher.expired_voucher_template
+msgid "Your sale voucher has expired"
+msgstr "Votre avoirs magasin est périmé"
+
+#. module: sale_voucher
+#: model:email.template,subject:sale_voucher.voucher_expiration_reminder_template
+msgid "Your sale voucher is expiring next month"
+msgstr "Votre avoir magasin sera périmé dans un mois"
+
+#. module: sale_voucher
+#: model:email.template,subject:sale_voucher.voucher_expiration_last_reminder_template
+msgid "Your sale voucher is expiring within 7 days"
+msgstr "Votre avoir magasin sera périmé dans 7 jours"
+
+#. module: sale_voucher
+#: view:reverse.expired.voucher:0
+msgid "or"
+msgstr "ou"
 

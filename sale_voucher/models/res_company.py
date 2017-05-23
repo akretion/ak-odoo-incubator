@@ -17,7 +17,7 @@ class ResCompany(orm.Model):
         'voucher_validity_time': fields.integer(
             'Voucher validity time (months)'),
         'voucher_warning_time': fields.integer(
-            'Voucher warning time (days',
+            'Voucher warning time (days)',
             help='It defines the date when the partner will be notified that '
             'his voucher will expire. it is the number of days before '
             'the expiration date.')
