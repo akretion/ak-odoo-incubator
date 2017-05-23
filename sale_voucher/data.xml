@@ -30,7 +30,7 @@
             <field name="name">Voucher expiration last reminder</field>
             <field name="email_from"></field>
             <field name="email_to">${object.partner_id.email or ''}</field>
-            <field name="subject">Your sale voucher is expiring within two days</field>
+            <field name="subject">Your sale voucher is expiring within 7 days</field>
             <field name="model_id" ref="sale_voucher.model_expired_voucher"/>
             <field name="auto_delete" eval="True"/>
             <field name="body_html"><![CDATA[
