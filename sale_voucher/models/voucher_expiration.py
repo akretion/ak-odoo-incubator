@@ -80,13 +80,26 @@ class ExpiredVoucher(orm.Model):
         }
 
     def expiration_warning(self, cr, uid, ids, context=None):
-        __, template_id = self.pool['ir.model.data'].get_object_reference(
+        data_obj = self.pool['ir.model.data']
+        __, template_id = data_obj.get_object_reference(
             cr, uid, 'sale_voucher', 'voucher_expiration_reminder_template')
+        __, last_template_id = data_obj.get_object_reference(
+            cr, uid, 'sale_voucher',
+            'voucher_expiration_last_reminder_template')
+        last_reminder_date = datetime.now() - relativedelta(days=7)
         for voucher in self.browse(cr, uid, ids, context=context):
-            if voucher.partner_notified:
+            if voucher.state == 'expired':
                 continue
+            expiration_date = datetime.strptime(voucher.expiration_date,
+                                                DEFAULT_SERVER_DATE_FORMAT)
+            if expiration_date == last_reminder_date:
+                used_template_id = last_template_id
+            elif voucher.partner_notified:
+                continue
+            else:
+                used_template_id = template_id
             self.pool['email.template'].send_mail(
-                cr, uid, template_id, voucher.id, force_send=False,
+                cr, uid, used_template_id, voucher.id, force_send=False,
                 context=context)
             voucher.write({'partner_notified': True}, context=context)
         return True
