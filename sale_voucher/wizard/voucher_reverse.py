@@ -39,7 +39,7 @@ class ReverseExpiredVoucher(orm.TransientModel):
             context=None):
         fposition_obj = self.pool['account.fiscal.position']
         tax_account_id = fposition_obj.map_account(
-            cr, uid, refund.fiscal_position, tax['account_paid_id'],
+            cr, uid, fiscal_position, tax['account_paid_id'],
             context=context)
         return {
             'name': tax['name'],
