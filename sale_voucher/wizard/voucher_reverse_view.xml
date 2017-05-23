@@ -15,9 +15,10 @@
                             attrs="{'invisible': [('summary_file', '=', False)]}"/>
                     </group>
                     <footer>
-                        <button name="reverse_expired_vouchers" string="Reverse" type="object" class="oe_highlight"/>
+                        <button name="reverse_expired_vouchers" string="Reverse" type="object" class="oe_highlight" attrs="{'invisible': [('summary_file', '!=', False)]}"/>
+                        <button string="Close" class="oe_link" special="cancel" attrs="{'invisible': [('summary_file', '=', False)]}"/>
                         or
-                        <button string="Cancel" class="oe_link" special="cancel"/>
+                        <button string="Cancel" class="oe_link" special="cancel" attrs="{'invisible': [('summary_file', '!=', False)]}"/>
                     </footer>
                 </form>
             </field>
