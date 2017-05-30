@@ -11,7 +11,7 @@ Remote records related to a warehouse when you delete it
     'author': "Akretion",
     'website': "http://www.akretion.com",
     'category': 'Uncategorized',
-    'version': '0.1',
+    'version': '8.0.1.0.0',
     'depends': [
         'stock',
     ],
