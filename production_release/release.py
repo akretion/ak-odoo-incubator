@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 class ProductionRelease(models.Model):
     _name = 'production.release'
     _description = 'Production Release'
+    _order = 'name desc'
 
     name = fields.Char(string='Version', readonly=True)
     date = fields.Datetime(readonly=True)
