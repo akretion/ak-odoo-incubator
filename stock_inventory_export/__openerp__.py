@@ -23,7 +23,7 @@
 
 {
     'name': 'Stock Inventory Export',
-    'version': '0.1',
+    'version': '8.0.1.0.0',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
     'description': """Create export profile for stock inventory""",
