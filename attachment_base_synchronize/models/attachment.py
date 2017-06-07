@@ -78,11 +78,11 @@ class IrAttachmentMetadata(models.Model):
                         attach._run()
                     except Exception, e:
                         attach.env.cr.rollback()
-                        _logger.exception(e)
+                        _logger.exception(unicode(e))
                         attach.write(
                             {
                                 'state': 'failed',
-                                'state_message': e,
+                                'state_message': unicode(e),
                             })
                         attach.env.cr.commit()
                     else:
