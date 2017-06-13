@@ -5,8 +5,14 @@
 
 
 from openerp.osv import orm
-from datadog import statsd
 from collections import defaultdict
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from datadog import statsd
+except ImportError:
+    _logger.debug('Can not import datadog')
 
 
 class DatadogCollect(orm.TransientModel):
