@@ -27,7 +27,7 @@ class StockPicking(orm.Model):
         sale = picking.repair_sale_id
         if sale and sale.magento_bind_ids:
             product = self.pool['product.product'].browse(
-                cr, uid, picking.move_lines[0].product.id,
+                cr, uid, picking.move_lines[0].product_id.id,
                 {'lang': sale.partner_id.lang})
             message = product.rma_out_description
             for magento_bind in sale.magento_bind_ids:
