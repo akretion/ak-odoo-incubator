@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="view_company_inherit_form2" model="ir.ui.view">
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="sale.view_company_inherit_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='sale_grp']/field[@name='sale_note']" position="before">
+                    <label for="out_warehouse_id" string="Delivery Warehouse"/>
+                    <div>
+                        <field name="out_warehouse_id"/>
+                    </div>
+                </xpath>
+                <xpath expr="//group[@name='sale_grp']" position="after">
+                    <group name="purchase_grp" string="Purchases">
+                        <label for="in_warehouse_id" string="Reception Warehouse"/>
+                        <div>
+                            <field name="in_warehouse_id"/>
+                        </div>
+                     </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
