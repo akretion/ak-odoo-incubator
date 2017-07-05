@@ -26,5 +26,5 @@ class FtpTask(ftpfs.FTPFS):
         conn = FtpTask(location.address,
                        location.login,
                        location.password,
-                       location.port)
+                       port=location.port)
         return conn
