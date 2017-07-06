@@ -6,7 +6,7 @@
 Stock Default Warehouse by Company
 ==================================
 
-Add in the company, default warehouse for outgoing shipments and incoming shipments.
+It allows to define in the company the default warehouses for outgoing shipments and incoming shipments.
 
 Contributors
 ------------
