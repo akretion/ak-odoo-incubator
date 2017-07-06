@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-04 16:12+0000\n"
-"PO-Revision-Date: 2017-07-04 16:12+0000\n"
+"POT-Creation-Date: 2017-07-06 08:54+0000\n"
+"PO-Revision-Date: 2017-07-06 08:54+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,18 +21,18 @@ msgid "Companies"
 msgstr "Sociétés"
 
 #. module: stock_default_warehouse_by_company
-#: help:res.company,in_warehouse_id:0
+#: help:res.company,reception_warehouse_id:0
 msgid "Default warehouse to use on Purchase Orders"
 msgstr "Entrepôt utilisé par défaut pour les commandes d'achats"
 
 #. module: stock_default_warehouse_by_company
-#: help:res.company,out_warehouse_id:0
+#: help:res.company,delivery_warehouse_id:0
 msgid "Default warehouse to use on Sale Orders"
 msgstr "Entrepôt utilisé par défaut pour les commandes de ventes"
 
 #. module: stock_default_warehouse_by_company
 #: view:res.company:stock_default_warehouse_by_company.view_company_inherit_form2
-#: field:res.company,out_warehouse_id:0
+#: field:res.company,delivery_warehouse_id:0
 msgid "Delivery Warehouse"
 msgstr "Entrepôt de livraison"
 
@@ -48,7 +48,7 @@ msgstr "Achats"
 
 #. module: stock_default_warehouse_by_company
 #: view:res.company:stock_default_warehouse_by_company.view_company_inherit_form2
-#: field:res.company,in_warehouse_id:0
+#: field:res.company,reception_warehouse_id:0
 msgid "Reception Warehouse"
 msgstr "Entrepôt de réception"
 

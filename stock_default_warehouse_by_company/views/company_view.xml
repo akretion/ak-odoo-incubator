@@ -6,16 +6,16 @@
             <field name="inherit_id" ref="sale.view_company_inherit_form2"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='sale_grp']/field[@name='sale_note']" position="before">
-                    <label for="out_warehouse_id" string="Delivery Warehouse"/>
+                    <label for="delivery_warehouse_id" string="Delivery Warehouse"/>
                     <div>
-                        <field name="out_warehouse_id"/>
+                        <field name="delivery_warehouse_id"/>
                     </div>
                 </xpath>
                 <xpath expr="//group[@name='sale_grp']" position="after">
                     <group name="purchase_grp" string="Purchases">
-                        <label for="in_warehouse_id" string="Reception Warehouse"/>
+                        <label for="reception_warehouse_id" string="Reception Warehouse"/>
                         <div>
-                            <field name="in_warehouse_id"/>
+                            <field name="reception_warehouse_id"/>
                         </div>
                      </group>
                 </xpath>
