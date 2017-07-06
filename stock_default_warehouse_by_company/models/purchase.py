@@ -10,12 +10,11 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def _get_picking_in(self):
-        company_id = self.env['res.users']._get_company()
-        company = self.env['res.company'].browse(company_id)
-        if company.in_warehouse_id:
+        company = self.env.user.company_id
+        if company.reception_warehouse_id:
             types = self.env['stock.picking.type'].search([
                 ('code', '=', 'incoming'),
-                ('warehouse_id', '=', company.in_warehouse_id.id)])
+                ('warehouse_id', '=', company.reception_warehouse_id.id)])
             if types:
                 return types[0]
         return super(PurchaseOrder, self)._get_picking_in()

@@ -8,9 +8,9 @@ from openerp import models, fields
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    out_warehouse_id = fields.Many2one(
+    delivery_warehouse_id = fields.Many2one(
         'stock.warehouse', string='Delivery Warehouse',
         help="Default warehouse to use on Sale Orders")
-    in_warehouse_id = fields.Many2one(
+    reception_warehouse_id = fields.Many2one(
         'stock.warehouse', string='Reception Warehouse',
         help="Default warehouse to use on Purchase Orders")
