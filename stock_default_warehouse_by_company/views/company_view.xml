@@ -13,9 +13,9 @@
                 </xpath>
                 <xpath expr="//group[@name='sale_grp']" position="after">
                     <group name="purchase_grp" string="Purchases">
-                        <label for="reception_warehouse_id" string="Reception Warehouse"/>
+                        <label for="receipt_warehouse_id" string="Receipt Warehouse"/>
                         <div>
-                            <field name="reception_warehouse_id"/>
+                            <field name="receipt_warehouse_id"/>
                         </div>
                      </group>
                 </xpath>

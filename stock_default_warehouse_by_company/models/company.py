@@ -11,6 +11,6 @@ class ResCompany(models.Model):
     delivery_warehouse_id = fields.Many2one(
         'stock.warehouse', string='Delivery Warehouse',
         help="Default warehouse to use on Sale Orders")
-    reception_warehouse_id = fields.Many2one(
-        'stock.warehouse', string='Reception Warehouse',
+    receipt_warehouse_id = fields.Many2one(
+        'stock.warehouse', string='Receipt Warehouse',
         help="Default warehouse to use on Purchase Orders")
