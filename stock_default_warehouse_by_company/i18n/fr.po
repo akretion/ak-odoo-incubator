@@ -21,7 +21,7 @@ msgid "Companies"
 msgstr "Sociétés"
 
 #. module: stock_default_warehouse_by_company
-#: help:res.company,reception_warehouse_id:0
+#: help:res.company,receipt_warehouse_id:0
 msgid "Default warehouse to use on Purchase Orders"
 msgstr "Entrepôt utilisé par défaut pour les commandes d'achats"
 
@@ -48,8 +48,8 @@ msgstr "Achats"
 
 #. module: stock_default_warehouse_by_company
 #: view:res.company:stock_default_warehouse_by_company.view_company_inherit_form2
-#: field:res.company,reception_warehouse_id:0
-msgid "Reception Warehouse"
+#: field:res.company,receipt_warehouse_id:0
+msgid "Receipt Warehouse"
 msgstr "Entrepôt de réception"
 
 #. module: stock_default_warehouse_by_company
