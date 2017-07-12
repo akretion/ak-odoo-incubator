@@ -17,7 +17,7 @@ env:
 
   matrix:
   - TESTS="0" LINT_CHECK="1"
-  - ODOO_REPO="OCA/OCB"
+  - ODOO_REPO="OCA/OCB" EXCLUDE='base_jsonify'
   - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE='base_jsonify'
   - UNIT_TEST="1" ODOO_REPO="odoo/odoo" EXCLUDE='base_jsonify'
 
