@@ -11,12 +11,14 @@
 - overstock implementation: exchange between: picking and reserve locations
 - reserve stock locations are stored by product putaway like picking locations
 """,
+    'category': 'warehouse',
     'depends': [
         'stock_putaway_product',
     ],
     'website': 'http://www.akretion.com/',
     'data': [
         'views/stock_view.xml',
+        'demo/stock_demo.xml',
     ],
     'installable': True,
     'license': 'AGPL-3',

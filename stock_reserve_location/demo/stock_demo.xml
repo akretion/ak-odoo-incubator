@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <record id="stock.stock_location_14" model="stock.location">
+        <field name="reserve" eval="1"/>
+    </record>
+
+    <record id="product_putaway_strategy_product_4_reserve"
+            model="stock.product.putaway.strategy">
+        <field name="product_product_id" ref="product.product_product_4"/>
+        <field name="product_template_id"
+               ref="product.product_product_4_product_template"/>
+        <field name="putaway_id" ref="stock_putaway_product.product_putaway_per_product_wh"/>
+        <field name="fixed_location_id" ref="stock.stock_location_14"/>
+    </record>
+
+</data>
+</openerp>
