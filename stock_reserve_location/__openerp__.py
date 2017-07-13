@@ -9,10 +9,10 @@
     'author': 'Akretion',
     'description': """
 - overstock implementation: exchange between: picking and reserve locations
--
+- reserve stock locations are stored by product putaway like picking locations
 """,
     'depends': [
-        'stock',
+        'stock_putaway_product',
     ],
     'website': 'http://www.akretion.com/',
     'data': [
