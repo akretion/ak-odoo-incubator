@@ -18,6 +18,8 @@
     'website': 'http://www.akretion.com/',
     'data': [
         'views/stock_view.xml',
+    ],
+    'demo': [
         'demo/stock_demo.xml',
     ],
     'installable': True,
