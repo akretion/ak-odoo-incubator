@@ -22,13 +22,18 @@ class FixedPutawayStrat(models.Model):
         string='Reserve', compute='_compute_reserve_location',
         store=True, help=RESERVE_HELP)
 
-    _sql_constraints = [(
-        'putaway_product_unique',
-        'unique(putaway_id,product_product_id,reserve)',
-        _("Issue: Informations 'Putaway / Product / Reserve' combination "
-          "must be unique !\n\n"
-          "Action: Remove this location in the product storage locations.")
-    )]
+    def _auto_init(self, cr, context=None):
+        """ idea from http://ludwiktrammer.github.io/odoo/
+            changing-sql-constraints-child-models-odoo-8.html
+        """
+        self._sql_constraints = [(
+            'putaway_product_unique',
+            'unique(putaway_id,product_product_id,reserve)',
+            _("Issue: Informations 'Putaway / Product / Reserve' combination "
+              "must be unique !\n\n"
+              "Action: Remove this location in the product storage locations.")
+        )]
+        super(FixedPutawayStrat, self)._auto_init(cr, context)
 
     @api.multi
     @api.depends('fixed_location_id.reserve')
