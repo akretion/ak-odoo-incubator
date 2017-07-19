@@ -52,4 +52,5 @@ class StockPicking(models.Model):
         return accounts[0]
 
     def _roulier_get_sender(self, package):
-        return self.sale_id.shop_id.partner_id
+        shop = self.sale_id.shop_id
+        return shop.shipping_sender_id or shop.partner_id

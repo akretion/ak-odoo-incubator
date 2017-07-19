@@ -6,6 +6,9 @@
             <field name="model">sale.shop</field>
             <field name="inherit_id" ref="sale_shop.view_sale_shop_form"/>
             <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="shipping_sender_id"/>
+                </field>
                 <xpath expr="//group[@name='logo']" position="after">
                     <field name="shop_methods"/>
                 </xpath>

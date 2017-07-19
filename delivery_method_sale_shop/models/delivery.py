@@ -29,6 +29,11 @@ class SaleShop(models.Model):
         comodel_name='sale.shop.method',
         inverse_name='shop'
     )
+    shipping_sender_id = fields.Many2one(
+        'res.partner', string='Shipping Sender',
+        help='Sender address. The main partner will be used if this field '
+             'is empty.'
+    )
 
 
 class ShopMethod(models.Model):
