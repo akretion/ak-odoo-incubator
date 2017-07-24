@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="unsmart_purchase_account_partner_view" model="ir.ui.view">
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="purchase.res_partner_view_purchase_account_buttons" />
+            <field name="arch" type="xml">
+               <button name="%(purchase.act_res_partner_2_supplier_invoices)d" position="attributes">
+                    <attribute name="string">Vendor Bills.</attribute>
+               </button>
+               <field name="supplier_invoice_count" position="replace"/>
+            </field>
+        </record>
+
+        <record id="unsmart_purchase_partner_view" model="ir.ui.view">
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="purchase.res_partner_view_purchase_buttons" />
+            <field name="arch" type="xml">
+               <button name="%(purchase.act_res_partner_2_purchase_order)d" position="attributes">
+                    <attribute name="string">Purchases</attribute>
+               </button>
+               <field name="purchase_order_count" position="replace"/>
+            </field>
+        </record>
+
+        <record id="unsmart_account_partner_view" model="ir.ui.view">
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.partner_view_buttons" />
+            <field name="arch" type="xml">
+               <field name="total_invoiced" position="replace"/>
+            </field>
+        </record>
+
+    </data>
+</openerp>
