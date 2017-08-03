@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+<record id="stock_picking_view_tree" model="ir.ui.view">
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="stock.vpicktree"/>
+    <field name="arch" type="xml">
+        <field name="state" position="before">
+             <field name="date_printed"/>
+        </field>
+    </field>
+</record>
+
+<record id="stock_picking_view_search" model="ir.ui.view">
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+    <field name="arch" type="xml">
+        <separator position="after">
+            <filter name="to_print"
+                string="To Print"
+                domain="[('date_printed', '=', False)]"/>
+            <filter name="Started"
+                string="Started"
+                domain="[
+                    ('date_printed', '!=', False),
+                    ('state', 'not in', ('done', 'cancel'))]"/>
+            <separator/>
+        </separator>
+    </field>
+</record>
+    </data>
+</openerp>
