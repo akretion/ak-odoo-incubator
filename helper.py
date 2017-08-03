@@ -35,6 +35,7 @@ class ProxyActionHelper(models.AbstractModel):
                 }
             }
 
+<<<<<<< HEAD
     @api.model
     def get_print_xml_receipt_action(
             self, receipt,
@@ -45,6 +46,12 @@ class ProxyActionHelper(models.AbstractModel):
             'url': '%s/hw_proxy/print_xml_receipt' % host,
             'params' : {'params': {'receipt': receipt}},
             }
+=======
+    def get_print_report_action(self, records, report_name, **kwargs):
+        data = self.env['report'].get_pdf(records.ids, report_name)
+        data = base64.b64encode(data)
+	return self.get_print_data_action(data, **kwargs)
+>>>>>>> [IMP] migrate module to version 8
 
     def send_proxy(self, todo):
         """ @param todo: list of requests
