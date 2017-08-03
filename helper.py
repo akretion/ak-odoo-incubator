@@ -34,6 +34,11 @@ class ProxyActionHelper(models.AbstractModel):
                 }
             }
 
+    def get_print_report_action(self, records, report_name, **kwargs):
+        data = self.env['report'].get_pdf(records.ids, report_name)
+        data = base64.b64encode(data)
+	return self.get_print_data_action(data, **kwargs)
+
     def send_proxy(self, todo):
         """ @param todo: list of requests
                          (printings, webservices)
