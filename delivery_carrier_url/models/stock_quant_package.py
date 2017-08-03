@@ -11,10 +11,8 @@ class StockQuantPackage(models.Model):
 
     @api.model
     def _get_tracking_url(self, picking):
-        """
-        Override this method for your carrier
-        """
-        pass
+        if picking.carrier_id.tracking_url:
+            return picking.carrier_id.tracking_url % self.parcel_tracking
 
     @api.multi
     @api.returns('stock.picking')
