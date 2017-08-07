@@ -15,6 +15,7 @@ openerp.proxy_action = function (instance) {
                     //TODO add an UI feedback
                 })
             })
+            this.do_action({"type":"ir.actions.act_window_close"});
         }
     })
 };
