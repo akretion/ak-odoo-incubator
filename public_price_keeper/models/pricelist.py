@@ -6,7 +6,7 @@ from openerp import _, api, fields, models
 from openerp.exceptions import Warning as UserError
 
 import logging
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 SEQUENCE = 999999
 PRICE_ITEM_NAME = "Default price rule based on public price"
@@ -64,9 +64,9 @@ class ProductPricelistItem(models.Model):
     def write(self, vals):
         for rec in self:
             if rec.default_item:
-                raise UserError(
-                    _("You must keep price rule item named '%s'\n"
-                      "without any change inside each pricelist version"
-                      % PRICE_ITEM_NAME))
+                # Some modules update price items, we bypass their behavior
+                vals = {}
+                _logger.info("Price item '%s' update is bypassed by "
+                             "public_price_keeper module", PRICE_ITEM_NAME)
         res = super(ProductPricelistItem, self).write(vals)
         return res
