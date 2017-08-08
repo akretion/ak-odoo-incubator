@@ -3,21 +3,19 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from .models.pricelist import (
-    SEQUENCE,
-    PRICE_ITEM_NAME)
+    get_pricelist_item_vals,
+    PRICE_ITEM_NAME
+)
 
 
 def post_init_hook(cr, registry):
     """ Add a pricelist.item for each pricelist.version
     """
     price_version_ids = registry['product.pricelist.version'].search(cr, 1, [
-        ('pricelist_id.type', '=', 'sale')])
-    vals = {
-        'default_item': True,
-        'base': 1,
-        'name': PRICE_ITEM_NAME,
-        'sequence': SEQUENCE,
-    }
+        ('active', 'in', [True, False]),
+        ('pricelist_id.type', '=', 'sale')
+    ])
+    vals = get_pricelist_item_vals()
     # we remove old if exists to avoid duplicates
     item_ids = registry['product.pricelist.item'].search(cr, 1, [
         ('name', '=', PRICE_ITEM_NAME)])

@@ -14,6 +14,12 @@ Wihtout this module your users may misconfigure their pricelists easily.
 Consider to use it when you have a lot of pricelists to manage.
 
 
+Limitation
+----------
+Pricelist updated from type 'purchase' to 'sale' are not taken account
+
+
+
 Contributors
 ------------
 
