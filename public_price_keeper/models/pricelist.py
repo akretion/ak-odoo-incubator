@@ -47,6 +47,16 @@ class ProductPricelistVersion(models.Model):
                 item.with_context(unlink_base_item=True).unlink()
         return super(ProductPricelistVersion, self).unlink()
 
+    @api.model
+    def _get_keep_public_price_domain(self):
+        """ Complete the domain in your own domain if required
+            This code is called by hooks.py
+        """
+        return [
+            ('active', 'in', [True, False]),
+            ('pricelist_id.type', '=', 'sale')
+        ]
+
 
 class ProductPricelistItem(models.Model):
     _inherit = 'product.pricelist.item'

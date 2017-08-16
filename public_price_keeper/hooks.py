@@ -11,10 +11,10 @@ from .models.pricelist import (
 def post_init_hook(cr, registry):
     """ Add a pricelist.item for each pricelist.version
     """
-    price_version_ids = registry['product.pricelist.version'].search(cr, 1, [
-        ('active', 'in', [True, False]),
-        ('pricelist_id.type', '=', 'sale')
-    ])
+    domain = registry['product.pricelist.version']\
+        ._get_keep_public_price_domain(cr, 1)
+    price_version_ids = registry['product.pricelist.version'].search(
+        cr, 1, domain)
     vals = get_pricelist_item_vals()
     # we remove old if exists to avoid duplicates
     item_ids = registry['product.pricelist.item'].search(cr, 1, [
