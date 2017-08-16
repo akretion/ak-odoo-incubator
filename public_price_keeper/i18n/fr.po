@@ -1,0 +1,45 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* public_price_keeper
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-16 14:19+0000\n"
+"PO-Revision-Date: 2017-08-16 14:19+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: public_price_keeper
+#: field:product.pricelist.item,base_item:0
+msgid "Default Item"
+msgstr "Règle par défaut"
+
+#. module: public_price_keeper
+#: help:product.pricelist.item,base_item:0
+msgid "Default price item is based on public price and is applied when no other item is found."
+msgstr "La règle de prix par défaut est basé sur le prix publique et est appliqué quand aucune autre règle n'est pris en compte."
+
+#. module: public_price_keeper
+#: model:ir.model,name:public_price_keeper.model_product_pricelist_version
+msgid "Pricelist Version"
+msgstr "Version de liste de prix"
+
+#. module: public_price_keeper
+#: model:ir.model,name:public_price_keeper.model_product_pricelist_item
+msgid "Pricelist item"
+msgstr "Élément de liste de prix"
+
+#. module: public_price_keeper
+#: code:addons/public_price_keeper/models/pricelist.py:74
+#, python-format
+msgid "You must keep a pricelist item named '%s' \n"
+"inside each pricelist version"
+msgstr "Vous devez conserver une règle de prix nommée '%s' \n"
+"dans chaque version de liste de prix."
+
