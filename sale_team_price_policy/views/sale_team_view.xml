@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="view_sale_team_form" model="ir.ui.view">
+            <field name="model">crm.case.section</field>
+            <field name="inherit_id" ref="sales_team.crm_case_section_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@string='Team Members']" position="before">
+                    <page name="pricing" string="Tarification">
+                        <group>
+                            <group col="2">
+                                <field name="price_policy" widget="radio"/>
+                            </group>
+                            <group col="2">
+                                <field name="pricelist_id"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</openerp>

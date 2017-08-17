@@ -1,0 +1,108 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_team_price_policy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-03 15:40+0000\n"
+"PO-Revision-Date: 2017-08-03 15:40+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_team_price_policy
+#: help:crm.case.section,price_policy:0
+msgid "- \"Use Market Pricelist\": This option force price liste to the market price liste defined on this sale team- \"Force Pratner Pricelist\": This option force price liste to the partner price liste- \"Use Pratner Pricelist if not public\": This option allow to use partner price liste if its not pubilc. Otherwise we use to the market price liste defined on this sale team.If this field is not set we use default behavior"
+msgstr "- \"Forcer le Prix marché\": Cette option force la liste de prix sur la commande ou la facture à celle du marché (équipe commerciale)\n - \"Forcer le prix partenaire\": Cette option force la liste de prix sur la commande ou la facture à celle du partenaire \n- \"Prix partenaire si n'est pas prix particulier\": Cette option permet ulitilisation de la liste de prix du partenaire s'il s'agit d'une liste spécifique sinon on utilise la liste du prix du marché (équipe commerciale)"
+
+#. module: sale_team_price_policy
+#: help:account.invoice,do_recalculate_price:0
+#: help:price.policy.mixin,do_recalculate_price:0
+#: help:sale.order,do_recalculate_price:0
+msgid "Cette case est coché automoatiquement après le changement de la liste de prix."
+msgstr "Cette case est coché automoatiquement après le changement de la liste de prix."
+
+#. module: sale_team_price_policy
+#: field:price.policy.mixin,display_name:0
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: sale_team_price_policy
+#: field:account.invoice,do_recalculate_price:0
+#: field:price.policy.mixin,do_recalculate_price:0
+#: field:sale.order,do_recalculate_price:0
+msgid "Do recalculate price"
+msgstr "Recalculer le prix"
+
+#. module: sale_team_price_policy
+#: selection:crm.case.section,price_policy:0
+msgid "Force Market Pricelist"
+msgstr "Forcer prix marché"
+
+#. module: sale_team_price_policy
+#: selection:crm.case.section,price_policy:0
+msgid "Force Partner Pricelist"
+msgstr "Forcer prix partenaire"
+
+#. module: sale_team_price_policy
+#: field:price.policy.mixin,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_team_price_policy
+#: help:product.pricelist,is_public:0
+msgid "If checked, the pricelist is public and used by all partners exept those with a specific pricelist"
+msgstr "Si elle est cochée, cette option permet de définir une liste de prix génirique (prix particulier)"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_account_invoice
+msgid "Invoice"
+msgstr "Facture"
+
+#. module: sale_team_price_policy
+#: field:price.policy.mixin,__last_update:0
+msgid "Last Modified on"
+msgstr "Last Modified on"
+
+#. module: sale_team_price_policy
+#: view:account.invoice:sale_team_price_policy.view_account_invoice_customer_form
+#: view:account.invoice:sale_team_price_policy.view_account_invoice_search
+#: view:account.invoice:sale_team_price_policy.view_account_invoice_supplier_form
+msgid "Liste de prix"
+msgstr "Liste de prix"
+
+#. module: sale_team_price_policy
+#: field:crm.case.section,price_policy:0
+msgid "Price policy"
+msgstr "Politique tarifaire"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_product_pricelist
+msgid "Pricelist"
+msgstr "Liste de prix"
+
+#. module: sale_team_price_policy
+#: field:product.pricelist,is_public:0
+msgid "Public pricelist"
+msgstr "Prix particulier"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_sale_order
+msgid "Sales Order"
+msgstr "Commandes de Vente"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_crm_case_section
+msgid "Sales Teams"
+msgstr "Équipes commerciales"
+
+#. module: sale_team_price_policy
+#: selection:crm.case.section,price_policy:0
+msgid "Use Pratner Pricelist if not public"
+msgstr "Prix partenaire si la liste pas générique"
+
