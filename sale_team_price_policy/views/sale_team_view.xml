@@ -13,7 +13,9 @@
                             <field name="price_policy" widget="radio"/>
                         </group>
                         <group col="2">
-                            <field name="pricelist_id"/>
+                            <field name="pricelist_id"
+                                   attrs="{'required': [('price_policy', 'in',
+                                      ['contract_pricelist', 'partner_pricelist_if_not_default'])]}"/>
                         </group>
                     </group>
                 </page>

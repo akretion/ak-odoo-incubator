@@ -50,6 +50,7 @@
     <record id="sales_team.crm_case_section_2" model="crm.case.section">
         <field name="name">Marketing (force market pricelist)</field>
         <field name="price_policy">contract_pricelist</field>
+        <field name="pricelist_id" ref="product_pricelist_sale_team"/>
     </record>
 
     <record id="sales_team.section_sales_department" model="crm.case.section">
@@ -60,6 +61,7 @@
     <record id="sales_team.crm_case_section_1" model="crm.case.section">
         <field name="name">Indirect Sales (use partner pricelist if not default)</field>
         <field name="price_policy">partner_pricelist_if_not_default</field>
+        <field name="pricelist_id" ref="product_pricelist_sale_team"/>
     </record>
 
     <!-- PARTNER -->
@@ -72,6 +74,7 @@
 
     <!-- SALES -->
     <record id="sale_market_pricelist" model="sale.order">
+        <field name="name">Pricelist based on sale team</field>
         <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
         <field name="section_id" ref="sales_team.crm_case_section_2"/>
     </record>
@@ -83,8 +86,10 @@
     </record>
 
     <record id="sale_partner_pricelist" model="sale.order">
+        <field name="name">Pricelist based on partner</field>
         <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
         <field name="section_id" ref="sales_team.section_sales_department"/>
+        <!-- <field name="pricelist_id" ref="sales_team.section_sales_department"/> -->
     </record>
     <record id="sale_line_partner_pricelist" model="sale.order.line">
         <field name="order_id" ref="sale_partner_pricelist"/>
@@ -92,6 +97,32 @@
         <field name="product_uom_qty">2</field>
         <field name="name">_</field>
     </record>
+
+
+    <!-- INVOICES -->
+<!--     <record id="invoice_market_pricelist" model="account.invoice">
+        <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
+        <field name="section_id" ref="sales_team.crm_case_section_2"/>
+        <field name="type">out_invoice</field>
+    </record> -->
+<!--     <record id="invoice_line_market_pricelist" model="account.invoice.line">
+        <field name="order_id" ref="invoice_market_pricelist"/>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="product_uom_qty">2</field>
+        <field name="name">_</field>
+    </record> -->
+
+<!--     <record id="invoice_partner_pricelist" model="account.invoice">
+        <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
+        <field name="section_id" ref="sales_team.section_sales_department"/>
+        <field name="type">out_invoice</field>
+    </record>
+    <record id="invoice_line_partner_pricelist" model="account.invoice.line">
+        <field name="order_id" ref="invoice_partner_pricelist"/>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="product_uom_qty">2</field>
+        <field name="name">_</field>
+    </record> -->
 
 </data>
 </openerp>

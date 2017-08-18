@@ -29,5 +29,5 @@ Contributors
 AKRETION
 
 * Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
-* Chafique DELLI <chafique.delli@akretion.com>
 * David BEAL <david.beal@akretion.com>
+* Chafique DELLI <chafique.delli@akretion.com>

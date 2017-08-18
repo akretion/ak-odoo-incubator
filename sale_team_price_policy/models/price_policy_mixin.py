@@ -6,39 +6,63 @@
 from openerp import api, fields, models
 from openerp.exceptions import Warning as UserError
 
+# TODO use this list on on change
+TRIGGER_FIELDS = ('partner_id', 'pricelist_id')
+
 
 class PricePolicyMixin(models.AbstractModel):
     _name = 'price.policy.mixin'
 
     do_recalculate_price = fields.Boolean(
-        help=u"Cette case est coché automatiquement après "
-             u"le changement de la liste de prix.")
+        help="Checked after the pricelist update for recomputing later.")
 
     @api.multi
-    @api.onchange('section_id', 'partner_id', 'pricelist_id')
+    @api.onchange('section_id', *TRIGGER_FIELDS)
     def _pp_onchange_section_id(self):
         for record in self:
             if record.section_id:
                 pricelist_id_before = record.pricelist_id
-                if record.section_id.price_policy == 'contract_pricelist':
-                    record.pricelist_id = record.section_id.pricelist_id
-
-                if record.section_id.price_policy ==\
-                        'partner_pricelist_if_not_default':
-                    if not record.partner_id.property_product_pricelist.\
-                            is_default_pricelist:
-                        record.pricelist_id =\
-                            record.partner_id.property_product_pricelist
-                    else:
-                        record.pricelist_id = record.section_id.pricelist_id
-                elif record.section_id.price_policy == 'partner_pricelist':
-                    record.pricelist_id =\
-                        record.partner_id.property_product_pricelist
+                final = record._synchro_fields(
+                    section=record.section_id, partner=record.partner_id)
+                for key in final:
+                    record[key] = final[key]
                 if record.pricelist_id != pricelist_id_before:
-                    if getattr(record, 'order_line', None) or\
+                    if getattr(record, 'order_line', None) or \
                             getattr(record, 'invoice_line', None):
                         record.do_recalculate_price = True
 
+    @api.model
+    def _synchro_fields(self, section=None, partner=None):
+        """ Make the same behavior between onchange and crud methods """
+        final = {}
+        if section.price_policy == 'contract_pricelist':
+            final['pricelist_id'] = section.pricelist_id.id
+        if section.price_policy == \
+                'partner_pricelist_if_not_default':
+            if not partner.property_product_pricelist.\
+                    is_default_pricelist:
+                final['pricelist_id'] = partner.property_product_pricelist.id
+            else:
+                final['pricelist_id'] = section.pricelist_id.id
+        elif section.price_policy == 'partner_pricelist':
+            final['pricelist_id'] = partner.property_product_pricelist.id
+        return final
+
+    @api.model
+    def create(self, vals):
+        if vals.get('section_id'):
+            synchro = False
+            for field in TRIGGER_FIELDS:
+                if field in vals:
+                    synchro = synchro or True
+            if synchro:
+                partner = self.env['res.partner'].browse(
+                    vals.get('partner_id'))
+                section = self.env['crm.case.section'].browse(
+                    vals['section_id'])
+                vals.update(
+                    self._synchro_fields(section=section, partner=partner))
+        return super(PricePolicyMixin, self).create(vals)
 
     # @api.multi
     # # @api.onchange('pricelist_id')
@@ -54,7 +78,8 @@ class PricePolicyMixin(models.AbstractModel):
 
     # @api.multi
     # def onchange(self, values, field_name, field_onchange):
-    #     # To avoid hard inheriting on partner_id we always play the section_id
+    #     # To avoid hard inheriting on partner_id we always
+    #     # play the section_id
     #     print "###############field_name############"
     #     print field_name
     #     if isinstance(field_name, list) and 'section_id' in field_name:
@@ -79,7 +104,7 @@ class PricePolicyMixin(models.AbstractModel):
         if self.section_id.price_policy == 'contract_pricelist' and \
                 self.pricelist_id != self.section_id.pricelist_id:
             raise UserError(
-                HELP_PRICELIST + u" prix du marché " + HELP_POLICY)
+                HELP_PRICELIST + u" market price " + HELP_POLICY)
 
         if self.section_id.price_policy ==\
                 'partner_pricelist_if_not_default':
@@ -87,19 +112,18 @@ class PricePolicyMixin(models.AbstractModel):
                     is_default_pricelist and self.pricelist_id !=\
                     self.partner_id.property_product_pricelist:
                 raise UserError(
-                    HELP_PRICELIST + u" prix du client " + HELP_POLICY)
+                    HELP_PRICELIST + u" customer price " + HELP_POLICY)
             elif self.pricelist_id != self.section_id.pricelist_id:
                 raise UserError(
-                    HELP_PRICELIST + u" prix du marché " + HELP_PRICELIST)
+                    HELP_PRICELIST + u" market price " + HELP_PRICELIST)
         if self.section_id.price_policy ==\
                 'partner_pricelist_if_not_default' and \
                 self.pricelist_id != \
                 self.partner_id.property_product_pricelist:
             raise UserError(
-                HELP_PRICELIST + u" prix du client " + HELP_POLICY)
+                HELP_PRICELIST + u" customer price " + HELP_POLICY)
 
 
-HELP_PRICELIST = u"La liste de prix de vente, doit correspondre à la liste de"
+HELP_PRICELIST = u"Sale pricelist must match to "
 
-HELP_POLICY = u"""(voir la politique tarifaire sur le marché:
-                   équipe commerciale)"""
+HELP_POLICY = u""" pricelist (see Sales team - Pricing tab)"""

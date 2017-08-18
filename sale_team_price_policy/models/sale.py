@@ -38,12 +38,18 @@ class SaleOrder(models.Model):
     def onchange_pricelist_id(self, pricelist_id, order_lines, context=None):
         res = super(SaleOrder, self).onchange_pricelist_id(
             pricelist_id, order_lines)
-        self._pp_onchange_section_id()
-        if self.pricelist_id.id != pricelist_id:
-            res['value']['pricelist_id'] = self.pricelist_id.id
-            res['warning']['message'] = (
-                u"La liste de prix est défini par la politique"
-                u" tarifaire du marché. Elle ne peut pas être changée pour "
-                u"le marché en cours. (voir la politique "
-                u" sur le marché) \n") + res['warning']['message']
+        if self.section_id:
+            self._pp_onchange_section_id()
+            if self.pricelist_id.id != pricelist_id:
+                res['value']['pricelist_id'] = self.pricelist_id.id
+                # import pdb; pdb.set_trace()
+                # res['warning']['message'] = PRICE_POLICY_MESSAGE + \
+                #     res['warning']['message']
         return res
+
+
+PRICE_POLICY_MESSAGE = """
+Pricelist is set by pricing policy on sales team.
+It can't be updated for this sale team.
+
+"""
