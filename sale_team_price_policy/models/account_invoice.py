@@ -4,7 +4,7 @@
 # Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from openerp import _, api, fields, models
 from openerp.exceptions import Warning as UserError
 
 
@@ -36,6 +36,25 @@ class AccountInvoice(models.Model):
     def invoice_validate(self):
         if self.filtered('do_recalculate_price'):
             raise UserError(
-                u"La liste de prix a été changé, "
-                u"les prix doivent être recalculés,")
+                _("Pricelist changed: Prices must be recomputed."))
         return super(AccountInvoice, self).invoice_validate()
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'
+
+    @api.model
+    def create(self, vals):
+        line = super(AccountInvoiceLine, self).create(vals)
+        if self.env.context.get('install_mode') and line.invoice_id:
+            inv = line.invoice_id
+            res = line.product_id_change(
+                line.product_id.id, line.uos_id.id, qty=line.quantity,
+                name=line.name, type=inv.type,
+                partner_id=line.partner_id.id,
+                fposition_id=inv.fiscal_position, price_unit=line.price_unit,
+                currency_id=inv.currency_id.id, company_id=inv.company_id.id)
+            vals.update(res['value'])
+            line.write(vals)
+            inv.button_update_prices_from_pricelist()
+        return line

@@ -81,7 +81,7 @@
     <record id="sale_line_market_pricelist" model="sale.order.line">
         <field name="order_id" ref="sale_market_pricelist"/>
         <field name="product_id" ref="product.product_product_31"/>
-        <field name="product_uom_qty">2</field>
+        <field name="product_uom_qty">1</field>
         <field name="name">_</field>
     </record>
 
@@ -93,7 +93,7 @@
     <record id="sale_line_partner_pricelist" model="sale.order.line">
         <field name="order_id" ref="sale_partner_pricelist"/>
         <field name="product_id" ref="product.product_product_31"/>
-        <field name="product_uom_qty">2</field>
+        <field name="product_uom_qty">1</field>
         <field name="name">_</field>
     </record>
 
@@ -111,7 +111,7 @@
     </record>
     <record id="invoice_line_market_pricelist" model="account.invoice.line">
         <field name="name">_</field>
-        <field name="quantity">2</field>
+        <field name="quantity">1</field>
         <field name="product_id" ref="product.product_product_31"/>
         <field name="account_id" ref="account.a_sale"/>
         <field name="invoice_id" ref="invoice_market_pricelist"/>
@@ -129,7 +129,7 @@
     </record>
     <record id="invoice_line_partner_pricelist" model="account.invoice.line">
         <field name="name">_</field>
-        <field name="quantity">2</field>
+        <field name="quantity">1</field>
         <field name="product_id" ref="product.product_product_31"/>
         <field name="account_id" ref="account.a_sale"/>
         <field name="invoice_id" ref="invoice_partner_pricelist"/>

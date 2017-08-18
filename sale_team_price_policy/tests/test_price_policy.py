@@ -8,6 +8,9 @@ from openerp.tests.common import TransactionCase
 logger = logging.getLogger(__name__)
 
 
+LINE_MESSAGE = "Line %s has no price %s matching with %s"
+
+
 class TestPricePolicy(TransactionCase):
 
     def setUp(self):
@@ -39,6 +42,19 @@ class TestPricePolicy(TransactionCase):
         )
         for line, pricing in compare:
             self.assertEqual(
-                line.price_unit, pricing,
-                "Sale line %s has no price %s matching with %s"
+                line.price_unit, pricing, LINE_MESSAGE
+                % (line, line.price_unit, pricing))
+
+    def test_invoice_price(self):
+        compare = (
+            (self.env.ref(
+                'sale_team_price_policy.invoice_line_partner_pricelist'),
+             self.partner_price),
+            (self.env.ref(
+                'sale_team_price_policy.invoice_line_market_pricelist'),
+             self.contract_price),
+        )
+        for line, pricing in compare:
+            self.assertEqual(
+                line.price_unit, pricing, LINE_MESSAGE
                 % (line, line.price_unit, pricing))

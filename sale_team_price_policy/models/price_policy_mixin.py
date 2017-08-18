@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # © 2017 Akretion (http://www.akretion.com)
 # Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
+# © 2017 David BEAL @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
 
 from openerp import api, fields, models
 from openerp.exceptions import Warning as UserError
-
-# TODO use this list on on change
-TRIGGER_FIELDS = ('partner_id', 'pricelist_id')
 
 
 class PricePolicyMixin(models.AbstractModel):
@@ -17,7 +16,7 @@ class PricePolicyMixin(models.AbstractModel):
         help="Checked after the pricelist update for recomputing later.")
 
     @api.multi
-    @api.onchange('section_id', *TRIGGER_FIELDS)
+    @api.onchange('section_id', 'partner_id', 'pricelist_id')
     def _pp_onchange_section_id(self):
         for record in self:
             if record.section_id:
