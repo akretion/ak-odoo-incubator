@@ -9,7 +9,7 @@ from openerp import fields, models
 class ProductPricelist(models.Model):
     _inherit = 'product.pricelist'
 
-    is_default_market = fields.Boolean(
-        string='Public pricelist',
+    is_default_pricelist = fields.Boolean(
+        string='Default pricelist',
         help='If checked, the pricelist is open and used by all partners'
              ' except those with a specific pricelist')

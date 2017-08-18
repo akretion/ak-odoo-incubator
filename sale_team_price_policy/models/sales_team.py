@@ -25,6 +25,7 @@ class CrmCaseSection(models.Model):
             string="Pricelist",
             company_dependent=True)
         price_policy = fields.Selection(
+            string='Price Policy',
             selection=[('contract_pricelist', 'Force Market Pricelist'),
                        ('partner_pricelist', 'Force Partner Pricelist'),
                        ('partner_pricelist_if_not_default',

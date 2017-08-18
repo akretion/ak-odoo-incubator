@@ -26,7 +26,7 @@ class PricePolicyMixin(models.AbstractModel):
                 if record.section_id.price_policy ==\
                         'partner_pricelist_if_not_default':
                     if not record.partner_id.property_product_pricelist.\
-                            is_default_market:
+                            is_default_pricelist:
                         record.pricelist_id =\
                             record.partner_id.property_product_pricelist
                     else:
@@ -84,7 +84,7 @@ class PricePolicyMixin(models.AbstractModel):
         if self.section_id.price_policy ==\
                 'partner_pricelist_if_not_default':
             if not self.partner_id.property_product_pricelist.\
-                    is_default_market and self.pricelist_id !=\
+                    is_default_pricelist and self.pricelist_id !=\
                     self.partner_id.property_product_pricelist:
                 raise UserError(
                     HELP_PRICELIST + u" prix du client " + HELP_POLICY)

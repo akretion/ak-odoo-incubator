@@ -8,7 +8,7 @@
     'version': '8.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Akretion',
-    'category': 'Sales Management',
+    'category': 'Sale',
     'summary': 'Add price policy management on sales and invoices',
     'depends': [
         'account_invoice_pricelist',
@@ -20,5 +20,8 @@
         'views/sale_team_view.xml',
         'views/sale_order_view.xml',
         'views/product_pricelist_view.xml',
+    ],
+    'demo': [
+        'demo/demo.xml',
     ],
 }
