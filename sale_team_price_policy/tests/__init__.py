@@ -1,1 +1,1 @@
-from . import price_policy
+from . import test_price_policy

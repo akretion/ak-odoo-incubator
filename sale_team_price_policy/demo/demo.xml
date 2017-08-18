@@ -89,7 +89,6 @@
         <field name="name">Pricelist based on partner</field>
         <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
         <field name="section_id" ref="sales_team.section_sales_department"/>
-        <!-- <field name="pricelist_id" ref="sales_team.section_sales_department"/> -->
     </record>
     <record id="sale_line_partner_pricelist" model="sale.order.line">
         <field name="order_id" ref="sale_partner_pricelist"/>
@@ -100,29 +99,41 @@
 
 
     <!-- INVOICES -->
-<!--     <record id="invoice_market_pricelist" model="account.invoice">
+    <record id="invoice_market_pricelist" model="account.invoice">
+        <field name="name">Pricelist based on sale team</field>
         <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
         <field name="section_id" ref="sales_team.crm_case_section_2"/>
+        <field name="account_id" ref="account.a_recv"/>
+        <field name="journal_id" ref="account.sales_journal"/>
         <field name="type">out_invoice</field>
-    </record> -->
-<!--     <record id="invoice_line_market_pricelist" model="account.invoice.line">
-        <field name="order_id" ref="invoice_market_pricelist"/>
-        <field name="product_id" ref="product.product_product_31"/>
-        <field name="product_uom_qty">2</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="invoice_line_market_pricelist" model="account.invoice.line">
         <field name="name">_</field>
-    </record> -->
+        <field name="quantity">2</field>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="account_id" ref="account.a_sale"/>
+        <field name="invoice_id" ref="invoice_market_pricelist"/>
+    </record>
 
-<!--     <record id="invoice_partner_pricelist" model="account.invoice">
+    <record id="invoice_partner_pricelist" model="account.invoice">
+        <field name="name">Pricelist based on partner</field>
         <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
         <field name="section_id" ref="sales_team.section_sales_department"/>
+        <field name="account_id" ref="account.a_recv"/>
+        <field name="journal_id" ref="account.sales_journal"/>
         <field name="type">out_invoice</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="currency_id" ref="base.EUR"/>
     </record>
     <record id="invoice_line_partner_pricelist" model="account.invoice.line">
-        <field name="order_id" ref="invoice_partner_pricelist"/>
-        <field name="product_id" ref="product.product_product_31"/>
-        <field name="product_uom_qty">2</field>
         <field name="name">_</field>
-    </record> -->
+        <field name="quantity">2</field>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="account_id" ref="account.a_sale"/>
+        <field name="invoice_id" ref="invoice_partner_pricelist"/>
+    </record>
 
 </data>
 </openerp>

@@ -37,7 +37,7 @@ class PricePolicyMixin(models.AbstractModel):
         final = {}
         if section.price_policy == 'contract_pricelist':
             final['pricelist_id'] = section.pricelist_id.id
-        if section.price_policy == \
+        elif section.price_policy == \
                 'partner_pricelist_if_not_default':
             if not partner.property_product_pricelist.\
                     is_default_pricelist:
@@ -51,17 +51,10 @@ class PricePolicyMixin(models.AbstractModel):
     @api.model
     def create(self, vals):
         if vals.get('section_id'):
-            synchro = False
-            for field in TRIGGER_FIELDS:
-                if field in vals:
-                    synchro = synchro or True
-            if synchro:
-                partner = self.env['res.partner'].browse(
-                    vals.get('partner_id'))
-                section = self.env['crm.case.section'].browse(
-                    vals['section_id'])
-                vals.update(
-                    self._synchro_fields(section=section, partner=partner))
+            partner = self.env['res.partner'].browse(vals.get('partner_id'))
+            section = self.env['crm.case.section'].browse(vals['section_id'])
+            vals.update(
+                self._synchro_fields(section=section, partner=partner))
         return super(PricePolicyMixin, self).create(vals)
 
     # @api.multi
