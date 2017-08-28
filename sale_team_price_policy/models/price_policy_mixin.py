@@ -37,9 +37,8 @@ class PricePolicyMixin(models.AbstractModel):
         if section.price_policy == 'contract_pricelist':
             final['pricelist_id'] = section.pricelist_id.id
         elif section.price_policy == \
-                'partner_pricelist_if_not_default':
-            if not partner.property_product_pricelist.\
-                    is_default_pricelist:
+                'partner_pricelist_if_exists':
+            if partner.property_product_pricelist:
                 final['pricelist_id'] = partner.property_product_pricelist.id
             else:
                 final['pricelist_id'] = section.pricelist_id.id
@@ -97,19 +96,16 @@ class PricePolicyMixin(models.AbstractModel):
                 self.pricelist_id != self.section_id.pricelist_id:
             raise UserError(
                 HELP_PRICELIST + u" market price " + HELP_POLICY)
-
-        if self.section_id.price_policy ==\
-                'partner_pricelist_if_not_default':
-            if not self.partner_id.property_product_pricelist.\
-                    is_default_pricelist and self.pricelist_id !=\
-                    self.partner_id.property_product_pricelist:
-                raise UserError(
-                    HELP_PRICELIST + u" customer price " + HELP_POLICY)
+        if self.section_id.price_policy == 'partner_pricelist_if_exists':
+            if self.partner_id.property_product_pricelist:
+                if self.partner_id.property_product_pricelist \
+                        != self.pricelist_id:
+                    raise UserError(
+                        HELP_PRICELIST + u" customer price " + HELP_POLICY)
             elif self.pricelist_id != self.section_id.pricelist_id:
                 raise UserError(
                     HELP_PRICELIST + u" market price " + HELP_PRICELIST)
-        if self.section_id.price_policy ==\
-                'partner_pricelist_if_not_default' and \
+        if self.section_id.price_policy == 'partner_pricelist_if_exists' and \
                 self.pricelist_id != \
                 self.partner_id.property_product_pricelist:
             raise UserError(

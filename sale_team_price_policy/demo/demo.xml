@@ -3,10 +3,6 @@
 <data noupdate="0">
 
     <!-- PRICELIST -->
-    <record id="product.list0" model="product.pricelist">
-        <field name="is_default_pricelist" eval="1"/>
-    </record>
-
     <record id="product_pricelist_sale_team" model="product.pricelist">
         <field name="name">Sale team pricelist</field>
         <field name="type">sale</field>
@@ -60,7 +56,7 @@
 
     <record id="sales_team.crm_case_section_1" model="crm.case.section">
         <field name="name">Indirect Sales (use partner pricelist if not default)</field>
-        <field name="price_policy">partner_pricelist_if_not_default</field>
+        <field name="price_policy">partner_pricelist_if_exists</field>
         <field name="pricelist_id" ref="product_pricelist_sale_team"/>
     </record>
 

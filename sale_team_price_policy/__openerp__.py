@@ -19,7 +19,6 @@
         'views/account_invoice_view.xml',
         'views/sale_team_view.xml',
         'views/sale_order_view.xml',
-        'views/product_pricelist_view.xml',
     ],
     'demo': [
         'demo/demo.xml',
