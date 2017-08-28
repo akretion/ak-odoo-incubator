@@ -10,9 +10,9 @@ PRICELIST_HELP = """
   to the market pricelist defined on this sale team'
 - "Force Partner Pricelist": This option force pricelist
   to the partner pricelist'
-- "Use Partner Pricelist if not public": This option allow to use
-   partner pricelist if it's not public. Otherwise we use
-   to the market pricelist defined on this sale team.
+- "Use Partner Pricelist if it exists": This option allow to use
+   partner pricelist if it exists. Otherwise we use
+   the market pricelist defined on this sale team.
    If this field is not set we use default behavior.
 """
 
@@ -29,6 +29,6 @@ class CrmCaseSection(models.Model):
             selection=[('contract_pricelist', 'Force Market Pricelist'),
                        ('partner_pricelist', 'Force Partner Pricelist'),
                        ('partner_pricelist_if_exists',
-                        'Use Partner Pricelist if not public'),
+                        'Use Partner Pricelist if exists'),
                        ],
             help=PRICELIST_HELP)

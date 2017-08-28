@@ -1,31 +1,51 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* sale_team_price_policy
+# 	* sale_team_price_policy
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-03 15:40+0000\n"
-"PO-Revision-Date: 2017-08-03 15:40+0000\n"
+"POT-Creation-Date: 2017-08-28 19:02+0200\n"
+"PO-Revision-Date: 2017-08-28 19:06+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: Poedit 2.0.1\n"
 
 #. module: sale_team_price_policy
 #: help:crm.case.section,price_policy:0
-msgid "- \"Use Market Pricelist\": This option force price liste to the market price liste defined on this sale team- \"Force Pratner Pricelist\": This option force price liste to the partner price liste- \"Use Pratner Pricelist if not public\": This option allow to use partner price liste if its not pubilc. Otherwise we use to the market price liste defined on this sale team.If this field is not set we use default behavior"
-msgstr "- \"Forcer le Prix marché\": Cette option force la liste de prix sur la commande ou la facture à celle du marché (équipe commerciale)\n - \"Forcer le prix partenaire\": Cette option force la liste de prix sur la commande ou la facture à celle du partenaire \n- \"Prix partenaire si n'est pas prix particulier\": Cette option permet ulitilisation de la liste de prix du partenaire s'il s'agit d'une liste spécifique sinon on utilise la liste du prix du marché (équipe commerciale)"
+msgid ""
+"\n"
+"- \"Use Market Pricelist\": This option force pricelist\n"
+"  to the market pricelist defined on this sale team'\n"
+"- \"Force Partner Pricelist\": This option force pricelist\n"
+"  to the partner pricelist'\n"
+"- \"Use Partner Pricelist if it exists\": This option allow to use\n"
+"   partner pricelist if it exists. Otherwise we use\n"
+"   the market pricelist defined on this sale team.\n"
+"   If this field is not set we use default behavior.\n"
+msgstr ""
+"\n"
+"- \"Use Market Pricelist\": This option force pricelist\n"
+"  to the market pricelist defined on this sale team'\n"
+"- \"Force Partner Pricelist\": This option force pricelist\n"
+"  to the partner pricelist'\n"
+"- \"Use Partner Pricelist if it exists\": This option allow to use\n"
+"   partner pricelist if it exists. Otherwise we use\n"
+"   the market pricelist defined on this sale team.\n"
+"   If this field is not set we use default behavior.\n"
 
 #. module: sale_team_price_policy
 #: help:account.invoice,do_recalculate_price:0
 #: help:price.policy.mixin,do_recalculate_price:0
 #: help:sale.order,do_recalculate_price:0
-msgid "Cette case est coché automoatiquement après le changement de la liste de prix."
-msgstr "Cette case est coché automoatiquement après le changement de la liste de prix."
+msgid "Checked after the pricelist update for recomputing later."
+msgstr "Coché après la mise à jour de la liste de prix pour recalcul ultérieur."
 
 #. module: sale_team_price_policy
 #: field:price.policy.mixin,display_name:0
@@ -55,14 +75,14 @@ msgid "ID"
 msgstr "ID"
 
 #. module: sale_team_price_policy
-#: help:product.pricelist,is_public:0
-msgid "If checked, the pricelist is public and used by all partners exept those with a specific pricelist"
-msgstr "Si elle est cochée, cette option permet de définir une liste de prix génirique (prix particulier)"
-
-#. module: sale_team_price_policy
 #: model:ir.model,name:sale_team_price_policy.model_account_invoice
 msgid "Invoice"
 msgstr "Facture"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Ligne de facture"
 
 #. module: sale_team_price_policy
 #: field:price.policy.mixin,__last_update:0
@@ -78,23 +98,50 @@ msgstr "Liste de prix"
 
 #. module: sale_team_price_policy
 #: field:crm.case.section,price_policy:0
-msgid "Price policy"
-msgstr "Politique tarifaire"
+msgid "Price Policy"
+msgstr "Politique de prix"
 
 #. module: sale_team_price_policy
+#: field:crm.case.section,pricelist_id:0
 #: model:ir.model,name:sale_team_price_policy.model_product_pricelist
 msgid "Pricelist"
 msgstr "Liste de prix"
 
 #. module: sale_team_price_policy
-#: field:product.pricelist,is_public:0
-msgid "Public pricelist"
-msgstr "Prix particulier"
+#: model:product.pricelist,name:sale_team_price_policy.product_pricelist_4_customer
+msgid "Pricelist 4 customer"
+msgstr "Pricelist 4 customer"
+
+#. module: sale_team_price_policy
+#: code:addons/sale_team_price_policy/models/account_invoice.py:39
+#, python-format
+msgid "Pricelist changed: Prices must be recomputed."
+msgstr "La liste de prix a changé : les prix doivent être recalculés."
+
+#. module: sale_team_price_policy
+#: model:product.pricelist.version,name:sale_team_price_policy.product_pricelist_version_4_customer
+msgid "Pricelist version 4 customer"
+msgstr "Pricelist version 4 customer"
+
+#. module: sale_team_price_policy
+#: view:crm.case.section:sale_team_price_policy.view_sale_team_form
+msgid "Pricing"
+msgstr "Tarification"
+
+#. module: sale_team_price_policy
+#: model:product.pricelist,name:sale_team_price_policy.product_pricelist_sale_team
+msgid "Sale team pricelist"
+msgstr "Liste de prix de l'équipe de vente"
+
+#. module: sale_team_price_policy
+#: model:product.pricelist.version,name:sale_team_price_policy.product_pricelist_version_sale_team
+msgid "Sale team pricelist version"
+msgstr "Version de liste de prix de l'équipe."
 
 #. module: sale_team_price_policy
 #: model:ir.model,name:sale_team_price_policy.model_sale_order
 msgid "Sales Order"
-msgstr "Commandes de Vente"
+msgstr "Bon de commande"
 
 #. module: sale_team_price_policy
 #: model:ir.model,name:sale_team_price_policy.model_crm_case_section
@@ -103,6 +150,5 @@ msgstr "Équipes commerciales"
 
 #. module: sale_team_price_policy
 #: selection:crm.case.section,price_policy:0
-msgid "Use Pratner Pricelist if not public"
-msgstr "Prix partenaire si la liste pas générique"
-
+msgid "Use Partner Pricelist if exists"
+msgstr "Utilisez la liste de prix du partenaire si existante."
