@@ -62,12 +62,12 @@ msgstr "Recalculer le prix"
 #. module: sale_team_price_policy
 #: selection:crm.case.section,price_policy:0
 msgid "Force Market Pricelist"
-msgstr "Forcer prix marché"
+msgstr "Forcer liste de prix marché"
 
 #. module: sale_team_price_policy
 #: selection:crm.case.section,price_policy:0
 msgid "Force Partner Pricelist"
-msgstr "Forcer prix partenaire"
+msgstr "Forcer liste de prix partenaire"
 
 #. module: sale_team_price_policy
 #: field:price.policy.mixin,id:0
@@ -131,12 +131,12 @@ msgstr "Tarification"
 #. module: sale_team_price_policy
 #: model:product.pricelist,name:sale_team_price_policy.product_pricelist_sale_team
 msgid "Sale team pricelist"
-msgstr "Liste de prix de l'équipe de vente"
+msgstr "Liste de prix du marché"
 
 #. module: sale_team_price_policy
 #: model:product.pricelist.version,name:sale_team_price_policy.product_pricelist_version_sale_team
 msgid "Sale team pricelist version"
-msgstr "Version de liste de prix de l'équipe."
+msgstr "Version de liste de prix du marché."
 
 #. module: sale_team_price_policy
 #: model:ir.model,name:sale_team_price_policy.model_sale_order
