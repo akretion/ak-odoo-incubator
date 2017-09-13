@@ -7,6 +7,9 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+                <field name="pricelist_id" position="replace">
+                    <field domain="[('type','=','sale')]" name="pricelist_id" groups="product.group_sale_pricelist" on_change="onchange_pricelist_id_new(pricelist_id,order_line, section_id, context)"/>
+                </field>                
                 <field name="pricelist_id" position="after">
                     <field name="do_recalculate_price" invisible="True"/>
                 </field>   

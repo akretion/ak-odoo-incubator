@@ -24,7 +24,8 @@ class PricePolicyMixin(models.AbstractModel):
                 final = record._synchro_policy_fields(
                     section=record.section_id, partner=record.partner_id)
                 for key in final:
-                    record[key] = final[key]
+                    if hasattr(record, key):
+                        setattr(record, key, final[key])
                 if record.pricelist_id != pricelist_id_before:
                     if getattr(record, 'order_line', None) or \
                             getattr(record, 'invoice_line', None):

@@ -35,13 +35,27 @@ class SaleOrder(models.Model):
         return super(SaleOrder, self).action_button_confirm()
 
     @api.multi
-    def onchange_pricelist_id(self, pricelist_id, order_lines, context=None):
+    def onchange_pricelist_id_new(self, pricelist_id, order_lines,
+                                  section_id, context=None):
         res = super(SaleOrder, self).onchange_pricelist_id(
             pricelist_id, order_lines)
-        if self.section_id:
-            self._pp_onchange_section_id()
-            if self.pricelist_id.id != pricelist_id:
-                res['value']['pricelist_id'] = self.pricelist_id.id
+        if type(res) is dict and 'value' in res:
+            for field, value in res.get('value').items():
+                if hasattr(self, field):
+                    setattr(self, field, value)
+        if section_id:
+            if isinstance(section_id, int):
+                section_id = self.env['crm.case.section'].browse(section_id)
+            pricelist_id_before = self.pricelist_id
+            final = self._synchro_policy_fields(
+                section=section_id, partner=self.partner_id)
+            for key in final:
+                if hasattr(self, key):
+                    setattr(self, key, final[key])
+            if self.pricelist_id.id != pricelist_id_before:
+                if self.order_line:
+                    self.do_recalculate_price = True
+                # res['value']['pricelist_id'] = self.pricelist_id.id
                 # import pdb; pdb.set_trace()
                 # res['warning']['message'] = PRICE_POLICY_MESSAGE + \
                 #     res['warning']['message']
