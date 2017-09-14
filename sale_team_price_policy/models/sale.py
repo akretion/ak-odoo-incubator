@@ -20,18 +20,22 @@ class SaleOrder(models.Model):
             if sale.state not in ('draft', 'cancel'):
                 sale._check_price_policy()
 
-    @api.multi
-    def recalculate_prices(self):
-        res = super(SaleOrder, self).recalculate_prices()
-        self.write({'do_recalculate_price': False})
-        return res
+    # For abilis price must be recalculted by wizard sale.order.recompute
+    # (in custom)
+    # @api.multi
+    # def recalculate_prices(self):
+    #     res = super(SaleOrder, self).recalculate_prices()
+    #     self.write({'do_recalculate_price': False})
+    #     return res
 
     @api.multi
     def action_button_confirm(self):
         if self.filtered('do_recalculate_price'):
             raise UserError(
                 u"La liste de prix a été changée, "
-                u"les prix doivent être recalculés,")
+                u"les prix doivent être recalculés."
+                u"Pour recalculer les prix allez sur autre option puis"
+                u"\"Mettre à jours les prix\"")
         return super(SaleOrder, self).action_button_confirm()
 
     @api.multi

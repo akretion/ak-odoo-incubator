@@ -56,36 +56,6 @@ class PricePolicyMixin(models.AbstractModel):
                 self._synchro_policy_fields(section=section, partner=partner))
         return super(PricePolicyMixin, self).create(vals)
 
-    # @api.multi
-    # # @api.onchange('pricelist_id')
-    # def onchange_pricelist_id(self, pricelist_id):
-    #     import pdb; pdb.set_trace()
-    #     return super(SaleOrder, self).onchange_pricelist_id(pricelist_id)
-    #     for record in self:
-    #         import pdb; pdb.set_trace()
-    #         if record.pricelist_id and record.state == 'draft':
-    #             for line in record.record_line:
-    #                 if not line.record_line_ids:
-    #                     line.update_from_pricelist()
-
-    # @api.multi
-    # def onchange(self, values, field_name, field_onchange):
-    #     # To avoid hard inheriting on partner_id we always
-    #     # play the section_id
-    #     print "###############field_name############"
-    #     print field_name
-    #     if isinstance(field_name, list) and 'section_id' in field_name:
-    #         field_name.remove('section_id')
-    #         field_name.append('section_id')
-    #     # If we call an onchange on the partner_id we also call the onchange
-    #     # on the section_id for the compatibility
-    #     if field_name == 'partner_id':
-    #         field_name = ['partner_id', 'section_id']
-    #     if field_name == 'pricelist_id':
-    #         field_name = ['pricelist_id', 'section_id']
-    #     return super(SaleOrder, self).onchange(
-    #         values, field_name, field_onchange)
-
     @api.model
     def _check_price_policy(self):
         """

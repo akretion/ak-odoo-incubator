@@ -13,7 +13,9 @@
     'depends': [
         'account_invoice_pricelist',
         'sales_team',
-        'sale_order_price_recalculation',
+        # For abilis price must be recalculted by wizard sale.order.recompute
+        # (in custom)
+        # 'sale_order_price_recalculation',
     ],
     'data': [
         'views/account_invoice_view.xml',
