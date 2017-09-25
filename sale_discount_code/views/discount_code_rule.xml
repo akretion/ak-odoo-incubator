@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <menuitem
+            id="menu_discount_code_rule"
+            parent="base.menu_base_config"
+            name="Discount code ule"
+            groups="base.group_sale_manager"
+            sequence="50"/>
+
+        <record id="view_discount_code_rule_tree" model="ir.ui.view">
+            <field name="name">discount.code.rule.tree</field>
+            <field name="model">discount.code.rule</field>
+            <field name="arch" type="xml">
+                <tree string="Discount code rule">
+                    <field name="sequence"/>
+                    <field name="code"/>
+                    <field name="discount_amount"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="restriction_method"/>
+                    <field name="restriction_amount"/>
+                    <field name="minimal_amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_discount_code_rule_form" model="ir.ui.view">
+            <field name="name">discount.code.rule.form</field>
+            <field name="model">discount.code.rule</field>
+            <field name="arch" type="xml">
+                <form string="Discount code rule">
+                    <header>
+                    </header>
+                    <sheet>
+                        <field name="code"/>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="application_type"/>
+                            <field name="discount_amount"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="restriction_method"/>
+                            <field name="usage_restriction"/>
+                            <field name="restriction_amount"/>
+                            <field name="minimal_amount"/>
+                        </group>
+                        <group string="Restricted partners" attrs="{'invisible': [('restriction_method', '!=', 'partner_list')]}">
+                            <field name="restrict_partner_ids" nolabel="1"/>
+                        </group>
+                        <group string="Restricted pricelists" attrs="{'invisible': [('restriction_method', '!=', 'pricelist')]}">
+                            <field name="restrict_pricelist_ids" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_discount_code_rule_form" model="ir.actions.act_window">
+            <field name="name">Discount code rules</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">discount.code.rule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            action="action_discount_code_rule_form"
+            id="menu_action_discount_code_rule_form"
+            parent="menu_discount_code_rule"
+            sequence="1"/>
+
+    </data>
+</openerp>
