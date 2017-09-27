@@ -4,6 +4,7 @@
 
 
 # Akretion Incubator
+
 ## Branch management from v10 version
 
 This repository is used by Akretion for sharing R&D module.
@@ -30,3 +31,4 @@ pre-commit install
 ```
 
 So the git hook will be installed and every check can be perform automatically
+
