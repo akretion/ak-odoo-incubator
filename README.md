@@ -24,4 +24,13 @@ Example for v10:
 
 =======
 - branch name convention : 
+<<<<<<< HEAD
 >>>>>>> INIT commit
+=======
+  - 10-my-module : permanent stable branch
+  - 10-my-module-david-...-wip : working branch
+  
+ - PR are done : 10-my-module-david-...-wip -> 10-my-module
+ - When PR is done, 10-my-module-david-...-wip is removed
+ 
+>>>>>>> Update README.md
