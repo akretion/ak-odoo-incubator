@@ -14,9 +14,15 @@ When module will be enought generic and stabilized we will propose them to the O
 This project use black and pre-commit.
 Please install precommit if you want to contribute
 
+<<<<<<< HEAD
 ```
 pipx install pre-commit
 ```
+=======
+ - PR are done : 10-my-module-david-...-wip -> 10-my-module
+ - When PR is done, 10-my-module-david-...-wip is removed
+ - PR are done : 10-my-module...-wip -> 10.0
+>>>>>>> INIT commit
 
 After cloning just run
 ```
