@@ -16,4 +16,5 @@ Example for v10:
 
  - PR are done : 10-my-module-david-...-wip -> 10-my-module
  - When PR is done, 10-my-module-david-...-wip is removed
+ - PR are done : 10-my-module...-wip -> 10.0
 
