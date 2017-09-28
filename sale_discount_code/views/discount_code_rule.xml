@@ -34,7 +34,9 @@
                     <header>
                     </header>
                     <sheet>
-                        <field name="code"/>
+                        <h1>
+                            <field name="code"/>
+                        </h1>
                         <group>
                             <field name="sequence"/>
                             <field name="application_type"/>

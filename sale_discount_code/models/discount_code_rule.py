@@ -58,19 +58,30 @@ class DiscountCodeRule(models.Model):
         ('code_unique', 'UNIQUE (code)', _('Discount code must be unique !'))]
 
     @api.model
+    def _check_restriction_partner_list(self, order):
+        return order.partner_id.id not in self.restrict_partner_ids.ids
+
+    @api.model
+    def _check_restriction_pricelist(self, order):
+        return order.pricelist_id.id not in self.restrict_pricelist_ids.ids
+
+    @api.model
+    def _check_restriction_newsletter(self, order):
+        return order.partner_id.opt_out
+
+    @api.model
     def _check_apply(self, order):
         if (self.date_to and fields.Date.today() > self.date_to) \
                 or (self.date_from and fields.Date.today() < self.date_from):
             return False
         if self.minimal_amount and (
-                (self.restriction_amount == 'taxed_amount' and self.minimal_amount > order.amount_total) \
-                or (self.restriction_amount == 'untaxed_amount' and self.minimal_amount > order.amount_untaxed)):
+                (self.restriction_amount == 'taxed_amount' and \
+                    self.minimal_amount > order.amount_total) \
+                or (self.restriction_amount == 'untaxed_amount' and \
+                self.minimal_amount > order.amount_untaxed)):
             return False
-        if self.restriction_method == 'partner_list' and order.partner_id.id not in rule.restrict_partner_ids.ids:
-            return False
-        if self.restriction_method == 'pricelist' and order.pricelist_id.id not in rule.restrict_pricelist_ids.ids:
-            return False
-        if self.restriction_method == 'newsletter' and order.partner_id.opt_out:
+        restriction_func = '_check_restriction_%s' % self.restriction_method
+        if restriction_func():
             return False
         if self.usage_restriction == 'one_per_partner':
             lines = self.env['sale.order.line'].search([
