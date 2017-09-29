@@ -20,7 +20,7 @@
     'demo': [
         'demo/attachment_metadata_demo.xml'
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
     'images': [],
 }

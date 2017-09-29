@@ -36,6 +36,6 @@ With this module, you can't forget anymore.
     'website': 'http://www.akretion.com/',
     'data': [
     ],
-    'installable': True,
+    'installable': False,
     'license': 'AGPL-3',
 }

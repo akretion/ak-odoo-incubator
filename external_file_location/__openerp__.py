@@ -30,6 +30,6 @@
     'demo': [
         'demo/task_demo.xml',
     ],
-    'installable': True,
+    'installable': False,
     'application': False,
 }

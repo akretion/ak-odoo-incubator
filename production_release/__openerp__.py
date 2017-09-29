@@ -15,4 +15,5 @@
         'release_view.xml',
         'security/ir.model.access.csv',
     ],
+    'installable': False,
 }

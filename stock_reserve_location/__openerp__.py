@@ -22,6 +22,6 @@
     'demo': [
         'demo/stock_demo.xml',
     ],
-    'installable': True,
+    'installable': False,
     'license': 'AGPL-3',
 }

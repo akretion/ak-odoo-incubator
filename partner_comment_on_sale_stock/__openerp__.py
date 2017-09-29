@@ -19,6 +19,6 @@ Display partner comment field on sales and picking
     'data': [
         'view.xml',
     ],
-    'installable': True,
+    'installable': False,
     'license': 'AGPL-3',
 }
