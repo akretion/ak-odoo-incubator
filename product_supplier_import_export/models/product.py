@@ -178,7 +178,8 @@ class DenormalizedProductSupplier(models.AbstractModel):
 
         def is_null_empty(self, fields):
             if len(fields) == 1:
-                return isinstance(self._fields[fields[0]], FloatNullEmpty)
+                return fields[0] in self._fields\
+                    and isinstance(self._fields[fields[0]], FloatNullEmpty)
             else:
                 model = self.env[self._fields[fields[0]].comodel_name]
                 return is_null_empty(model, fields[1:])
