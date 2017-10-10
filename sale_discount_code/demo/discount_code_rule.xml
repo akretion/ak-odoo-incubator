@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+<record id="rule_1" model="discount.code.rule">
+    <field name="code">ELDONGHUT</field>
+    <field name="application_type">manual</field>
+    <field name="discount_amount">10.00</field>
+    <field name="minimal_amount">50.00</field>
+    <field name="restriction_amount">taxed_amount</field>
+</record>
+
+    </data>
+</openerp>

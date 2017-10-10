@@ -25,7 +25,6 @@ class DiscountCodeRule(models.Model):
     date_to = fields.Date()
     restriction_method = fields.Selection(
         selection=[
-            ('no_restriction', 'No restriction'),
             ('partner_list', 'Partner list'),
             ('newsletter', 'Only newsletter'),
             ('pricelist', 'Pricelist')],
@@ -80,9 +79,12 @@ class DiscountCodeRule(models.Model):
                 or (self.restriction_amount == 'untaxed_amount' and \
                 self.minimal_amount > order.amount_untaxed)):
             return False
-        restriction_func = '_check_restriction_%s' % self.restriction_method
-        if restriction_func():
-            return False
+        if self.restriction_method:
+            restriction_func = getattr(
+                DiscountCodeRule,
+                '_check_restriction_%s' % self.restriction_method)
+            if restriction_func():
+                return False
         if self.usage_restriction == 'one_per_partner':
             lines = self.env['sale.order.line'].search([
                 ('order_id', '!=', order.id),

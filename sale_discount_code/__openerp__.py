@@ -22,8 +22,10 @@
     "data": [
         'views/sale_order.xml',
         'views/discount_code_rule.xml',
+        'security/ir.model.access.csv',
     ],
     "demo": [
+        'demo/discount_code_rule.xml',
     ],
     "qweb": [
     ]
