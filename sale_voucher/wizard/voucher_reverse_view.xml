@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="reverse_expired_voucher_view" model="ir.ui.view">
+            <field name="name">Reverse expired voucher</field>
+            <field name="model">reverse.expired.voucher</field>
+            <field name="arch" type="xml">
+                <form string="Reverse expired voucher" version="7.0">
+                    <label string="This wizard allows you to reverse expired sale vouchers previously selected. A summary of the reversed vouchers will be created" colspan="4"/>
+                    <group>
+                        <field name="summary_file_name" invisible="1"/>
+                        <field name="summary_file" readonly="1"
+                            filename="summary_file_name"
+                            attrs="{'invisible': [('summary_file', '=', False)]}"/>
+                    </group>
+                    <footer>
+                        <button name="reverse_expired_vouchers" string="Reverse" type="object" class="oe_highlight" attrs="{'invisible': [('summary_file', '!=', False)]}"/>
+                        <button string="Close" class="oe_link" special="cancel" attrs="{'invisible': [('summary_file', '=', False)]}"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" attrs="{'invisible': [('summary_file', '!=', False)]}"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Reverse Expired Vouchers"
+            res_model="reverse.expired.voucher"
+            src_model="expired.voucher"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            id="action_reverse_voucher"/>
+
+    </data>
+</openerp>
