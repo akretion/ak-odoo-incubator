@@ -86,7 +86,7 @@ class ExpiredVoucher(orm.Model):
         __, last_template_id = data_obj.get_object_reference(
             cr, uid, 'sale_voucher',
             'voucher_expiration_last_reminder_template')
-        last_reminder_date = datetime.now() - relativedelta(days=7)
+        last_reminder_date = datetime.now() + relativedelta(days=7)
         for voucher in self.browse(cr, uid, ids, context=context):
             if voucher.state == 'expired':
                 continue
