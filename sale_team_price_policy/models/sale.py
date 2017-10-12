@@ -43,6 +43,8 @@ class SaleOrder(models.Model):
                                   section_id, context=None):
         res = super(SaleOrder, self).onchange_pricelist_id(
             pricelist_id, order_lines)
+        if not self:
+            self = self.new()
         if type(res) is dict and 'value' in res:
             for field, value in res.get('value').items():
                 if hasattr(self, field):
