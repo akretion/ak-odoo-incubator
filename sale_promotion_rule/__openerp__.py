@@ -3,8 +3,8 @@
 # Benoît GUILLOT <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
-    "name": "sale_discount_code",
-    "summary": "Module to manage discount code",
+    "name": "Sale Promotion Rule",
+    "summary": "Module to manage promotion rule on sale order",
     "version": "8.0.1.0.0",
     "category": "Sale",
     "website": "https://akretion.com",
@@ -21,7 +21,7 @@
     ],
     "data": [
         'views/sale_order.xml',
-        'views/discount_code_rule.xml',
+        'views/sale_promotion_rule.xml',
         'security/ir.model.access.csv',
     ],
     "demo": [

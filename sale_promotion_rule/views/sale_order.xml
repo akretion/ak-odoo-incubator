@@ -8,15 +8,15 @@
     <field name="arch" type="xml">
         <field name="amount_untaxed" position="before">
             <div class=" oe_inline">
-                <label for="discount_code" class="oe_form_label_help"/>
+                <label for="promotion_rule_id" class="oe_form_label_help"/>
                 <button
-                    name="apply_discount"
+                    name="apply_promotion"
                     states="draft,sent"
                     string="(Apply)"
                     type="object"
                     class="oe_edit_only oe_link"/>
             </div>
-            <field name="discount_code" nolabel="1"/>
+            <field name="promotion_rule_id" nolabel="1" string="Promo"/>
         </field>
     </field>
 </record>
