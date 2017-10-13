@@ -105,9 +105,6 @@ class DiscountCodeRule(models.Model):
 
     @api.model
     def _apply(self, order):
-        for line in order.order_line:
-            if line.discount_rule_id:
-                line.write({'discount': 0, 'discount_rule_id': False})
         if self._check_apply(order):
             self._apply_discount(order)
         else:

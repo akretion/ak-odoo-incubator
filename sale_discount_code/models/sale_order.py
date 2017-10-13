@@ -13,12 +13,20 @@ class SaleOrder(models.Model):
     discount_code = fields.Char(string='Discount code')
 
     @api.multi
+    def clear_discount(self):
+        for order in self:
+            for line in order.order_line:
+                if line.discount_rule_id:
+                    line.write({'discount': 0, 'discount_rule_id': False})
+
+    @api.multi
     def apply_discount(self):
         for order in self:
             if order.discount_code:
                 rule = self.env['discount.code.rule'].search(
                     [('code', '=', order.discount_code)])
                 if rule:
+                    order.clear_discount()
                     rule._apply(order)
                 else:
                     raise UserError(
