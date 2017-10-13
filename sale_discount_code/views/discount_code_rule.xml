@@ -2,13 +2,6 @@
 <openerp>
     <data>
 
-        <menuitem
-            id="menu_discount_code_rule"
-            parent="base.menu_base_config"
-            name="Discount code ule"
-            groups="base.group_sale_manager"
-            sequence="50"/>
-
         <record id="view_discount_code_rule_tree" model="ir.ui.view">
             <field name="name">discount.code.rule.tree</field>
             <field name="model">discount.code.rule</field>
@@ -70,8 +63,8 @@
         <menuitem
             action="action_discount_code_rule_form"
             id="menu_action_discount_code_rule_form"
-            parent="menu_discount_code_rule"
-            sequence="1"/>
+            parent="base.menu_sale_config_sales"
+            sequence="50"/>
 
     </data>
 </openerp>
