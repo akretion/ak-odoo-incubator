@@ -3,9 +3,8 @@
 # @author Benoît GUILLOT <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import api, fields, models, _
+from openerp import fields, models, _
 import openerp.addons.decimal_precision as dp
-from openerp.exceptions import Warning as UserError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -97,8 +96,8 @@ class SalePromotionRule(models.Model):
 
     def _check_valid_date(self, order):
         return not (
-            (self.date_to and fields.Date.today() > self.date_to) \
-            or (self.date_from and fields.Date.today() < self.date_from))
+            (self.date_to and fields.Date.today() > self.date_to) or
+            (self.date_from and fields.Date.today() < self.date_from))
 
     def _check_valid_total_amount(self, order):
         return self.minimal_amount < order[self.restriction_amount]

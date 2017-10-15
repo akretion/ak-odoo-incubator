@@ -25,7 +25,7 @@
         'security/ir.model.access.csv',
     ],
     "demo": [
-        'demo/discount_code_rule.xml',
+        'demo/sale_promotion_rule.xml',
     ],
     "qweb": [
     ]

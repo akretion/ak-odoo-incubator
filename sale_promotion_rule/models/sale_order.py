@@ -69,6 +69,6 @@ class SaleOrderLine(models.Model):
         self.ensure_one()
         key = rule.promo_type.replace('discount_on_', '')
         return not self.discount and (
-            key == 'all'
-            or (key == 'shipping' and self.is_delivery)
-            or (key == 'product' and not self.is_delivery))
+            key == 'all' or
+            (key == 'shipping' and self.is_delivery) or
+            (key == 'product' and not self.is_delivery))
