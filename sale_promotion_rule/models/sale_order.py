@@ -49,7 +49,7 @@ class SaleOrder(models.Model):
     def _apply_promotion_rule(self):
         self.ensure_one()
         rule = self.promotion_rule_id
-        if rule.promo_type.startswith('discount'):
+        if rule.promo_type == 'discount':
             for line in self.order_line:
                 if line._can_be_discounted(rule):
                     line.write({
@@ -67,8 +67,4 @@ class SaleOrderLine(models.Model):
 
     def _can_be_discounted(self, rule):
         self.ensure_one()
-        key = rule.promo_type.replace('discount_on_', '')
-        return not self.discount and (
-            key == 'all' or
-            (key == 'shipping' and self.is_delivery) or
-            (key == 'product' and not self.is_delivery))
+        return not self.discount

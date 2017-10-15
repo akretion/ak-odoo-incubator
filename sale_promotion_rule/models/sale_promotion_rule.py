@@ -34,12 +34,10 @@ class SalePromotionRule(models.Model):
     promo_type = fields.Selection(
         selection=[
             # ('gift', 'Gift'), TODO implement
-            ('discount_on_product', 'Discount on product'),
-            ('discount_on_shipping', 'Discount on shipping'),
-            ('discount_on_all', 'Discount on all'),
+            ('discount', 'Discount'),
             ],
         required=True,
-        default='discount_on_product')
+        default='discount')
     discount_type = fields.Selection(
         selection=[
             ('percentage', 'Percentage'),
