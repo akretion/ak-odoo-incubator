@@ -7,10 +7,11 @@ from openerp.tests.common import TransactionCase
 from openerp.exceptions import Warning as UserError
 
 
-class AbstractPromotionCase(object):
+class AbstractCommonPromotionCase(object):
 
     def set_up(self):
         self.sale = self.env.ref('sale.sale_order_3')
+        self.promotion_rule = self.env.ref('sale_promotion_rule.rule_1')
 
     def add_coupon_code(self, coupon_code):
         self.sale.add_coupon(coupon_code)
@@ -19,14 +20,15 @@ class AbstractPromotionCase(object):
         self.assertEqual(line.promotion_rule_id, promo_rule)
         self.assertEqual(line.discount, promo_rule.discount_amount)
 
+
+class AbstractPromotionCase(AbstractCommonPromotionCase):
+
     def test_add_valid_discount_code_for_all_line(self):
-        self.promotion_rule = self.env.ref('sale_promotion_rule.rule_1')
         self.add_coupon_code('ELDONGHUT')
         for line in self.sale.order_line:
             self.check_discount_rule_set(line, self.promotion_rule)
 
     def test_add_valid_discount_code_for_one_line(self):
-        self.promotion_rule = self.env.ref('sale_promotion_rule.rule_1')
         first_line = self.sale.order_line[0]
         first_line.discount = 20
         self.add_coupon_code('ELDONGHUT')
