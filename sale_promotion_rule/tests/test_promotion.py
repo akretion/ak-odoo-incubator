@@ -9,8 +9,8 @@ from openerp.exceptions import Warning as UserError
 
 class AbstractCommonPromotionCase(object):
 
-    def set_up(self):
-        self.sale = self.env.ref('sale.sale_order_3')
+    def set_up(self, sale_xml_id):
+        self.sale = self.env.ref(sale_xml_id)
         self.promotion_rule = self.env.ref('sale_promotion_rule.rule_1')
 
     def add_coupon_code(self, coupon_code):
@@ -46,4 +46,4 @@ class PromotionCase(TransactionCase, AbstractPromotionCase):
 
     def setUp(self, *args, **kwargs):
         super(PromotionCase, self).setUp(*args, **kwargs)
-        self.set_up()
+        self.set_up('sale.sale_order_3')

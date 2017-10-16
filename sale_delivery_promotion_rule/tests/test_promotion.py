@@ -10,11 +10,10 @@ from openerp.addons.sale_promotion_rule.tests.test_promotion import (
 
 class AbstractPromotionDeliveryCase(AbstractCommonPromotionCase):
 
-    def set_up(self):
-        super(AbstractPromotionDeliveryCase, self).set_up()
+    def set_up(self, sale_xml_id):
+        super(AbstractPromotionDeliveryCase, self).set_up(sale_xml_id)
         self.sale.carrier_id = self.env.ref('delivery.normal_delivery_carrier')
         self.sale.delivery_set()
-        self.promotion_rule = self.env.ref('sale_promotion_rule.rule_1')
 
     def test_add_valid_discount_code_for_delivery(self):
         self.promotion_rule.apply_discount_on = 'shipping'
@@ -44,4 +43,4 @@ class PromotionDeliveryCase(TransactionCase, AbstractPromotionDeliveryCase):
 
     def setUp(self, *args, **kwargs):
         super(PromotionDeliveryCase, self).setUp(*args, **kwargs)
-        self.set_up()
+        self.set_up('sale.sale_order_3')
