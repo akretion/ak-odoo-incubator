@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="unsmart_purchase_product_template_view" model="ir.ui.view">
             <field name="model">product.template</field>
             <field name="inherit_id" ref="purchase.view_product_template_purchase_buttons_from" />
             <field name="arch" type="xml">
-               <button name="action_view_purchases" position="attributes">
+               <button name="%(purchase.action_purchase_line_product_tree)d" position="attributes">
                     <attribute name="string">Purchases</attribute>
                </button>
                <field name="purchase_count" position="replace"/>
             </field>
         </record>
 
-        <record id="unsmart_purchase_product_product_view" model="ir.ui.view">
+        <!--<record id="unsmart_purchase_product_product_view" model="ir.ui.view">
             <field name="model">product.product</field>
             <field name="inherit_id" ref="purchase.view_product_normal_purchase_buttons_from" />
             <field name="arch" type="xml">
@@ -22,7 +21,7 @@
                </button>
                <field name="purchase_count" position="replace"/>
             </field>
-        </record>
+        </record>-->
 
         <record id="unsmart_sale_product_template_view" model="ir.ui.view">
             <field name="model">product.template</field>
@@ -39,7 +38,7 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="sale.product_form_view_sale_order_button" />
             <field name="arch" type="xml">
-               <button name="action_view_sales" position="attributes">
+               <button name="%(sale.action_product_sale_list)d" position="attributes">
                     <attribute name="string">Sales</attribute>
                </button>
                <field name="sales_count" position="replace"/>
@@ -71,5 +70,4 @@
             </field>
         </record>
 
-    </data>
-</openerp>
+</odoo>
