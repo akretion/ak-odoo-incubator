@@ -25,7 +25,7 @@ class SaleOrder(models.Model):
     def add_coupon(self, coupon_code):
         self.ensure_one()
         rule = self.env['sale.promotion.rule'].search([
-            ('code', '=', coupon_code),
+            ('code', '=ilike', coupon_code),
             ('rule_type', '=', 'coupon'),
             ])
         if not rule:

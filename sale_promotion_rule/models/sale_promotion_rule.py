@@ -115,7 +115,7 @@ class SalePromotionRule(models.Model):
         if self.usage_restriction == 'one_per_partner':
             lines = self.env['sale.order.line'].search([
                 ('order_id', '!=', order.id),
-                ('discount_rule_id', '=', self.id),
+                ('promotion_rule_id', '=', self.id),
                 ('state', '!=', 'cancel')])
             if lines:
                 return False
