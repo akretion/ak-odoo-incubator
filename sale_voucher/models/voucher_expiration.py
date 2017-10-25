@@ -36,6 +36,7 @@ class ExpiredVoucher(orm.Model):
             ('reversed', 'Reversed')], 'State',
             required=True),
         'partner_notified': fields.boolean('Partner notified'),
+        'partner_last_notified': fields.boolean('Partner last notified'),
         'company_id': fields.many2one(
             'res.company', 'Company', required=True),
     }
@@ -86,22 +87,26 @@ class ExpiredVoucher(orm.Model):
         __, last_template_id = data_obj.get_object_reference(
             cr, uid, 'sale_voucher',
             'voucher_expiration_last_reminder_template')
-        last_reminder_date = datetime.now() + relativedelta(days=7)
+        last_reminder_date = date.today() + relativedelta(days=7)
         for voucher in self.browse(cr, uid, ids, context=context):
             if voucher.state == 'expired':
                 continue
-            expiration_date = datetime.strptime(voucher.expiration_date,
-                                                DEFAULT_SERVER_DATE_FORMAT)
-            if expiration_date == last_reminder_date:
+            vals = {}
+            expiration_date = datetime.strptime(
+                voucher.expiration_date, DEFAULT_SERVER_DATE_FORMAT).date()
+            if expiration_date == last_reminder_date \
+                    and not voucher.partner_last_notified:
                 used_template_id = last_template_id
-            elif voucher.partner_notified:
+                vals = {'partner_last_notified': True}
+            elif voucher.partner_notified or voucher.partner_last_notified:
                 continue
             else:
                 used_template_id = template_id
+                vals = {'partner_notified': True}
             self.pool['email.template'].send_mail(
                 cr, uid, used_template_id, voucher.id, force_send=False,
                 context=context)
-            voucher.write({'partner_notified': True}, context=context)
+            voucher.write(vals, context=context)
         return True
 
     def _create_expired_voucher(self, cr, uid, context=None):
