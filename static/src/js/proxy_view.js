@@ -19,6 +19,7 @@ openerp.proxy_action = function (instance) {
                     self.ir_actions_act_window_close(action, options);
                 })
             })
+            this.do_action({"type":"ir.actions.act_window_close"});
         }
     })
 };
