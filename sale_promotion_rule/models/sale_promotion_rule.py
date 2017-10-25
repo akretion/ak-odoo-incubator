@@ -20,7 +20,7 @@ class SalePromotionRule(models.Model):
             ('coupon', 'Coupon'),
             # TODO add offert support
             # offert are rule that apply automatically
-            # ('offert', 'Offert'),
+            # ('auto', 'Automatic'),
             ],
         string='Rule type',
         required=True,

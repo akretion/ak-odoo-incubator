@@ -6,11 +6,9 @@
             <field name="model">sale.promotion.rule</field>
             <field name="inherit_id" ref="sale_promotion_rule.view_sale_promotion_rule_form"/>
             <field name="arch" type="xml">
-                <form string="Promotion Rule">
-                    <field name="discount_type" position="after">
-                        <field name="apply_discount_on" widget="radio"/>
-                    </field>
-                </form>
+                <field name="discount_type" position="after">
+                    <field name="apply_discount_on" widget="radio"/>
+                </field>
             </field>
         </record>
 
