@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data noupdate="0">
+
+    <!-- PRICELIST -->
+    <record id="product_pricelist_sale_team" model="product.pricelist">
+        <field name="name">Sale team pricelist</field>
+        <field name="type">sale</field>
+    </record>
+
+    <record id="product_pricelist_version_sale_team" model="product.pricelist.version">
+        <field name="name">Sale team pricelist version</field>
+        <field name="pricelist_id" ref="product_pricelist_sale_team"></field>
+    </record>
+
+    <record id="product_pricelist_item_sale_team" model="product.pricelist.item">
+        <field name="name">Sale team item pricelist</field>
+        <field name="price_version_id" ref="product_pricelist_version_sale_team"></field>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="base" eval="1"/>
+        <field name="price_discount">-1</field>
+        <field name="price_surcharge">7</field>
+    </record>
+
+    <record id="product_pricelist_4_customer" model="product.pricelist">
+        <field name="name">Pricelist 4 customer</field>
+        <field name="type">sale</field>
+    </record>
+
+    <record id="product_pricelist_version_4_customer" model="product.pricelist.version">
+        <field name="name">Pricelist version 4 customer</field>
+        <field name="pricelist_id" ref="product_pricelist_4_customer"></field>
+    </record>
+
+    <record id="product_pricelist_item_4_customer" model="product.pricelist.item">
+        <field name="name">item pricelist 4 customer</field>
+        <field name="price_version_id" ref="product_pricelist_version_4_customer"></field>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="base" eval="1"/>
+        <field name="price_discount">-1</field>
+        <field name="price_surcharge">10</field>
+    </record>
+
+
+    <!-- SALE TEAMS -->
+    <record id="sales_team.crm_case_section_2" model="crm.case.section">
+        <field name="name">Marketing (force market pricelist)</field>
+        <field name="price_policy">contract_pricelist</field>
+        <field name="pricelist_id" ref="product_pricelist_sale_team"/>
+    </record>
+
+    <record id="sales_team.section_sales_department" model="crm.case.section">
+        <field name="name">Direct Sales (force partner pricelist)</field>
+        <field name="price_policy">partner_pricelist</field>
+    </record>
+
+    <record id="sales_team.crm_case_section_1" model="crm.case.section">
+        <field name="name">Indirect Sales (use partner pricelist if not default)</field>
+        <field name="price_policy">partner_pricelist_if_exists</field>
+        <field name="pricelist_id" ref="product_pricelist_sale_team"/>
+    </record>
+
+    <!-- PARTNER -->
+    <record id="partner_with_pricelist_4_customer" model="res.partner">
+        <field name="name">Part. w/ pricelist 4 customer</field>
+        <field name="property_product_pricelist" ref="product_pricelist_4_customer"/>
+        <field name="is_company" eval="1"/>
+        <field name="customer" eval="1"/>
+    </record>
+
+    <!-- SALES -->
+    <record id="sale_market_pricelist" model="sale.order">
+        <field name="name">Pricelist based on sale team</field>
+        <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
+        <field name="section_id" ref="sales_team.crm_case_section_2"/>
+    </record>
+    <record id="sale_line_market_pricelist" model="sale.order.line">
+        <field name="order_id" ref="sale_market_pricelist"/>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="product_uom_qty">1</field>
+        <field name="name">_</field>
+    </record>
+
+    <record id="sale_partner_pricelist" model="sale.order">
+        <field name="name">Pricelist based on partner</field>
+        <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
+        <field name="section_id" ref="sales_team.section_sales_department"/>
+    </record>
+    <record id="sale_line_partner_pricelist" model="sale.order.line">
+        <field name="order_id" ref="sale_partner_pricelist"/>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="product_uom_qty">1</field>
+        <field name="name">_</field>
+    </record>
+
+
+    <!-- INVOICES -->
+    <record id="invoice_market_pricelist" model="account.invoice">
+        <field name="name">Pricelist based on sale team</field>
+        <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
+        <field name="section_id" ref="sales_team.crm_case_section_2"/>
+        <field name="account_id" ref="account.a_recv"/>
+        <field name="journal_id" ref="account.sales_journal"/>
+        <field name="type">out_invoice</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="invoice_line_market_pricelist" model="account.invoice.line">
+        <field name="name">_</field>
+        <field name="quantity">1</field>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="account_id" ref="account.a_sale"/>
+        <field name="invoice_id" ref="invoice_market_pricelist"/>
+    </record>
+
+    <record id="invoice_partner_pricelist" model="account.invoice">
+        <field name="name">Pricelist based on partner</field>
+        <field name="partner_id" ref="partner_with_pricelist_4_customer"/>
+        <field name="section_id" ref="sales_team.section_sales_department"/>
+        <field name="account_id" ref="account.a_recv"/>
+        <field name="journal_id" ref="account.sales_journal"/>
+        <field name="type">out_invoice</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="invoice_line_partner_pricelist" model="account.invoice.line">
+        <field name="name">_</field>
+        <field name="quantity">1</field>
+        <field name="product_id" ref="product.product_product_31"/>
+        <field name="account_id" ref="account.a_sale"/>
+        <field name="invoice_id" ref="invoice_partner_pricelist"/>
+    </record>
+
+</data>
+</openerp>

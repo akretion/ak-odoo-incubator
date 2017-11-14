@@ -1,0 +1,145 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_team_price_policy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-14 10:06+0000\n"
+"PO-Revision-Date: 2017-11-14 10:06+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_team_price_policy
+#: help:crm.case.section,price_policy:0
+msgid "\n"
+"- \"Use Market Pricelist\": This option force pricelist\n"
+"  to the market pricelist defined on this sale team'\n"
+"- \"Use Partner Pricelist\": This option force pricelist\n"
+"  to the partner pricelist'\n"
+"- \"Use Partner Pricelist if it exists\": This option allow to use\n"
+"   partner pricelist if it exists. Otherwise we use\n"
+"   the market pricelist defined on this sale team.\n"
+"   If this field is not set we use default behavior.\n"
+""
+msgstr "\n"
+"Ce champ agit sur la liste de prix de la commande de vente ou de la facture selon les valeurs suivantes:\n\n"
+"- \"Utiliser la liste de prix du marché\": \n"
+"Cette option définie la liste de prix \n"
+"en fonction de celle du marché définie sur l'équipe commerciale\n\n"
+"- \"Utiliser la liste de prix du partenaire\":\n"
+"Cette option définie la liste de prix \n"
+"selon la liste de prix du partenaire (client)'\n\n"
+"- \"Utiliser la liste de prix du partenaire si existante\":\n"
+"Cette option définie la liste de prix (vente ou facture) "
+"à celle du partenaire si existante.\n"
+"Autrement nous utilisons celle définie\n"
+"sur le marché (équipe commerciale)\n\n"
+"Si le champ n'est pas définie on utilise le comportement par défaut.\n"
+""
+
+#. module: sale_team_price_policy
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:75
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:83
+#, python-format
+msgid " customer price "
+msgstr " prix client "
+
+#. module: sale_team_price_policy
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:69
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:78
+#, python-format
+msgid " market price "
+msgstr " prix marché "
+
+#. module: sale_team_price_policy
+#: help:account.invoice,do_recalculate_price:0
+#: help:price.policy.mixin,do_recalculate_price:0
+#: help:sale.order,do_recalculate_price:0
+msgid "Checked after the pricelist update for recomputing later."
+msgstr "Coché après la mise à jour de la liste de prix pour recalcul ultérieur."
+
+#. module: sale_team_price_policy
+#: field:price.policy.mixin,display_name:0
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: sale_team_price_policy
+#: field:account.invoice,do_recalculate_price:0
+#: field:price.policy.mixin,do_recalculate_price:0
+#: field:sale.order,do_recalculate_price:0
+msgid "Do recalculate price"
+msgstr "Recalculer le prix"
+
+#. module: sale_team_price_policy
+#: field:price.policy.mixin,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_account_invoice
+msgid "Invoice"
+msgstr "Facture"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Lignes de facture"
+
+#. module: sale_team_price_policy
+#: field:price.policy.mixin,__last_update:0
+msgid "Last Modified on"
+msgstr "Modifié le"
+
+#. module: sale_team_price_policy
+#: view:account.invoice:sale_team_price_policy.view_account_invoice_customer_form
+#: view:account.invoice:sale_team_price_policy.view_account_invoice_search
+#: view:account.invoice:sale_team_price_policy.view_account_invoice_supplier_form
+msgid "Liste de prix"
+msgstr "Liste de prix"
+
+#. module: sale_team_price_policy
+#: field:crm.case.section,price_policy:0
+msgid "Price Policy"
+msgstr "Politique de prix"
+
+#. module: sale_team_price_policy
+#: code:addons/sale_team_price_policy/models/account_invoice.py:39
+#, python-format
+msgid "Pricelist changed: Prices must be recomputed."
+msgstr "La liste de prix a changé : les prix doivent être recalculés."
+
+#. module: sale_team_price_policy
+#: view:crm.case.section:sale_team_price_policy.view_sale_team_form
+msgid "Pricing"
+msgstr "Tarification"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_sale_order
+msgid "Sales Order"
+msgstr "Commandes de Vente"
+
+#. module: sale_team_price_policy
+#: model:ir.model,name:sale_team_price_policy.model_crm_case_section
+msgid "Sales Teams"
+msgstr "Équipes commerciales"
+
+#. module: sale_team_price_policy
+#: selection:crm.case.section,price_policy:0
+msgid "Use Market Pricelist"
+msgstr "Utilise la liste de prix marché"
+
+#. module: sale_team_price_policy
+#: selection:crm.case.section,price_policy:0
+msgid "Use Partner Pricelist"
+msgstr "Utilise la liste de prix partenaire"
+
+#. module: sale_team_price_policy
+#: selection:crm.case.section,price_policy:0
+msgid "Use Partner Pricelist if exists"
+msgstr "Utilise la liste de prix du partenaire si existante."
