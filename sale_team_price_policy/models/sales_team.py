@@ -8,7 +8,7 @@ from openerp import fields, models
 PRICELIST_HELP = """
 - "Use Market Pricelist": This option force pricelist
   to the market pricelist defined on this sale team'
-- "Force Partner Pricelist": This option force pricelist
+- "Use Partner Pricelist": This option force pricelist
   to the partner pricelist'
 - "Use Partner Pricelist if it exists": This option allow to use
    partner pricelist if it exists. Otherwise we use
@@ -26,8 +26,8 @@ class CrmCaseSection(models.Model):
             company_dependent=True)
         price_policy = fields.Selection(
             string='Price Policy',
-            selection=[('contract_pricelist', 'Force Market Pricelist'),
-                       ('partner_pricelist', 'Force Partner Pricelist'),
+            selection=[('contract_pricelist', 'Use Market Pricelist'),
+                       ('partner_pricelist', 'Use Partner Pricelist'),
                        ('partner_pricelist_if_exists',
                         'Use Partner Pricelist if exists'),
                        ],
