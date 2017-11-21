@@ -8,6 +8,8 @@ from openerp.addons.account_move_base_import.parser.parser import\
     AccountMoveImportParser
 from datetime import date
 from collections import defaultdict
+import logging
+_logger = logging.getLogger(__name__)
 
 try:
     import stripe
@@ -83,9 +85,11 @@ class StripeParser(AccountMoveImportParser):
             account_id = None
         amount = line['amount']/100.
         return {
-            'name': line['description'].split('|')[0], # TODO remove in 10
+            # TODO remove split('|') in 10, payment gateway compatibility
+            'name': line['description'].split('|')[0],
             'date_maturity': date.fromtimestamp(line['available_on']),
             'credit': amount > 0.0 and amount or 0.0,
             'debit': amount < 0.0 and -amount or 0.0,
             'account_id': account_id,
+            'transaction_ref': line.get('source'),
             }

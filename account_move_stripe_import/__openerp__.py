@@ -18,8 +18,8 @@
         "bin": [],
     },
     "depends": [
-        "account_move_base_import",
-        "payment_gateway_stripe", # TODO remove dependency in 10
+        "account_move_transactionid_import",
+        "keychain",
     ],
     "data": [
         "wizards/import_statement_view.xml",

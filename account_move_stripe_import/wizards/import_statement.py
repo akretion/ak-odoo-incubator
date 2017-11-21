@@ -5,6 +5,7 @@
 
 from openerp import api, fields, models
 
+
 class CreditStatementImport(models.Model):
     _inherit = 'credit.statement.import'
 
