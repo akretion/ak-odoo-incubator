@@ -100,6 +100,16 @@ class SalePromotionRule(models.Model):
     def _check_valid_total_amount(self, order):
         return self.minimal_amount < order[self.restriction_amount]
 
+    def _check_valid_usage(self, order):
+        if self.usage_restriction == 'one_per_partner':
+            return not self.env['sale.order'].search([
+                ('id', '!=', order.id),
+                ('partner_id', '=', order.partner_id.id),
+                ('promotion_rule_id', '=', self.id),
+                ('state', '!=', 'cancel')])
+        else:
+            return True
+
     def _is_promotion_valid(self, order):
         restrictions = [
             'date',
@@ -107,6 +117,7 @@ class SalePromotionRule(models.Model):
             'partner_list',
             'pricelist',
             'newsletter',
+            'usage',
             ]
         for key in restrictions:
             if not getattr(self, '_check_valid_%s' % key)(order):
