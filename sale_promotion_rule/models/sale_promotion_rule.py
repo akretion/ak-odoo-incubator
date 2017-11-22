@@ -123,6 +123,13 @@ class SalePromotionRule(models.Model):
             if not getattr(self, '_check_valid_%s' % key)(order):
                 _logger.debug('Invalid restriction %s', key)
                 return False
+        if self.usage_restriction == 'one_per_partner':
+            lines = self.env['sale.order.line'].search([
+                ('order_id', '!=', order.id),
+                ('promotion_rule_id', '=', self.id),
+                ('state', '!=', 'cancel')])
+            if lines:
+                return False
         return True
 
     def _compute_display_name(self):
