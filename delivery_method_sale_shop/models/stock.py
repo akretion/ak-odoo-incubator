@@ -27,15 +27,15 @@ class StockPicking(models.Model):
         shop = self.sale_id.shop_id
         method = self.carrier_id
 
-        sale_shop_method = self.env['sale.shop.method'].search(
+        sale_shop_methods = self.env['sale.shop.method'].search(
             [
                 ['shop', '=', shop.id],
                 ['delivery_methods', 'in', (method.id)],
             ])
 
-        if len(sale_shop_method) != 1:
+        if len(sale_shop_methods) < 1:
             _logger.debug(
-                'Only 1 sale_shop_method should be found %s %s' %
+                'At least 1 sale_shop_method should be found %s %s' %
                 (shop, method.id)
             )
             raise UserError("Shop / Account / Delivery not well configured")
@@ -43,11 +43,11 @@ class StockPicking(models.Model):
         accounts = retrieve(
             [
                 ['namespace', '=', 'roulier_%s' % self.carrier_type],
-                ['shop_methods', '=', sale_shop_method.id]
+                ['shop_methods', 'in', sale_shop_methods.ids]
             ])
-        if len(accounts) == 0:
+        if len(accounts) != 1:
             _logger.debug('Searching an account for %s' % shop)
-            raise UserError("No account found based on the shop")
+            raise UserError("No account or multiple accounts found based on the shop")
 
         return accounts[0]
 
