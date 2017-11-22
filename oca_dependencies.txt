@@ -2,3 +2,4 @@ server-tools
 product-attribute
 product-variant
 delivery-carrier
+bank-statement-reconcile
