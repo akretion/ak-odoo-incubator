@@ -6,7 +6,7 @@
 from openerp import api, fields, models
 
 
-class CreditStatementImport(models.Model):
+class CreditStatementImport(models.TransientModel):
     _inherit = 'credit.statement.import'
 
     input_statement = fields.Binary(required=False)
