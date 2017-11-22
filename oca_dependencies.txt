@@ -2,4 +2,4 @@ server-tools
 product-attribute
 product-variant
 delivery-carrier
-bank-statement-reconcile https://github.com/akretion/bank-statement-reconcile 8.0-move-import-backport
+bank-statement-reconcile
