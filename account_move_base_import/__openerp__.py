@@ -20,11 +20,6 @@
         "views/partner_view.xml",
     ],
     'test': [
-        'test/partner.yml',
-        'test/invoice.yml',
-        'test/supplier_invoice.yml',
-        'test/refund.yml',
-        'test/completion_test.yml'
     ],
     'installable': True,
     'auto_install': False,

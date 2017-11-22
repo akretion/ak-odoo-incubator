@@ -13,8 +13,7 @@
     'data': [
         'data/completion_rule_data.xml',
     ],
-    'test': [
-        'test/completion_so_test.yml'],
+    'test': [],
     'installable': True,
     'images': [],
     'auto_install': False,
