@@ -13,6 +13,7 @@ class CreditStatementImport(models.TransientModel):
     need_file = fields.Boolean(compute='_compute_need_file')
 
     @api.multi
+    @api.depends('journal_id')
     def _compute_need_file(self):
         for record in self:
             record.need_file = record.journal_id.import_type != 'stripe'
