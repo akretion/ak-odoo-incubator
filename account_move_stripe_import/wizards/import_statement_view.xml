@@ -9,11 +9,14 @@
         <field name="arch" type="xml">
             <field name="input_statement" position="before">
                 <field name="need_file" invisible="1"/>
+                <field
+                    name="last_import_date"
+                    attrs="{'invisible': [('need_file', '=', True)]}"/>
             </field>
-         	<field name="input_statement" position="attributes">
-				<attribute name="attrs">{
+            <field name="input_statement" position="attributes">
+                <attribute name="attrs">{
                     'required': [('need_file', '=', True)],
-					'invisible': [('need_file', '=', False)],
+                    'invisible': [('need_file', '=', False)],
                     }</attribute>
             </field>
         </field>
