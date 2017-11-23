@@ -8,6 +8,9 @@ from openerp.addons.account_move_base_import.parser.parser import\
     AccountMoveImportParser
 from datetime import date
 from collections import defaultdict
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from datetime import datetime
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -46,16 +49,32 @@ class StripeParser(AccountMoveImportParser):
         return bool(self.env['account.move'].search([
             ('ref', '=', payout_id)]))
 
-    def parse(self, filebuffer):
-        api_key = self._get_account().get_password()
+    def _get_payout(self, api_key=None):
+        payouts = []
         kwargs = {
             'status': 'paid',
             'limit': 100,
             }
         if self.journal.last_import_date:
-            kwargs['arrival_date'] = self.journal.last_import_date
+            timestamp = datetime.strptime(
+                self.journal.last_import_date,
+                DEFAULT_SERVER_DATETIME_FORMAT).strftime("%s")
+            kwargs['arrival_date'] = {'gt': timestamp}
+        while True:
+            results = stripe.Payout.list(api_key=api_key, **kwargs)['data']
+            if not results:
+                break
+            payouts += results
+            kwargs['starting_after'] = results[-1]['id']
+        if payouts:
+            payouts.reverse()
+            self.journal.last_import_date = date.fromtimestamp(
+                payouts[-1]['arrival_date'])
+        return payouts
 
-        for payout in stripe.Payout.list(api_key=api_key, **kwargs):
+    def parse(self, filebuffer):
+        api_key = self._get_account().get_password()
+        for payout in self._get_payout(api_key=api_key):
             if self._skip(payout['id']):
                 continue
             self.move_ref = payout['id']
@@ -71,25 +90,33 @@ class StripeParser(AccountMoveImportParser):
                     'description': description,
                     'amount': -amount,
                     'available_on': payout['arrival_date'],
-                    'account_id': self.journal.commission_account_id.id,
                     'type': 'fee',
                     })
             yield self.result_row_list
 
     def get_move_line_vals(self, line, *args, **kwargs):
-        if line['type'] == 'transfer':
-            account_id = self.journal.default_debit_account_id.id
-        elif line['type'] == 'fee':
-            account_id = self.journal.commission_account_id.id
-        else:
-            account_id = None
         amount = line['amount']/100.
-        return {
+        vals = {
             # TODO remove split('|') in 10, payment gateway compatibility
             'name': line['description'].split('|')[0],
             'date_maturity': date.fromtimestamp(line['available_on']),
             'credit': amount > 0.0 and amount or 0.0,
             'debit': amount < 0.0 and -amount or 0.0,
-            'account_id': account_id,
             'transaction_ref': line.get('source'),
+            'already_completed': False,
+            'partner_id': None,
+            'account_id': None,
             }
+        if line['type'] == 'transfer':
+            vals.update({
+                'partner_id': self.journal.partner_id.id,
+                'account_id': self.journal.default_debit_account_id.id,
+                'already_completed': True,
+                })
+        elif line['type'] == 'fee':
+            vals.update({
+                'partner_id': self.journal.partner_id.id,
+                'account_id': self.journal.commission_account_id.id,
+                'already_completed': True,
+                })
+        return vals

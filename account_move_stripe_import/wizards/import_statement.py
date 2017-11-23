@@ -11,6 +11,9 @@ class CreditStatementImport(models.TransientModel):
 
     input_statement = fields.Binary(required=False)
     need_file = fields.Boolean(compute='_compute_need_file')
+    last_import_date = fields.Datetime(
+        string="Import From",
+        related='journal_id.last_import_date')
 
     @api.multi
     @api.depends('journal_id')
