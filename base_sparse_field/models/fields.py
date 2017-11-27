@@ -2,7 +2,10 @@
 
 import json
 
-from openerp import fields
+from openerp import fields, models
+from openerp.osv import fields as old_fields
+
+models.FIELDS_TO_PGTYPES[old_fields.serialized] = 'jsonb'
 
 
 def monkey_patch(cls):
@@ -35,8 +38,8 @@ fields.Field.__doc__ += """
 
 
 @monkey_patch(fields.Field)
-def set_class_name(self, cls, name):
-    set_class_name.super(self, cls, name)
+def _setup_attrs(self, model, name):
+    _setup_attrs.super(self, model, name)
     attrs = self._attrs
     if attrs.get('sparse'):
         # by default, sparse fields are not stored and not copied
@@ -73,7 +76,6 @@ def _inverse_sparse(self, records):
                 values.pop(self.name)
                 record[self.sparse] = values
 
-
 #
 # Definition and implementation of serialized fields
 #
@@ -84,7 +86,7 @@ class Serialized(fields.Field):
     _slots = {
         'prefetch': False,              # not prefetched by default
     }
-    column_type = ('text', 'text')
+    column_type = ('jsonb', 'jsonb')
 
     def convert_to_column(self, value, record):
         return json.dumps(value)
