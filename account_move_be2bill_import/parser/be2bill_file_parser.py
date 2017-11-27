@@ -38,7 +38,6 @@ class Be2BillFileParser(FileParser):
             journal, ftype=ftype, extra_fields=conversion_dict,
             dialect=be2bill_dialect, **kwargs
         )
-        self.commission_field = 'BILLINGFEES INCL. VAT'
 
     def _pre(self, *args, **kwargs):
         super(Be2BillFileParser, self)._pre(*args, **kwargs)
@@ -105,6 +104,12 @@ class Be2BillPaypalAmexeParser(Be2BillFileParser):
 
 
 class Be2BillCBFileParser(Be2BillFileParser):
+
+    def __init__(self, journal, ftype='csv', **kwargs):
+        super(Be2BillCBFileParser, self).__init__(
+            journal, ftype=ftype, **kwargs
+        )
+        self.commission_field = 'BILLINGFEES INCL. VAT'
 
     @classmethod
     def parser_for(cls, parser_name):
