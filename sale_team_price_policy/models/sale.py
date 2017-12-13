@@ -17,7 +17,7 @@ class SaleOrder(models.Model):
         Check if price policy of sale team are fulfilled.
         """
         for sale in self:
-            if sale.state not in ('draft', 'cancel'):
+            if sale.state not in ('draft', 'cancel', 'done'):
                 sale._check_price_policy()
 
     # For abilis price must be recalculted by wizard sale.order.recompute

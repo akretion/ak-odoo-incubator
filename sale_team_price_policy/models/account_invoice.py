@@ -21,7 +21,7 @@ class AccountInvoice(models.Model):
         We check only for customer invoice (not supplier invoice nor refunds)
         """
         for inv in self:
-            if inv.state not in ('draft', 'cancel') and\
+            if inv.state not in ('draft', 'cancel', 'paid') and\
                     inv.type == 'out_invoice':
                 inv._check_price_policy()
 
