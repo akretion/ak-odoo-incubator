@@ -77,6 +77,13 @@ class AccountTaxTemplate(models.Model):
         for field in field_list:
             if field in vals:
                 tax_vals[field] = vals[field]
+
+        if not hasattr(self, 'suspend_security'):
+            # base suspend security is not loaded during module update
+            # therefore we use sudo as a failback
+            # TODO : check this for v10
+            self.suspend_security = self.sudo
+
         if tax_vals and self.suspend_security().tax_ids:
             self.suspend_security().tax_ids.write(tax_vals)
         return super(AccountTaxTemplate, self).write(vals)
@@ -205,6 +212,12 @@ class AccountAccountTemplate(models.Model):
         field_list = ['name', 'code', 'type', 'currency_id',
                       'user_type', 'reconcile']
         account_vals = {}
+        if not hasattr(self, 'suspend_security'):
+            # base suspend security is not loaded during module update
+            # therefore we use sudo as a failback
+            # TODO : check this for v10
+            self.suspend_security = self.sudo
+
         for field in field_list:
             if field in vals:
                 account_vals[field] = vals[field]

@@ -19,7 +19,7 @@
 ##############################################################################
 
 {'name': 'Account Chart MultiCompany',
- 'version': '8.0.0.1.0',
+ 'version': '8.0.0.1.1',
  'category': 'Generic Modules/Others',
  'license': 'AGPL-3',
  'description': """""",
