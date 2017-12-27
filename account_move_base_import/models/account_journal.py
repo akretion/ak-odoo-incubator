@@ -119,9 +119,10 @@ class AccountJournal(models.Model):
             'already_completed': True,
             'journal_id': self.id,
             'company_id': self.company_id.id,
-            'currency_id': self.currency_id.id,
+            'currency_id': self.currency.id,
             'company_currency_id': self.company_id.currency_id.id,
             'amount_residual': amount,
+            'period_id': move.period_id.id,
         }
         return counterpart_values
 
@@ -131,7 +132,7 @@ class AccountJournal(models.Model):
         refund = 0.0
         payment = 0.0
         transfer_lines = []
-        for move_line in move.line_ids:
+        for move_line in move.line_id:
             refund -= move_line.debit
             payment += move_line.credit
         if self.split_counterpart:
