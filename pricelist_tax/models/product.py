@@ -32,6 +32,34 @@ class ProductPricelist(models.Model):
                     "There are price rules like %s which have base field\n"
                     "not compatible with Tax defined on Pricelist" % items[0]))
 
+    @api.multi
+    def name_get(self):
+        res = super(ProductPricelist, self).name_get()
+        pricelist_ids = [x[0] for x in res]
+        pricelists = self.env['product.pricelist'].browse(pricelist_ids)
+        suffix = {x.id: ' (TTC)' for x in pricelists if x.price_include_taxes}
+        names = []
+        for elm in res:
+            names.append((elm[0], '%s%s' % (elm[1], suffix.get(elm[0], ''))))
+        return names
+
+
+class ProductPricelistVersion(models.Model):
+    _inherit = 'product.pricelist.version'
+
+    @api.multi
+    def name_get(self):
+        res = super(ProductPricelistVersion, self).name_get()
+        price_version_ids = [x[0] for x in res]
+        versions = self.env['product.pricelist.version'].browse(
+            price_version_ids)
+        suffix = {x.id: ' (TTC)' for x in versions
+                  if x.pricelist_id.price_include_taxes}
+        names = []
+        for elm in res:
+            names.append((elm[0], '%s%s' % (elm[1], suffix.get(elm[0], ''))))
+        return names
+
 
 class ProductPriceType(models.Model):
     _inherit = 'product.price.type'
