@@ -25,7 +25,7 @@ class ProductPricelist(models.Model):
                 [('pricelist_id', '=', rec.id)])
             items = self.env['product.pricelist.item'].search(
                 [('price_version_id', 'in', versions._ids),
-                 ('base', '>', '0'),  # TODO check other case
+                 ('base', '>', '0'),
                  ('base', 'in', map_price_type[not rec.price_include_taxes])])
             if items:
                 raise UserError(_(
@@ -80,9 +80,9 @@ class ProductPricelistItem(models.Model):
     def _constrains_price_item_price_include(self):
         map_price_type = self.env['product.price.type']._get_tax_price_type()
         for rec in self:
-            if rec.base >= 1:  # TODO check other case
-                price_include_taxes = (
-                    rec.price_version_id.pricelist_id.price_include_taxes)
+            price_include_taxes = (
+                rec.price_version_id.pricelist_id.price_include_taxes)
+            if rec.base >= 1:
                 if rec.base not in map_price_type[price_include_taxes]:
                     price_type_name = self.env['product.price.type'].browse(
                         rec.base).name
@@ -93,3 +93,9 @@ class ProductPricelistItem(models.Model):
                         u"Nom type prix : %s\n"
                         u"Champ TTC de la liste de prix : %s" % (
                             price_type_name, price_include_taxes))
+            elif rec.base == -1 and (
+                    rec.base_pricelist_id.price_include_taxes !=
+                    price_include_taxes):
+                raise UserError(_(
+                    "You used a price based another pricelist which is "
+                    "incompatible with present pricelist (TTC checkbox)."))
