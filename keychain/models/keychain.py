@@ -207,6 +207,7 @@ class KeychainBackend(models.AbstractModel):
     password = fields.Char(
         compute="_compute_password",
         inverse="_inverse_password",
+        compute_sudo=True,
         required=True)
     data = fields.Serialized(
         compute="_compute_keychain",
@@ -240,8 +241,10 @@ class KeychainBackend(models.AbstractModel):
         return account
 
     def _inverse_password(self):
+        # Compute sudo do not work on inverse
+        # so we use sudo manually
         for record in self:
-            account = self._get_keychain_account()
+            account = self.sudo()._get_keychain_account()
             if record.password and record.password != '******':
                 account.clear_password = record.password
 
@@ -254,13 +257,17 @@ class KeychainBackend(models.AbstractModel):
                 record.password = ""
 
     def _inverse_keychain(self):
+        # Compute sudo do not work on serialized field
+        # so we use sudo manually
         for record in self:
-            account = record._get_keychain_account()
+            account = record.sudo()._get_keychain_account()
             account.data = account._serialize_data(record.data)
 
     def _compute_keychain(self):
+        # Compute sudo do not work on serialized field
+        # so we use sudo manually
         for record in self:
-            account = record._get_existing_keychain()
+            account = record.sudo()._get_existing_keychain()
             if account:
                 record.data = account.get_data()
             else:
