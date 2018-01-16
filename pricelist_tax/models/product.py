@@ -73,6 +73,7 @@ class ProductPriceType(models.Model):
 
 
 class ProductPricelistItem(models.Model):
+    # TODO manage pricelist base on supplier price
     _inherit = 'product.pricelist.item'
 
     @api.multi
@@ -93,9 +94,9 @@ class ProductPricelistItem(models.Model):
                         u"Nom type prix : %s\n"
                         u"Champ TTC de la liste de prix : %s" % (
                             price_type_name, price_include_taxes))
-            elif rec.base == -1 and (
-                    rec.base_pricelist_id.price_include_taxes !=
-                    price_include_taxes):
-                raise UserError(_(
-                    "You used a price based another pricelist which is "
-                    "incompatible with present pricelist (TTC checkbox)."))
+            elif rec.base == -1:
+                if (rec.base_pricelist_id.price_include_taxes !=
+                        price_include_taxes):
+                    raise UserError(_(
+                        "You used a price based another pricelist which is "
+                        "incompatible with present pricelist (TTC checkbox)."))
