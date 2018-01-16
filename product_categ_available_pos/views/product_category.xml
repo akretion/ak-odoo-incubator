@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odoo>
-
+<openerp>
+<data>
     <record id="product_category_form_view" model="ir.ui.view">
         <field name="inherit_id" ref="pos_remove_pos_category.product_category_form_view"/>
         <field name="model">product.category</field>
@@ -19,4 +19,5 @@
         </field>
     </record>
 
-</odoo>
+</data>
+</openerp>

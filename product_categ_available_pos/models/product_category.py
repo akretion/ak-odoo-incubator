@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from openerp import models, fields, api
 
 
 class ProductCategory(models.Model):
@@ -29,7 +29,8 @@ class ProductCategory(models.Model):
 
     @api.model
     def get_parents_category_domain(self, arg):
-        return [('child_id', 'parent_of', arg)]
+        # en v8 parent_of n'existe pas
+        return [('parent_right', '>', self.parent_left), ('parent_left', '<=', self.parent_left)]
 
     @api.model
     def get_children_category_domain(self, arg):

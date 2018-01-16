@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
-from odoo.exceptions import UserError
+from openerp import models, fields, api
+from openerp.exceptions import Warning as UserError
 
 
 class ProductTemplate(models.Model):

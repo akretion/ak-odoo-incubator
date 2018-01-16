@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models
+from openerp import models
 
 
 class ProductProduct(models.Model):

@@ -2,7 +2,7 @@
 # © 2018 Akretion Raphaël REVERDY
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests import common
+from openerp.tests import common
 
 import logging
 
@@ -27,7 +27,7 @@ class TestPosAvailableCategory(common.TransactionCase):
     def setUp(self):
         super(TestPosAvailableCategory, self).setUp()
         self.category_1_id = self.ref('product.product_category_1')
-        group_user = self.env.ref('sales_team.group_sale_manager')
+        group_user = self.env.ref('base.group_sale_manager')
         company_1 = self.env['res.company'].create(
             {'name': 'Test company 1'})
 

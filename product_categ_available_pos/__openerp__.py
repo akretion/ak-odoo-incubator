@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Product category available in pos by company',
-    'version': '10.0.0.1.0',
+    'version': '8.0.0.1.0',
     'category': 'Point Of Sale',
     'description': """
 Set company_dependent to product.category.available_in_pos.
