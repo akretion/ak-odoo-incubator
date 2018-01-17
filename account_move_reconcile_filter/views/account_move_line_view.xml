@@ -8,7 +8,7 @@
     <field name="inherit_id" ref="account.view_account_move_line_filter"/>
     <field name="arch" type="xml">
         <field name="date" position="after">
-            <field name="date" string="Unreconcile at date" filter_domain="['|', ('reconcile_id', '=', False), ('reconcile_id.reconcile_date', '&gt;=', self)]"/>
+            <field name="date" string="Unreconcile at date" filter_domain="[('date', '&lt;=', self), '|', ('reconcile_id', '=', False), ('reconcile_id.reconcile_date', '&gt;', self)]"/>
         </field>
     </field>
 </record>
