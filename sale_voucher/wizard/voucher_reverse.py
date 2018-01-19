@@ -162,9 +162,9 @@ class ReverseExpiredVoucher(orm.TransientModel):
                 voucher.partner_id.name.encode('utf-8'),
                 voucher.partner_id.email.encode('utf-8'),
                 balance])
-            self.pool['email.template'].send_mail(
-                cr, uid, template_id, voucher.id, force_send=False,
-                context=context)
+#            self.pool['email.template'].send_mail(
+#                cr, uid, template_id, voucher.id, force_send=False,
+#                context=context)
         summary_file = base64.b64encode(f.getvalue())
         file_name = "voucher_reversed.csv"
         self.write(
