@@ -22,10 +22,10 @@ class CrmCaseSection(models.Model):
 
         pricelist_id = fields.Many2one(
             comodel_name='product.pricelist',
-            string="Pricelist",
+            string="Pricelist", track_visibility='onchange',
             company_dependent=True)
         price_policy = fields.Selection(
-            string='Price Policy',
+            string='Price Policy', track_visibility='onchange',
             selection=[('contract_pricelist', 'Use Market Pricelist'),
                        ('partner_pricelist', 'Use Partner Pricelist'),
                        ('partner_pricelist_if_exists',
