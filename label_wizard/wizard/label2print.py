@@ -2,9 +2,8 @@
 # © 2016 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from openerp import api, fields, models, _
 from openerp.exceptions import Warning as UserError
-from openerp.tools.safe_eval import safe_eval
 
 
 class LabelFromRecord(models.TransientModel):
@@ -48,7 +47,7 @@ class LabelFromRecord(models.TransientModel):
         Product_m = self.env['product.product']
         for rec in self:
             if rec.content:
-                errors, products2print, data4print = [], [], []
+                products2print, data4print = [], []
                 lines = rec.content.split('\n')
                 for line in lines:
                     # on remplace le text par des entiers quand possible
@@ -57,14 +56,8 @@ class LabelFromRecord(models.TransientModel):
                     parts = [(x.strip().isdigit() and int(x.strip()) or
                               x.strip())
                              for x in line.split(';') if x.strip()]
-                    bad = rec._sanitize_and_check_parts(parts, line)
-                    if bad:
-                        errors.append(bad)
-                    else:
-                        products2print.append(parts[:])
-                if errors:
-                    raise UserError(
-                        u"Voici les erreurs trouvées:\n%s" % '\n'.join(errors))
+                    rec._sanitize_and_check_parts(parts, line)
+                    products2print.append(parts[:])
                 for info in products2print:
                     product, quantity = rec._search_product(info)
                     if product:
@@ -94,24 +87,17 @@ class LabelFromRecord(models.TransientModel):
     def _sanitize_and_check_parts(self, parts, line):
         """ @return la 1ère règle non respecté
         """
-        message = u"La ligne '%s' ne respecte pas le format"
-        rules = [
-            # ('condition that must be ok', 'message if condition not ok')
-            ('isinstance(parts, list)', message % line),
-            ('len(parts) > 1', message % line),
-            ('len(parts) < 4', u"Plus de 3 segments. " + message % line),
-            ('parts[1] != "0"', u"La quantité ne peut être de 0. '%s'" % line),
-            ('parts[1] > 0', u"La quantité ne peut être < 0. '%s'" % line),
-            ('isinstance(parts[1], int)',
-             u"La quantité n'est pas un entier '%s'" % line),
-        ]
-        if len(parts) > 2:
-            rules.append(
-                ('isinstance(parts[2], int)',
-                 u"L'id' n'est pas un entier '%s'" % line),
-            )
-        for rule in rules:
-            # TODO replace by safe_eval
-            if not eval(rule[0]):
-                return rule[1]  # message
-        return False
+        message = u"La ligne '%s' ne respecte pas le format."
+        if not isinstance(parts, list):
+            raise UserError(_(message % line))
+        if len(parts) <= 2:
+            raise UserError(_(message % line))
+        if len(parts) >= 4:
+            raise UserError(_(u"Plus de 3 segments. " + message % line))
+        if not isinstance(parts[1], int):
+            raise UserError(_(u"La quantité n'est pas un entier '%s'" % line))
+        if parts[1] <= 0:
+            raise UserError(_(u"La quantité ne peut être <= 0. '%s'" % line))
+        if len(parts) > 2 and not isinstance(parts[2], int):
+            raise UserError(_(u"L'id n'est pas un entier '%s'" % line))
+        return True
