@@ -88,11 +88,15 @@ class ProductPricelistItem(models.Model):
                     price_type_name = self.env['product.price.type'].browse(
                         rec.base).name
                     raise UserError(
-                        u"La règle de prix a le champ 'Base' "
-                        u"dont le paramétrage de taxe ne correspond pas\n"
-                        u"à celui de la liste de prix.\n"
+                        u"Points à vérifier"
+                        u"---------------------"
+                        u"1/ Votre liste de prix est elle bien "
+                        u"une grille tarifaire ?\n\n"
+                        u"2/ La règle de prix a le champ 'Base' "
+                        u"dont le paramétrage de taxe peut ne pas "
+                        u"correspondre\nà celui de la liste de prix.\n"
                         u"Nom type prix : %s\n"
-                        u"Champ TTC de la liste de prix : %s" % (
+                        u"Champ TTC de la liste de prix : \n%s" % (
                             price_type_name, price_include_taxes))
             elif rec.base == -1:
                 if (rec.base_pricelist_id.price_include_taxes !=
