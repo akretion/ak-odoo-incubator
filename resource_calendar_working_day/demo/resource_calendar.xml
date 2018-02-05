@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="timesheet_group1" model="resource.calendar">
+            <field name="name">40 Hours/Week</field>
+        </record>
+
+        <record model="resource.calendar.attendance" id="calendar_attendance_mon1">
+            <field name="name">Monday AM</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">08</field>
+            <field name="hour_to">12</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_mon2">
+            <field name="name">Monday PM</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">14</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_tue1">
+            <field name="name">Tuesday AM</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">08</field>
+            <field name="hour_to">12</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_tue2">
+            <field name="name">Tuesday PM</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">14</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_wed1">
+            <field name="name">Wednesday AM</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">08</field>
+            <field name="hour_to">12</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_wed2">
+            <field name="name">Wednesday PM</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">14</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_thu1">
+            <field name="name">Thursday AM</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">08</field>
+            <field name="hour_to">12</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_thu2">
+            <field name="name">Thursday PM</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">14</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_fri1">
+            <field name="name">Friday AM</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">08</field>
+            <field name="hour_to">12</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+        <record model="resource.calendar.attendance" id="calendar_attendance_fri2">
+            <field name="name">Friday PM</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">14</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="timesheet_group1"/>
+        </record>
+
+   </data>
+</odoo>
