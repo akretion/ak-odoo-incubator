@@ -63,26 +63,71 @@ class PricePolicyMixin(models.AbstractModel):
         We check only for customer invoice (not supplier invoice nor refunds)
         """
         self.ensure_one()
+        description = {
+            'team': (_('Sale Team'), self.section_id.name),
+            'policy': (_('Sale Team Policy'), self.section_id.price_policy),
+            'sale_price': (_('Pricelist in %s') % self._description,
+                           self.pricelist_id.name),
+            'team_price': (_('Pricelist in sale team'),
+                           self.section_id.pricelist_id and
+                           self.section_id.pricelist_id.name),
+            'partner_price': (_('Pricelist on partner'),
+                              self.partner_id.property_product_pricelist and
+                              self.partner_id.property_product_pricelist.name),
+        }
+        issue_ctx = {
+            description['sale_price'][0]: description['sale_price'][1],
+            description['team'][0]: description['team'][1],
+            description['policy'][0]: description['policy'][1],
+        }
+        # context is empty, then we choose to take the company of the
+        # sale/invoice to evaluate company dependent fields
+        self = self.with_context(force_company=self.company_id.id)
         if self.section_id.price_policy == 'contract_pricelist' and \
                 self.pricelist_id != self.section_id.pricelist_id:
+            add_issue('team', issue_ctx, description)
+            add_issue('team_price', issue_ctx, description)
             raise UserError(
-                HELP_PRICELIST + _(" market price ") + HELP_POLICY)
+                HELP_PRICELIST + _(" market price ") + HELP_POLICY +
+                HELP_CHECK_DATA + flat_dict(issue_ctx))
         if self.section_id.price_policy == 'partner_pricelist_if_exists':
             if self.partner_id.property_product_pricelist:
                 if self.partner_id.property_product_pricelist \
                         != self.pricelist_id:
+                    add_issue('partner_price', issue_ctx, description)
                     raise UserError(
-                        HELP_PRICELIST + _(" customer price ") + HELP_POLICY)
+                        HELP_PRICELIST + _(" customer price ") +
+                        HELP_CHECK_DATA + flat_dict(issue_ctx))
             elif self.section_id.pricelist_id != self.pricelist_id:
+                add_issue('team', issue_ctx, description)
+                add_issue('team_price', issue_ctx, description)
                 raise UserError(
-                    HELP_PRICELIST + _(" market price ") + HELP_PRICELIST)
+                    HELP_PRICELIST + _(" market price ") + HELP_POLICY +
+                    HELP_CHECK_DATA + flat_dict(issue_ctx))
         if self.section_id.price_policy == 'partner_pricelist' and \
                 self.pricelist_id != \
                 self.partner_id.property_product_pricelist:
+            add_issue('partner_price', issue_ctx, description)
             raise UserError(
-                HELP_PRICELIST + _(" customer price ") + HELP_POLICY)
+                HELP_PRICELIST + _(" customer price ") +
+                HELP_CHECK_DATA + flat_dict(issue_ctx))
 
 
-HELP_PRICELIST = u"Sale pricelist must match to "
+def add_issue(key, issue_ctx, description):
+    """ Complete issue_ctx according to provided key"""
+    issue_ctx[description[key][0]] = description[key][1]
 
-HELP_POLICY = u""" pricelist (see Sales team - Pricing tab)"""
+
+def flat_dict(mystring):
+    """ Format dict to a human readable string
+        Comes from :
+        https://codereview.stackexchange.com/questions/7953/flattening-a-dictionary-into-a-string
+    """
+    # TODO Migr V12
+    return ', \n'.join("%s : %r" % (
+        key, val) for (key, val) in mystring.iteritems()).replace("u'", "'")
+
+
+HELP_PRICELIST = _("Sale pricelist must match to ")
+HELP_CHECK_DATA = '\n\n' + _('Check your data below:') + '\n\n'
+HELP_POLICY = _(""" pricelist (see Sales team - Pricing tab)""")
