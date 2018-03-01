@@ -15,8 +15,10 @@
     'version': '8.0.1.0.1',
     'depends': [
         'stock',
+        'report_xlsx',
     ],
     'data': [
         'views/inventory_view.xml',
+        'report/report_view.xml',
     ],
 }

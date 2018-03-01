@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+<data>
+
+    <report
+        id="simple_inventory_valuation"
+        model="stock.inventory"
+        string="Inventory Valuation"
+        report_type="xlsx"
+        name="stock.inventory.xlsx"
+        file="simple_valuation"
+        attachment_use="True"
+        attachment="object.name + '%s.xlsx' % object.company_id.name or ''"
+    />
+
+</data>
+</openerp>
