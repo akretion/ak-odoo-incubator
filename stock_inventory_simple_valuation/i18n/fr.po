@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 17:01+0000\n"
-"PO-Revision-Date: 2018-03-01 17:01+0000\n"
+"POT-Creation-Date: 2018-03-01 18:14+0000\n"
+"PO-Revision-Date: 2018-03-01 18:14+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -44,20 +44,24 @@ msgid "Cost from product \"%s\" standard_price"
 msgstr "Coût à partir de l'artice \"%s\" (prix d'achat)"
 
 #. module: stock_inventory_simple_valuation
-#: code:addons/stock_inventory_simple_valuation/models/inventory.py:60
-#, python-format
-msgid "Cost from supplier info %s"
-msgstr "Coût à partir info fournisseur %s"
-
-#. module: stock_inventory_simple_valuation
 #: help:stock.inventory.line,cost_explanation:0
 msgid "Explain computation method for each product"
 msgstr "Explication de la méthode de calcul du coût"
 
 #. module: stock_inventory_simple_valuation
+#: model:ir.model,name:stock_inventory_simple_valuation.model_stock_inventory
+msgid "Inventory"
+msgstr "Inventaire"
+
+#. module: stock_inventory_simple_valuation
 #: model:ir.model,name:stock_inventory_simple_valuation.model_stock_inventory_line
 msgid "Inventory Line"
 msgstr "Ligne d'inventaire"
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.actions.report.xml,name:stock_inventory_simple_valuation.simple_inventory_valuation
+msgid "Inventory Valuation"
+msgstr "Inventory Valuation"
 
 #. module: stock_inventory_simple_valuation
 #: field:stock.inventory.line,manual_product_cost:0
