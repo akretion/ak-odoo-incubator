@@ -58,7 +58,7 @@ class StockInventoryLine(models.Model):
                 if sup_info and sup_info[0].pricelist_ids:
                     cost_price = sup_info[0].pricelist_ids[0].price
                     explanation = _('Cost from supplier info %s') %\
-                        sup_info.name.name
+                        sup_info[0].name.name
             if not cost_price:
                 # get cot price form supplier info
                 sup_info = invent_line.product_id.seller_id
@@ -77,8 +77,8 @@ class StockInventoryLine(models.Model):
     @api.multi
     @api.depends('calc_product_cost', 'manual_product_cost')
     def _compute_value(self):
-        for invent_line in self:
-            if invent_line.manual_product_cost:
-                self.value = invent_line.manual_product_cost * self.product_qty
+        for line in self:
+            if line.manual_product_cost:
+                line.value = line.manual_product_cost * line.product_qty
             else:
-                self.value = invent_line.calc_product_cost * self.product_qty
+                line.value = line.calc_product_cost * line.product_qty

@@ -17,12 +17,25 @@ INV_FIELDS = [
     'company_id',
     'location_id',
 ]
+
 LINE_FIELDS = [
     'product_id',
     'product_uom_id',
     'location_id',
     'product_qty',
+    'manual_product_cost',
+    'value',
+    'cost_explanation',
 ]
+LINE_PARAMS = {
+    'product_id': {'size': 40, 'string': "Produit"},
+    'product_uom_id': {'size': 7, 'string': u"Unités"},
+    'location_id': {'size': 20, 'string': "Emplacement"},
+    'product_qty': {'size': 5, 'string': u"Qté"},
+    'manual_product_cost': {'size': 7, 'string': u"Val. manuelle"},
+    'value': {'size': 7, 'string': "Valeur"},
+    'cost_explanation': {'size': 10, 'string': u"Explication"},
+}
 
 
 def sheet_name(name):
@@ -49,19 +62,29 @@ class InventoryValuation(ReportXlsx):
                     myfield = inv[key]['name']
                 sheet.write(y, 0, inv._fields[key].string, bold)
                 sheet.write(y, 1, myfield, bold)
-            # inventory lines
+            # inventory lines header
             y = len(INV_FIELDS) + 4
             x = 0
             for key in LINE_FIELDS:
-                sheet.write(y, x, inv.line_ids._fields[key].string, bold)
+                string = inv.line_ids._fields[key].string
+                if key in LINE_PARAMS:
+                    if LINE_PARAMS[key].get('size'):
+                        sheet.set_column(x, x, LINE_PARAMS[key]['size'])
+                    if LINE_PARAMS[key].get('string'):
+                        string = LINE_PARAMS[key]['string']
+                sheet.write(y, x, string, bold)
                 x += 1
+            # inventory lines
             for line in inv.line_ids:
                 x = 0
+                y += 1
                 for key in LINE_FIELDS:
                     myfield = line[key]
-                    if line._fields[key].type == 'many2one' and hasattr(
-                            line[key], 'name'):
-                        myfield = line[key]['name']
+                    if line._fields[key].type == 'many2one':
+                        if hasattr(line[key], 'display_name'):
+                            myfield = line[key]['display_name']
+                        elif hasattr(line[key], 'name'):
+                            myfield = line[key]['name']
                     sheet.write(y + 1, x, myfield)
                     x += 1
 
