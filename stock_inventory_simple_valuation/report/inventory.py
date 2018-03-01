@@ -2,7 +2,7 @@
 # © 2018 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, models, fields
+# from openerp import api, models, fields
 
 try:
     from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
@@ -12,11 +12,17 @@ except ImportError:
             pass
 
 
-INV_FIELDS = {
-    'date': {},
-    'company_id': {},
-    'location_id': {},
-}
+INV_FIELDS = [
+    'date',
+    'company_id',
+    'location_id',
+]
+LINE_FIELDS = [
+    'product_id',
+    'product_uom_id',
+    'location_id',
+    'product_qty',
+]
 
 
 def sheet_name(name):
@@ -32,10 +38,10 @@ class InventoryValuation(ReportXlsx):
         for inv in odoo_objects:
             sheet = workbook.add_worksheet(sheet_name(inv.name))
             bold = workbook.add_format({'bold': True})
-            # header
+            # inventory header
             y = 0
-            sheet.write(0, 4, "INVENTAIRE VALORISE", bold)
-            for key in INV_FIELDS.keys():
+            sheet.write(0, 2, "INVENTAIRE VALORISE", bold)
+            for key in INV_FIELDS:
                 y += 1
                 myfield = inv[key]
                 if inv._fields[key].type == 'many2one' and hasattr(
@@ -43,7 +49,21 @@ class InventoryValuation(ReportXlsx):
                     myfield = inv[key]['name']
                 sheet.write(y, 0, inv._fields[key].string, bold)
                 sheet.write(y, 1, myfield, bold)
-            #
+            # inventory lines
+            y = len(INV_FIELDS) + 4
+            x = 0
+            for key in LINE_FIELDS:
+                sheet.write(y, x, inv.line_ids._fields[key].string, bold)
+                x += 1
+            for line in inv.line_ids:
+                x = 0
+                for key in LINE_FIELDS:
+                    myfield = line[key]
+                    if line._fields[key].type == 'many2one' and hasattr(
+                            line[key], 'name'):
+                        myfield = line[key]['name']
+                    sheet.write(y + 1, x, myfield)
+                    x += 1
 
     def _set_format_definition(self, workbook):
         base_format = {
