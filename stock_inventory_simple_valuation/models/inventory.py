@@ -2,33 +2,83 @@
 # © 2018 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, models, fields
-
-
-class StockInventory(models.Model):
-    _inherit = 'stock.inventory'
-
-    explanation = fields.Text(
-        help="Explain computation method for each product")
+from openerp import api, models, fields, _
+import openerp.addons.decimal_precision as dp
 
 
 class StockInventoryLine(models.Model):
     _inherit = 'stock.inventory.line'
 
-    value = fields.Float(compute='_compute_value', string="Value")
+    calc_product_cost = fields.Float(
+        compute='_compute_product_cost', string='Computed cost',
+        digits_compute=dp.get_precision('Account'))
+    manual_product_cost = fields.Float(
+        string='Manual cost',
+        digits_compute=dp.get_precision('Account'))
+    value = fields.Float(
+        compute='_compute_value', string='Value',
+        digits_compute=dp.get_precision('Account'))
+    cost_explanation = fields.Text(
+        compute='_compute_product_cost',
+        help='Explain computation method for each product')
 
-    @api.one
+    @api.multi
+    @api.depends('product_id',)
+    def _compute_product_cost(self):
+        inv_l_obj = self.env['account.invoice.line']
+        po_l_obj = self.env['purchase.order.line']
+        for invent_line in self:
+            # get cost form supplier invoice
+            explanation = ''
+            cost_price = 0
+            if not invent_line.product_id:
+                continue
+            inv_line = inv_l_obj.search(
+                [('product_id', '=', invent_line.product_id.id),
+                 ('invoice_id.type', '=', 'out_invoice'),
+                 ('invoice_id.state', 'in', ('open', 'paid')),
+                 ], limit=1)
+            if inv_line:
+                cost_price = inv_line.price_unit
+                explanation = _('Cost from Invoice %s') %\
+                    inv_line.invoice_id.number
+            if not cost_price:
+                # get cot price form purchase
+                po_line = po_l_obj.search(
+                    [('product_id', '=', invent_line.product_id.id),
+                     ('order_id.state', '=', 'done')
+                     ], limit=1)
+                if po_line:
+                    cost_price = po_line.price_unit
+                    explanation = _('Cost from Purchase %s') %\
+                        po_line.order_id.name
+            if not cost_price:
+                # get cot price form supplier info
+                sup_info = invent_line.product_id.seller_ids
+                if sup_info and sup_info[0].pricelist_ids:
+                    cost_price = sup_info[0].pricelist_ids[0].price
+                    explanation = _('Cost from supplier info %s') %\
+                        sup_info.name.name
+            if not cost_price:
+                # get cot price form supplier info
+                sup_info = invent_line.product_id.seller_id
+                if invent_line.product_id.standard_price:
+                    cost_price = invent_line.product_id.standard_price
+                    explanation = _('Cost from product "%s" standard_price') %\
+                        invent_line.product_id.default_code or\
+                        invent_line.product_id.name
+            if not cost_price:
+                explanation = _('Not Cost found for the product "%s"') %\
+                    invent_line.product_id.default_code or\
+                    invent_line.product_id.name
+            invent_line.calc_product_cost = cost_price
+            invent_line.cost_explanation = explanation
+
+    @api.multi
+    @api.depends('calc_product_cost', 'manual_product_cost')
     def _compute_value(self):
-        # infos supplier
-        # centrale d'achat
-        #
-        self.value = 1
-        # if len(self.product_id.seller_ids) < 1:  # Product has no sellers
-        #     self.value = round(
-        #         float(self.product_id.standard_price * self.product_qty), 2)
-        # else:  # has sellers
-        #     suppliers = self.product_id.seller_ids.sorted(
-        #         key=lambda r: r.sequence)
-        #     right_supplier = suppliers[0]
-        #     self.value = round(
-        #         float(right_supplier.price * self.product_qty), 2)
+        for invent_line in self:
+            if invent_line.manual_product_cost:
+                self.value = invent_line.manual_product_cost * self.product_qty
+            else:
+                self.value = invent_line.calc_product_cost * self.product_qty
