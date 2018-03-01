@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp.tests import common
-from openerp.exceptions import Warning as UserError
 
 import logging
 
@@ -48,12 +47,3 @@ class TestPosAvailableProduct(common.TransactionCase):
         self.assertEqual(
             prod.available_in_pos, cat.available_in_pos)
         self.assertTrue(prod.available_in_pos)
-
-    def test_ensure_cant_set_from_template(self):
-        prod = self.get_ctx(self.env['product.template']).search(
-            [['categ_id', '=', self.category_1_id]], limit=1)
-        try:
-            prod.available_in_pos = True
-            self.assertTrue(False, 'Should raise')
-        except UserError:
-            self.assertTrue(True, 'Exception raised as expected')

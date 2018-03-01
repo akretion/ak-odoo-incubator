@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api
-from openerp.exceptions import Warning as UserError
+from openerp import models, fields
 
 
 class ProductTemplate(models.Model):
@@ -10,7 +9,6 @@ class ProductTemplate(models.Model):
 
     available_in_pos = fields.Boolean(
         compute='_compute_available_in_pos',
-        inverse='_set_available_in_pos',
         help="Should be set from the category",
         readonly=True,
         store=False,  # because it's now company dependent
@@ -19,7 +17,3 @@ class ProductTemplate(models.Model):
     def _compute_available_in_pos(self):
         for rec in self:
             rec.available_in_pos = rec.categ_id.available_in_pos
-
-    def _set_available_in_pos(self):
-        # triggered by code only because readonly is set for view
-        raise UserError("Set it from category")
