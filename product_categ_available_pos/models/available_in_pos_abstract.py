@@ -8,30 +8,38 @@ class AvailabeInPosMixin(models.AbstractModel):
     _description = 'Available in POS via category'
 
     @api.model
-    def search_read(self, domain=None, fields=None, offset=0, limit=None,
-                    order=None):
-        # domain may be tuple or list, convert it to list in
-        # order to modify it
-        new_domain = map(list, domain)
+    def _available_in_pos_domain(self, domain):
+        """Replace available_in_pos by categ_id.available_in_pos.
+
+        ... in domains.
+        @params domain: list or tuple
+        @returns a new list
+        """
+        new_domain = []
         for lvl2 in domain:
             if lvl2[0] == 'available_in_pos':
-                lvl2[0] = 'categ_id.available_in_pos'
+                # because lvl2 may be a tuple
+                # tuple is immutable
+                new_lvl2 = list(lvl2)
+                new_lvl2[0] = 'categ_id.available_in_pos'
+                new_domain.append(new_lvl2)
+            else:
+                new_domain.append(lvl2)
+        return new_domain
 
-        res = super(AvailabeInPosMixin, self).search_read(
+    @api.model
+    def search_read(self, domain=None, fields=None, offset=0, limit=None,
+                    order=None):
+        # prepend categ_id to available in pos
+        new_domain = self._available_in_pos_domain(domain)
+        return super(AvailabeInPosMixin, self).search_read(
             domain=new_domain, fields=fields, offset=offset,
             limit=limit, order=order)
-        return res
 
     @api.model
     def search(self, args, offset=0, limit=0, order=None, count=False):
-        # new_args may be tuple or list, convert it to list in
-        # order to modify it
-        new_args = map(list, args)
-        for lvl2 in new_args:
-            if lvl2[0] == 'available_in_pos':
-                lvl2[0] = 'categ_id.available_in_pos'
-
-        res = super(AvailabeInPosMixin, self).search(
+        # prepend categ_id to available in pos
+        new_args = self._available_in_pos_domain(args)
+        return super(AvailabeInPosMixin, self).search(
             new_args, offset=offset, limit=limit,
             order=order, count=count)
-        return res
