@@ -2,8 +2,6 @@
 # © 2018 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-# from openerp import api, models, fields
-
 try:
     from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
 except ImportError:
@@ -25,22 +23,24 @@ LINE_FIELDS = [
     'product_qty',
     'manual_product_cost',
     'value',
-    'cost_explanation',
+    'cost_origin',
+    'reference',
 ]
 LINE_PARAMS = {
     'product_id': {'size': 40, 'string': "Produit"},
     'product_uom_id': {'size': 7, 'string': u"Unités"},
     'location_id': {'size': 20, 'string': "Emplacement"},
     'product_qty': {'size': 5, 'string': u"Qté"},
-    'manual_product_cost': {'size': 7, 'string': u"Val. manuelle"},
+    'manual_product_cost': {'size': 7, 'string': u"Val.\nmanuelle"},
     'value': {'size': 7, 'string': "Valeur"},
-    'cost_explanation': {'size': 10, 'string': u"Explication"},
+    'cost_origin': {'size': 20, 'string': u"Explication"},
 }
 
 
-def sheet_name(name):
+def sheet_name(inventory):
     for char in ['[', ']', ':', '*', '?', '/', '\\']:
-        name = name.replace(char, ' ')
+        inventory.name = inventory.name.replace(char, ' ')
+    name = '%s %s' % (inventory.id, inventory.name)
     return name[:31]
 
 
@@ -49,7 +49,7 @@ class InventoryValuation(ReportXlsx):
     def generate_xlsx_report(self, workbook, data, odoo_objects):
         self._set_format_definition(workbook)
         for inv in odoo_objects:
-            sheet = workbook.add_worksheet(sheet_name(inv.name))
+            sheet = workbook.add_worksheet(sheet_name(inv))
             bold = workbook.add_format({'bold': True})
             # inventory header
             y = 0
@@ -80,7 +80,7 @@ class InventoryValuation(ReportXlsx):
                 y += 1
                 for key in LINE_FIELDS:
                     myfield = line[key]
-                    if line._fields[key].type == 'many2one':
+                    if line._fields[key].type in ('many2one', 'reference'):
                         if hasattr(line[key], 'display_name'):
                             myfield = line[key]['display_name']
                         elif hasattr(line[key], 'name'):

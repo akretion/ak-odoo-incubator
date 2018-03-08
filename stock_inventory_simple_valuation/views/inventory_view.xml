@@ -3,7 +3,6 @@
     <data>
 
 
-
     <record model="ir.ui.view" id="view_inventory_form">
         <field name="model">stock.inventory</field>
         <field name="inherit_id" ref="stock.view_inventory_form"/>
@@ -13,7 +12,11 @@
                 <field name="calc_product_cost"/>
                 <field name="manual_product_cost"/>
                 <field name="value"/>
-                <field name="cost_explanation"/>
+                <button name="button_info_origin" type="object" icon="STOCK_INFO" string="🛈"
+                        help="Information Origin"
+                        attrs="{'invisible': [('reference', '=', False)]}"/>
+                <field name="cost_origin"/>
+                <field name="reference"/>
             </xpath>
         </field>
     </record>
