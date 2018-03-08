@@ -3,12 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': "Inventory Valuation",
+    'name': "Stock Inventory Simple Valuation",
     'summary': "... ",
     'description': """
-        Insipred by
-    https://github.com/abakus-it/stock/tree/9.0/stock_valuation_improved
-    """,
+        Display cost information from different sources in inventory line""",
     'author': "Akretion",
     'website': "http://www.akretion.com",
     'category': 'Stock',
