@@ -1,23 +1,17 @@
 <?xml version="1.0" ?>
 <odoo>
-        <record id="view_company_inherit_form2" model="ir.ui.view">
-            <field name="model">res.company</field>
-            <field name="inherit_id" ref="sale.view_company_inherit_form2"/>
-            <field name="arch" type="xml">
-                <xpath expr="//group[@name='sale_grp']/field[@name='sale_note']" position="before">
-                    <label for="delivery_warehouse_id" string="Delivery Warehouse"/>
-                    <div>
-                        <field name="delivery_warehouse_id"/>
-                    </div>
-                </xpath>
-                <xpath expr="//group[@name='sale_grp']" position="after">
-                    <group name="purchase_grp" string="Purchases">
-                        <label for="receipt_warehouse_id" string="Receipt Warehouse"/>
-                        <div>
-                            <field name="receipt_warehouse_id"/>
-                        </div>
-                     </group>
-                </xpath>
-            </field>
-        </record>
+    <!-- "TODO improve view" -->
+    <record id="view_company_form" model="ir.ui.view">
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[1]" position="inside">
+                <group>
+                    <field name="delivery_warehouse_id"/>
+                    <field name="receipt_warehouse_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
