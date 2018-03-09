@@ -55,9 +55,8 @@ class StockInventoryLine(models.Model):
             return
         invoices = self._get_invoice_data(product_ids)
         for line in self:
-            if line.inventory_id.to_recompute:
-                line.inventory_id.to_recompute = False
-            elif line.inventory_id.state not in ('done'):
+            if line.inventory_id.state not in ('done') and \
+                    not line.inventory_id.to_recompute:
                 continue
             if not line.inventory_id or not line.product_id:
                 continue

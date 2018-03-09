@@ -6,33 +6,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-08 15:14+0100\n"
-"PO-Revision-Date: 2018-03-08 15:17+0100\n"
+"POT-Creation-Date: 2018-03-09 11:39+0000\n"
+"PO-Revision-Date: 2018-03-09 12:42+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: fr\n"
 "X-Generator: Poedit 2.0.1\n"
 
 #. module: stock_inventory_simple_valuation
-#: code:addons/stock_inventory_simple_valuation/models/inventory.py:151
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:163
 #, python-format
 msgid "%s: %s: '%s'"
 msgstr "%s: %s: '%s'"
 
 #. module: stock_inventory_simple_valuation
+#: view:stock.inventory:stock_inventory_simple_valuation.view_inventory_form
+msgid "Compute/Reset cost"
+msgstr "Calcul/Réinitialise les coûts"
+
+#. module: stock_inventory_simple_valuation
 #: field:stock.inventory.line,calc_product_cost:0
 msgid "Computed cost"
 msgstr "Coût calculé"
-
-#. module: stock_inventory_simple_valuation
-#: code:addons/stock_inventory_simple_valuation/models/inventory.py:83
-#, python-format
-msgid "Cost from product \"%s\" standard_price"
-msgstr "Coût à partir de l'article \"%s\" (prix standard)"
 
 #. module: stock_inventory_simple_valuation
 #: field:stock.inventory.line,cost_origin:0
@@ -70,13 +69,19 @@ msgid "Manual cost"
 msgstr "Coût manuel"
 
 #. module: stock_inventory_simple_valuation
-#: code:addons/stock_inventory_simple_valuation/models/inventory.py:87
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:99
 #, python-format
-msgid "Not Cost found"
+msgid "No Cost found"
 msgstr "Pas de coût trouvé"
 
 #. module: stock_inventory_simple_valuation
-#: code:addons/stock_inventory_simple_valuation/models/inventory.py:69
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:96
+#, python-format
+msgid "Product standard_price"
+msgstr "Product standard_price"
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:82
 #, python-format
 msgid "Purchase"
 msgstr "Achat"
@@ -87,18 +92,28 @@ msgid "Reference"
 msgstr "Référence"
 
 #. module: stock_inventory_simple_valuation
-#: code:addons/stock_inventory_simple_valuation/models/inventory.py:56
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:70
 #, python-format
 msgid "Supplier Invoice"
 msgstr "Facture fournisseur"
 
 #. module: stock_inventory_simple_valuation
-#: code:addons/stock_inventory_simple_valuation/models/inventory.py:76
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:89
 #, python-format
 msgid "Supplier info"
 msgstr "Info fournisseur"
 
 #. module: stock_inventory_simple_valuation
+#: field:stock.inventory,to_recompute:0
+msgid "To recompute"
+msgstr "A recalculer"
+
+#. module: stock_inventory_simple_valuation
 #: field:stock.inventory.line,value:0
 msgid "Value"
 msgstr "Valeur"
+
+#. module: stock_inventory_simple_valuation
+#: view:stock.inventory:stock_inventory_simple_valuation.view_inventory_form
+msgid "automatically computed when validated"
+msgstr "calculé automatiquement quand l'inventaire est validé"
