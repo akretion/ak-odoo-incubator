@@ -9,23 +9,35 @@ from openerp import api, models, fields, _
 import openerp.addons.decimal_precision as dp
 
 
+class StockInventory(models.Model):
+    _inherit = 'stock.inventory'
+
+    to_recompute = fields.Boolean()
+
+    @api.one
+    def button_compute_cost(self):
+        "Compute or reset"
+        self.write({'to_recompute': not self.to_recompute})
+
+
 class StockInventoryLine(models.Model):
     _inherit = 'stock.inventory.line'
 
     calc_product_cost = fields.Float(
-        compute='_compute_product_cost', string='Computed cost',
+        compute='_compute_product_cost', string='Computed cost', store=True,
         digits_compute=dp.get_precision('Account'))
     manual_product_cost = fields.Float(
         string='Manual cost',
         digits_compute=dp.get_precision('Account'))
     value = fields.Float(
-        compute='_compute_value', string='Value',
+        compute='_compute_value', string='Value', store=True,
         digits_compute=dp.get_precision('Account'))
     cost_origin = fields.Text(
-        compute='_compute_product_cost',
+        compute='_compute_product_cost', store=True,
         help='Explain computation method for each product')
     reference = fields.Reference(
-        selection='_select_models', compute='_compute_product_cost')
+        selection='_select_models', compute='_compute_product_cost',
+        store=True)
 
     def _select_models(self):
         models = self.env['ir.model'].search(
@@ -33,34 +45,37 @@ class StockInventoryLine(models.Model):
         return [(x['model'], x['name']) for x in models] + [('', '')]
 
     @api.multi
-    @api.depends('product_id',)
+    @api.depends('product_id', 'product_qty', 'manual_product_cost',
+                 'inventory_id.state', 'inventory_id.to_recompute')
     def _compute_product_cost(self):
         po_l_obj = self.env['purchase.order.line']
         product_ids = [x.product_id.id for x in self]
+        # product_ids == [False] for first created line
         if not product_ids or not product_ids[0]:
-            # product_ids == [False] for first created line
             return
         invoices = self._get_invoice_data(product_ids)
-        for invent_line in self:
-            if not invent_line.inventory_id or \
-                    not invent_line.product_id or \
-                    invent_line.inventory_id.state not in ('done'):
+        for line in self:
+            if line.inventory_id.to_recompute:
+                line.inventory_id.to_recompute = False
+            elif line.inventory_id.state not in ('done'):
+                continue
+            if not line.inventory_id or not line.product_id:
                 continue
             # get cost from supplier invoice
             explanation = ''
             cost_price = 0
             reference = False
             if invoices:
-                cost_price = invoices[invent_line.product_id.id].get(
+                cost_price = invoices[line.product_id.id].get(
                     'price_unit')
                 explanation = _('Supplier Invoice')
-                if invoices[invent_line.product_id.id].get('id'):
+                if invoices[line.product_id.id].get('id'):
                     reference = 'account.invoice,%s' % invoices[
-                        invent_line.product_id.id].get('id')
+                        line.product_id.id].get('id')
             if not cost_price:
                 # get cost price from purchase
                 po_line = po_l_obj.search(
-                    [('product_id', '=', invent_line.product_id.id),
+                    [('product_id', '=', line.product_id.id),
                      ('order_id.state', '=', 'done')
                      ], limit=1)
                 if po_line:
@@ -69,26 +84,25 @@ class StockInventoryLine(models.Model):
                     reference = 'purchase.order,%s' % po_line.order_id.id
             if not cost_price:
                 # get cost price from supplier info
-                sup_info = invent_line.product_id.seller_ids
+                sup_info = line.product_id.seller_ids
                 if sup_info and sup_info[0].pricelist_ids:
                     cost_price = sup_info[0].pricelist_ids[0].price
                     explanation = _('Supplier info')
                     reference = 'product.supplierinfo,%s' % sup_info[0].id
             if not cost_price:
                 # get cost price from supplier info
-                sup_info = invent_line.product_id.seller_id
-                if invent_line.product_id.standard_price:
-                    cost_price = invent_line.product_id.standard_price
-                    explanation = _('Cost from product "%s" standard_price') %\
-                        invent_line.product_id.default_code or\
-                        invent_line.product_id.name
+                sup_info = line.product_id.seller_id
+                if line.product_id.standard_price:
+                    cost_price = line.product_id.standard_price
+                    explanation = _('Product standard_price')
+                    reference = 'product.product,%s' % line.product_id.id
             if not cost_price:
-                explanation = _('Not Cost found')
+                explanation = _('No Cost found')
                 reference = ''
-            invent_line.calc_product_cost = cost_price
-            invent_line.cost_origin = explanation
+            line.calc_product_cost = cost_price
+            line.cost_origin = explanation
             if reference:
-                invent_line.reference = reference
+                line.reference = reference
 
     @api.multi
     @api.depends('calc_product_cost', 'manual_product_cost')
