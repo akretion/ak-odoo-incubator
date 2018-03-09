@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_base_settings_form_forbiden_models" model="ir.ui.view">
+        <field name="model">base.config.settings</field>
+        <field name="inherit_id" ref="base_setup.view_general_configuration"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='google_analytics']" position="after">
+                <group string="Forbiden Models" name="forbiden">
+                    <label for="id" string="Public Key*"/>
+                    <div name="forbidden_models">
+                        <div name="forbidden_models">
+                            <field name="forbidden_models" nolabel="1"/>
+                        </div>
+                    </div>
+                    <label for="id" string="Private Key*"/>
+                    <div name="forbidden_models_msg">
+                        <div name="forbidden_models_msg">
+                            <field name="forbidden_models_msg" nolabel="1"/>
+                        </div>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
