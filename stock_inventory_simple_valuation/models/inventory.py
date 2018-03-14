@@ -119,7 +119,7 @@ class StockInventoryLine(models.Model):
             FROM account_invoice_line l
                 LEFT JOIN account_invoice i ON i.id = l.invoice_id
             WHERE l.product_id IN %s
-              AND i.type = 'out_invoice' AND i.state in ('open', 'paid')
+              AND i.type = 'in_invoice' AND i.state in ('open', 'paid')
             GROUP BY 1
             ORDER BY date ASC
             LIMIT 1
@@ -131,7 +131,7 @@ class StockInventoryLine(models.Model):
                 FROM account_invoice_line l
                     LEFT JOIN account_invoice i ON i.id = l.invoice_id
                 WHERE l.product_id IN %s AND l.create_date >= %s
-                    AND i.type = 'out_invoice' AND i.state in ('open', 'paid')
+                    AND i.type = 'in_invoice' AND i.state in ('open', 'paid')
                 ORDER BY l.create_date ASC
             """
             self.env.cr.execute(query, (tuple(product_ids), oldier[0][1]))
