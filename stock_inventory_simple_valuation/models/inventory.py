@@ -53,7 +53,8 @@ class StockInventoryLine(models.Model):
         # product_ids == [False] for first created line
         if not product_ids or not product_ids[0]:
             return
-        invoices = self._get_invoice_data(product_ids)
+        invoices = self._get_invoice_data(
+            product_ids, company=self.env.user.company_id)
         for line in self:
             if line.inventory_id.state not in ('done') and \
                     not line.inventory_id.to_recompute:
@@ -64,7 +65,14 @@ class StockInventoryLine(models.Model):
             explanation = ''
             cost_price = 0
             reference = False
-            if invoices:
+            if not cost_price:
+                # get cost price from supplier info
+                sup_info = line.product_id.seller_ids
+                if sup_info and sup_info[0].pricelist_ids:
+                    cost_price = sup_info[0].pricelist_ids[0].price
+                    explanation = _('Supplier info')
+                    reference = 'product.supplierinfo,%s' % sup_info[0].id
+            if not cost_price and invoices:
                 cost_price = invoices[line.product_id.id].get(
                     'price_unit')
                 explanation = _('Supplier Invoice')
@@ -81,13 +89,6 @@ class StockInventoryLine(models.Model):
                     cost_price = po_line.price_unit
                     explanation = _('Purchase')
                     reference = 'purchase.order,%s' % po_line.order_id.id
-            if not cost_price:
-                # get cost price from supplier info
-                sup_info = line.product_id.seller_ids
-                if sup_info and sup_info[0].pricelist_ids:
-                    cost_price = sup_info[0].pricelist_ids[0].price
-                    explanation = _('Supplier info')
-                    reference = 'product.supplierinfo,%s' % sup_info[0].id
             if not cost_price:
                 # get cost price from supplier info
                 sup_info = line.product_id.seller_id
@@ -113,28 +114,30 @@ class StockInventoryLine(models.Model):
                 line.value = line.calc_product_cost * line.product_qty
 
     @api.model
-    def _get_invoice_data(self, product_ids):
+    def _get_invoice_data(self, product_ids, company):
         invoices = defaultdict(dict)
         query = """ SELECT l.product_id, max(l.create_date) AS date
             FROM account_invoice_line l
                 LEFT JOIN account_invoice i ON i.id = l.invoice_id
-            WHERE l.product_id IN %s
+            WHERE l.product_id IN %s AND i.company_id = %s
               AND i.type = 'in_invoice' AND i.state in ('open', 'paid')
             GROUP BY 1
             ORDER BY date ASC
             LIMIT 1
         """
-        self.env.cr.execute(query, (tuple(product_ids),))
+        self.env.cr.execute(query, (tuple(product_ids), company.id))
         oldier = self.env.cr.fetchall()
         if oldier:
             query = """ SELECT l.product_id, l.price_unit, i.id, i.number
                 FROM account_invoice_line l
                     LEFT JOIN account_invoice i ON i.id = l.invoice_id
-                WHERE l.product_id IN %s AND l.create_date >= %s
+                WHERE l.product_id IN %s AND i.company_id = %s
+                    AND l.create_date >= %s
                     AND i.type = 'in_invoice' AND i.state in ('open', 'paid')
                 ORDER BY l.create_date ASC
             """
-            self.env.cr.execute(query, (tuple(product_ids), oldier[0][1]))
+            self.env.cr.execute(query, (
+                tuple(product_ids), company.id, oldier[0][1]))
             res = self.env.cr.fetchall()
             invoices = defaultdict(dict)
             for elm in res:
