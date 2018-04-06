@@ -32,7 +32,9 @@ class Purchase(models.Model):
 
     @api.multi
     def button_approve(self, force=False):
-        # TODO gérer le lock
+        """Check procurement when PO is approved.
+
+        Approved is after confirmed when 2-steps validiation."""
         res = super(Purchase, self).button_approve()
         for rec in self:
             if rec.state == 'purchase':
@@ -43,6 +45,7 @@ class Purchase(models.Model):
 
     @api.multi
     def button_cancel(self):
+        """Forbid PO canceling of done production."""
         for rec in self:
             for line in rec.order_line:
                 if line._is_service_procurement():
@@ -52,11 +55,14 @@ class Purchase(models.Model):
         super(Purchase, self).button_cancel()
         # ça passe en exception si rule.progate = false
 
-    # @api.multi
-    # def button_draft(self):
-    #     super(Purchase, self).button_cancel()
-    #     for rec in self:
-    #         for line in rec.order_line:
-    #             if line._is_service_procurement():
-    #                 _logger.info('on set a running : %s' % line.procurement_ids.state)
-    #                 line.procurement_ids.state = 'running'
+    @api.multi
+    def button_draft(self):
+        """Put procurement back in running.
+
+        When PO is canceled the procurment goes in exception.
+        When PO is back to draft the procurement goes in running"""
+        super(Purchase, self).button_draft()
+        for rec in self:
+            for line in rec.order_line:
+                if line._is_service_procurement():
+                    line.procurement_ids.state = 'running'

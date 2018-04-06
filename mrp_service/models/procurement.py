@@ -19,6 +19,7 @@ class ProcurementOrder(models.Model):
 
     @api.multi
     def _is_service_procurement(self):
+        """Helper."""
         self.ensure_one()
         if self.product_id and self.product_id.type == 'service':
             tmpl = self.product_id.product_tmpl_id
@@ -27,9 +28,8 @@ class ProcurementOrder(models.Model):
 
     @api.multi
     def _check(self):
-        _logger.info('On check si le procurement est fait pour valider')
+        """Validate procurement if purchase of service is done."""
         if self._is_service_procurement():
-            _logger.info('on valide le procurement ? %s' % self.purchase_id.state)
             return (
                 self.purchase_id and
                 self.purchase_id.state in ['purchase', 'done']
@@ -38,6 +38,7 @@ class ProcurementOrder(models.Model):
 
     @api.multi
     def propagate_cancels(self):
+        """Forbid procurement cancelation if production is already done."""
         result = super(ProcurementOrder, self).propagate_cancels()
         for procurement in self:
             if not procurement._is_service_procurement():
@@ -47,14 +48,14 @@ class ProcurementOrder(models.Model):
                 raise UserError(
                     _('Can not cancel a procurement related to a produced manufacturing order.')
                 )
-            #import pdb
-           #pdb.set_trace()
+            # import pdb
+            # pdb.set_trace()
             # if procurement.rule_id.action == 'buy' and procurement.purchase_line_id:
             #     if procurement.purchase_line_id.order_id.state not in ('draft', 'cancel', 'sent', 'to validate'):
                    
             # if procurement.purchase_line_id:
            
-#        return result
+        return result
         
     # @api.multi
     # def _run(self):

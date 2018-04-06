@@ -27,6 +27,7 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
     service_id = fields.Many2one(
+        # subcontracted service
         'product.product',
         'Service',
         readonly=True,
@@ -38,10 +39,12 @@ class MrpProduction(models.Model):
         readonly=True,
     )
     wait_for_service = fields.Boolean(
+        # Display a warning in the view
         compute="_compute_wait_for_service",
-        store=True)
-
+        store=True
+    )
     service_provider_id = fields.Many2one(
+        # Partner of the related PO service
         'res.partner',
         'Provider',
         related="service_procurement_id.purchase_id.partner_id",
@@ -57,6 +60,7 @@ class MrpProduction(models.Model):
             else:
                 rec.wait_for_service = False
 
+    @api.depends('bom_id')
     def _compute_service_id(self):
         for rec in self:
             rec.service_id = rec.bom_id.service_id.id
@@ -69,9 +73,9 @@ class MrpProduction(models.Model):
 
     @api.multi
     def _generate_service_procurement(self):
+        """Generate a procurement for subcontracted service."""
         if not self.service_id:
             return
-        _logger.info('on va generer des procurements')
 
         procurements = self.env['procurement.order']
         for rec in self:
@@ -105,16 +109,15 @@ class MrpProduction(models.Model):
         }
 
     def _check_procurement(self):
-        _logger.info('check si le procurement est ok')
+        """Block availability of the MO if service is not bough."""
         if self.service_procurement_id.state == 'done':
                 return self.availability
         else:
-            return 'waiting'  # or waiting service ?
+            return 'waiting'
 
     @api.multi
     @api.depends('service_procurement_id.state')
     def _compute_availability(self):
-        _logger.info('_compute_availability only if service procurement.state')
         super(MrpProduction, self)._compute_availability()
         for rec in self:
             if rec.wait_for_service:
