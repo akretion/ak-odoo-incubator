@@ -14,6 +14,7 @@
         "stock",
         "mrp",
         "product",
+        "purchase",
     ],
     "data": [
         "views/mrp.xml",

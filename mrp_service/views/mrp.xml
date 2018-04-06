@@ -20,6 +20,13 @@
             <field name="arch" type="xml">
                 <field name="product_tmpl_id" position="after">
                     <field name="service_id" />
+                    <field name="service_procurement_id" />
+                     <field name="service_provider_id" />
+                 </field>
+                <field name="state" position="before">
+                    <field name="wait_for_service" invisible="1" />
+                    <span class="label label-danger" attrs="{'invisible': [('wait_for_service', '!=', True)]}">Service not bought !</span>
+
                 </field>
             </field>
         </record>
