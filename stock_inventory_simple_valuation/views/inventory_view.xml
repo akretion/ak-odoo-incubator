@@ -10,7 +10,7 @@
             <field name="date" position="after">
                 <button name="button_compute_cost" type="object" 
                         attrs="{'invisible': [('state', '=', 'done')]}"
-                        string="Compute/Reset cost"/>
+                        string="Compute cost"/>
                 <span attrs="{'invisible': [('state', '=', 'done')]}">automatically computed when validated</span>
             </field>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
