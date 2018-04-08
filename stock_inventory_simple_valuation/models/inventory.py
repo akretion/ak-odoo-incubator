@@ -55,9 +55,11 @@ class StockInventoryLine(models.Model):
             return
         invoices = self._get_invoice_data(
             product_ids, company=self.env.user.company_id)
+        afs_infos = self._get_afs_supplier_info(product_ids)
         for line in self:
             if line.inventory_id.state not in ('done') and \
                     not line.inventory_id.to_recompute:
+                line.cost_origin = _("Click on 'Compute cost'")
                 continue
             if not line.inventory_id or not line.product_id:
                 continue
@@ -72,6 +74,14 @@ class StockInventoryLine(models.Model):
                     cost_price = sup_info[0].pricelist_ids[0].price
                     explanation = _('Supplier info')
                     reference = 'product.supplierinfo,%s' % sup_info[0].id
+            if not cost_price and afs_infos:
+                # SPECIFIC HERE
+                infos = afs_infos['product_id'].get(line.product_id.id) or \
+                    afs_infos['product_tmpl_id'].get(
+                    line.product_id.product_tmpl_id.id) or False
+                if infos:
+                    explanation = _('Supplier info') + " d'AFS"
+                    cost_price = infos.get('price')
             if not cost_price and invoices:
                 cost_price = invoices[line.product_id.id].get(
                     'price_unit')
@@ -145,6 +155,31 @@ class StockInventoryLine(models.Model):
                     {'price_unit': elm[1], 'id': elm[2], 'number': elm[3]})
         return invoices
 
+    @api.model
+    def _get_afs_supplier_info(self, product_ids, company_id=12):
+        # NOT GENERIC METHOD HERE
+        if not self.env['res.company'].browse(company_id):
+            # no AFS company in db
+            return {}
+        query = """
+            SELECT sp.product_id, sp.product_tmpl_id,
+                   pp.min_quantity, pp.price, sp.id
+            FROM product_supplierinfo sp
+                LEFT JOIN pricelist_partnerinfo pp ON sp.id = pp.suppinfo_id
+            WHERE sp.product_id IN %s AND sp.company_id = %s
+            ORDER BY pp.min_quantity DESC
+        """
+        self.env.cr.execute(query, (tuple(product_ids), company_id))
+        res = self.env.cr.fetchall()
+        product, template = defaultdict(dict), defaultdict(dict)
+        for elm in res:
+            dico = {'min_quantity': elm[2], 'price': elm[3], 'id': elm[4]}
+            template[elm[1]].update(dico)
+            if elm[0]:
+                product[elm[0]].update(dico)
+        return {'product_id': product, 'product_tmpl_id': template}
+
+    @api.model
     def _get_models(self):
         return [
             'account.invoice',
