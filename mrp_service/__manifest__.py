@@ -10,11 +10,9 @@
     "application": False,
     "installable": True,
     "depends": [
-        "base",
-        "stock",
         "mrp",
-        "product",
         "purchase",
+        "subcontracted_service",
     ],
     "data": [
         "views/mrp.xml",
