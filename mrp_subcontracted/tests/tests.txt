@@ -1,0 +1,11 @@
+
+# TODO : 
+
+# Si je confirme la PO le procurement doit se terminer.
+# Si le procurement se termine, cela débloque ma MO.
+# Si la MO a produit, je ne peux pas annuler la PO.
+# Si j'annule la PO, le procurement passe en exception.
+# Si je remet la PO en brouillon, le procurement passe d'exception à running
+# La PO doit bloquer le lancement de la production
+# Depuis la MO, je doit pouvoir aller sur la PO.
+# Depuis la PO, je doit pouvoir aller sur la MO ?
