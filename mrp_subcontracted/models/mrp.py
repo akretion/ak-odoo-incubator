@@ -20,7 +20,8 @@ class MrpBom(models.Model):
     # ça peut être une variante ?
     service_id = fields.Many2one(
         'product.product', 'Service',
-        domain="[('type', 'in', ['service'])]")
+        domain="[('type', 'in', ['service']),\
+            ('property_subcontracted_service', '=', True)]")
 
 
 class MrpProduction(models.Model):
@@ -31,7 +32,7 @@ class MrpProduction(models.Model):
         'product.product',
         'Service',
         readonly=True,
-        compute="_compute_service_id",
+        related='bom_id.service_id',
     )
     service_procurement_id = fields.Many2one(
         'procurement.order',
@@ -59,11 +60,6 @@ class MrpProduction(models.Model):
                     rec.service_procurement_id.state != 'done')
             else:
                 rec.wait_for_service = False
-
-    @api.depends('bom_id')
-    def _compute_service_id(self):
-        for rec in self:
-            rec.service_id = rec.bom_id.service_id.id
 
     @api.model
     def create(self, values):
@@ -95,7 +91,7 @@ class MrpProduction(models.Model):
             'product_id': self.service_id.id,
             'product_qty': self.product_qty,
             'product_uom': self.service_id.uom_po_id.id,
-            'production_id': self.id,  # TODO: mettre une autre clef?service_mrp_id ?
+            'production_id': self.id,
             'location_id': self.location_dest_id.id,
             # 'move_dest_id': (
             #    self.procurement_ids and

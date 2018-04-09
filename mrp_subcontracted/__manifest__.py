@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Subcontract manufacture",
-    "summary": "Soustraiter des fabrications",
+    "summary": "Subcontract manufacturing orders",
     "version": "10.0.1.0.0",
-    'category': 'Technical Settings',
+    'category': 'Manufacturing',
     "website": "www.akretion.com",
     "author": " Akretion",
     "license": "AGPL-3",
@@ -11,7 +11,6 @@
     "installable": True,
     "depends": [
         "mrp",
-        "purchase",
         "subcontracted_service",
     ],
     "data": [
