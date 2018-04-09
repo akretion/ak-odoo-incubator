@@ -6,17 +6,17 @@
 MRP Subcontract Location
 ========================
 
-This modules aims to put the right location subcontracted manufacturing orders.
-At Sale order Validation, we do not know yet which supplier will produce which products.
+This modules aims to put the right location for subcontracted Manufacturing Orders (MO).
+At Sale Order (SO) validation, we do not know yet which subcontractors will be choosen.
 We only have this information when the subcontrated PO linked to a MO is validated.
-At this moment, we put the location on the raw material MO and the destination location on the MO's finished product.
+At this moment, we put the location on the raw materials and on the destination location of the finished product.
 
-When MO are chained, to avoid adding steps with internal picking between MO, we make the chained MO take the raw material (source location) directly on the previous MO dest location.
+When MOs are chained, to avoid adding steps with internal picking between MO, we make the chained MO take the raw material (source location) directly from the previous MO dest location.
 
 When subcontracting MOs, we also need to purchase and send the raw material directly at the subcontractor manufactory.
 This module display an address field on POs to indicate at which subcontractor we send the PO, the picking is created to the subcontractor location.
 
-We create one global warehouse for all subcontractors and one sublocation by subcontractor to avoid having one warehouse by subcontractor, which could become very difficult to manage.
+To keep is simple, a global warehouse for all subcontractors is created and then one sublocation by subcontractor should be created to avoid having one warehouse by subcontractor, which could become very difficult to manage.
 
 
 Configuration
@@ -25,7 +25,7 @@ Configuration
 To configure this module, you need to:
 
 #. Configure the new created warehouse (Change the name, code...)
-#. Change the warehouse main location to view type (name of location is stock by default)
+#. Change the warehouse main location to _view type_ (name of location is stock by default)
 #. Add one sublocation for each subcontractor and fill these new location on each subcontractor information (Sale & Purchase tab)
 
 
