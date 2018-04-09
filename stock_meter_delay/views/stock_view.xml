@@ -26,11 +26,16 @@
             <field name="count_picking_late" position="after">
                 <field name="count_picking_late_soon"/>
             </field>
-            <xpath expr="//div[@class='oe_items_list oe_kanban_ellipsis']/div[1]" position="before">
-                <div>
-                    <a name="%(action_picking_tree_late_soon)d" type="action">
-                        <field name="count_picking_late_soon"/> Late Soon
-                    </a>
+            <xpath expr="//div[@class='col-xs-6 o_kanban_primary_right']" position="inside">
+                <div t-if="record.count_picking_late_soon.raw_value &gt; 0" class="row">
+                    <div class="col-xs-9">
+                        <a class="oe_kanban_stock_picking_type_list" name="%(action_picking_tree_late_soon)d" type="action">
+                            Late Soon
+                        </a>
+                    </div>
+                    <div class="col-xs-3">
+                        <field name="count_picking_late_soon"/>
+                    </div>
                 </div>
             </xpath>
         </field>
