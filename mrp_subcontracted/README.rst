@@ -2,9 +2,9 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-==============
-{module_title}
-==============
+================================
+Subcontracted Manfucatring Order
+================================
 
 This modules allows to bind a Bill of Materials to a service (product).
 
