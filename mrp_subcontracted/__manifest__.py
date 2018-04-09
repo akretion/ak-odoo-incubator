@@ -16,5 +16,9 @@
     ],
     "data": [
         "views/mrp.xml",
-    ]
+    ],
+    "demo": [
+        "demo/products.xml",
+        "demo/mrp.xml",
+    ],
 }
