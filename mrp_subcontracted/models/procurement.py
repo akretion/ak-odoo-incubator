@@ -5,7 +5,8 @@
 # ajouter les fournisseurs sur les services
 
 
-from odoo import api, fields, models
+from odoo import api, models, _
+from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -46,20 +47,7 @@ class ProcurementOrder(models.Model):
             if procurement.production_id.state == 'done':
                 # utile ?
                 raise UserError(
-                    _('Can not cancel a procurement related to a produced manufacturing order.')
+                    _('Unable to cancel procurement %s related \
+                        to a produced manufacturing order.') % procurement.id
                 )
-            # import pdb
-            # pdb.set_trace()
-            # if procurement.rule_id.action == 'buy' and procurement.purchase_line_id:
-            #     if procurement.purchase_line_id.order_id.state not in ('draft', 'cancel', 'sent', 'to validate'):
-                   
-            # if procurement.purchase_line_id:
-           
         return result
-        
-    # @api.multi
-    # def _run(self):
-    #     if self.rule_id and self.rule_id.action == 'buy':
-    #         import pdb
-    #         pdb.set_trace()
-    #     return super(ProcurementOrder, self)._run()

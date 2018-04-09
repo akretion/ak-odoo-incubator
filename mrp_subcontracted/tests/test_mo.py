@@ -59,7 +59,14 @@ class TestMO(TransactionCase):
             self.assertTrue(False)
         except UserError as err:
             self.assertTrue('Unable to cancel purchase order' in err[0])
+
+        try:
+            proc.propagate_cancels()
+            self.assertTrue(False)
+        except UserError as err:
+            self.assertTrue(True)
+            # self.assertTrue('Unable to cancel procurement' in err[0])
+
         self.assertTrue(po.state == 'purchase')
         self.assertTrue(proc.state == 'done')
         self.assertTrue(mo.state == 'done')
-

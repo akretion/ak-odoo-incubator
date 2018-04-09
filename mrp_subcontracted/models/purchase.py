@@ -51,7 +51,9 @@ class Purchase(models.Model):
                 if line._is_service_procurement():
                     if line.procurement_ids.production_id.state == 'done':
                         raise UserError(
-                            _('Unable to cancel purchase order %s as some productions have already been done.') % (line.name))
+                            _('Unable to cancel purchase order %s as some \
+                            productions have already been done.')
+                            % (line.name))
         super(Purchase, self).button_cancel()
         # ça passe en exception si rule.progate = false
 
