@@ -22,8 +22,7 @@ class PurchaseOrder(models.Model):
         for purchase in self:
             for line in purchase.order_line:
                 if line._is_service_procurement():
-                    mo = line.procurement_ids and \
-                         line.procurement_ids[0].production_id
+                    mo = line.procurement_ids.production_id
                     mo.update_locations(purchase)
 
     @api.multi

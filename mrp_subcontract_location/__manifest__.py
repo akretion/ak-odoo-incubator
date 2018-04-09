@@ -5,9 +5,9 @@
     'author': 'Akretion',
     'website': 'www.akretion.com',
     'license': 'AGPL-3',
-    'category': 'Generic Modules',
+    'category': 'Manufacturing',
     'description': """
-        Manage stock by location for subcontract manufacture order
+        Manage stock by location for subcontracted manufacture order
  """,
     'depends': [
         'mrp_subcontracted',
