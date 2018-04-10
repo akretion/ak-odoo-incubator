@@ -19,18 +19,24 @@ class PurchaseOrderLine(models.Model):
     def _is_service_procurement(self):
         """Ensure the order line is a service procurement.
 
-        It's tied to a procurement and
+        It's tied to a procurement.
+        The procurement is tied to one manufacturing order
         the product is a subcontracted_service
+
+        Multiple procurements or MOs not implemented
         """
         self.ensure_one()
         is_service = False
-        is_procurement = False
+        has_procurement = False
+        has_mo = False
         if self.procurement_ids:
-            is_procurement = self.procurement_ids.product_id == self.product_id
+            has_procurement = (
+                self.procurement_ids.product_id == self.product_id)
+            has_mo = len(self.procurement_ids.production_id) == 1
         if self.product_id and self.product_id.type == 'service':
             tmpl = self.product_id.product_tmpl_id
             is_service = tmpl.property_subcontracted_service
-        return is_service and is_procurement
+        return is_service and has_procurement and has_mo
 
 
 class Purchase(models.Model):
