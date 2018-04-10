@@ -27,16 +27,14 @@ class PurchaseOrderLine(models.Model):
         """
         self.ensure_one()
         is_service = False
-        has_procurement = False
         has_mo = False
-        if self.procurement_ids:
-            has_procurement = (
-                self.procurement_ids.product_id == self.product_id)
-            has_mo = len(self.procurement_ids.production_id) == 1
         if self.product_id and self.product_id.type == 'service':
             tmpl = self.product_id.product_tmpl_id
             is_service = tmpl.property_subcontracted_service
-        return is_service and has_procurement and has_mo
+
+        if is_service and self.procurement_ids:
+            has_mo = len(self.procurement_ids.production_id) == 1
+        return is_service and has_mo
 
 
 class Purchase(models.Model):
