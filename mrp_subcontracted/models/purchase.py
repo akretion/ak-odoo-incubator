@@ -17,11 +17,20 @@ class PurchaseOrderLine(models.Model):
 
     @api.multi
     def _is_service_procurement(self):
+        """Ensure the order line is a service procurement.
+
+        It's tied to a procurement and
+        the product is a subcontracted_service
+        """
         self.ensure_one()
+        is_service = False
+        is_procurement = False
+        if self.procurement_ids:
+            is_procurement = self.procurement_ids.product_id == self.product_id
         if self.product_id and self.product_id.type == 'service':
             tmpl = self.product_id.product_tmpl_id
-            return tmpl.property_subcontracted_service
-        return False
+            is_service = tmpl.property_subcontracted_service
+        return is_service and is_procurement
 
 
 class Purchase(models.Model):
