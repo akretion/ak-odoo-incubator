@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <record id="service_milling_template" model="product.template">
+            <field name="name">Flour Milling</field>
+            <field name="type">service</field>
+            <field name="description">Example of subcontracted service linked to a bom.</field>
+            <field name="default_code">milling</field>
+            <field name="property_subcontracted_service">1</field>
+        </record>
+
+        <record id="service_milling_product" model="product.product">
+            <field name="product_tmpl_id" ref="service_milling_template" />
+        </record>
+
+        <record id="product_grain" model="product.product">
+            <field name="name">Grain</field>
+            <field name="type">product</field>
+            <field name="description">Raw material</field>
+            <field name="default_code">ext_mo</field>
+        </record>
+
+        <record id="product_flour_template" model="product.template">
+            <field name="name">Flour</field>
+            <field name="type">product</field>
+            <field name="description">Pastery flour Finished product</field>
+            <field name="default_code">T45</field>
+        </record>
+
+        <record id="product_flour_product" model="product.product">
+            <field name="product_tmpl_id" ref="product_flour_template" />
+        </record>
+
+
+        <record id="partner_mil" model="res.partner">
+            <field name="name">Old Mil</field>
+            <field name="customer" eval="False"/>
+            <field name="supplier" eval="True"/>
+            <field name="email">admin@example.com</field>
+        </record>
+
+        <record id="flour_supplier" model="product.supplierinfo">
+            <field name="name" ref="partner_mil" />
+            <field name="product_tmpl_id" ref="service_milling_template" />
+            <field name="delay">3</field>
+            <field name="min_qty">1</field>
+            <field name="price">70</field>
+        </record>
+
+    </data>
+</odoo>
+
