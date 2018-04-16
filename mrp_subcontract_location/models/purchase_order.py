@@ -31,7 +31,7 @@ class PurchaseOrder(models.Model):
         supplier_wh = self.env.ref(
             'mrp_subcontract_location.warehouse_supplier')
         if supplier_wh.id == self.warehouse_id.id and self.dest_address_id:
-            if not self.partner_id.supplier_location_id:
+            if not self.dest_address_id.supplier_location_id:
                 raise exceptions.ValidationError(
                     _('No location configured on the subcontractor'))
             return self.dest_address_id.supplier_location_id.id
