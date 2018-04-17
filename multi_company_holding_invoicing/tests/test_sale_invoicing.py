@@ -10,7 +10,7 @@ from .common import (
     XML_COMPANY_A,
     XML_PARTNER_ID,
     )
-from openerp.exceptions import Warning as UserError
+from odoo.exceptions import UserError
 from datetime import datetime
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
+    
 
 <record id="section_market_1" model="crm.case.section">
     <field name="name">Holding Market 1</field>
@@ -26,5 +26,5 @@
         ref="account_invoice_inter_company.product_consultant_multi_company"/>
 </record>
 
-    </data>
-</openerp>
+    
+</odoo>

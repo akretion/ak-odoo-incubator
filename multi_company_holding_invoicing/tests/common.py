@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 from datetime import datetime
 
 XML_COMPANY_A = 'multi_company_holding_invoicing.child_company_a'

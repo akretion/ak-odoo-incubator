@@ -5,14 +5,15 @@
 
 
 {'name': 'Multi Company Holding Invoicing',
- 'version': '8.0.0.0.1',
+ 'version': '10.0.0.0.1',
  'category': 'Accounting & Finance',
  'author': 'Akretion, Odoo Community Association (OCA)',
  'website': 'http://www.akretion.com/',
  'license': 'AGPL-3',
  'depends': [
      'account_invoice_inter_company',
-     'sales_team',
+     # 'sales_team',
+     'agreement_sale',
      'base_suspend_security',
      # Note we depend of this module for having the sale_ids field
      # on the invoice
