@@ -57,12 +57,12 @@ class CommonInvoicing(TransactionCase):
     def _set_section(self, sale_xml_ids, section_xml_id):
         section = self.env.ref(section_xml_id)
         sales = self._get_sales(sale_xml_ids)
-        sales.write({'section_id': section.id})
+        sales.write({'agreement_id': section.id})
 
     def _generate_holding_invoice(self, section_xml_id):
         date_invoice = datetime.today()
         wizard = self.env['wizard.holding.invoicing'].create({
-            'section_id': self.ref(section_xml_id),
+            'agreement_id': self.ref(section_xml_id),
             'date_invoice': date_invoice,
             })
         res = wizard.create_invoice()
@@ -132,7 +132,7 @@ class CommonInvoicing(TransactionCase):
                     % (holding_partner.name, child.partner_id.name))
 
     def _check_child_invoice_amount(self, invoice):
-        discount = invoice.section_id.holding_discount
+        discount = invoice.agreement_id.holding_discount
         expected_amount = invoice.amount_total * (1 - discount/100)
         computed_amount = 0
         for child in invoice.child_invoice_ids:

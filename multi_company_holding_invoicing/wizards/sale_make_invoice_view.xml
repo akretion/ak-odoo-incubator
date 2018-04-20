@@ -18,10 +18,10 @@
             <attribute name="attrs">{'invisible': [('error', '!=', False)]}</attribute>
         </button>
         <field name="grouped" position="after">
-            <field name="section_id"/>
+            <field name="agreement_id"/>
         </field>
         <field name="grouped" position="attributes">
-            <attribute name="attrs">{'invisible': [('section_id', '!=', False)]}</attribute>
+            <attribute name="attrs">{'invisible': [('agreement_id', '!=', False)]}</attribute>
         </field>
 
     </field>

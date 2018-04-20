@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  
+
 
 <record id="view_order_form" model="ir.ui.view">
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
-        <field name="invoiced" position="after">
+        <field name="company_id" position="after">
            <field name="invoice_state"/>
+        </field>
+        <field name="fiscal_position_id" position="after">
            <field name="holding_invoice_id"/>
         </field>
     </field>
@@ -18,10 +20,7 @@
     <field name="inherit_id" ref="sale.view_order_tree"/>
     <field name="arch" type="xml">
         <field name="user_id" position="after">
-           <field name="section_id"/>
-        </field>
-        <field name="state" position="after">
-           <field name="invoice_state"/>
+           <field name="agreement_id"/>
            <field name="holding_invoice_id"/>
         </field>
     </field>
@@ -31,10 +30,10 @@
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="sale.view_sales_order_filter"/>
     <field name="arch" type="xml">
-        <filter string="Salesperson" position="after">
-            <filter name="section_id"
-                    string="Section"
-                    context="{'group_by':'section_id'}"/>
+        <filter name="my_sale_orders_filter" position="after">
+            <filter name="agreement_id"
+                    string="Agreement"
+                    context="{'group_by':'agreement_id'}"/>
             <filter name="holding_invoice_id"
                     string="Holding Invoice"
                     context="{'group_by':'holding_invoice_id'}"/>
@@ -54,5 +53,5 @@
     </field>
 </record>
 
-    
+
 </odoo>

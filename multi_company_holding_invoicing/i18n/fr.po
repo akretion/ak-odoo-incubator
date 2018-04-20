@@ -289,8 +289,8 @@ msgid "Sale"
 msgstr "Commande"
 
 #. module: multi_company_holding_invoicing
-#: field:sale.make.invoice,section_id:0
-#: field:wizard.holding.invoicing,section_id:0
+#: field:sale.make.invoice,agreement_id:0
+#: field:wizard.holding.invoicing,agreement_id:0
 msgid "Sale Section"
 msgstr "Equipe Commercial"
 
@@ -401,5 +401,5 @@ msgstr "{'invisible': [('error', '!=', False)]}"
 
 #. module: multi_company_holding_invoicing
 #: view:sale.make.invoice:multi_company_holding_invoicing.view_sale_order_make_invoice
-msgid "{'invisible': [('section_id', '!=', False)]}"
-msgstr "{'invisible': [('section_id', '!=', False)]}"
+msgid "{'invisible': [('agreement_id', '!=', False)]}"
+msgstr "{'invisible': [('agreement_id', '!=', False)]}"

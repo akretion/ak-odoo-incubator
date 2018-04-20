@@ -15,7 +15,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
     @api.multi
     def create_invoices(self):
         sales = self.env['sale.order'].search([
-            ('id', 'in', self._context['active_ids']),
+            ('id', 'in', self.env.context['active_ids']),
             ('holding_company_id', '!=', False),
             ])
         if sales:

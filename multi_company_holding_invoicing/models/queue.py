@@ -11,6 +11,6 @@ from odoo import fields, models
 class QueueJob(models.Model):
     _inherit = 'queue.job'
 
-    holding_invoice_id = fields.Many2one('account.invoice',
-                                         string='Holding Invoice',
-                                         copy=False, readonly=True)
+    holding_invoice_id = fields.Many2one(
+        comodel_name='account.invoice', string='Holding Invoice',
+        copy=False, readonly=True)

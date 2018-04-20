@@ -8,13 +8,15 @@
 from odoo import fields, models
 
 
-class CrmCaseSection(models.Model):
-    _inherit = 'crm.case.section'
+class Agreement(models.Model):
+    _inherit = 'agreement'
 
     holding_company_id = fields.Many2one(
-        'res.company', string='Holding Company for Invoicing',
-        help="Select the holding company to invoice")
-    holding_discount = fields.Float(string='Holding Discount (%)', default=0.0)
+        comodel_name='res.company', string='Holding Company',
+        help="Select the holding company used to invoice")
+    holding_discount = fields.Float(
+        string='% Holding Discount',
+        help="")
     holding_invoice_generated_by = fields.Selection([
         ('holding', 'Holding'),
         ('child', 'Child'),
@@ -28,14 +30,14 @@ class CrmCaseSection(models.Model):
         ('sale', 'Sale'),
         ], default='none',
         string='Invoice Group by',
-        help="This will define how the sale order are grouped on the invoice")
+        help="This will define how the sales are grouped on the invoice")
     holding_product_id = fields.Many2one(
-        'product.product',
+        comodel_name='product.product',
         string='Holding Invoice Product',
         help=("This product will be used for the holding invoice line "
-             "accounting information will be taken on this product"))
+              "accounting information will be taken on this product"))
     holding_royalty_product_id = fields.Many2one(
-        'product.product',
-        string='Royalty Holding Invoice Product',
+        comodel_name='product.product',
+        string='Royalty Holding Product',
         help=("This product will be used for the holding invoice line royalty "
-             "accounting information will be taken on this product"))
+              "accounting information will be taken on this product"))

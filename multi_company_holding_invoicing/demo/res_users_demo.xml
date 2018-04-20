@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    
+
 
 <record id="user_a" model="res.users" context="{'no_reset_password': True}">
     <field name="name">Sébastien Beau</field>
@@ -16,5 +16,5 @@
     <field name="company_ids" eval="[(4, ref('child_company_b'))]"/>
 </record>
 
-    
+
 </odoo>
