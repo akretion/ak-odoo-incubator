@@ -3,56 +3,17 @@
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
-from odoo.exceptions import Warning as UserError
-import logging
-import functools
-import json
-
-_logger = logging.getLogger(__name__)
-
-try:
-    from cerberus import Validator
-except ImportError:
-    _logger.debug('Can not import cerberus')
+from odoo.addons.component.core import AbstractComponent
+from odoo.exceptions import UserError, MissingError
 
 
-def to_bool(val):
-    if val == 'False':
-        return False
-    elif val == 'True':
-        return True
-    else:
-        return val
+class ExternalTaskService(AbstractComponent):
+    _inherit = 'base.rest.service'
+    _name = 'external.task.service'
+    _collection = 'project.project'
+    _expose_model = 'project.task'
 
 
-def secure_params(func):
-    @functools.wraps(func)
-    def wrapped(self, params):
-        secure_params = self._secure_params(func.__name__, params)
-        return func(self, secure_params)
-    return wrapped
-
-
-class TaskService(models.AbstractModel):
-    _name = "task.service"
-
-    def _get_schema_for_method(self, method):
-        validator_method = '_validator_%s' % method
-        if not hasattr(self, validator_method):
-            raise NotImplemented
-        return getattr(self, validator_method)()
-
-    def _secure_params(self, method, params):
-        schema = self._get_schema_for_method(method)
-        v = Validator(schema, purge_unknown=True)
-        secure_params = v.normalized(params)
-        if not v.errors and v.validate(secure_params):
-            return secure_params
-        _logger.error("BadRequest %s", v.errors)
-        raise UserError("BadRequest %s" % v.errors)
-
-    @secure_params
     def list(self, params):
         domain = json.loads(params['args'])
         domain += [('project_id', '=', self.project.id)]
@@ -68,7 +29,6 @@ class TaskService(models.AbstractModel):
             return tasks.ids
         return []
 
-    @secure_params
     def get(self, params):
         tasks = self.env['project.task'].search(
             [('id', 'in', json.loads(params['ids'])),
@@ -80,7 +40,6 @@ class TaskService(models.AbstractModel):
             return tasks
         return []
 
-    @secure_params
     def read_group(self, params):
         domain = json.loads(params['domain'])
         domain += [('project_id', '=', self.project.id)]
@@ -116,19 +75,16 @@ class TaskService(models.AbstractModel):
             tasks = ordered_tasks
         return tasks
 
-    @secure_params
     def create(self, params):
         params['project_id'] = self.project.id
         return self.env['project.task'].create(params).id
 
-    @secure_params
     def update(self, params):
         tasks = self.env['project.task'].search(
             [('id', 'in', params['ids']),
              ('project_id', '=', self.project.id)])
         return tasks.write(params['vals'])
 
-    @secure_params
     def get_message(self, params):
         messages = self.env['mail.message'].message_read(
             ids=json.loads(params['ids']),
@@ -141,7 +97,6 @@ class TaskService(models.AbstractModel):
             return messages
         return []
 
-    @secure_params
     def create_message(self, params):
         kwargs = params['kwargs']
         message = self.pool['project.task'].message_post(

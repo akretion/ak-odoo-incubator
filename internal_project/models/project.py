@@ -24,7 +24,10 @@ from odoo import fields, api, models
 class ProjectProject(models.Model):
     _inherit = 'project.project'
 
-    api_key = fields.Char('Project Api Key')
+    auth_api_key_id = fields.Many2one(
+        'auth.api.key',
+        required=True,
+    )
 
 
 class ProjectTask(models.Model):
