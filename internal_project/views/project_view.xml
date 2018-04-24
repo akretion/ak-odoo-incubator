@@ -6,7 +6,7 @@
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
                     <newline/>
-                    <field name="api_key"/>
+                    <field name="auth_api_key_id"/>
                 </field>
             </field>
         </record>
