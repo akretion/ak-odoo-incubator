@@ -4,10 +4,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 
-from openerp.http import HttpRequest, Root
+from odoo.http import HttpRequest, Root
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import escape
-from openerp.exceptions import Warning as UserError, MissingError, AccessError
+from odoo.exceptions import Warning as UserError, MissingError, AccessError
 from werkzeug.exceptions import (
     BadRequest, NotFound, Forbidden, InternalServerError)
 import json

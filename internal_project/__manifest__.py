@@ -20,7 +20,7 @@
 {
     'name': 'Internal Project Akretion',
     'summary': 'Custom for Akretion',
-    "version": "8.0.1.0.0",
+    "version": "10.0.1.0.0",
     "category": "Project Management",
     'author': "Akretion",
     'website': '',
