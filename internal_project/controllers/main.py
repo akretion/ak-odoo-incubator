@@ -37,6 +37,17 @@ class ExternalTaskController(main.RestController):
         res['project'] = self._get_project_from_request()
         return res
 
+    @route([
+        '<string:_service_name>',
+        '<string:_service_name>/<string:method_name>',
+        '<string:_service_name>/<int:_id>',
+        '<string:_service_name>/<int:_id>/<string:method_name>',
+    ], methods=['GET'])
+    def get(self, _service_name, _id=None, method_name=None, **params):
+        if not method_name:
+            method_name = 'get'
+        return self._process_method(_service_name, method_name, _id, params)
+
     @route(
         '/externaltask/task',
         methods=['GET', 'POST', 'PUT'],
