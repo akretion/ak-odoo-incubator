@@ -12,10 +12,13 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class IrHttp(models.Model):
+class IrHttp(models.AbstractModel):
     _inherit = 'ir.http'
 
+    @classmethod
     def _auth_method_externaltask(self):
+        ret = super(IrHttp, cls)._auth_method_externaltask()
+        import pdb; pdb.set_trace()
         headers = request.httprequest.environ
         if headers.get('HTTP_API_KEY'):
             request.uid = 1

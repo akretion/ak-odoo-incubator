@@ -26,6 +26,8 @@
     'website': '',
     'license': 'AGPL-3',
     'depends': [
+        'auth_api_key',
+        'base_rest',
         'project',
     ],
     'data': [
