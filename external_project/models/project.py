@@ -3,10 +3,10 @@
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import fields, api, models, SUPERUSER_ID
-from openerp.exceptions import Warning as UserError
-from openerp.tools.translate import _
-from openerp.tools.safe_eval import safe_eval
+from odoo import fields, api, models
+from odoo.exceptions import Warning as UserError
+from odoo.tools.translate import _
+from odoo.tools.safe_eval import safe_eval
 from lxml import etree
 import requests
 import json
@@ -119,22 +119,20 @@ class ExternalTask(models.Model):
     def copy(self, default):
         return self
 
-    def read(
-            self, cr, uid, ids, fields=None, context=None,
-            load='_classic_read'):
+    @api.multi
+    def read(self, fields=None, load='_classic_read'):
         method = 'get'
         payload = {
             'method': 'read',
-            'ids': json.dumps(ids),
+            'ids': json.dumps(self.ids),
             'fields': json.dumps(fields),
-            'context': json.dumps(context),
+            'context': json.dumps(self.context),
             'load': load
         }
-        return self._call_odoo(cr, uid, method, payload)
+        return self._call_odoo(method, payload)
 
-    def search(
-            self, cr, user, args, offset=0, limit=None, order=None,
-            context=None, count=False):
+    @api.model
+    def search(self, args, offset=0, limit=0, order=None, count=False):
         method = 'get'
         payload = {
             'method': 'search',
@@ -142,14 +140,16 @@ class ExternalTask(models.Model):
             'offset': offset,
             'limit': limit,
             'order': json.dumps(order),
-            'context': json.dumps(context),
+            'context': json.dumps(self.env.context),
             'count': count
         }
-        return self._call_odoo(cr, user, method, payload)
+        return self._call_odoo(method, payload)
 
+    @api.model
     def read_group(
-            self, cr, uid, domain, fields, groupby, offset=0, limit=None,
-            context=None, orderby=False, lazy=True):
+        self, domain, fields, groupby, offset=0,
+            limit=None, orderby=False, lazy=True):
+        import pdb; pdb.set_trace()
         method = 'get'
         payload = {
             'method': 'read_group',
@@ -159,10 +159,10 @@ class ExternalTask(models.Model):
             'offset': offset,
             'limit': limit or None,
             'orderby': json.dumps(orderby),
-            'context': json.dumps(context),
+            'context': json.dumps(self.env.context),
             'lazy': lazy
         }
-        return self._call_odoo(cr, uid, method, payload)
+        return self._call_odoo(method, payload)
 
     @api.multi
     def message_get_suggested_recipients(self):
@@ -171,7 +171,7 @@ class ExternalTask(models.Model):
 
     @api.cr_uid_ids_context
     def message_post(
-            self, cr, uid, thread_id, body='', subject=None,
+            self, thread_id, body='', subject=None,
             type='notification', subtype=None, parent_id=False,
             attachments=None, context=None, content_subtype='html', **kwargs):
         method = 'post'
@@ -186,7 +186,7 @@ class ExternalTask(models.Model):
             'content_subtype': content_subtype,
             'kwargs': kwargs
         }
-        return self.pool['mail.message']._call_odoo(cr, uid, method, payload)
+        return self.pool['mail.message']._call_odoo(method, payload)
 
     @api.model
     def fields_view_get(
@@ -266,12 +266,12 @@ class MailMessage(models.Model):
 
     @api.cr_uid_context
     def message_read(
-            self, cr, uid, ids=None, domain=None, message_unload_ids=None,
+            self, domain=None, message_unload_ids=None,
             thread_level=0, context=None, parent_id=False, limit=None):
         if context.get('default_model', '') == 'external.task':
             method = 'get'
             payload = {
-                'ids': json.dumps(ids),
+                'ids': json.dumps(self.ids),
                 'domain': json.dumps(domain),
                 'message_unload_ids': json.dumps(message_unload_ids),
                 'thread_level': thread_level or None,
@@ -279,9 +279,9 @@ class MailMessage(models.Model):
                 'parent_id': parent_id,
                 'limit': limit,
             }
-            return self._call_odoo(cr, uid, method, payload)
+            return self._call_odoo(method, payload)
         return super(MailMessage, self).message_read(
-            cr, uid, ids=ids, domain=domain,
+            domain=domain,
             message_unload_ids=message_unload_ids, thread_level=thread_level,
             context=context, parent_id=parent_id, limit=limit)
 
@@ -289,36 +289,32 @@ class MailMessage(models.Model):
 class IrActionActWindows(models.Model):
     _inherit = 'ir.actions.act_window'
 
-    def read(self, cr, uid, ids, fields=None, context=None,
-             load='_classic_read'):
-        if context is None:
-            context = {}
+    # @api.multi
+    # def read(self, fields=None, load='_classic_read'):
+    #     if self.context.get('install_mode'):
+    #         return super(IrActionActWindows, self).read(
+    #             fields=fields, load=load)
 
-        def update_context(action):
-            action['context'] = safe_eval(action.get('context', '{}'))
-            action['context'].update({
-                'from_model': context.get('active_model'),
-                'from_id': context.get('active_id'),
-            })
-            if 'params' in context and 'action':
-                action['context'].update({
-                    'from_action': context['params'].get('action')})
-            if 'params' in context and 'action':
-                action['context'].update({
-                    'from_action': context['params'].get('action')})
-        res = super(IrActionActWindows, self).read(
-            cr, uid, ids, fields=fields, context=context, load=load)
-        if isinstance(ids, list):
-            action_id = ids[0]
-        else:
-            action_id = ids
-        task_action_id = self.pool['ir.model.data'].xmlid_to_res_id(
-            cr, SUPERUSER_ID,
-            'external_project.task_from_elsewhere')
-        if action_id == task_action_id:
-            if isinstance(res, list):
-                for elem in res:
-                    update_context(elem)
-            else:
-                update_context(res)
-        return res
+    #     def update_context(action):
+    #         action['context'] = safe_eval(action.get('context', '{}'))
+    #         action['context'].update({
+    #             'from_model': self.env.selfcontext.get('active_model'),
+    #             'from_id': self.env.context.get('active_id'),
+    #         })
+    #         if 'params' in self.env.context and 'action':
+    #             action['context'].update({
+    #                 'from_action': self.env.context['params'].get('action')})
+    #         if 'params' in self.env.context and 'action':
+    #             action['context'].update({
+    #                 'from_action': self.env.context['params'].get('action')})
+    #     res = super(IrActionActWindows, self).read(fields=fields, load=load)
+    #     action_id = self
+
+    #     task_action_id = self.env.ref('external_project.task_from_elsewhere')
+    #     if action_id == task_action_id:
+    #         if isinstance(res, list):
+    #             for elem in res:
+    #                 update_context(elem)
+    #         else:
+    #             update_context(res)
+    #     return res
