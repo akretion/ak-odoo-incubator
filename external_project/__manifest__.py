@@ -28,6 +28,7 @@
     'depends': [
         'project',
         'keychain',
+        'base_suspend_security',
     ],
     'data': [
         'views/project_view.xml'
