@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+    
 
         <menuitem
             id="external_project"
             name="Project ERP"
-            parent="base.menu_main_pm"
+            parent="project.menu_main_pm"
             sequence="2"/>
 
         <record id="view_external_task_form" model="ir.ui.view">
@@ -101,27 +101,29 @@
             </field>
         </record>
 
-        <record id="action_view_external_task" model="ir.actions.act_window">
-           <field name="name">External task</field>
-           <field name="res_model">external.task</field>
-           <field name="view_mode">kanban,tree,form</field>
-           <field name="search_view_id" ref="view_external_task_search"/>
-           <field name="help" type="html">
-               <p>
-                  Here you can view your issues
-               </p>
-           </field>
-       </record>
-
-       <menuitem action="action_view_external_task"
-           id="menu_action_view_external_task"
-           parent="external_project"
-           sequence="10"/>
-
         <record model="ir.actions.act_window" id="task_from_elsewhere">
             <field name="name">Model to task creation</field>
             <field name="res_model">external.task</field>
             <field name="view_mode">form</field>
         </record>
-    </data>
-</openerp>
+
+        <record id="action_view_external_task" model="ir.actions.act_window">
+            <field name="name">External task</field>
+            <field name="res_model">external.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_external_task_search"/>
+<!--             <field name="view_id" ref="view_account_list"/>
+ -->        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add an issue.
+              </p><p>
+                An issue created in your ERP create an external task in your intergateur to treat them. If you cant' create an issue contact your Adminstrator to check External task configuration.
+              </p>
+            </field>
+        </record>
+       <menuitem action="action_view_external_task"
+           id="menu_action_view_external_task"
+           parent="external_project"
+           sequence="10"/>
+</odoo>
