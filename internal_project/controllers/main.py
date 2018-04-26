@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 class ExternalTaskController(main.RestController):
-    _root_path = '/externatask/'
+    _root_path = '/externaltask/'
     _collection_name = 'project.project'
     _default_auth = 'api_key'
 
@@ -38,38 +38,17 @@ class ExternalTaskController(main.RestController):
         return res
 
     @route([
-        '<string:_service_name>',
-        '<string:_service_name>/<string:method_name>',
-        '<string:_service_name>/<int:_id>',
-        '<string:_service_name>/<int:_id>/<string:method_name>',
+        '<string:_service_name>/read',
     ], methods=['GET'])
-    def get(self, _service_name, _id=None, method_name=None, **params):
-        if not method_name:
-            method_name = 'get'
-        return self._process_method(_service_name, method_name, _id, params)
+    def read(self, _service_name, **params):
+        return self._process_method(_service_name, 'read', params=params)
 
-    @route(
-        '/externaltask/task',
-        methods=['GET', 'POST', 'PUT'],
-        auth="externaltask")
-    def task_list(self, **params):
-        method = request.httprequest.method
-        service = request.env['task.service']
-        service.project = request.project
-        if method == 'GET':
-            submethod = params['method']
-            del params['method']
-            if submethod == 'read':
-                res = service.get(params)
-            elif submethod == 'search':
-                res = service.list(params)
-            elif submethod == 'read_group':
-                res = service.read_group(params)
-        elif method == 'POST':
-            res = service.create(params)
-        elif method == 'PUT':
-            res = service.update(params)
-        return request.make_response(res)
+    @route([
+        '<string:_service_name>/read_group',
+    ], methods=['GET'])
+    def read_group(self, _service_name, **params):
+        return self._process_method(_service_name, 'read_group', params=params)
+
 
     @route(
         '/externaltask/message', methods=['GET', 'POST'], auth="externaltask")
