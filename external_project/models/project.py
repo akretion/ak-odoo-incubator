@@ -74,24 +74,28 @@ class ExternalTask(models.Model):
             [['namespace', '=', 'external_project']])[0]
         return {
             'url': account.login,
-            'api_key': account.get_password()
+            'api_key': account._get_password()
         }
 
     @api.model
-    def _call_odoo(self, method, params):
+    def _call_odoo(self, reqtype, params, method=None, _id=None):
         url_key = self.get_url_key()
-        url = '%s/externaltask/task' % url_key['url']
-        if method == 'get':
+        url = '%s/externaltask/project_task' % url_key['url']
+        if _id:
+            url = '%s/%s' % (url, _id)
+        if method:
+            url = '%s/%s' % (url, method)
+        if reqtype == 'get':
             kwargs = {'params': params}
         else:
             kwargs = {'json': params}
         headers = {'API_KEY': url_key['api_key']}
-        res = getattr(requests, method)(url, headers=headers, **kwargs)
+        res = getattr(requests, reqtype)(url, headers=headers, **kwargs)
         return res.json()
 
     @api.model
     def create(self, vals):
-        method = 'post'
+        reqtype = 'post'
         vals = self._add_missing_default_values(vals)
         if vals.get('external_user_id', False):
             user = self.env['res.users'].browse(vals['external_user_id'])
@@ -99,17 +103,20 @@ class ExternalTask(models.Model):
                 'contact_email': user.email,
                 'contact_mobile': user.mobile or '',
             })
-        task_id = self._call_odoo(method, vals)
+        if not vals.get('model_reference', False):
+            vals['model_reference'] = ''
+        task_id = self._call_odoo(reqtype, vals)
         return self.browse(task_id)
 
     @api.multi
     def write(self, vals):
-        method = 'put'
-        payload = {
-            'ids': self.ids,
-            'vals': vals
-        }
-        return self._call_odoo(method, payload)
+        reqtype = 'put'
+        for task_id in self.ids:
+            payload = {
+                'vals': vals
+            }
+            self._call_odoo(reqtype, payload, _id=task_id)
+        return True
 
     @api.multi
     def unlink(self):
@@ -121,48 +128,42 @@ class ExternalTask(models.Model):
 
     @api.multi
     def read(self, fields=None, load='_classic_read'):
-        method = 'get'
+        reqtype = 'get'
         payload = {
-            'method': 'read',
             'ids': json.dumps(self.ids),
             'fields': json.dumps(fields),
-            'context': json.dumps(self.context),
             'load': load
         }
-        return self._call_odoo(method, payload)
+        return self._call_odoo(reqtype, payload, method='read')
 
     @api.model
     def search(self, args, offset=0, limit=0, order=None, count=False):
-        method = 'get'
+        reqtype = 'get'
         payload = {
-            'method': 'search',
             'args': json.dumps(args),
             'offset': offset,
             'limit': limit,
             'order': json.dumps(order),
-            'context': json.dumps(self.env.context),
             'count': count
         }
-        return self._call_odoo(method, payload)
+        ids =  self._call_odoo(reqtype, payload)
+        return self.browse(ids)
 
     @api.model
     def read_group(
         self, domain, fields, groupby, offset=0,
             limit=None, orderby=False, lazy=True):
-        import pdb; pdb.set_trace()
-        method = 'get'
+        reqtype = 'get'
         payload = {
-            'method': 'read_group',
             'domain': json.dumps(domain),
             'fields': json.dumps(fields),
             'groupby': json.dumps(groupby),
             'offset': offset,
             'limit': limit or None,
             'orderby': json.dumps(orderby),
-            'context': json.dumps(self.env.context),
             'lazy': lazy
         }
-        return self._call_odoo(method, payload)
+        return self._call_odoo(reqtype, payload, method='read_group')
 
     @api.multi
     def message_get_suggested_recipients(self):
