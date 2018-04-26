@@ -3,56 +3,62 @@
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.addons.component.core import AbstractComponent
+from odoo.addons.component.core import Component
+from odoo.addons.base_rest.components.service import to_bool
 from odoo.exceptions import UserError, MissingError
+import json
 
 
-class ExternalTaskService(AbstractComponent):
+class ExternalTaskService(Component):
     _inherit = 'base.rest.service'
     _name = 'external.task.service'
     _collection = 'project.project'
-    _expose_model = 'project.task'
+    _usage = 'project_task'
 
+    @property
+    def project(self):
+        return self.work.project
 
-    def list(self, params):
-        domain = json.loads(params['args'])
+    def search(self, args, offset, limit, order, count):
+        domain = json.loads(args)
         domain += [('project_id', '=', self.project.id)]
         tasks = self.env['project.task'].search(
             domain,
-            offset=params['offset'],
-            limit=params['limit'],
-            order=json.loads(params['order']),
-            count=params['count'])
+            offset=offset,
+            limit=limit,
+            order=json.loads(order),
+            count=count)
         if tasks:
-            if params['count']:
-                return tasks
+            if count:
+                return tasks.ids
             return tasks.ids
-        return []
+        return self.env['project.tasks'].browse([])
 
-    def get(self, params):
+    def read(self, ids, fields, load):
         tasks = self.env['project.task'].search(
-            [('id', 'in', json.loads(params['ids'])),
+            [('id', 'in', json.loads(ids)),
              ('project_id', '=', self.project.id)])
         tasks = tasks.read(
-            fields=json.loads(params['fields']),
-            load=params['load'])
+            fields=json.loads(fields),
+            load=load)
         if tasks:
             return tasks
-        return []
+        return self.env['project.tasks'].browse([])
 
-    def read_group(self, params):
-        domain = json.loads(params['domain'])
+    def read_group(self, domain, fields, groupby, offset=0,
+            limit=None, orderby=False, lazy=True):
+        domain = json.loads(domain)
         domain += [('project_id', '=', self.project.id)]
-        groupby = json.loads(params['groupby'])
-        fields = json.loads(params['fields'])
+        groupby = json.loads(groupby)
+        fields = json.loads(fields)
         tasks = self.env['project.task'].read_group(
             domain,
             fields,
             groupby,
-            offset=params['offset'],
-            limit=params['limit'],
-            orderby=json.loads(params['orderby']),
-            lazy=params['lazy'])
+            offset=offset,
+            limit=limit,
+            orderby=json.loads(orderby),
+            lazy=lazy)
         # Order stages from stage id order and add fold parameter
         if 'stage_name' in groupby:
             ordered_tasks = []
@@ -62,10 +68,10 @@ class ExternalTaskService(AbstractComponent):
                 domain,
                 fields,
                 groupby,
-                offset=params['offset'],
-                limit=params['limit'],
-                orderby=json.loads(params['orderby']),
-                lazy=params['lazy'])
+                offset=offset,
+                limit=limit,
+                orderby=json.loads(orderby),
+                lazy=lazy)
             for stage_task in stage_tasks:
                 for task in tasks:
                     if task['stage_name'] == stage_task['stage_id'][1]:
@@ -75,15 +81,15 @@ class ExternalTaskService(AbstractComponent):
             tasks = ordered_tasks
         return tasks
 
-    def create(self, params):
+    def create(self, **params):
         params['project_id'] = self.project.id
         return self.env['project.task'].create(params).id
 
-    def update(self, params):
+    def update(self, _id, vals):
         tasks = self.env['project.task'].search(
-            [('id', 'in', params['ids']),
+            [('id', '=', _id),
              ('project_id', '=', self.project.id)])
-        return tasks.write(params['vals'])
+        return tasks.write(vals)
 
     def get_message(self, params):
         messages = self.env['mail.message'].message_read(
@@ -116,7 +122,7 @@ class ExternalTaskService(AbstractComponent):
         return []
 
     # Validator
-    def _validator_get(self):
+    def _validator_read(self):
         return {
             'ids': {'type': 'string'},
             'fields': {'type': 'string'},
@@ -124,7 +130,7 @@ class ExternalTaskService(AbstractComponent):
             'context': {'type': 'string'},
             }
 
-    def _validator_list(self):
+    def _validator_search(self):
         return {
             'args': {'type': 'string'},
             'offset': {'coerce': int},
@@ -161,7 +167,6 @@ class ExternalTaskService(AbstractComponent):
 
     def _validator_update(self):
         return {
-            'ids': {'type': 'list', 'required': True},
             'vals': {
                 'type': 'dict',
                 'schema': {
