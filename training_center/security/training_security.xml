@@ -1,0 +1,49 @@
+<odoo>
+
+    <record id="training_security_category" model="ir.module.category">
+        <field name="name">Training</field>
+        <field name="sequence" eval="1"/>
+    </record>
+
+    <record id="training_employee" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="training_security_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">The user can only read and create</field>
+    </record>
+
+    <record id="training_officer" model="res.groups">
+        <field name="name">Officer</field>
+        <field name="category_id" ref="training_security_category"/>
+        <field name="implied_ids" eval="[(4, ref('training_employee'))]"/>
+    </record>
+
+
+    <record id="training_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="training_security_category"/>
+        <field name="implied_ids" eval="[(4, ref('training_officer'))]"/>
+    </record>
+
+
+    <record model="ir.rule" id="training_access_user">
+        <field name="name">Training Access Rules</field>
+        <field name="model_id" ref="model_training"/>
+        <!-- <field name="domain_force">[('employee_id.user_id','=',user.id)]</field> -->
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="groups" eval="[(4,ref('training_employee'))]"/>
+        <!--<field name="perm_create" eval="True"/>-->
+    </record>
+
+
+    <record id="training_access_officer" model="ir.rule">
+        <field name="name">Training Officer</field>
+        <field name="model_id" ref="model_training"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4,ref('training_officer'))]"/>
+    </record>
+
+</odoo>
+

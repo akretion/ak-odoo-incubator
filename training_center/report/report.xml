@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+<record id="training_convention_odt" model="ir.actions.report.xml">
+    <field name="name">Training Convention</field>
+    <field name="model">training</field>
+    <field name="report_name">convention.odt</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">odt</field>
+    <field name="module">training_center</field>
+    <field name="py3o_template_fallback">report/convention.odt</field>
+</record>
+
+<record id="training_convention_odt_button" model="ir.values">
+    <field name="name">Training Convention</field>
+    <field name="model">training</field>
+    <field name="key2">client_print_multi</field>
+    <field name="value" eval="'ir.actions.report.xml,%d'%training_convention_odt"/>
+</record>
+
+
+
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_training_employee,Training Employee,model_training,training_employee,1,1,1,0
+access_training_officer,Training Officer,model_training,training_officer,1,1,1,0
+access_training_manager,Training Manager,model_training,training_manager,1,1,1,1
