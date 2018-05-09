@@ -28,16 +28,17 @@
                     </div>
                     <group>
                         <group>
-                            <field name="trainer_id"/>
+                            <field name="partner_id"/>
                             <field name="auditor_ids" widget="many2many_tags"/>
                             <field name="quotation_id"/>
-                            <field name="partner_id"/>
+                            <field name="trainer_id"/>
+                            <field name="company_id"/>
                         </group>
                         <group>
                             <field name="duration"/>
                             <field name="from_date"/>
                             <field name="to_date"/>
-                            <field name="company_id"/>
+                            <field name="training_place_id"/>
                         </group>
                     </group>
                     <group col="4">
