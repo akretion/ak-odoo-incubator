@@ -19,8 +19,7 @@ class Training(models.Model):
         comodel_name='res.partner', string='Trainer')
     training_place_id = fields.Many2one(
         comodel_name='res.partner', string='Place',
-        help="Default place is the address of the company "
-             "(used in the report)")
+        help="If not specified, company address is used in the report)")
     training_place_cpt_id = fields.Many2one(
         comodel_name='res.partner', compute='_compute_place')
     state = fields.Selection(default='draft', selection=[
