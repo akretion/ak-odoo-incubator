@@ -13,6 +13,7 @@
         'base_company_extension',
         'sale_usability',
         'report_py3o',
+        'l10n_fr_siret',
     ],
     'data': [
         'views/training_view.xml',
@@ -22,6 +23,7 @@
         'security/ir.model.access.csv',
     ],
     'demo': [
+        'training_demo.xml',
     ],
     'license': 'AGPL-3',
 }

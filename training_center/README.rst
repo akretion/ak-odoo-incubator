@@ -12,5 +12,7 @@ Training documentation management :
 Credits
 ========
 
+David BEAL <david.beal@akretion.com>
+
 Inspired from https://github.com/mahmoudelsaka/Training
 
