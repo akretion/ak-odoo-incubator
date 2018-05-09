@@ -9,9 +9,14 @@
     'category': 'Employees',
     'summary': '',
     'version': '10.0.0.1',
-    'depends': ['sale', 'report_py3o'],
+    'depends': [
+        'base_company_extension',
+        'sale_usability',
+        'report_py3o',
+    ],
     'data': [
         'views/training_view.xml',
+        'views/company_view.xml',
         'report/report.xml',
         'security/training_security.xml',
         'security/ir.model.access.csv',

@@ -1,11 +1,24 @@
 <odoo>
 
+    <record id="training_tree_view" model="ir.ui.view">
+        <field name="model">training</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="trainer_id"/>
+                <field name="partner_id"/>
+                <field name="from_date"/>
+                <field name="duration"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="training_form_view" model="ir.ui.view">
         <field name="model">training</field>
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" widget="statusbar"/>
+                    <field name="state" widget="statusbar" clickable="1"/>
                 </header>
                 <sheet>
                     <div>
@@ -18,11 +31,13 @@
                             <field name="trainer_id"/>
                             <field name="auditor_ids" widget="many2many_tags"/>
                             <field name="quotation_id"/>
+                            <field name="partner_id"/>
                         </group>
                         <group>
                             <field name="duration"/>
                             <field name="from_date"/>
                             <field name="to_date"/>
+                            <field name="company_id"/>
                         </group>
                     </group>
                     <group col="4">
@@ -55,6 +70,7 @@
                 <field name="trainer_id"/>
                 <group expand="0" string="Group By">
                     <filter name="trainer_id" context="{'group_by':'trainer_id'}" string="Course"/>
+                    <filter name="state" context="{'group_by':'state'}" string="State"/>
                     <filter name="groupby_month" context="{'group_by': 'from_date:month'}" string="Month"/>
                 </group>
             </search>

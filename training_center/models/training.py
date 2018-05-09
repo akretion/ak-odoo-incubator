@@ -12,6 +12,9 @@ class Training(models.Model):
     quotation_id = fields.Many2one(
         comodel_name='sale.order', string='Quotation')
     content = fields.Text()
+    partner_id = fields.Many2one(
+        comodel_name='res.partner', string='Customer',
+        related='quotation_id.partner_id')
     trainer_id = fields.Many2one(
         comodel_name='res.partner', string='Trainer')
     state = fields.Selection(default='draft', selection=[
@@ -22,6 +25,8 @@ class Training(models.Model):
         comodel_name='res.partner', string='Auditors')
     related_auditor_ids = fields.Many2many(
         related='auditor_ids', readonly=True)
-    duration = fields.Integer('Duration')
+    duration = fields.Integer(string='Duration')
     from_date = fields.Date(string='From')
     to_date = fields.Date(string='To')
+    company_id = fields.Many2one(
+        comodel_name='res.company', string='Company')
