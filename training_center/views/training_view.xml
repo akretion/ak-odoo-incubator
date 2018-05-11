@@ -28,31 +28,39 @@
                     </div>
                     <group>
                         <group>
-                            <field name="partner_id"/>
-                            <field name="auditor_ids" widget="many2many_tags"/>
                             <field name="quotation_id"/>
                             <field name="trainer_id"/>
+                            <field name="skill"/>
                             <field name="company_id"/>
                         </group>
                         <group>
+                            <field name="partner_id"/>
                             <field name="duration"/>
                             <field name="from_date"/>
                             <field name="to_date"/>
                             <field name="training_place_id"/>
                         </group>
                     </group>
-                    <group col="4">
-                        <separator string="Auditors" attrs="{'invisible': [('related_auditor_ids', '=', False)]}"/>
-                        <field name="related_auditor_ids" colspan="4" nolabel="1">
+                    <group col="1">
+                        <separator string="Auditors"/>
+                        <field name="auditor_ids" colspan="4" nolabel="1">
                             <tree>
                                 <field name="name"/>
                                 <field name="function"/>
                                 <field name="parent_id"/>
                             </tree>
                         </field>
-                        <separator string="Training Content"/>
-                        <field name="content" colspan="4" nolabel="1"
-                               placeholder=" - here is details about the training"/>
+                    </group>
+                    <group col="2">
+                        <group colspan="1">
+                            <separator string="Pedagogical Targets"/>
+                            <field name="pedagogical_targets" colspan="2" nolabel="1"/>
+                        </group>
+                        <group colspan="1">
+                            <separator string="Training Content"/>
+                            <field name="content" colspan="2" nolabel="1"
+                                   placeholder=" - here is details about the training"/>
+                        </group>
                     </group>
                 </sheet>
                 <div class="oe_chatter">
@@ -84,5 +92,8 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <menuitem id="training_menu" action="training_action"
+              parent="sales_team.menu_sales" sequence="60"/>
 
 </odoo>

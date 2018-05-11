@@ -2,6 +2,9 @@
 
 from odoo import models, fields
 
+SKILL = "Consultant expert Odoo. Développeur actif de " \
+        "nombreux modules sur l'ERP Odoo."
+
 
 class Training(models.Model):
     _name = 'training'
@@ -12,11 +15,13 @@ class Training(models.Model):
     quotation_id = fields.Many2one(
         comodel_name='sale.order', string='Quotation')
     content = fields.Text()
+    pedagogical_targets = fields.Text()
     partner_id = fields.Many2one(
         comodel_name='res.partner', string='Customer',
         related='quotation_id.partner_id')
     trainer_id = fields.Many2one(
         comodel_name='res.partner', string='Trainer')
+    skill = fields.Char(default=SKILL)
     training_place_id = fields.Many2one(
         comodel_name='res.partner', string='Place',
         help="If not specified, company address is used in the report)")
@@ -29,8 +34,6 @@ class Training(models.Model):
     auditor_ids = fields.Many2many(
         comodel_name='res.partner', string='Auditors')
     auditor_number = fields.Integer(compute='_compute_auditors')
-    related_auditor_ids = fields.Many2many(
-        related='auditor_ids', readonly=True)
     duration = fields.Integer(string='Duration')
     hour_number = fields.Integer(compute='_compute_hours')
     from_date = fields.Date(string='From')

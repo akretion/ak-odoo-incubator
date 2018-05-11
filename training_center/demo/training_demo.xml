@@ -1,5 +1,35 @@
 <odoo>
 
+    <record id="training_odoo_12_quote" model="sale.order">
+        <field name="partner_id" ref="res_partner_dih"/>
+        <field name="partner_invoice_id" ref="res_partner_dih"/>
+        <field name="partner_shipping_id" ref="res_partner_dih"/>
+        <field name="date_order" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d %H:%M')"/>
+    </record>
+    <record id="training_odoo_12_quote_line_1" model="sale.order.line">
+        <field name="order_id" ref="training_odoo_12_quote"/>
+        <field name="name">Formation Odoo level 1 pendant 2 jours</field>
+        <field name="product_id" ref="sale.advance_product_0"/>
+        <field name="product_uom_qty">1</field>
+        <field name="product_uom" ref="product.product_uom_unit"/>
+        <field name="price_unit">1500.00</field>
+    </record>
 
+    <record id="training_odoo_12" model="training">
+        <field name="name">Odoo 12, premiers essais, newbies</field>
+        <field name="state">draft</field>
+        <field name="duration">2</field>
+        <field name="from_date" eval="(DateTime.today() + relativedelta(days=6)).strftime('%Y-%m-%d %H:%M')"/>
+        <field name="to_date" eval="(DateTime.today() + relativedelta(days=8)).strftime('%Y-%m-%d %H:%M')"/>
+        <field name="quotation_id" ref="training_odoo_12_quote"/>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="trainer_id" ref="res_partner_ak_seb"/>
+        <field name="content">1/ Présentation 2/ Ergonomie 3/ Module contact ...</field>
+        <field name="auditor_ids" eval="[(6,0,[ref('res_partner_dih'), ref('res_partner_dubol'), ref('res_partner_vencouran'), ref('res_partner_nhastic0'), ref('res_partner_voj'), ref('res_partner_honnete'), ref('res_partner_honxa'), ref('res_partner_aze'), ref('res_partner_anht0'), ref('res_partner_stou')])]"/>
+    </record>
+
+    <record id="base.main_company" model="res.company">
+        <field name="training_agreement">432-899-74</field>
+    </record>
 
 </odoo>

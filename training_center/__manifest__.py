@@ -23,6 +23,7 @@
         'security/ir.model.access.csv',
     ],
     'demo': [
+        'demo/res.partner.csv',
         'demo/training_demo.xml',
     ],
     'license': 'AGPL-3',

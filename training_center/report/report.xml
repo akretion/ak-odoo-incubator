@@ -36,5 +36,40 @@
     <field name="value" eval="'ir.actions.report.xml,%d'%training_attendance_odt"/>
 </record>
 
+<record id="training_evaluation_odt" model="ir.actions.report.xml">
+    <field name="name">Evaluation</field>
+    <field name="model">training</field>
+    <field name="report_name">evaluation.odt</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">odt</field>
+    <field name="module">training_center</field>
+    <field name="py3o_template_fallback">report/evaluation.odt</field>
+</record>
+
+<record id="training_evaluation_odt_button" model="ir.values">
+    <field name="name">Evaluation</field>
+    <field name="model">training</field>
+    <field name="key2">client_print_multi</field>
+    <field name="value" eval="'ir.actions.report.xml,%d'%training_evaluation_odt"/>
+</record>
+
+
+<record id="training_attestation_odt" model="ir.actions.report.xml">
+    <field name="name">Attestation</field>
+    <field name="model">training</field>
+    <field name="report_name">attestation.odt</field>
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">odt</field>
+    <field name="module">training_center</field>
+    <field name="py3o_template_fallback">report/attestation.odt</field>
+</record>
+
+<record id="training_attestation_odt_button" model="ir.values">
+    <field name="name">Attestation</field>
+    <field name="model">training</field>
+    <field name="key2">client_print_multi</field>
+    <field name="value" eval="'ir.actions.report.xml,%d'%training_attestation_odt"/>
+</record>
+
 
 </odoo>
