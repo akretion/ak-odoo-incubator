@@ -235,6 +235,7 @@ class AccountJournal(models.Model):
         values['journal_id'] = self.id
         values['move_id'] = move.id
         values['date'] = move.date
+        values['line_balance'] = values['debit'] - values['credit']
         values['period_id'] = move.period_id.id
         if self.currency and self.company_id.currency_id != self.currency:
             values['amount_currency'] = values['debit'] - values['credit']
