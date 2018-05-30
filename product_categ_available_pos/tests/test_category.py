@@ -27,7 +27,6 @@ class TestPosAvailableCategory(common.TransactionCase):
     def setUp(self):
         super(TestPosAvailableCategory, self).setUp()
         self.category_1_id = self.ref('product.product_category_1')
-        group_user = self.env.ref('sales_team.group_sale_manager')
         company_1 = self.env['res.company'].create(
             {'name': 'Test company 1'})
 
@@ -35,7 +34,9 @@ class TestPosAvailableCategory(common.TransactionCase):
             {'name': 'User company 1',
              'login': 'user_company_1',
              'groups_id': [
-                 (6, 0, group_user.ids)],
+                 (6, 0, self.env.ref('point_of_sale.group_pos_manager').ids),
+                 (6, 0, self.env.ref('stock.group_stock_manager').ids),
+             ],
              'company_id': company_1.id,
              'company_ids': [(6, 0, company_1.ids)]})
 
