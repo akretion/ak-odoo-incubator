@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="product_category_form_view" model="ir.ui.view">
+        <field name="inherit_id" ref="pos_remove_pos_category.product_category_form_view"/>
+        <field name="model">product.category</field>
+        <field name="arch" type="xml">
+            <field name="available_in_pos" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+
+            <field name="type" position="after">
+                <label string="Available in Pos"/>
+                <div>
+                    <field name="available_in_pos_view" class="oe_inline" />
+                    <label for="available_in_pos_view"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+</odoo>
