@@ -24,6 +24,7 @@ class PurchaseOrder(models.Model):
                 if line._is_service_procurement():
                     mo = line.procurement_ids.production_id
                     mo.update_locations(purchase)
+                    mo.add_moves_near_production()
 
     @api.multi
     def _get_destination_location(self):
