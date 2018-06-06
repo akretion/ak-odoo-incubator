@@ -26,6 +26,7 @@ class MrpProduction(models.Model):
         self.location_dest_id = subcontract_loc
         self.picking_type_id = subcontract_loc.get_warehouse().manu_type_id
 
+    @api.multi
     def add_moves_near_production(self):
         """Change products locations according to mo's location
 
@@ -43,6 +44,7 @@ class MrpProduction(models.Model):
         Virt/Inter-warehouse > A_SUPPLIER/Stock and it's added to a
         new picking A_SUPPLIER:Receipts
         Add moves between Stock and Production."""
+        self.ensure_one()
         supplier_location_id = self.location_src_id
 
         # Modify incoming move and create a second one hereafter
@@ -78,28 +80,28 @@ class MrpProduction(models.Model):
 
         # Modify outgoing move and create a second one herebefore
         # It's easier to add new move before the existing one
-        move_out = self.move_finished_ids
-        if move_out.location_dest_id == self.location_dest_id:
-            return
-
-        # Production has not procure_method
-        # (see mrp_production.py:_generate_finished_moves)
-        if not move_out.move_dest_id:
-            _logger.info('Prod fini en make to stock. On change juste la loc')
-            move_out.location_dest_id = supplier_location_id
-        else:
-            _logger.info('Prod fini en make to order')
-            prod_2_sup = self.new_move_just_after_prod(
-                move_source=move_out,  # virtual/prod
-                location=supplier_location_id)
-            picking_out = self.create_picking_out(supplier_location_id)
-            _logger.info('On a cree un picking %s' % picking_out.name)
-            move_out.production_id = False
-            move_out.location_id = picking_out.location_id
-            move_out.location_dest_id = picking_out.location_dest_id
-            move_out.picking_id = picking_out
-            prod_2_sup.action_confirm()  # don't let it in draft
-
+        for move_out in self.move_finished_ids:
+            if move_out.location_dest_id == self.location_dest_id:
+                continue
+            # Production has not procure_method
+            # (see mrp_production.py:_generate_finished_moves)
+            if not move_out.move_dest_id:
+                _logger.info(
+                    'Prod fini en make to stock. On change juste la loc')
+                move_out.location_dest_id = supplier_location_id
+            else:
+                _logger.info('Prod fini en make to order')
+                if not picking_out:
+                    picking_out = self.create_picking_out(supplier_location_id)
+                prod_2_sup = self.new_move_just_after_prod(
+                    move_source=move_out,  # virtual/prod
+                    location=supplier_location_id)
+                _logger.info('On a cree un picking %s' % picking_out.name)
+                move_out.production_id = False
+                move_out.location_id = picking_out.location_id
+                move_out.location_dest_id = picking_out.location_dest_id
+                move_out.picking_id = picking_out
+                prod_2_sup.action_confirm()  # don't let it in draft
 
     def create_picking_in(self, location):
         return self.env['stock.picking'].create({
