@@ -6,7 +6,7 @@
 Product Category Sort
 ======================
 
-This module add a view for sorting your category
+This module adds a view to sort your product categories.
 
 Installation
 ============
