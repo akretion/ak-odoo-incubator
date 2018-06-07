@@ -5,7 +5,7 @@
 {
     'name': 'Stock Reserve Location',
     'summary': 'Allow to feed picking locations from reserve locations',
-    'version': '8.0.1.0.0',
+    'version': '10.0.1.0.0',
     'author': 'Akretion',
     'description': """
 - overstock implementation: exchange between: picking and reserve locations
