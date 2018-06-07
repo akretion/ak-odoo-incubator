@@ -2,7 +2,7 @@
 # © 2017 David BEAL @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import _, api, models, fields
+from odoo import _, api, models, fields
 
 
 RESERVE_HELP = ("The location is used as reserve"
