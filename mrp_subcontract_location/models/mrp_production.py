@@ -61,6 +61,9 @@ class MrpProduction(models.Model):
                     move_source=move_in,
                     location=supplier_location_id)
                 move_in.raw_material_production_id = False
+                move_in.operation_id = False
+                move_in.bom_line_id = False
+                # move_in.warehouse_id = ?
                 move_in.move_dest_id = sup_2_prod
                 move_in.location_id = picking.location_id
                 move_in.location_dest_id = picking.location_dest_id
@@ -120,13 +123,20 @@ class MrpProduction(models.Model):
             'product_uom_qty': move_source.product_uom_qty,
             'procurement_id': move_source.procurement_id.id,
             'company_id': move_source.company_id.id,
+            'price_unit': move_source.price_unit,
             'origin': move_source.name,
+            'unit_factor': move_source.unit_factor,
             'group_id': move_source.group_id.id,
+            'procure_method': move_source.procure_method,
             'propagate': move_source.propagate,
             'location_id': False,
             'location_dest_id': False,
             'move_dest_id': False,
             'production_id': False,
+            'raw_material_production_id': False,
+            'bom_line_id': False,
+            'operation_id': False,
+            'warehouse_id': False,
         }
 
     def new_move_just_before_prod(self, move_source, location):
@@ -136,6 +146,8 @@ class MrpProduction(models.Model):
         vals['move_dest_id'] = move_source.move_dest_id.id
         vals['raw_material_production_id'] = (
             move_source.raw_material_production_id.id)
+        vals['operation_id'] = move_source.operation_id.id
+        vals['bom_line_id'] = move_source.bom_line_id.id
         vals['name'] = 'before prod %s' % vals['name']
         new_move = self.env['stock.move'].create(vals)
         print "move cree"
