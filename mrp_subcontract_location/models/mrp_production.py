@@ -65,6 +65,7 @@ class MrpProduction(models.Model):
                     move_source=move_in,
                     location=supplier_location_id)
                 move_in.raw_material_production_id = False
+                move_in.move_dest_id = sup_2_prod
                 move_in.picking_id = picking_in
                 move_in.location_id = picking_in.location_id
                 move_in.location_dest_id = picking_in.location_dest_id
@@ -162,3 +163,28 @@ class MrpProduction(models.Model):
         vals['name'] = 'after prod %s' % vals['name']
         new_move = self.env['stock.move'].create(vals)
         return new_move
+
+    @api.multi
+    def write(self, vals):
+        """Propagate date_planned start to previous move."""
+
+        # lorsqu'on change la date de la mo
+        #  on change la date de reception associée
+        # est-ce vraiment utile ??
+        res = super(MrpProduction, self).write(vals)
+        if 'date_planned_start' in vals:
+            inter_wh = self.env.ref('stock.stock_location_inter_wh')
+
+            for move_in in self.move_raw_ids.filtered(
+                lambda r: r.state not in ['done', 'cancel']
+            ):
+                for previous_move in move_in.move_orig_ids:
+                    if previous_move.location_id != inter_wh:
+                        _logger.warning('precedent non concernee')
+                        continue
+                    if len(move_in.move_orig_ids) > 1:
+                        _logger.warning('devrait pas arriver !')
+                    previous_move.date_expected = move_in.date_expected
+                    _logger.info('date du precedent pickng changee')
+            _logger.info('pour le moment on fait pas les move out')
+        return res
