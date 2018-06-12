@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 try:
-    from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
+    from odoo.addons.report_xlsx.report.report_xlsx import ReportXlsx
 except ImportError:
     class ReportXlsx(object):
         def __init__(self, *args, **kwargs):

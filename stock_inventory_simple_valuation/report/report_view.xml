@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-<data>
+<odoo>
+
 
     <report
         id="simple_inventory_valuation"
@@ -13,5 +13,5 @@
         attachment="object.name + '%s.xlsx' % object.company_id.name or ''"
     />
 
-</data>
-</openerp>
+
+</odoo>
