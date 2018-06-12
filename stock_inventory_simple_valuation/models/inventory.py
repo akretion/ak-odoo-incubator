@@ -5,8 +5,8 @@
 
 from collections import defaultdict
 
-from openerp import api, models, fields, _
-import openerp.addons.decimal_precision as dp
+from odoo import api, models, fields, _
+import odoo.addons.decimal_precision as dp
 
 
 class StockInventory(models.Model):
