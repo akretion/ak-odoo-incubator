@@ -53,6 +53,8 @@ class MrpProduction(models.Model):
             'stock.stock_location_inter_wh'
         ).id
         for move_in in self.move_raw_ids:
+            # TODO finir ici !
+            #remplacer par : if move_in.move_orig_ids.location_id == inter_wh:
             if move_in.location_id == supplier_location_id:
                 # don't run twice
                 continue

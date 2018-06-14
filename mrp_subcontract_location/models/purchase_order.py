@@ -35,6 +35,9 @@ class PurchaseOrder(models.Model):
                         location)
                     all_moves_in |= moves_in
                     all_moves_out |= moves_out
+
+                    # faut-til cabler les in et les outs ?
+                    # ou alors le in suivant ? (facturation)
                     self.add_purchase_line_id(moves_out, line)
                     self.add_purchase_line_id(moves_in, line)
             self.attach_picking_in(all_moves_in)
@@ -60,22 +63,6 @@ class PurchaseOrder(models.Model):
         else:
             return super(PurchaseOrder, self)._get_destination_location()
 
-    def create_picking_in(self, location):
-        return self.env['stock.picking'].create({
-            'picking_type_id': location.get_warehouse().in_type_id.id,
-            'location_id': self.env.ref(
-                'stock.stock_location_inter_wh').id,
-            'location_dest_id': location.id,
-        })
-
-    def create_picking_out(self, location):
-        return self.env['stock.picking'].create({
-            'picking_type_id': location.get_warehouse().out_type_id.id,
-            'location_id': location.id,
-            'location_dest_id': self.env.ref(
-                'stock.stock_location_inter_wh').id,
-        })
-
     def add_purchase_line_id(self, moves, line):
         '''Add the reference to this PO.
         Only moves in the picking
@@ -96,7 +83,8 @@ class PurchaseOrder(models.Model):
                 _logger.warning('devrait pas arriver')
                 continue
             move.move_dest_id.partner_id = self.partner_id
-            move.partner_id = move.move_dest_id.picking_type_id.warehouse_id.partner_id
+            move.partner_id = (
+                move.move_dest_id.picking_type_id.warehouse_id.partner_id)
             key = move.move_dest_id.location_dest_id
             ins.setdefault(key, self.env['stock.move'])
             outs.setdefault(key, self.env['stock.move'])
@@ -126,7 +114,8 @@ class PurchaseOrder(models.Model):
                 _logger.warning('devrait pas arriver')
                 continue
             move.move_orig_ids.partner_id = self.partner_id
-            move.partner_id = move.move_orig_ids.picking_type_id.warehouse_id.partner_id
+            move.partner_id = (
+                move.move_orig_ids.picking_type_id.warehouse_id.partner_id)
             key = move.move_orig_ids.location_id
             ins.setdefault(key, self.env['stock.move'])
             outs.setdefault(key, self.env['stock.move'])
