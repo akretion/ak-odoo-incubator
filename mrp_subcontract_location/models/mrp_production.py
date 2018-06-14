@@ -26,7 +26,7 @@ class MrpProduction(models.Model):
         self.picking_type_id = subcontract_loc.get_warehouse().manu_type_id
 
     @api.multi
-    def add_moves_before_production(self, supplier_location_id, picking=False):
+    def add_moves_before_production(self, supplier_location_id):
         """Change products locations according to mo's location
 
         Workflow
@@ -49,10 +49,14 @@ class MrpProduction(models.Model):
         # It's easier to add new moves after existing ones.
         moves_in = self.env['stock.move']
         moves_prod = self.env['stock.move']
+        inter_location_id = self.env.ref(
+            'stock.stock_location_inter_wh'
+        ).id
         for move_in in self.move_raw_ids:
             if move_in.location_id == supplier_location_id:
                 # don't run twice
                 continue
+            move_in.warehouse_id = supplier_location_id.get_warehouse().id
             if move_in.procure_method == 'make_to_stock':
                 # prevent picking creation
                 move_in.location_id = supplier_location_id
@@ -65,10 +69,10 @@ class MrpProduction(models.Model):
                 move_in.bom_line_id = False
                 # move_in.warehouse_id = ?
                 move_in.move_dest_id = sup_2_prod
-                move_in.location_id = picking.location_id
-                move_in.location_dest_id = picking.location_dest_id
-                move_in.picking_id = picking
-
+                move_in.location_id = inter_location_id
+                move_in.location_dest_id = supplier_location_id
+                move_in.picking_id = False
+                move_in.picking_type_id = move_in.warehouse_id.in_type_id.id
                 # update the procurement
                 for procurement in self.procurement_group_id.procurement_ids:
                     if procurement.move_dest_id == move_in:
@@ -82,38 +86,42 @@ class MrpProduction(models.Model):
         return moves_in, moves_prod
 
     @api.multi
-    def add_moves_after_production(self, location, picking=False):
+    def add_moves_after_production(self, supplier_location_id):
         # Modify outgoing move and create a second one herebefore
         # It's easier to add new move before the existing one
         moves_out = self.env['stock.move']
         moves_prod = self.env['stock.move']
+        inter_location_id = self.env.ref(
+            'stock.stock_location_inter_wh'
+        ).id
 
         for move_out in self.move_finished_ids:
             if move_out.location_dest_id == self.location_dest_id:
                 continue
+            move_out.warehouse_id = supplier_location_id.get_warehouse().id
             # Production has not procure_method
             # (see mrp_production.py:_generate_finished_moves)
             if not move_out.move_dest_id:
                 _logger.info(
                     'Prod fini en make to stock. On change juste la loc')
-                move_out.location_dest_id = location
+                move_out.location_dest_id = inter_location_id
             else:
                 _logger.info('Prod fini en make to order')
                 prod_2_sup = self.new_move_just_after_prod(
                     move_source=move_out,  # virtual/prod
-                    location=location)
+                    location=supplier_location_id)
                 move_out.production_id = False
-                move_out.location_id = picking.location_id
-                move_out.location_dest_id = picking.location_dest_id
-                move_out.picking_id = picking
+                move_out.location_id = supplier_location_id
+                move_out.location_dest_id = inter_location_id
+                move_out.picking_type_id = move_out.warehouse_id.out_type_id.id
+                move_out.picking_id = False
                 prod_2_sup.action_confirm()  # don't let it in draft
                 moves_prod |= prod_2_sup
             moves_out |= move_out
         return moves_out, moves_prod
 
-
     def _prepare_copy_move(self, move_source):
-        # Existing -> New + Existing 
+        # Existing -> New + Existing
         return {
             'name': move_source.name,
             'date': move_source.date,
@@ -129,6 +137,7 @@ class MrpProduction(models.Model):
             'group_id': move_source.group_id.id,
             'procure_method': move_source.procure_method,
             'propagate': move_source.propagate,
+            'warehouse_id': move_source.warehouse_id.id,
             'location_id': False,
             'location_dest_id': False,
             'move_dest_id': False,
@@ -136,7 +145,6 @@ class MrpProduction(models.Model):
             'raw_material_production_id': False,
             'bom_line_id': False,
             'operation_id': False,
-            'warehouse_id': False,
         }
 
     def new_move_just_before_prod(self, move_source, location):

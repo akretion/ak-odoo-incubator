@@ -7,7 +7,8 @@
 #
 ##############################################################################
 from odoo import models, fields, api, exceptions, _
-
+import logging
+_logger = logging.getLogger(__name__)
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
@@ -20,17 +21,25 @@ class PurchaseOrder(models.Model):
     def button_approve(self):
         res = super(PurchaseOrder, self).button_approve()
         for purchase in self:
+            all_moves_in = self.env['stock.move']
+            all_moves_out = self.env['stock.move']
             location = self._get_location()
-            picking_in = self.create_picking_in(location)
-            picking_out = self.create_picking_out(location)
             for line in purchase.order_line:
                 if line._is_service_procurement():
                     mo = line.procurement_ids.production_id
+
                     mo.update_locations(location)
                     moves_in, moves_in_prod = mo.add_moves_before_production(
-                        location, picking_in)
+                        location)
                     moves_out, moves_out_prod = mo.add_moves_after_production(
-                        location, picking_out)
+                        location)
+                    all_moves_in |= moves_in
+                    all_moves_out |= moves_out
+                    self.add_purchase_line_id(moves_out, line)
+                    self.add_purchase_line_id(moves_in, line)
+            self.attach_picking_in(all_moves_in)
+            self.attach_picking_out(all_moves_out)
+        return res
 
     @api.multi
     def _get_location(self):
@@ -66,3 +75,70 @@ class PurchaseOrder(models.Model):
             'location_dest_id': self.env.ref(
                 'stock.stock_location_inter_wh').id,
         })
+
+    def add_purchase_line_id(self, moves, line):
+        '''Add the reference to this PO.
+        Only moves in the picking
+        '''
+        self.ensure_one()
+        moves.write({'purchase_line_id': line.id})
+
+    def attach_picking_out(self, moves):
+        inter_co = self.env.ref(
+            'stock.stock_location_inter_wh'
+        )
+        ins = {}
+        outs = {}
+        for move in moves:
+            if move.move_dest_id.location_id != inter_co:
+                continue
+            if move.move_dest_id.picking_id:
+                _logger.warning('devrait pas arriver')
+                continue
+            move.move_dest_id.partner_id = self.partner_id
+            move.partner_id = move.move_dest_id.picking_type_id.warehouse_id.partner_id
+            key = move.move_dest_id.location_dest_id
+            ins.setdefault(key, self.env['stock.move'])
+            outs.setdefault(key, self.env['stock.move'])
+            ins[key] |= move
+            outs[key] |= move.move_dest_id
+
+        for key, moves in ins.iteritems():
+            picking_in = self.env['stock.picking'].create(
+                moves[0]._get_new_picking_values())
+            moves.write({'picking_id': picking_in.id})
+
+        for key, moves in outs.iteritems():
+            picking_in = self.env['stock.picking'].create(
+                moves[0]._get_new_picking_values())
+            moves.write({'picking_id': picking_in.id})
+
+    def attach_picking_in(self, moves):
+        inter_co = self.env.ref(
+            'stock.stock_location_inter_wh'
+        )
+        ins = {}
+        outs = {}
+        for move in moves:
+            if move.move_orig_ids.location_dest_id != inter_co:
+                continue
+            if move.move_orig_ids.picking_id:
+                _logger.warning('devrait pas arriver')
+                continue
+            move.move_orig_ids.partner_id = self.partner_id
+            move.partner_id = move.move_orig_ids.picking_type_id.warehouse_id.partner_id
+            key = move.move_orig_ids.location_id
+            ins.setdefault(key, self.env['stock.move'])
+            outs.setdefault(key, self.env['stock.move'])
+            ins[key] |= move.move_orig_ids
+            outs[key] |= move
+
+        for key, moves in ins.iteritems():
+            picking_in = self.env['stock.picking'].create(
+                moves[0]._get_new_picking_values())
+            moves.write({'picking_id': picking_in.id})
+
+        for key, moves in outs.iteritems():
+            picking_in = self.env['stock.picking'].create(
+                moves[0]._get_new_picking_values())
+            moves.write({'picking_id': picking_in.id})
