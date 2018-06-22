@@ -100,8 +100,6 @@ class MrpProduction(models.Model):
         inter_location_id = self.env.ref(
             'stock.stock_location_inter_wh'
         ).id
-        import pdb
-        pdb.set_trace()
         for move_out in self.move_finished_ids:
             add_new_move = False
             if (
