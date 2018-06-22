@@ -107,6 +107,12 @@ class MrpProduction(models.Model):
                 move_out.move_dest_id.location_dest_id == inter_location_id
             ):
                 continue
+            elif (
+                move_out.move_dest_id and
+                move_out.move_dest_id.location_dest_id.usage == 'customer'
+            ):
+                move_out.move_dest_id.location_id = supplier_location_id
+                continue
             move_out.warehouse_id = supplier_location_id.get_warehouse().id
             # Production has not procure_method
             # (see mrp_production.py:_generate_finished_moves)
