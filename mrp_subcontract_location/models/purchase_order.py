@@ -79,27 +79,32 @@ class PurchaseOrder(models.Model):
         for move in moves:
             if move.move_dest_id.location_id != inter_co:
                 continue
-            if move.move_dest_id.picking_id:
-                _logger.warning('devrait pas arriver')
-                continue
+            # can happen now for pull rule move creation...
+#            if move.move_dest_id.picking_id:
+#                _logger.warning('devrait pas arriver')
+#                continue
             move.move_dest_id.partner_id = self.partner_id
             move.partner_id = (
                 move.move_dest_id.picking_type_id.warehouse_id.partner_id)
             key = move.move_dest_id.location_dest_id
             ins.setdefault(key, self.env['stock.move'])
             outs.setdefault(key, self.env['stock.move'])
-            ins[key] |= move
-            outs[key] |= move.move_dest_id
+            if not move.picking_id:
+                ins[key] |= move
+            if not move.move_dest_id.picking_id:
+                outs[key] |= move.move_dest_id
 
         for key, moves in ins.iteritems():
-            picking_in = self.env['stock.picking'].create(
-                moves[0]._get_new_picking_values())
-            moves.write({'picking_id': picking_in.id})
+            if moves:
+                picking_in = self.env['stock.picking'].create(
+                    moves[0]._get_new_picking_values())
+                moves.write({'picking_id': picking_in.id})
 
         for key, moves in outs.iteritems():
-            picking_in = self.env['stock.picking'].create(
-                moves[0]._get_new_picking_values())
-            moves.write({'picking_id': picking_in.id})
+            if moves:
+                picking_in = self.env['stock.picking'].create(
+                    moves[0]._get_new_picking_values())
+                moves.write({'picking_id': picking_in.id})
 
     def attach_picking_in(self, moves):
         inter_co = self.env.ref(
