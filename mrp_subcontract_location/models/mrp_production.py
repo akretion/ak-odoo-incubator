@@ -116,6 +116,9 @@ class MrpProduction(models.Model):
                     location=supplier_location_id)
                 origin = (move_out.group_id and move_out.group_id.name + ':' or '') + move_out.origin
                 move_out.origin = origin
+                # The move has ancestors now, the state should not be
+                # 'confirmed' anymore, but 'waiting'
+                move_out.state = 'waiting'
                 move_out.production_id = False
                 move_out.location_id = supplier_location_id
                 move_out.location_dest_id = inter_location_id
