@@ -66,6 +66,8 @@ class MrpProduction(models.Model):
                 sup_2_prod = self.new_move_just_before_prod(
                     move_source=move_in,
                     location=supplier_location_id)
+                origin = (move_in.group_id and move_in.group_id.name + ':' or '') + move_in.origin
+                move_in.origin = origin
                 move_in.raw_material_production_id = False
                 move_in.operation_id = False
                 move_in.bom_line_id = False
@@ -112,6 +114,8 @@ class MrpProduction(models.Model):
                 prod_2_sup = self.new_move_just_after_prod(
                     move_source=move_out,  # virtual/prod
                     location=supplier_location_id)
+                origin = (move_out.group_id and move_out.group_id.name + ':' or '') + move_out.origin
+                move_out.origin = origin
                 move_out.production_id = False
                 move_out.location_id = supplier_location_id
                 move_out.location_dest_id = inter_location_id
