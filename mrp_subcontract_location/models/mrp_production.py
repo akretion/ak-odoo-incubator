@@ -127,6 +127,7 @@ class MrpProduction(models.Model):
                         move_source=move_out,
                         location=dest_location)
                     move_out.move_dest_id = extra_move
+                    extra_move.action_confirm()
                     _logger.info('extra move cree')
                     add_new_move = True
             else:
