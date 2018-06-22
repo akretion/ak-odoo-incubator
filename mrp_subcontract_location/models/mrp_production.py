@@ -55,7 +55,7 @@ class MrpProduction(models.Model):
         for move_in in self.move_raw_ids:
             # TODO finir ici !
             #remplacer par : if move_in.move_orig_ids.location_id == inter_wh:
-            if move_in.location_id == supplier_location_id:
+            if move_in.move_orig_ids.location_id.id == inter_location_id:
                 # don't run twice
                 continue
             move_in.warehouse_id = supplier_location_id.get_warehouse().id
@@ -198,4 +198,26 @@ class MrpProduction(models.Model):
                     previous_move.date_expected = move_in.date_expected
                     _logger.info('date du precedent pickng changee')
             _logger.info('pour le moment on fait pas les move out')
+        return res
+
+    @api.multi
+    def _generate_moves(self):
+        """
+            We want to affect the default supplier to the MO
+            We do it after raw material move confirmation so the procurement
+            keep the same location.
+        """
+        res = super(MrpProduction, self)._generate_moves()
+        wh_loc = self.env.ref('stock.stock_location_stock')
+        # TODO replace by supplier warehouse as it would be better if we user our own warehouse one day?
+        for mo in self:
+            #TODO handle errors/bad configurations
+            if mo.location_src_id.id == wh_loc.id and mo.service_id:
+                supplier_info = (mo.service_id.seller_ids and
+                            mo.service_id.seller_ids[0] or False)
+                if supplier_info:
+                    location = supplier_info.name.supplier_location_id
+                    mo.update_locations(location)
+                    mo.move_finished_ids.write({'location_dest_id': location.id})
+                    mo.move_raw_ids.write({'location_id': location.id})
         return res
