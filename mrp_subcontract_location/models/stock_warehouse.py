@@ -44,7 +44,7 @@ class StockWarehouse(models.Model):
             'propagate': True,
             'procure_method': 'make_to_stock',
             'route_id': inter_wh_route.id,
-            'partner_address_id': self.partner_id,
+            'partner_address_id': self.partner_id.id,
         }
         self.env['procurement.rule'].create(
             wh_inter_wh_supply_rule_vals)
