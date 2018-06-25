@@ -134,6 +134,9 @@ class MrpProduction(models.Model):
                         location=dest_location)
                     move_out.move_dest_id = extra_move
                     extra_move.action_confirm()
+                    # Avoid picking creation adding picking type after confirmation
+                    dest_wh = dest_location.get_warehouse()
+                    extra_move.picking_type_id = dest_wh.in_type_id.id
                     _logger.info('extra move cree')
                     add_new_move = True
             else:
@@ -221,7 +224,6 @@ class MrpProduction(models.Model):
         vals['location_dest_id'] = location.id
         vals['name'] = 'from remote stock %s' % vals['name']
         vals['warehouse_id'] = dest_wh.id
-        vals['picking_type_id'] = dest_wh.in_type_id.id
         new_move = self.env['stock.move'].create(vals)
         return new_move
 
