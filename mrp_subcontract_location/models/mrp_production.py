@@ -98,11 +98,23 @@ class MrpProduction(models.Model):
         inter_location_id = self.env.ref(
             'stock.stock_location_inter_wh'
         ).id
-
+        my_company_wh = self.env.ref('stock.warehouse0')
+        supplier_wh = supplier_location_id.get_warehouse()
         for move_out in self.move_finished_ids:
-            if move_out.location_dest_id == self.location_dest_id:
+            # Case the delivery move is created by pull rule instead of
+            # service PO valiadtion. (manually or by min/max rule for instance
+            if move_out.move_dest_id.location_id.get_warehouse() == my_company_wh:
+                move_out.move_dest_id.update_warehouse(supplier_wh, 'out')
+                moves_out |= move_out.move_dest_id
                 continue
-            move_out.warehouse_id = supplier_location_id.get_warehouse().id
+            if move_out.move_dest_id.location_dest_id.id == inter_location_id:
+                moves_out |= move_out.move_dest_id
+                continue
+            # Customer BL FROM sale order...
+            elif move_out.move_dest_id.location_dest_id.usage == 'customer':
+                move_out.move_dest_id.location_id = supplier_location_id
+                continue
+            move_out.warehouse_id = supplier_wh.id
             # Production has not procure_method
             # (see mrp_production.py:_generate_finished_moves)
             if not move_out.move_dest_id:
