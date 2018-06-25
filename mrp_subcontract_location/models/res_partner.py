@@ -12,6 +12,10 @@ from odoo import models, fields, api, _
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    supplier_location_id = fields.Many2one(
-        'stock.location', string="Supplier Location",
+    # TODO constraint so both location are not equal (if set)
+    reception_location_id = fields.Many2one(
+        'stock.location', string="Supplier Reception Location",
+        help="The location should belong to the supplier warehouse.")
+    manufacture_location_id = fields.Many2one(
+        'stock.location', string="Supplier Manufacture Location",
         help="The location should belong to the supplier warehouse.")

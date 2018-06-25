@@ -23,31 +23,34 @@ class PurchaseOrder(models.Model):
         for purchase in self:
             all_moves_in = self.env['stock.move']
             all_moves_out = self.env['stock.move']
-            location = self._get_location()
+#            location = self._get_location()
+            supplier = self.partner_id
             for line in purchase.order_line:
                 if line._is_service_procurement():
+                    update = False
                     mo = line.procurement_ids.production_id
-
-                    mo.update_locations(location)
-                    moves_in, moves_in_prod = mo.add_moves_before_production(
-                        location)
-                    moves_out, moves_out_prod = mo.add_moves_after_production(
-                        location)
+                    if mo.location_dest_id != purchase.partner_id.manufacture_location_id:
+                        update = True
+                        mo.update_locations(supplier)
+                    moves_in = mo.update_moves_before_production(
+                        supplier, update=update)
+                    moves_out, moves_out_dest = mo.update_moves_after_production(
+                        supplier, update=update)
                     all_moves_in |= moves_in
                     all_moves_out |= moves_out
 
                     # faut-til cabler les in et les outs ?
                     # ou alors le in suivant ? (facturation)
                     self.add_purchase_line_id(moves_out, line)
-                    self.add_purchase_line_id(moves_in, line)
+                    self.add_purchase_line_id(moves_out_dest, line)
             self.attach_picking_in(all_moves_in)
             self.attach_picking_out(all_moves_out)
         return res
 
-    @api.multi
-    def _get_location(self):
-        self.ensure_one()
-        return self.partner_id.supplier_location_id
+#    @api.multi
+#    def _get_location(self):
+#        self.ensure_one()
+#        return self.partner_id.supplier_location_id
 
     @api.multi
     def _get_destination_location(self):
@@ -74,65 +77,38 @@ class PurchaseOrder(models.Model):
         inter_co = self.env.ref(
             'stock.stock_location_inter_wh'
         )
-        ins = {}
-        outs = {}
+        all_moves = self.env['stock.move']
         for move in moves:
-            if move.move_dest_id.location_id != inter_co:
+            # TODO find a best and more secure way to do this?!
+            next_po = move.move_dest_id.move_dest_id.raw_material_production_id.service_procurement_id.purchase_id
+            if next_po.state not in ('purchase', 'done'):
                 continue
-            # can happen now for pull rule move creation...
-#            if move.move_dest_id.picking_id:
-#                _logger.warning('devrait pas arriver')
-#                continue
-            move.move_dest_id.partner_id = self.partner_id
+            move.move_dest_id.partner_id = self.partner_id.id
             move.partner_id = (
-                move.move_dest_id.picking_type_id.warehouse_id.partner_id)
-            key = move.move_dest_id.location_dest_id
-            ins.setdefault(key, self.env['stock.move'])
-            outs.setdefault(key, self.env['stock.move'])
-            if not move.picking_id:
-                ins[key] |= move
-            if not move.move_dest_id.picking_id:
-                outs[key] |= move.move_dest_id
+                move.move_dest_id.picking_type_id.warehouse_id.partner_id.id)
+            all_moves |= move
+            all_moves |= move.move_dest_id
 
-        for key, moves in ins.iteritems():
-            if moves:
-                picking_in = self.env['stock.picking'].create(
-                    moves[0]._get_new_picking_values())
-                moves.write({'picking_id': picking_in.id})
+            all_moves.assign_picking_by_purchase()
 
-        for key, moves in outs.iteritems():
-            if moves:
-                picking_in = self.env['stock.picking'].create(
-                    moves[0]._get_new_picking_values())
-                moves.write({'picking_id': picking_in.id})
 
     def attach_picking_in(self, moves):
         inter_co = self.env.ref(
             'stock.stock_location_inter_wh'
         )
-        ins = {}
-        outs = {}
+        all_moves = self.env['stock.move']
         for move in moves:
-            if move.move_orig_ids.location_dest_id != inter_co:
+            previous_po = move.purchase_line_id.order_id
+            if not previous_po or previous_po.state not in ('purchase', 'done'):
                 continue
             if move.move_orig_ids.picking_id:
                 _logger.warning('devrait pas arriver')
                 continue
             move.move_orig_ids.partner_id = self.partner_id
             move.partner_id = (
-                move.move_orig_ids.picking_type_id.warehouse_id.partner_id)
-            key = move.move_orig_ids.location_id
-            ins.setdefault(key, self.env['stock.move'])
-            outs.setdefault(key, self.env['stock.move'])
-            ins[key] |= move.move_orig_ids
-            outs[key] |= move
+                previous_po.partner_id.id)
 
-        for key, moves in ins.iteritems():
-            picking_in = self.env['stock.picking'].create(
-                moves[0]._get_new_picking_values())
-            moves.write({'picking_id': picking_in.id})
+            all_moves |= move
+            all_moves |= move.move_orig_ids
 
-        for key, moves in outs.iteritems():
-            picking_in = self.env['stock.picking'].create(
-                moves[0]._get_new_picking_values())
-            moves.write({'picking_id': picking_in.id})
+            all_moves.assign_picking_by_purchase()

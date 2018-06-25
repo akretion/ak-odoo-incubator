@@ -36,15 +36,15 @@ class StockWarehouse(models.Model):
             'mrp_subcontract_location.route_interwarehouse_supply')
         wh_inter_wh_supply_rule_vals = {
             'action': 'move',
+            'warehouse_id': self.id,
             'name': 'Transit => %s' % self.code,
-            'location_id': self.lot_stock_id.id,
+            'location_id': self.partner_id.reception_location_id.id,
             'location_src_id': self.env.ref('stock.stock_location_inter_wh').id,
             'picking_type_id': self.in_type_id.id,
-            'propagate_warehouse_id': self.env.ref('stock.warehouse0').id,
             'propagate': True,
-            'procure_method': 'make_to_stock',
+            'procure_method': 'make_to_order',
             'route_id': inter_wh_route.id,
-            'partner_address_id': self.partner_id,
+#            'partner_address_id': self.partner_id.id,
         }
         self.env['procurement.rule'].create(
             wh_inter_wh_supply_rule_vals)
