@@ -57,8 +57,6 @@ class MrpProduction(models.Model):
                 moves_in |= move_in.move_orig_ids
                 continue
             # TODO Would be better to not create it at the first place
-            if move_in.move_orig_ids.picking_id:
-                move_in.move_orig_ids.picking_id.unlink()
             # TODO should be done in upadte_mo()
             move_in.location_id = supplier.reception_location_id.id
             move_in.warehouse_id = supplier.reception_location_id.get_warehouse().id

@@ -81,15 +81,25 @@ class PurchaseOrder(models.Model):
         for move in moves:
             # TODO find a best and more secure way to do this?!
             next_po = move.move_dest_id.move_dest_id.raw_material_production_id.service_procurement_id.purchase_id
-            if next_po.state not in ('purchase', 'done'):
+            if next_po and next_po.state not in ('purchase', 'done'):
                 continue
-            move.move_dest_id.partner_id = self.partner_id.id
-            move.partner_id = (
-                move.move_dest_id.picking_type_id.warehouse_id.partner_id.id)
-            all_moves |= move
-            all_moves |= move.move_dest_id
-
-            all_moves.assign_picking_by_purchase()
+            elif move.location_dest_id.usage == 'customer':
+                # TODO need some actions?
+                continue
+            else:
+                move.move_dest_id.partner_id = self.partner_id.id
+                move.partner_id = (
+                    move.move_dest_id.picking_type_id.warehouse_id.partner_id.id)
+                all_moves |= move
+                all_moves |= move.move_dest_id
+                # Handle case it was in picking before
+                # TODO maybe we should find a way to block creation at first place?
+                pickings = all_moves.mapped('picking_id')
+                all_moves.write({'picking_id': False})
+                for picking in pickings:
+                    if not picking.move_lines:
+                        picking.unlink()
+                all_moves.assign_picking_by_purchase()
 
 
     def attach_picking_in(self, moves):
@@ -110,5 +120,12 @@ class PurchaseOrder(models.Model):
 
             all_moves |= move
             all_moves |= move.move_orig_ids
+            # Handle case it was in picking before
+            # TODO maybe we should find a way to block creation at first place?
+            pickings = all_moves.mapped('picking_id')
+            all_moves.write({'picking_id': False})
+            for picking in pickings:
+                if not picking.move_lines:
+                    picking.unlink()
 
             all_moves.assign_picking_by_purchase()

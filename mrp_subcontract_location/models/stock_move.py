@@ -24,7 +24,8 @@ class StockMove(models.Model):
         for move in self:
             recompute = False
             picking = Picking.search([
-                ('group_id', '=', move.group_id.id),
+                # Group is not relevant here
+#                ('group_id', '=', move.group_id.id),
                 ('location_id', '=', move.location_id.id),
                 ('location_dest_id', '=', move.location_dest_id.id),
                 ('picking_type_id', '=', move.picking_type_id.id),
