@@ -54,8 +54,10 @@ class MrpProduction(models.Model):
         ).id
         for move_in in self.move_raw_ids:
             # TODO finir ici !
-            #remplacer par : if move_in.move_orig_ids.location_id == inter_wh:
-            if move_in.move_orig_ids.location_id.id == inter_location_id:
+            if (
+                move_in.move_orig_ids and
+                move_in.move_orig_ids.location_id == inter_location_id
+            ):
                 # don't run twice
                 continue
             move_in.warehouse_id = supplier_location_id.get_warehouse().id
@@ -98,18 +100,49 @@ class MrpProduction(models.Model):
         inter_location_id = self.env.ref(
             'stock.stock_location_inter_wh'
         ).id
-
         for move_out in self.move_finished_ids:
-            if move_out.location_dest_id == self.location_dest_id:
+            add_new_move = False
+            if (
+                move_out.move_dest_id and
+                move_out.move_dest_id.location_dest_id == inter_location_id
+            ):
+                continue
+            elif (
+                move_out.move_dest_id and
+                move_out.move_dest_id.location_dest_id.usage == 'customer'
+            ):
+                move_out.move_dest_id.location_id = supplier_location_id
                 continue
             move_out.warehouse_id = supplier_location_id.get_warehouse().id
             # Production has not procure_method
             # (see mrp_production.py:_generate_finished_moves)
             if not move_out.move_dest_id:
-                _logger.info(
-                    'Prod fini en make to stock. On change juste la loc')
-                move_out.location_dest_id = inter_location_id
+
+                # Make to stock
+                procurement = move_out.procurement_id
+                if not procurement:
+                    # requested by this supplier
+                    move_out.location_dest_id = supplier_location_id
+                if (
+                    procurement and
+                    procurement.location_id != supplier_location_id
+                ):
+                    # requested by someone else, forward it
+                    dest_location = move_out.procurement_id.location_id
+                    extra_move = self.new_move_inter_co(
+                        move_source=move_out,
+                        location=dest_location)
+                    move_out.move_dest_id = extra_move
+                    extra_move.action_confirm()
+                    # Avoid picking creation adding picking type after confirmation
+                    dest_wh = dest_location.get_warehouse()
+                    extra_move.picking_type_id = dest_wh.in_type_id.id
+                    _logger.info('extra move cree')
+                    add_new_move = True
             else:
+                add_new_move = True
+
+            if add_new_move:
                 _logger.info('Prod fini en make to order')
                 prod_2_sup = self.new_move_just_after_prod(
                     move_source=move_out,  # virtual/prod
@@ -179,6 +212,18 @@ class MrpProduction(models.Model):
         vals['production_id'] = move_source.production_id.id
         vals['move_dest_id'] = move_source.id
         vals['name'] = 'after prod %s' % vals['name']
+        new_move = self.env['stock.move'].create(vals)
+        return new_move
+
+    def new_move_inter_co(self, move_source, location):
+        dest_wh = location.get_warehouse()
+        vals = self._prepare_copy_move(move_source)
+        vals['location_id'] = self.env.ref(
+            'stock.stock_location_inter_wh'
+        ).id
+        vals['location_dest_id'] = location.id
+        vals['name'] = 'from remote stock %s' % vals['name']
+        vals['warehouse_id'] = dest_wh.id
         new_move = self.env['stock.move'].create(vals)
         return new_move
 
