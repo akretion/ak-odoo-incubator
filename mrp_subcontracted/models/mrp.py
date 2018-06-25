@@ -83,9 +83,11 @@ class MrpProduction(models.Model):
             procurements.run()
 
     def _prepare_procurement_for_service(self):
+        origin = (self.procurement_group_id and
+                  self.procurement_group_id.name + ":" or "") + self.name
         return {
             'name': "Service for %s " % self.name,
-            'origin': self.name,
+            'origin': origin,
             'company_id': self.company_id.id,
             'date_planned': self.date_planned_start,
             'product_id': self.service_id.id,
