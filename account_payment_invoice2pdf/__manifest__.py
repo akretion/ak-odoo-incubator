@@ -10,7 +10,6 @@
     'summary': '',
     'version': '10.0.0.1',
     'depends': [
-        'report',
         'account_payment_order',
     ],
     'data': [

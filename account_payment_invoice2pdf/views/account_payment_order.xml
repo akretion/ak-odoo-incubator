@@ -4,7 +4,7 @@
         <field name="model">account.payment.order</field>
         <field name="inherit_id" ref="account_payment_order.account_payment_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='generated2uploaded']" position="after">
+            <xpath expr="//button[@name='action_cancel']" position="after">
                 <button name="generate_invoice_pdf" type="object" states="open"
                     string="Generate invoice report" class="oe_highlight"/>
             </xpath>
