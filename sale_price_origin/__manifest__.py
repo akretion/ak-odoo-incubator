@@ -5,7 +5,7 @@
 {
     'name': 'Sale Price Origin',
     'summary': 'Keep product pricelist item used on sale order line',
-    'version': '8.0.1.0.0',
+    'version': '10.0.1.0.0',
     'author': 'Akretion',
     'maintainer': 'Akretion',
     'category': 'Sale',
