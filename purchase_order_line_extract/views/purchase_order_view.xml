@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="open_order_purchase_order_form" model="ir.ui.view">
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="arch" type="xml">
+                <field name="shipped" position="after">
+                    <field name="open_order"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.server" id="action_extract_purchase_line">
+            <field name="name">Extract Purchase Lines</field>
+            <field name="model_id" ref="model_purchase_order"/>
+            <field name="state">code</field>
+            <field name="code">
+purchases = model.browse(context.get('active_ids'))
+action = purchases.open_extract_line_items()
+            </field>
+        </record>
+
+        <record id="ir_extract_purchase_line" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'purchase.order'" name="model"/>
+            <field name="name">Extract Purchase Lines</field>
+            <field eval="'ir.actions.server,%d'%action_extract_purchase_line" name="value"/>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="purchase_line_extractor_wizard_form" model="ir.ui.view">
+            <field name="name">purchase.line.extractor.wizard.form</field>
+            <field name="model">purchase.line.extractor.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Line Extracor">
+                    <group>
+                        <field name="order_reference"/>
+                        <field name="origin"/>
+                        <field name="date_order"/>
+                        <field name="picking_type_id" required="1"/>
+                    </group>
+                    <field name="line_ids" readonly="1">
+                        <tree>
+                            <field name="purchase_id"/>
+                            <field name="partner_id"/>
+                            <field name="product_id"/>
+                            <field name="date_planned"/>
+                            <field name="quantity"/>
+                            <field name="extract_quantity"/>
+                            <field name="product_uom"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button
+                            name="extract_po_line" string="Create New Order"
+                            type="object" icon="gtk-apply"/>
+                        or
+                        <button
+                            special="cancel" string="Cancel" type="object"
+                            icon="gtk-cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+            id="purchase_line_extractor_wizard_action"
+            name="Extract Lines"
+            res_model="purchase.line.extractor.wizard"
+            src_model="purchase.order.extract.line"
+            target="new"
+            key2="client_action_multi"
+            view_mode="form"
+        />
+
+    </data>
+</openerp>
