@@ -6,10 +6,10 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@string='Order Lines']//form//field[@name='price_unit']" position="after">
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
                 <field name="pricelist_item_id" groups="product.group_sale_pricelist"/>
             </xpath>
-            <xpath expr="//page[@string='Order Lines']//tree[@string='Sales Order Lines']" position="inside">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
                 <field name="pricelist_item_id" groups="product.group_sale_pricelist"/>
             </xpath>
         </field>
