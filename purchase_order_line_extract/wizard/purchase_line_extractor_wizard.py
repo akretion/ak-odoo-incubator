@@ -16,41 +16,35 @@ class PurchaseLineExtractorWizard(models.TransientModel):
         'stock.picking.type', string='Deliver To')
     origin = fields.Char()
     date_order = fields.Date()
+    expected_date = fields.Date()
     order_reference = fields.Char()
-    line_ids = fields.Many2many(
-        comodel_name='purchase.order.extract.line',
-        relation='extractor_wizard_purchase_line_extract_rel',
-        column1='wizard_id',
-        column2='line_id',
+    line_ids = fields.One2many(
+        'purchase.order.extract.line',
+        'extractor_wizard_id',
         string='Purchase Lines')
 
-    @api.model
-    def default_get(self, fields):
-        res = super(PurchaseLineExtractorWizard, self).default_get(fields)
-        extract_line_ids = self.env.context.get('active_ids', [])
-        extract_lines = self.env['purchase.order.extract.line'].browse(
-            extract_line_ids)
-        pos = extract_lines.mapped('purchase_id')
-        res['picking_type_id'] = pos[0].picking_type_id.id
-        res['origin'] = ', '.join(pos.mapped('name'))
-        res['date_order'] = pos[0].date_order
-        res['line_ids'] = [(6, 0, extract_line_ids)]
-        return res
-
     @api.multi
-    def extract_po_line(self):
+    def get_new_po_vals(self):
         self.ensure_one()
-        copy_po_vals = {
+        vals = {
             'picking_type_id': self.picking_type_id.id,
             'origin': self.origin,
             'order_line': False,
             'open_order': False,
-            'date_order': self.date_order
+            'date_order': self.date_order,
         }
-#        if self.order_reference:
-#            copy_po_vals['name'] = self.order_reference
+        if self.order_reference:
+            vals['name'] = self.order_reference
+        return vals
+
+    @api.multi
+    def extract_po_line(self):
+        self.ensure_one()
+        copy_po_vals = self.get_new_po_vals()
         new_po = self.line_ids[0].purchase_line_id.order_id.copy(copy_po_vals)
         for line in self.line_ids:
+            if line.extract_quantity <= 0.0:
+                continue
             purchase_line = line.purchase_line_id
             procs = purchase_line.procurement_ids
             move_dests = procs.mapped('move_dest_id')
@@ -65,11 +59,11 @@ class PurchaseLineExtractorWizard(models.TransientModel):
                 raise exceptions.Warning(
                     _('Too much moves for product %s'
                       % purchase_line.product_id.default_code))
-            if line.extract_quantity <= 0.0:
-                raise exceptions.Warning(
-                    _('The quantity to extract must be positive'))
-            line.generate_new_po_line(new_po)
+            line.generate_new_po_line(new_po, self.expected_date)
             line.update_quantity_extracted(moves)
+        if not new_po.order_line:
+            raise exceptions.Warning(
+                _('No purchase line found'))
         new_po.signal_workflow('purchase_confirm')
         new_po.signal_workflow('purchase_approve')
 
@@ -80,7 +74,3 @@ class PurchaseLineExtractorWizard(models.TransientModel):
         result['views'] = [(view.id, 'form')]
         result['res_id'] = new_po.id
         return result
-            
-        
-        
-        

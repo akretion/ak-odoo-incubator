@@ -10,20 +10,22 @@
                     <group>
                         <field name="order_reference"/>
                         <field name="origin"/>
-                        <field name="date_order"/>
+                        <field name="date_order" required="1"/>
+                        <field name="expected_date" required="1"/>
                         <field name="picking_type_id" required="1"/>
                     </group>
-                    <field name="line_ids" readonly="1">
-                        <tree>
-                            <field name="purchase_id"/>
-                            <field name="partner_id"/>
-                            <field name="product_id"/>
-                            <field name="date_planned"/>
-                            <field name="quantity"/>
-                            <field name="extract_quantity"/>
-                            <field name="product_uom"/>
-                        </tree>
-                    </field>
+                    <field name="line_ids"/>
+<!--                    <field name="line_ids" readonly="1">-->
+<!--                        <tree>-->
+<!--                            <field name="purchase_id"/>-->
+<!--                            <field name="partner_id"/>-->
+<!--                            <field name="product_id"/>-->
+<!--                            <field name="date_planned"/>-->
+<!--                            <field name="quantity"/>-->
+<!--                            <field name="extract_quantity"/>-->
+<!--                            <field name="product_uom"/>-->
+<!--                        </tree>-->
+<!--                    </field>-->
                     <footer>
                         <button
                             name="extract_po_line" string="Create New Order"
@@ -37,15 +39,15 @@
             </field>
         </record>
 
-        <act_window
-            id="purchase_line_extractor_wizard_action"
-            name="Extract Lines"
-            res_model="purchase.line.extractor.wizard"
-            src_model="purchase.order.extract.line"
-            target="new"
-            key2="client_action_multi"
-            view_mode="form"
-        />
+        <record id="purchase_line_extractor_action" model="ir.actions.act_window">
+            <field name="name">Extract Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.line.extractor.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+<!--            <field name="search_view_id" ref="purchase.purchase_order_line_search"/>-->
+        </record>
 
     </data>
 </openerp>

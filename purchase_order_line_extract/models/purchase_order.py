@@ -16,6 +16,12 @@ class PurchaseOrder(models.Model):
         help="This kind of order can't be tranfered. The lines and "
              "quantity can be extract to a normal PO")
 
+    @api.model
+    def _get_picking_vals(self, order):
+        vals = super(PurchaseOrder, self)._get_picking_vals(order)
+        vals['open_order'] = order.open_order
+        return vals
+
     @api.multi
     def open_extract_line_items(self):
         """
@@ -23,8 +29,7 @@ class PurchaseOrder(models.Model):
             It is used to update purchase order line date planned
             after order validation.
         """
-        extract_line_ids = []
-        extract_line_obj = self.env['purchase.order.extract.line']
+        lines = []
         for po in self:
             if not po.open_order:
                 raise exceptions.Warning(
@@ -33,18 +38,25 @@ class PurchaseOrder(models.Model):
             for line in po.order_line:
                 if line.state == 'cancel':
                     continue
-                vals = {
+                line_vals = {
                     'purchase_line_id': line.id,
-                    'extract_quantity': line.product_qty,
                 }
-                extract_line = extract_line_obj.create(vals)
-                extract_line_ids.append(extract_line.id)
+                lines.append((0, 0, line_vals))
+        wizard_vals = {
+            'origin': ', '.join(self.mapped('name')),
+            'picking_type_id': self[0].picking_type_id.id,
+            'expected_date': self[0].minimum_planned_date,
+            'date_order': self[0].date_order,
+            'line_ids': lines,
+        }
+        wiz = self.env['purchase.line.extractor.wizard'].create(wizard_vals)
+
         action = self.env.ref(
-            'purchase_order_line_extract.purchase_order_extract_line_action')
+            'purchase_order_line_extract.purchase_line_extractor_action')
         result = action.read()[0]
-        result['domain'] = (
-            "[('id','in',[" + ','.join(map(str, extract_line_ids)) + "])]"
-        )
+        view = self.env.ref(
+            'purchase_order_line_extract.purchase_line_extractor_wizard_form')
+        result['res_id'] = wiz.id
         return result
 
     @api.multi

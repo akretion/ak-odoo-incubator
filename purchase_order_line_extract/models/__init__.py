@@ -1,2 +1,2 @@
 from . import purchase_order
-from . import purchase_order_extract_line
+from . import stock_picking

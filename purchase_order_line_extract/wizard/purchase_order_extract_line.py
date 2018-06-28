@@ -38,14 +38,16 @@ class PurchaseOrderExtractLine(models.TransientModel):
         related='purchase_line_id.order_id.partner_id',
         store=True,
         readonly=True)
-    extract_quantity = fields.Float()
+    extract_quantity = fields.Float(default=0.0)
+    extractor_wizard_id = fields.Many2one('purchase.line.extractor.wizard')
 
     @api.multi
-    def generate_new_po_line(self, po):
+    def generate_new_po_line(self, po, expected_date):
         self.ensure_one()
         copy_vals = {
             'order_id': po.id,
             'product_qty': self.extract_quantity,
+            'date_planned': expected_date,
         }
         self.purchase_line_id.copy(copy_vals)
 
