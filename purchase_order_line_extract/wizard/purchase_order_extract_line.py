@@ -48,6 +48,7 @@ class PurchaseOrderExtractLine(models.TransientModel):
             'order_id': po.id,
             'product_qty': self.extract_quantity,
             'date_planned': expected_date,
+            'origin_order_id': self.purchase_id.id,
         }
         self.purchase_line_id.copy(copy_vals)
 
@@ -57,7 +58,7 @@ class PurchaseOrderExtractLine(models.TransientModel):
         po_line = self.purchase_line_id
         if self.extract_quantity >= self.quantity:
             move.action_cancel()
-            po_line.action_cancel()
+            po_line.write({'product_qty': 0.0})
         else:
             move_obj = self.env['stock.move']
             new_move_id = move_obj.split(move, self.extract_quantity)

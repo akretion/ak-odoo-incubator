@@ -7,6 +7,7 @@
 #
 ##############################################################################
 from openerp import models, fields, api, exceptions, _
+from openerp.fields import Date
 
 
 class PurchaseLineExtractorWizard(models.TransientModel):
@@ -14,9 +15,9 @@ class PurchaseLineExtractorWizard(models.TransientModel):
 
     picking_type_id = fields.Many2one(
         'stock.picking.type', string='Deliver To')
-    origin = fields.Char()
-    date_order = fields.Date()
-    expected_date = fields.Date()
+    origin = fields.Char(readonly="True")
+    date_order = fields.Date(default=Date.today())
+    expected_date = fields.Date(default=Date.today())
     order_reference = fields.Char()
     line_ids = fields.One2many(
         'purchase.order.extract.line',
@@ -38,10 +39,21 @@ class PurchaseLineExtractorWizard(models.TransientModel):
         return vals
 
     @api.multi
+    def check_open_order_state(self, orders):
+        for po in orders:
+            lines = po.order_line.filtered(lambda l: l.state != 'cancel')
+            if all([line.product_qty == 0.0 for line in lines]):
+                # We can close the order, as all qties have been extracted
+                # And invoicing won't happen on this PO
+                po.delete_workflow()
+                po.write({'state': 'done'})
+
+    @api.multi
     def extract_po_line(self):
         self.ensure_one()
         copy_po_vals = self.get_new_po_vals()
         new_po = self.line_ids[0].purchase_line_id.order_id.copy(copy_po_vals)
+        extracted_po = self.env['purchase.order']
         for line in self.line_ids:
             if line.extract_quantity <= 0.0:
                 continue
@@ -59,6 +71,7 @@ class PurchaseLineExtractorWizard(models.TransientModel):
                 raise exceptions.Warning(
                     _('Too much moves for product %s'
                       % purchase_line.product_id.default_code))
+            extracted_po |= line.purchase_id
             line.generate_new_po_line(new_po, self.expected_date)
             line.update_quantity_extracted(moves)
         if not new_po.order_line:
@@ -66,6 +79,8 @@ class PurchaseLineExtractorWizard(models.TransientModel):
                 _('No purchase line found'))
         new_po.signal_workflow('purchase_confirm')
         new_po.signal_workflow('purchase_approve')
+
+        self.check_open_order_state(extracted_po)
 
         action = self.env.ref(
             'purchase.purchase_form_action')

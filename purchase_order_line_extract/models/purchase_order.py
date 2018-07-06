@@ -36,7 +36,7 @@ class PurchaseOrder(models.Model):
                     _('Order %s is not an open order, it is not possible '
                       'to extract lines from it to a new order.' % po.name))
             for line in po.order_line:
-                if line.state == 'cancel':
+                if line.state == 'cancel' or not line.product_qty:
                     continue
                 line_vals = {
                     'purchase_line_id': line.id,
