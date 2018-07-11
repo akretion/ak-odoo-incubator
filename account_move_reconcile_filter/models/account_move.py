@@ -3,19 +3,26 @@
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import fields, models
+from openerp import api, fields, models
 
 
 class AccountMoveReconcile(models.Model):
     _inherit = 'account.move.reconcile'
 
-    reconcile_date = fields.Date(
+    date_max = fields.Date(
+        compute='_compute_reconcile_date',
+        store=True)
+    date_min = fields.Date(
         compute='_compute_reconcile_date',
         store=True)
 
+    @api.depends('line_id.date')
     def _compute_reconcile_date(self):
         for record in self:
-            date = None
+            min_date = None
+            max_date = None
             for line in record.line_id:
-                date = max(line.date, date)
-            record.reconciliation_date = date
+                max_date = max(line.date, max_date)
+                min_date = min(line.date, min_date)
+            record.date_max = max_date
+            record.date_min = min_date
