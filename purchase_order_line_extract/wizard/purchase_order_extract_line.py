@@ -16,27 +16,21 @@ class PurchaseOrderExtractLine(models.TransientModel):
         'purchase.order.line', string='Purchase Line', required=True)
     purchase_id = fields.Many2one(
         related='purchase_line_id.order_id',
-        store=True,
         readonly=True)
     product_id = fields.Many2one(
         related='purchase_line_id.product_id',
-        store=True,
         readonly=True)
     date_planned = fields.Date(
         related='purchase_line_id.date_planned',
-        store=True,
         readonly=True)
     quantity = fields.Float(
         related='purchase_line_id.product_qty',
-        store=True,
         readonly=True)
     product_uom = fields.Many2one(
         related='purchase_line_id.product_uom',
-        store=True,
         readonly=True)
     partner_id = fields.Many2one(
         related='purchase_line_id.order_id.partner_id',
-        store=True,
         readonly=True)
     extract_quantity = fields.Float(default=0.0)
     extractor_wizard_id = fields.Many2one('purchase.line.extractor.wizard')
