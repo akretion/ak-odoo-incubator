@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="putaway_from_inventory" model="product.putaway">
+            <field name="name">Deduced from Inventory</field>
+            <field name="method">per_product</field>
+        </record>
+
+    </data>
+</odoo>
