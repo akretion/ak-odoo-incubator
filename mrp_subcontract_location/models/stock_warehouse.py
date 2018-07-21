@@ -12,39 +12,39 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class StockWarehouse(models.Model):
-    _inherit = 'stock.warehouse'
+# TODO when creating inter wh rules : make the last one in make to order by default + put partner_address_id
+#class StockWarehouse(models.Model):
+#    _inherit = 'stock.warehouse'
 
-    @api.model
-    def create(self, vals):
-        wh = super(StockWarehouse, self).create(vals)
-        if vals.get('partner_id'):
-            wh.create_inter_wh_rule()
-        return wh
+#    @api.model
+#    def create(self, vals):
+#        wh = super(StockWarehouse, self).create(vals)
+#        if vals.get('partner_id'):
+#            wh.create_inter_wh_rule()
+#        return wh
 
-    def write(self, vals):
-        res = super(StockWarehouse, self).write(vals)
-        # TODO maybe add field on warehouse to link the rule and manage creation/deletion
-        for wh in self:
-            if vals.get('partner_id'):
-                wh.create_inter_wh_rule()
-        return res
+#    def write(self, vals):
+#        res = super(StockWarehouse, self).write(vals)
+#        for wh in self:
+#            if vals.get('partner_id'):
+#                wh.create_inter_wh_rule()
+#        return res
 
-    def create_inter_wh_rule(self):
-        self.ensure_one()
-        inter_wh_route = self.env.ref(
-            'mrp_subcontract_location.route_interwarehouse_supply')
-        wh_inter_wh_supply_rule_vals = {
-            'action': 'move',
-            'warehouse_id': self.id,
-            'name': 'Transit => %s' % self.code,
-            'location_id': self.partner_id.reception_location_id.id,
-            'location_src_id': self.env.ref('stock.stock_location_inter_wh').id,
-            'picking_type_id': self.in_type_id.id,
-            'propagate': True,
-            'procure_method': 'make_to_order',
-            'route_id': inter_wh_route.id,
-#            'partner_address_id': self.partner_id.id,
-        }
-        self.env['procurement.rule'].create(
-            wh_inter_wh_supply_rule_vals)
+#    def create_inter_wh_rule(self):
+#        self.ensure_one()
+#        inter_wh_route = self.env.ref(
+#            'mrp_subcontract_location.route_interwarehouse_supply')
+#        wh_inter_wh_supply_rule_vals = {
+#            'action': 'move',
+#            'warehouse_id': self.id,
+#            'name': 'Transit => %s' % self.code,
+#            'location_id': self.partner_id.reception_location_id.id,
+#            'location_src_id': self.env.ref('stock.stock_location_inter_wh').id,
+#            'picking_type_id': self.in_type_id.id,
+#            'propagate': True,
+#            'procure_method': 'make_to_order',
+#            'route_id': inter_wh_route.id,
+##            'partner_address_id': self.partner_id.id,
+#        }
+#        self.env['procurement.rule'].create(
+#            wh_inter_wh_supply_rule_vals)

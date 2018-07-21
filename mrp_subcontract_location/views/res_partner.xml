@@ -6,8 +6,7 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[@name='purchase']/field[@name='supplier']" position="after">
-                <field name="reception_location_id"/>
-                <field name="manufacture_location_id"/>
+                <field name="location_id"/>
             </xpath >
         </field>
     </record>
