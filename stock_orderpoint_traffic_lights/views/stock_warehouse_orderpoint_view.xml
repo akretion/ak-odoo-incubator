@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_warehouse_orderpoint_tree" model="ir.ui.view">
+        <field name="name">stock.warehouse.orderpoint.tree</field>
+        <field name="model">stock.warehouse.orderpoint</field>
+        <field name="inherit_id"
+               ref="stock.view_warehouse_orderpoint_tree"/>
+        <field name="arch" type="xml">
+            <field name="product_uom" position="after">
+                <field name="dlt"/>
+                <field name="order_cycle"/>
+                <field name="minimum_order_quantity"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="warehouse_orderpoint_search">
+        <field name="name">stock.warehouse.orderpoint.search</field>
+        <field name="model">stock.warehouse.orderpoint</field>
+        <field name="inherit_id"
+               ref="stock.warehouse_orderpoint_search"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="dlt"/>
+                <field name="order_cycle"/>
+                <field name="minimum_order_quantity"/>
+                <field name="planning_priority_level"/>
+      <!--          <field name="execution_priority_level"/> -->
+                <group name="planning_priority"
+                       string="Planning Priority Zones">
+                    <filter name="planning_priority_level"
+                            string="Red"
+                            domain="[('planning_priority_level', '=', '1_red')]"/>
+                    <filter name="planning_priority_level_yellow"
+                            string="Yellow"
+                            domain="[('planning_priority_level', '=', '2_yellow')]"/>
+                    <filter name="planning_priority_level_green"
+                            string="Green"
+                            domain="[('planning_priority_level', '=', '3_green')]"/>
+                </group>
+<!--                <group name="execution_priority"
+                       string="On Hand Alert Zones">
+                    <filter name="execution_priority_level_red"
+                            string="Red"
+                            domain="[('execution_priority_level', '=', '1_red')]"/>
+                    <filter name="execution_priority_level_yellow"
+                            string="Yellow"
+                            domain="[('execution_priority_level', '=', '2_yellow')]"/>
+                    <filter name="execution_priority_level_green"
+                            string="Green"
+                            domain="[('execution_priority_level', '=', '3_green')]"/>
+                </group>
+-->                <group name="procure_recommendation"
+                       string="Procurement">
+                   
+                </group>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_warehouse_orderpoint_form" model="ir.ui.view">
+        <field name="name">stock.warehouse.orderpoint.form</field>
+        <field name="model">stock.warehouse.orderpoint</field>
+        <field name="inherit_id"
+               ref="stock.view_warehouse_orderpoint_form"/>
+        <field name="arch" type="xml">
+            <button name="%(stock.do_view_procurement_op)d"
+                    position="after">
+                <button string="Refresh Buffer" name="cron_actions" class="oe_stat_button"
+                        icon="fa-refresh" type="object"/>
+            </button>
+            <button name="%(stock.do_view_procurement_op)d"
+                    position="attributes">
+                <attribute name="icon">fa-cogs</attribute>
+            </button>
+            <xpath expr="//group[1]" position="inside">
+                <group name="buffer_size_factors"
+                       string="Buffer size factors">
+                    <label for="dlt"/>
+                    <div name="dlt">
+                        <field name="dlt" class="oe_inline"/> days
+                    </div>
+                    <label for="order_cycle"/>
+                    <div name="order_cycle">
+                        <field name="order_cycle" class="oe_inline"/> days
+                    </div>
+                    <field name="minimum_order_quantity"/>
+                    <label for="horizon"/>
+                    <div name="horizon">
+                        <field name="horizon" class="oe_inline"/> days
+                    </div>
+                </group>
+                <group name="next_need"
+                       string="Next needs">
+                    <field name="incoming_dlt_qty"/>
+                    <field name="execution_priority_level" />
+<!--                    <field name="planning_priority_level" />
+                    <field name="qualified_demand"/>
+-->                    <field name="least_order_date" />
+                    <field name="next_need" />
+                </group>
+            </xpath>
+            <sheet position="inside">
+                <notebook>
+                    <!--Meant to be inherited by other modules.-->
+                </notebook>
+            </sheet>
+        </field>
+    </record>
+
+    <!-- Buffer Planning Screen -->
+    <record model="ir.ui.view"
+            id="view_ddmrp_stock_buffer_planning_tree">
+        <field name="name">stock.warehouse.orderpoint.planner.tree</field>
+        <field name="model">stock.warehouse.orderpoint</field>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <tree string="Buffer monitor">
+                <field name="product_id"/>
+                <field name="product_uom" string="UoM"/>
+                <field name="warehouse_id"/>
+                <field name="location_id"/>
+                <field name="planning_priority_level"
+                       bg_color="red:planning_priority_level=='1_red';yellow:planning_priority_level=='2_yellow';green:planning_priority_level == '3_green'"
+                       fg_color="white:planning_priority_level=='1_red';black:planning_priority_level=='2_yellow';white:planning_priority_level == '3_green'"/>
+   <!--             <field name="execution_priority_level"
+                       bg_color="red:execution_priority_level=='1_red';yellow:execution_priority_level=='2_yellow';green:execution_priority_level == '3_green'"
+                       fg_color="white:execution_priority_level=='1_red';black:execution_priority_level=='2_yellow';white:execution_priority_level == '3_green'"/>
+       -->        
+                <button string="Refresh Buffer"
+                        name="cron_actions"
+                        icon="fa-refresh" type="object"/>
+                <field name="incoming_dlt_qty" string="Incoming within DLT"/>
+                <field name="incoming_location_qty"
+                       string="Total Incoming"/>
+<!--                 <field name="qualified_demand"/>
+ -->                <field name="next_need"/>
+                <field name="procure_uom_id"/>
+                <field name="least_order_date"/>
+                <button string="Create Procurement"
+                        name="%(stock_orderpoint_manual_procurement.act_make_procurement_from_orderpoint)d"
+                        icon="fa fa-cogs" type="action"/>
+                <button string="Procurements"
+                        name="%(procurement.procurement_action)d"
+                        icon="fa fa-folder-open" type="action"
+                        domain="[('orderpoint_id','=', active_id)]"
+                        context="{'search_default_orderpoint_id': [active_id]}"/>
+                <field name="dlt"/>
+            </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window"
+            id="action_ddmrp_stock_buffer_planning">
+        <field name="name">Stock Buffer Planning</field>
+        <field name="res_model">stock.warehouse.orderpoint</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_ddmrp_stock_buffer_planning_tree"/>
+        <field name="search_view_id" ref="warehouse_orderpoint_search"/>
+    </record>
+
+    <menuitem name="Stock Buffer Planning"
+              parent="stock.menu_stock_inventory_control"
+              action="action_ddmrp_stock_buffer_planning" id="menu_action_ddmrp_stock_buffer_planning"/>
+
+</odoo>
