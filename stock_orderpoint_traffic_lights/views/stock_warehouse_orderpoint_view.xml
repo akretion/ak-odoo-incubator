@@ -94,9 +94,9 @@
                 <group name="next_need"
                        string="Next needs">
                     <field name="incoming_dlt_qty"/>
-                    <field name="execution_priority_level" />
-<!--                    <field name="planning_priority_level" />
-                    <field name="qualified_demand"/>
+<!--                    <field name="execution_priority_level" />-->
+                    <field name="planning_priority_level" />
+<!--                    <field name="qualified_demand"/>
 -->                    <field name="least_order_date" />
                     <field name="next_need" />
                 </group>
