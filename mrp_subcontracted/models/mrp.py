@@ -61,6 +61,13 @@ class MrpProduction(models.Model):
             else:
                 rec.wait_for_service = False
 
+    @api.multi
+    def action_cancel(self):
+        res = super(MrpProduction, self).action_cancel()
+        for prod in self:
+            prod.service_procurement_id.cancel()
+        return res
+
     @api.model
     def create(self, values):
         production = super(MrpProduction, self).create(values)
