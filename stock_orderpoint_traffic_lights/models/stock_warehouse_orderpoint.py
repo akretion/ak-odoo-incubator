@@ -140,9 +140,15 @@ class StockWarehouseOrderpoint(models.Model):
         for rec in self:
             rec.refresh()
             if not rec.next_need:
-                rec.planning_priority_level = '3_green'
-                rec.least_order_date = fields.date.today() + timedelta(
-                    days=int(rec.horizon))
+                # Even if we do not have next need, we may want to puchase to
+                # respect the min/max quantities
+                if rec.procure_recommended_qty > 0.0:
+                    rec.planning_priority_level = '2_yellow'
+                    rec.least_order_date = fields.date.today()
+                else:
+                    rec.planning_priority_level = '3_green'
+                    rec.least_order_date = fields.date.today() + timedelta(
+                        days=int(rec.horizon))
                 return
             diff = (
                 fields.Datetime.from_string(rec.next_need).date() -
@@ -175,6 +181,7 @@ class StockWarehouseOrderpoint(models.Model):
 
     @api.multi
     def _calc_qualified_demand(self):
+        subtract_qty = self.subtract_procurements_from_orderpoints()
         for rec in self:
             rec.refresh()
             rec.qualified_demand = 0.0
@@ -200,7 +207,7 @@ class StockWarehouseOrderpoint(models.Model):
             demand_sorted = demand_by_days.keys()
             demand_sorted.sort()
             min_date = False
-            sum_to_order = 0.0
+            future_stock = 0.0
             for i in xrange(len(demand_sorted)):
                 day = demand_by_days[demand_sorted[i]]
                 prev = demand_by_days[demand_sorted[max(i - 1, 0)]]
@@ -211,10 +218,36 @@ class StockWarehouseOrderpoint(models.Model):
                     if day['sum'] < 0:
                         min_date = demand_sorted[i]
                 if day['sum'] < 0:
-                    sum_to_order = sum_to_order + day['sum']
+                    future_stock = future_stock + day['sum']
             rec.next_need = min_date
-            rec.procure_recommended_qty = sum_to_order * -1
-            print "sum to order : %s" % sum_to_order
+            product_qty = 0.0
+            # qty needed from future stock move (withing the horizon)
+#            sum_to_order = sum_to_order * -1
+            # qty needed taking into account the current stock
+            future_stock += rec.with_context(
+                location=rec.location_id.id).product_id.qty_available
+            if float_compare(future_stock, rec.product_min_qty,
+                             precision_rounding=rec.product_uom.rounding) < 0:
+                sum_to_order = max(rec.product_min_qty, rec.product_max_qty) - future_stock
+                sum_to_order -= subtract_qty[rec.id]
+                if sum_to_order > 0.0:
+                    reste = rec.qty_multiple > 0 and \
+                        sum_to_order % rec.qty_multiple or 0.0
+                    if rec.procure_uom_id:
+                        rounding = rec.procure_uom_id.rounding
+                    else:
+                        rounding = rec.product_uom.rounding
+                    if float_compare(
+                            reste, 0.0,
+                            precision_rounding=rounding) > 0:
+                        sum_to_order += rec.qty_multiple - reste
+                    if rec.procure_uom_id:
+                        product_qty = rec.product_id.uom_id._compute_quantity(
+                            sum_to_order, rec.procure_uom_id)
+                    else:
+                        product_qty = sum_to_order
+            rec.procure_recommended_qty = product_qty
+            print "sum to order : %s" % product_qty
         return True
 
     @api.multi

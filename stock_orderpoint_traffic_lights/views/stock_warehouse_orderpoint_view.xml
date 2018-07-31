@@ -131,6 +131,7 @@
                 <button string="Refresh Buffer"
                         name="cron_actions"
                         icon="fa-refresh" type="object"/>
+                <field name="procure_recommended_qty" string="Qty to order"/>
                 <field name="incoming_dlt_qty" string="Incoming within DLT"/>
                 <field name="incoming_location_qty"
                        string="Total Incoming"/>
