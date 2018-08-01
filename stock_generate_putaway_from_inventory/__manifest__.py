@@ -4,7 +4,7 @@
 
 {
     "name": "Stock Generate Putaway from Inventory",
-    "summary": "generate Putaway locations per Product deduced from stock adjustment",
+    "summary": "generate Putaway locations per Product deduced from stock inventory",
     "version": "10.0.1.0.0",
     "author": "Akretion"
               "Odoo Community Association (OCA)",
