@@ -36,13 +36,21 @@ class PurchaseOrderLine(models.Model):
             if line.product_id.type not in ['consu', 'product'] and not line.move_ids:
                 line.qty_received = line.product_qty
                 continue
+
             total = 0.0
-            for move in line.move_ids:
-                # TODO: mettre un related sur line: line.product_finished_id
-                if move.state == 'done' and move.product_id == line.procurement_ids.production_id.product_id:
-                    # filter on finished products
-                    if move.product_uom != line.product_uom:
-                        total += move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
-                    else:
-                        total += move.product_uom_qty
+            if line._is_service_procurement():
+                mo = line.procurement_ids.production_id
+                if mo.state == 'done':
+                    for move in mo.move_finished_ids:
+                        if move.product_uom != line.product_uom:
+                            total += move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
+                        else:
+                            total += move.product_uom_qty
+            else:
+                for move in line.move_ids:
+                    if move.state == 'done':
+                        if move.product_uom != line.product_uom:
+                            total += move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
+                        else:
+                            total += move.product_uom_qty
             line.qty_received = total
