@@ -95,6 +95,12 @@ class PurchaseOrder(models.Model):
                     if seller.name.id != partner.id:
                         continue
                     purchase_edi = seller.purchase_edi_id or False
+                # Services should not appear in EDI file unless an EDI profile
+                # is specifically on the supplier info. This way, we avoid
+                # adding transport of potential discount or anything else
+                # in the EDI file.
+                if product.type == 'service' and not purchase_edi:
+                    continue
                 if purchase_edi:
                     profile_lines_dict[purchase_edi].append(line.id)
                 elif partner.default_purchase_profile_id:
