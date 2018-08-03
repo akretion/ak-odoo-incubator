@@ -43,6 +43,41 @@ class Purchase(models.Model):
     # TODO rajouter un field pour dire que le production_id (mrp)
     # est en attente de nous et pas l'inverse ?
 
+    @api.depends('order_line.procurement_ids.production_id')
+    def _compute_mo(self):
+        for order in self:
+            mos = self.env['mrp.production']
+            for line in order.order_line:
+                if line._is_service_procurement():
+                    mos |= line.procurement_ids.production_id
+            order.manufacture_ids = mos
+            order.mo_count = len(mos)
+
+    mo_count = fields.Integer(compute='_compute_mo', string='Manufacturing Orders', default=0)
+    manufacture_ids = fields.Many2many('mrp.production', compute='_compute_mo', string='Manufacturing Orders', copy=False)
+
+    @api.multi
+    def action_view_mo(self):
+        '''
+        This function returns an action that display existing picking orders of given purchase order ids.
+        When only one found, show the picking immediately.
+        '''
+        action = self.env.ref('mrp.mrp_production_action')
+        result = action.read()[0]
+
+        #override the context to get rid of the default filtering on picking type
+        result.pop('id', None)
+        result['context'] = {}
+        mo_ids = sum([order.manufacture_ids.ids for order in self], [])
+        #choose the view_mode accordingly
+        if len(mo_ids) > 1:
+            result['domain'] = "[('id','in',[" + ','.join(map(str, mo_ids)) + "])]"
+        elif len(mo_ids) == 1:
+            res = self.env.ref('mrp.mrp_production_form_view', False)
+            result['views'] = [(res and res.id or False, 'form')]
+            result['res_id'] = mo_ids and mo_ids[0] or False
+        return result
+
     @api.multi
     def button_approve(self, force=False):
         """Check procurement when PO is approved.
