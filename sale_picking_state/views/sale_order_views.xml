@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='confirmation_date']" position="before">
-                    <field name="picking_state"/>
+                    <field name="picking_state" readonly="True"/>
                 </xpath>
            </field>
         </record>
