@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+            <field name="domain">[('state','in',('draft','sent','cancel', 'confirmed', 'po_sent'))]</field>
+        </record>
+
+        <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+            <field name="domain">[('state','not in',('draft','sent', 'po_sent', 'confirmed'))]</field>
+        </record>
+
+    <record id="purchase_order_form" model="ir.ui.view">
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_rfq_send'][3]" position="after">
+                <button name="action_rfq_send" states="draft" string="Send PO by Email" type="object" context="{'send_rfq':False}"/>
+                <button name="action_rfq_send" states="sent" string="Send PO by Email" type="object" context="{'send_rfq':False}"/>
+                <button name="action_rfq_send" states="po_sent" string="Re-Send PO by Email" type="object" context="{'send_rfq':False}"/>
+            </xpath>
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="states">draft,to approve,sent,po_sent,purchase</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_confirm'][2]" position="after">
+                <button name="button_confirm" type="object" states="po_sent" string="Confirm Order" id="po_sent_confirm"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
