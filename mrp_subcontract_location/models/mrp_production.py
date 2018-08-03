@@ -34,23 +34,9 @@ class MrpProduction(models.Model):
         })
 
     @api.multi
-    def update_moves_before_production(self, supplier, update=False):
+    def update_moves_before_production(self, supplier):
         """Change products locations according to mo's location
-
-        Workflow
-        1) a subcontracted MO in WH/Stock is created due to some procurments
-        2) when a subcontracted service is bought to a supplier it changes
-        the mo's locations (where raw materials are taken and produced product is put):
-        (it changes from WH/Stock to A_SUPPLIER/Stock)
-        3) related moves should be then changed: instead of taken goods from WH/STOCK 
-        it shoud take them from A_SUPPLIER/Stock.
-        WH/Stock > Virt/Production becomes
-        WH/Stock > A_SUPPLIER/Stock + A_SUPPLIER/Stock > Virt/Production
-        4) pickings should then be added :
-        WH/Stock > A_SUPPLIER/Stock is changed to
-        Virt/Inter-warehouse > A_SUPPLIER/Stock and it's added to a
-        new picking A_SUPPLIER:Receipts
-        Add moves between Stock and Production."""
+        """
         self.ensure_one()
 
         moves_in = self.env['stock.move']
@@ -82,12 +68,14 @@ class MrpProduction(models.Model):
                 move_out = move_in.move_orig_ids
                 if not move_out:
                     _logger.error('pas de move_out, impossible?')
+                    continue
 
                 if move_in.state == 'done' or move_out.state == 'done':
                     print "les expe ou reception on deja eu lieu. on cut !"
                     move_in.move_dest_id = False
                     continue
 
+                # change pickings
                 old_pickings |= move_in.picking_id
                 move_in.picking_id = False
                 move_in.location_dest_id = supplier.location_id.id
@@ -102,7 +90,6 @@ class MrpProduction(models.Model):
 
             moves = self.move_raw_ids.filtered(lambda x: x.state not in ('done', 'cancel'))
             moves.do_unreserve()
-            moves.action_assign()
 
             self.action_assign()
         # TODO update procurements?
@@ -112,7 +99,7 @@ class MrpProduction(models.Model):
         return moves_in
 
     @api.multi
-    def update_moves_after_production(self, supplier, update=False):
+    def update_moves_after_production(self, supplier):
         # Modify outgoing move and create a second one herebefore
         # It's easier to add new move before the existing one
         moves_out = self.env['stock.move']
