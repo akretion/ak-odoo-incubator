@@ -12,7 +12,7 @@
     "website": "www.akretion.com",
     "author": " Akretion",
     "license": "AGPL-3",
-    "depends": ["account_move_base_import"],
+    "depends": ["account_move_transactionid_import"],
     "data": [],
     "installable": True,
 }
