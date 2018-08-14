@@ -9,7 +9,6 @@ import datetime
 from odoo.addons.account_move_base_import.parser.file_parser import FileParser
 from csv import Dialect
 from _csv import QUOTE_MINIMAL, register_dialect
-from odoo.osv import osv
 
 
 def float_or_zero(val):
@@ -70,7 +69,6 @@ class AtosFileParser(FileParser):
         self.filebuffer = "\n".join(selected_lines)
 
     def _parse(self, *args, **kwargs):
-        # return super(AtosFileParser, self)._parse(*args, **kwargs)
         self.result_row_list = self._parse_csv()
         return True
 
@@ -92,42 +90,20 @@ class AtosFileParser(FileParser):
                 }
         """
         amount = line['OPERATION_AMOUNT']
-        credit = bool(line['OPERATION_NAME'] == 'CREDIT_CAPTURE')
+        if line['OPERATION_NAME'] not in ['CREDIT_CAPTURE', 'DEBIT_CAPTURE']:
+            raise Exception(
+                _("The bank statement imported has invalid line(s),"
+                  " the operation type %s is not supported"
+                  % line['OPERATION_NAME']))
+
+        # inversed because the file is written from the bank's point of view,
+        # a credit in the file is then a debit from odoo's side
+        is_debit = bool(line['OPERATION_NAME'] == 'CREDIT_CAPTURE')
         res = {
             'name': line["OPERATION_NAME"] + '_' + line["TRANSACTION_ID"],
             'date_maturity': line["OPERATION_DATE"],
-            'credit': amount if credit else 0.0,
-            'debit': amount if not credit else 0.0,
-            # 'transaction_id': line["PAYMENT_DATE"] + line["TRANSACTION_ID"],
+            'debit': amount if is_debit else 0.0,
+            'credit': amount if not is_debit else 0.0,
+            'transaction_ref': line["TRANSACTION_ID"],
         }
         return res
-
-    def _post(self, *args, **kwargs):
-        """
-        Compute the total transfer amount
-        """
-        res = super(AtosFileParser, self)._post(*args, **kwargs)
-        self.transfer_amount = 0.0
-        self.refund_amount = 0.0
-        rows = []
-        for row in self.result_row_list:
-            if row['OPERATION_NAME'] in ('CREDIT'):
-                continue
-            rows.append(row)
-            if row['OPERATION_NAME'] == 'CREDIT_CAPTURE':
-                row["OPERATION_AMOUNT"] = - row["OPERATION_AMOUNT"]
-                self.refund_amount -= row["OPERATION_AMOUNT"]
-            elif row['OPERATION_NAME'] == 'DEBIT_CAPTURE':
-                self.transfer_amount -= row["OPERATION_AMOUNT"]
-            else:
-                raise osv.except_osv(
-                    _("User Error"),
-                    _("The bank statement imported have invalide line,"
-                      " indeed the operation type %s is not supported")
-                    % row['OPERATION_NAME'])
-        self.result_row_list = rows
-        self.statement_date = self.result_row_list[0]["OPERATION_DATE"]
-        return res
-
-    # def get_refund_amount(self):
-    #     return self.refund_amount
