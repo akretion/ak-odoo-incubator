@@ -58,15 +58,23 @@ class MrpProduction(models.Model):
             moves_in |= move_in
 
             if not move_in:
+                # Could happen for make to stock or make to order bought product
+                # with PO not validated yet. But we do not handle this case
+                # for now.
+                # TODO manage make to order buy case
                 print "pas de move_in? on a peut être pris du stock"
                 print "ou alors OF en cascade ?"
                 print "on fait rien ?"
             else:
                 if move_in.location_id.id != intra_location_id.id:
+                    # Could happen for make to order buy product, but
+                    # case is not handled
+                    # TODO manage make to order buy case
                     _logger.error('probleme, devrait jamais arriver?')
                     continue
                 move_out = move_in.move_orig_ids
                 if not move_out:
+                    # Make to order buy case...
                     _logger.error('pas de move_out, impossible?')
                     continue
 
