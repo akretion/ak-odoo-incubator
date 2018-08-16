@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<!--    <record id="view_purchase_order_subcontract_location" model="ir.ui.view">-->
+<!--        <field name="model">purchase.order</field>-->
+<!--        <field name="inherit_id" ref="purchase.purchase_order_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="dest_address_id" position="after">-->
+<!--                <field name="warehouse_id" invisible="1"/>-->
+<!--            </field >-->
+<!--            <field name="dest_address_id" position="attributes">-->
+<!--                <attribute name="attrs">{'invisible': ['&amp;', ('warehouse_id', '!=', %(mrp_subcontract_location.warehouse_supplier)d), ('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}</attribute>-->
+<!--            </field >-->
+<!--        </field>-->
+<!--    </record>-->
+
+</odoo>

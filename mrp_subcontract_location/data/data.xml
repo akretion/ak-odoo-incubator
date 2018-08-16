@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <data noupdate="1">
+
+<!--        <record id="warehouse_supplier" model="stock.warehouse">-->
+<!--            <field name="name">Supplier Warehouse</field>-->
+<!--            <field name="code">SUP</field>-->
+<!--        </record>-->
+
+<!--        <record id="route_interwarehouse_supply" model="stock.location.route">-->
+<!--            <field name="name">Global Interwarehouse Supply</field>-->
+<!--            <field name="warehouse_selectable" eval="True"/>-->
+<!--        </record>-->
+
+<!--        <record id="inter_wh_supply_rule" model="procurement.rule">-->
+<!--            <field name="name">wh stock=> transit</field>-->
+<!--            <field name="action">move_default_supplier_src</field>-->
+<!--            <field name="procure_method">make_to_order</field>-->
+<!--            <field name="picking_type_id" ref="stock.picking_type_out"/>-->
+<!--            <field name="location_id" ref="stock.stock_location_inter_wh"/>-->
+<!--            <field name="route_id" ref="mrp_subcontract_location.route_interwarehouse_supply"/>-->
+<!--            <field name="propagate" eval="False"/>-->
+<!--        </record>-->
+
+    </data>
+</odoo>
