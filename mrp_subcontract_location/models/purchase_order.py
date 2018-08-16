@@ -27,18 +27,17 @@ class PurchaseOrder(models.Model):
             supplier = self.partner_id
             for line in purchase.order_line:
                 if line._is_service_procurement():
-                    update = False
                     mo = line.procurement_ids.production_id
                     if mo.location_dest_id != purchase.partner_id.location_id:
-                        update = True
                         mo.update_locations(supplier)
-                    
-                    moves_in = mo.update_moves_before_production(
-                        supplier, update=update)
-                    moves_out, moves_out_dest = mo.update_moves_after_production(
-                        supplier, update=update)
-                    all_moves_in |= moves_in
-                    all_moves_out |= moves_out
+                        moves_in = mo.update_moves_before_production(
+                            supplier)
+                        moves_out, moves_out_dest = (
+                            mo.update_moves_after_production(
+                                supplier)
+                        )
+                        all_moves_in |= moves_in
+                        all_moves_out |= moves_out
 
                     # faut-til cabler les in et les outs ?
                     # ou alors le in suivant ? (facturation)

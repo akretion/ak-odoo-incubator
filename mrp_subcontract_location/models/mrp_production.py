@@ -34,32 +34,19 @@ class MrpProduction(models.Model):
         })
 
     @api.multi
-    def update_moves_before_production(self, supplier, update=False):
+    def update_moves_before_production(self, supplier):
         """Change products locations according to mo's location
-
-        Workflow
-        1) a subcontracted MO in WH/Stock is created due to some procurments
-        2) when a subcontracted service is bought to a supplier it changes
-        the mo's locations (where raw materials are taken and produced product is put):
-        (it changes from WH/Stock to A_SUPPLIER/Stock)
-        3) related moves should be then changed: instead of taken goods from WH/STOCK 
-        it shoud take them from A_SUPPLIER/Stock.
-        WH/Stock > Virt/Production becomes
-        WH/Stock > A_SUPPLIER/Stock + A_SUPPLIER/Stock > Virt/Production
-        4) pickings should then be added :
-        WH/Stock > A_SUPPLIER/Stock is changed to
-        Virt/Inter-warehouse > A_SUPPLIER/Stock and it's added to a
-        new picking A_SUPPLIER:Receipts
-        Add moves between Stock and Production."""
+        """
         self.ensure_one()
 
         moves_in = self.env['stock.move']
         proc_obj = self.env['procurement.order']
-        inter_location_id = self.env.ref(
-             'stock.stock_location_inter_wh'
-         ).id
         supplier_wh = supplier.location_id.get_warehouse()
+        intra_location_id, inter_location_id = (
+            supplier_wh._get_transit_locations()
+        )
         old_pickings = self.env['stock.picking']
+        self.cut_buy_procurement(only_buy=True)
         for raw_move in self.move_raw_ids:
             # If there is a purchase order or request, not validated yet
             # It seems complicated to change it manually, since it could be
@@ -69,57 +56,58 @@ class MrpProduction(models.Model):
             # Maybe we could display a wizard witl all impacted POs before validation
             move_in = raw_move.move_orig_ids
             moves_in |= move_in
-            if not update:
-                continue
+
             if not move_in:
-#                proc = proc_obj.search([
-#                    ('move_dest_id', '=', raw_move.id),
-#                    ('state', 'in', ('exception', 'confirmed', 'running')),
-#                    '|', ('purchase_line_id', '!=', False),
-#                    ('request_id', '!=', False)])
-#                if not proc:
-   #                # make to stock, nothing to do
-                continue
-#                if proc.purchase_id:
-                    # sortir ligne de PO de la PO et la mettre dans une nouvelle???
-#                else proc.request_id:
-                    # Changement sur la request... plusieurs PO en brouillon créées??
+                # Could happen for make to stock or make to order bought product
+                # with PO not validated yet. But we do not handle this case
+                # for now.
+                # TODO manage make to order buy case
+                print "pas de move_in? on a peut être pris du stock"
+                print "ou alors OF en cascade ?"
+                print "on fait rien ?"
             else:
-                if move_in.purchase_line_id:
-                    # TODO si orig a un PO => PO en cours à changer...
-                    pass
-                else:
-                    if move_in.location_id.id != inter_location_id:
-                        _logger.info('probleme, devrait jamais arriver?')
-                        continue
-                    move_out = move_in.move_orig_ids
-                    if not move_out:
-                        _logger.info('pas de move_out, impossible?')
-                    # We can't do anything it is is already sent
-                    # #TODO Warn the user??
-                    if move_in.state == 'done' or move_out.state == 'done':
-                        continue
-                    old_pickings |= move_in.picking_id
-                    move_in.picking_id = False
-                    move_in.location_dest_id = supplier.location_id.id
-                    move_in.warehouse_id = supplier_wh.id
-                    move_in.picking_type_id = supplier_wh.in_type_id.id
-                    move_in.assign_picking()
+                if move_in.location_id.id != intra_location_id.id:
+                    # Could happen for make to order buy product, but
+                    # case is not handled
+                    # TODO manage make to order buy case
+                    _logger.error('probleme, devrait jamais arriver?')
+                    continue
+                move_out = move_in.move_orig_ids
+                if not move_out:
+                    # Make to order buy case...
+                    _logger.error('pas de move_out, impossible?')
+                    continue
 
-                    old_pickings |= move_out.picking_id
-                    move_out.picking_id = False
-                    move_out.partner_id = supplier.id
-                    move_out.assign_picking()
-                    # assign_picking
+                if move_in.state == 'done' or move_out.state == 'done':
+                    print "les expe ou reception on deja eu lieu. on cut !"
+                    move_in.move_dest_id = False
+                    continue
 
-            # TODO update procurements?
+                # change pickings
+                old_pickings |= move_in.picking_id
+                move_in.picking_id = False
+                move_in.location_dest_id = supplier.location_id.id
+                move_in.warehouse_id = supplier_wh.id
+                move_in.picking_type_id = supplier_wh.in_type_id.id
+                move_in.assign_picking()
+
+                old_pickings |= move_out.picking_id
+                move_out.picking_id = False
+                move_out.partner_id = supplier.id
+                move_out.assign_picking()
+
+            moves = self.move_raw_ids.filtered(lambda x: x.state not in ('done', 'cancel'))
+            moves.do_unreserve()
+
+            self.action_assign()
+        # TODO update procurements?
         for picking in old_pickings:
             if not picking.move_lines:
                 picking.unlink()
         return moves_in
 
     @api.multi
-    def update_moves_after_production(self, supplier, update=False):
+    def update_moves_after_production(self, supplier):
         # Modify outgoing move and create a second one herebefore
         # It's easier to add new move before the existing one
         moves_out = self.env['stock.move']
@@ -136,8 +124,6 @@ class MrpProduction(models.Model):
             moves_out |= move_out
             moves_out_dest |= move_out_dest
 
-            if not update:
-                continue
             old_pickings |= move_out.picking_id
             # TODO update procurements?
             move_out.picking_id = False
