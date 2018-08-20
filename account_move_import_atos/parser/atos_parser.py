@@ -90,7 +90,8 @@ class AtosFileParser(FileParser):
                 }
         """
         amount = line['OPERATION_AMOUNT']
-        if line['OPERATION_NAME'] not in ['CREDIT_CAPTURE', 'DEBIT_CAPTURE']:
+        operation_names = ['CREDIT_CAPTURE', 'DEBIT_CAPTURE', 'CREDIT']
+        if line['OPERATION_NAME'] not in operation_names:
             raise Exception(
                 _("The bank statement imported has invalid line(s),"
                   " the operation type %s is not supported"
@@ -98,12 +99,12 @@ class AtosFileParser(FileParser):
 
         # inversed because the file is written from the bank's point of view,
         # a credit in the file is then a debit from odoo's side
-        is_debit = bool(line['OPERATION_NAME'] == 'CREDIT_CAPTURE')
+        is_credit = bool(line['OPERATION_NAME'] == 'DEBIT_CAPTURE')
         res = {
             'name': line["OPERATION_NAME"] + '_' + line["TRANSACTION_ID"],
             'date_maturity': line["OPERATION_DATE"],
-            'debit': amount if is_debit else 0.0,
-            'credit': amount if not is_debit else 0.0,
+            'credit': amount if is_credit else 0.0,
+            'debit': amount if not is_credit else 0.0,
             'transaction_ref': line["TRANSACTION_ID"],
         }
         return res
