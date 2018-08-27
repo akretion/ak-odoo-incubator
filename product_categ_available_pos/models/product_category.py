@@ -16,14 +16,14 @@ class ProductCategory(models.Model):
         name="Available in POS",
         help="Switching this will impact all children categories.",
         compute='_compute_available_in_pos_view',
-        inverse='_set_available_in_pos_view',
+        inverse='_inverse_available_in_pos_view',
         store=False)
 
     def _compute_available_in_pos_view(self):
         for rec in self:
             rec.available_in_pos_view = rec.available_in_pos
 
-    def _set_available_in_pos_view(self):
+    def _inverse_available_in_pos_view(self):
         for rec in self:
             rec.set_available_in_pos(rec.available_in_pos_view)
 

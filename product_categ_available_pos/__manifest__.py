@@ -10,6 +10,7 @@ Change search and search_read in order to search from category.
     """,
     'author': 'Akretion',
     'website': 'https://akretion.com',
+    "license": "AGPL-3",
     'depends': ['product', 'pos_remove_pos_category'],
     'data': ['views/product_category.xml'],
     'installable': True,
