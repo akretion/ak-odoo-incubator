@@ -85,4 +85,3 @@ class TestPosAvailableCategory(common.TransactionCase):
         self.get_ctx(parent).set_available_in_pos(False)
         self.assertFalse(parent.available_in_pos)
         self.assertFalse(child.available_in_pos)
-
