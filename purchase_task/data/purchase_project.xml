@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="project.project" id="purchase_project">
+      <field name="name">Purchases</field>
+    </record>
+
+    <record model="project.task.type" id="init">
+      <field name="sequence">1</field>
+      <field name="name">Brouillon</field>
+      <field name="project_ids" eval="[(4, ref('purchase_project'))]" />
+    </record>
+
+    <record model="project.task.type" id="revision_sent">
+      <field name="sequence">2</field>
+      <field name="name">Révision envoyée</field>
+      <field name="project_ids" eval="[(4, ref('purchase_project'))]" />
+    </record>
+
+    <record model="project.task.type" id="ack_received">
+      <field name="sequence">3</field>
+      <field name="name">Accusé reçu</field>
+      <field name="project_ids" eval="[(4, ref('purchase_project'))]" />
+    </record>
+
+    <record model="project.task.type" id="splip_sent">
+      <field name="sequence">4</field>
+      <field name="name">B/L envoyé</field>
+      <field name="project_ids" eval="[(4, ref('purchase_project'))]" />
+    </record>
+
+    <record model="project.task.type" id="running">
+      <field name="sequence">5</field>
+      <field name="name">En cours</field>
+      <field name="project_ids" eval="[(4, ref('purchase_project'))]" />
+    </record>
+
+</odoo>
