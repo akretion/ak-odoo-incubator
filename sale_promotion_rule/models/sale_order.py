@@ -32,7 +32,7 @@ class SaleOrder(models.Model):
             ])
         if not rule:
             raise UserError(
-                _('Code number %s is invalid' % coupon_code))
+                _('Code number %s is invalid') % coupon_code)
         else:
             self.write({'promotion_rule_id': rule.id})
             self.apply_promotion()

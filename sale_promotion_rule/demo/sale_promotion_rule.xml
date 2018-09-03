@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
 
 <record id="rule_1" model="sale.promotion.rule">
     <field name="name">Best Promo</field>
@@ -22,5 +21,4 @@
     <field name="use_best_discount">True</field>
 </record>
 
-    </data>
 </odoo>

@@ -2,12 +2,12 @@
 # Copyright 2017 Akretion (http://www.akretion.com).
 # @author Benoît GUILLOT <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import logging
 
 from odoo import api, fields, models, _
 from odoo.tools import float_compare
 import odoo.addons.decimal_precision as dp
 
-import logging
 _logger = logging.getLogger(__name__)
 
 
@@ -16,20 +16,18 @@ class SalePromotionRule(models.Model):
     _description = 'Sale Promotion Rule'
     _rec_name = "display_name"
 
-    sequence = fields.Integer('Sequence', default=10)
+    sequence = fields.Integer(default=10)
     rule_type = fields.Selection(
         selection=[
             ('coupon', 'Coupon'),
             ('auto', 'Automatic'),
             ],
-        string='Rule type',
         required=True,
         default='coupon')
-    name = fields.Char('Name', required=True)
-    code = fields.Char('Code')
+    name = fields.Char(required=True)
+    code = fields.Char()
     discount_amount = fields.Float(
-        string='Discount amount',
-        digits_compute=dp.get_precision('Discount'),
+        digits=dp.get_precision('Discount'),
         required=True)
     promo_type = fields.Selection(
         selection=[
@@ -73,8 +71,7 @@ class SalePromotionRule(models.Model):
         ], default='amount_total',
         required=True)
     minimal_amount = fields.Float(
-        string='Minimal amount',
-        digits_compute=dp.get_precision('Account'))
+        digits=dp.get_precision('Discount'))
     display_name = fields.Char(
         compute='_compute_display_name')
     use_best_discount = fields.Boolean(String='Use best discount')
@@ -112,8 +109,7 @@ class SalePromotionRule(models.Model):
                 ('partner_id', '=', order.partner_id.id),
                 ('promotion_rule_id', '=', self.id),
                 ('state', '!=', 'cancel')])
-        else:
-            return True
+        return True
 
     def _is_promotion_valid(self, order):
         restrictions = [
@@ -139,3 +135,4 @@ class SalePromotionRule(models.Model):
                 record.display_name = '%s (%s)' % (record.name, _('Automatic'))
             else:
                 super(SalePromotionRule, record)._compute_display_name()
+        return None
