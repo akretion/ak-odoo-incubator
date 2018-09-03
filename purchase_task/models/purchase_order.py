@@ -41,7 +41,7 @@ class PurchaseOrder(models.Model):
         store=True,
         index=True)
 
-    @api.depends('picking_ids.state')
+    @api.depends('order_line.move_ids', 'order_line.move_ids.state')
     def _compute_stage_delivery(self):
         # done = all done
         # available : at least one available
@@ -59,8 +59,8 @@ class PurchaseOrder(models.Model):
                 rec.stage_delivery = 'waiting'
 
     @api.depends(
-        'manufacture_ids.availability',
-        'manufacture_ids.state')
+        'order_line.procurement_ids.production_id.availability',
+        'order_line.procurement_ids.production_id.state')
     def _compute_stage_manufacture(self):
         # done = all manufactures done
         # mrp running  = materials available or prod started
