@@ -3,8 +3,10 @@
 # @author Benoît GUILLOT <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models, _
+from odoo import api, fields, models, _
+from odoo.tools import float_compare
 import odoo.addons.decimal_precision as dp
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -27,7 +29,7 @@ class SalePromotionRule(models.Model):
     code = fields.Char('Code')
     discount_amount = fields.Float(
         string='Discount amount',
-        digits_compute=dp.get_precision('Account'),
+        digits_compute=dp.get_precision('Discount'),
         required=True)
     promo_type = fields.Selection(
         selection=[
@@ -97,7 +99,11 @@ class SalePromotionRule(models.Model):
             (self.date_from and fields.Date.today() < self.date_from))
 
     def _check_valid_total_amount(self, order):
-        return self.minimal_amount < order[self.restriction_amount]
+        precision = self.env['decimal.precision'].precision_get('Discount')
+        return float_compare(
+            self.minimal_amount,
+            order[self.restriction_amount],
+            precision_digits=precision) < 0
 
     def _check_valid_usage(self, order):
         if self.usage_restriction == 'one_per_partner':
@@ -124,11 +130,12 @@ class SalePromotionRule(models.Model):
                 return False
         return True
 
+    @api.depends('rule_type', 'code', 'name')
     def _compute_display_name(self):
         for record in self:
             if record.rule_type == 'coupon':
                 record.display_name = '%s (%s)' % (record.name, record.code)
             elif record.rule_type == 'auto':
-                record.display_name = '%s (%s)' % (record.name, 'Automatic')
+                record.display_name = '%s (%s)' % (record.name, _('Automatic'))
             else:
                 super(SalePromotionRule, record)._compute_display_name()
