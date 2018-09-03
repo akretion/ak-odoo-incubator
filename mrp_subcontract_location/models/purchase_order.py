@@ -18,31 +18,59 @@ class PurchaseOrder(models.Model):
 #        help="Technical field used to display the Drop Ship Address",
 #        readonly=True)
 
+    def manage_subcontracted_manufacture_line(self, line):
+        self.ensure_one()
+        supplier = self.partner_id
+        if line._is_service_procurement():
+            mo = line.procurement_ids.production_id
+            if mo.location_dest_id != self.partner_id.location_id:
+                mo.update_locations(supplier)
+                moves_in = mo.update_moves_before_production(
+                    supplier)
+                moves_out, moves_out_dest = (
+                    mo.update_moves_after_production(
+                        supplier)
+                )
+            else:
+                # in order to link existing move to po
+                moves_in = self.env['stock.move']
+                moves_out, moves_out_dest = (
+                    mo.get_expedition_and_reception_moves()
+                )
+
+            # faut-til cabler les in et les outs ?
+            # ou alors le in suivant ? (facturation)
+            self.add_purchase_line_id(moves_out, line)
+            self.add_purchase_line_id(moves_out_dest, line)
+            return moves_in, moves_out, moves_out_dest
+
     def button_approve(self):
         res = super(PurchaseOrder, self).button_approve()
         for purchase in self:
-            all_moves_in = self.env['stock.move']
-            all_moves_out = self.env['stock.move']
+#            all_moves_in = self.env['stock.move']
+#            all_moves_out = self.env['stock.move']
 #            location = self._get_location()
-            supplier = self.partner_id
+#            supplier = purchase.partner_id
             for line in purchase.order_line:
-                if line._is_service_procurement():
-                    mo = line.procurement_ids.production_id
-                    if mo.location_dest_id != purchase.partner_id.location_id:
-                        mo.update_locations(supplier)
-                        moves_in = mo.update_moves_before_production(
-                            supplier)
-                        moves_out, moves_out_dest = (
-                            mo.update_moves_after_production(
-                                supplier)
-                        )
-                        all_moves_in |= moves_in
-                        all_moves_out |= moves_out
+                # In seperate method as it is reused in an other module
+                purchase.manage_subcontracted_manufacture_line(line)
+#                if line._is_service_procurement():
+#                    mo = line.procurement_ids.production_id
+#                    if mo.location_dest_id != purchase.partner_id.location_id:
+#                        mo.update_locations(supplier)
+#                        moves_in = mo.update_moves_before_production(
+#                            supplier)
+#                        moves_out, moves_out_dest = (
+#                            mo.update_moves_after_production(
+#                                supplier)
+#                        )
+##                        all_moves_in |= moves_in
+##                        all_moves_out |= moves_out
 
-                    # faut-til cabler les in et les outs ?
-                    # ou alors le in suivant ? (facturation)
-                    self.add_purchase_line_id(moves_out, line)
-                    self.add_purchase_line_id(moves_out_dest, line)
+#                    # faut-til cabler les in et les outs ?
+#                    # ou alors le in suivant ? (facturation)
+#                    self.add_purchase_line_id(moves_out, line)
+#                    self.add_purchase_line_id(moves_out_dest, line)
 #            self.attach_picking_in(all_moves_in)
 #            self.attach_picking_out(all_moves_out)
         return res

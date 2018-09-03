@@ -143,6 +143,18 @@ class MrpProduction(models.Model):
         return moves_out, moves_out_dest
 
     @api.multi
+    def get_expedition_and_reception_moves(self):
+        self.ensure_one()
+        moves_out = self.env['stock.move']
+        moves_out_dest = self.env['stock.move']
+        for finish_move in self.move_finished_ids:
+            move_out = finish_move.move_dest_id
+            move_out_dest = move_out.move_dest_id
+            moves_out |= move_out
+            moves_out_dest |= move_out_dest
+        return moves_out, moves_out_dest
+
+    @api.multi
     def write(self, vals):
         """Propagate date_planned start to previous move."""
 
