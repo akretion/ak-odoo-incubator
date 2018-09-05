@@ -28,10 +28,37 @@ class SaleOrder(models.Model):
         store=True
     )
 
+    applied_promotion_rule_ids = fields.Many2many(
+        'sale.promotion.rule',
+        string='Promotion rules',
+        compute='_compute_applied_promotion_rule_ids'
+    )
+
+    has_promotion_rules = fields.Boolean(
+        compute='_compute_has_promotion_rules'
+    )
+
+    @api.depends('promotion_rule_ids', 'coupon_promotion_rule_id')
+    def _compute_has_promotion_rules(self):
+        for rec in self:
+            rec.has_promotion_rules = (
+                rec.coupon_promotion_rule_id or
+                rec.promotion_rule_ids)
+
+    @api.depends('promotion_rule_ids', 'coupon_promotion_rule_id')
+    def _compute_applied_promotion_rule_ids(self):
+        for rec in self:
+            rec.applied_promotion_rule_ids = (
+                rec.coupon_promotion_rule_id + rec.promotion_rule_ids)
+
     @api.multi
     def add_coupon(self, coupon_code):
         self.env['sale.promotion.rule'].apply_coupon(self, coupon_code)
 
     @api.multi
-    def apply_promotion(self):
+    def apply_promotions(self):
         self.env['sale.promotion.rule'].compute_promotions(self)
+
+    @api.multi
+    def clear_promotions(self):
+        self.env['sale.promotion.rule'].remove_promotions(self)

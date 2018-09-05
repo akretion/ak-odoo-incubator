@@ -53,14 +53,14 @@ class AbstractPromotionCase(AbstractCommonPromotionCase):
             self.add_coupon_code('DGRVBYTHT')
 
     def test_add_automatic_discount_code(self):
-        self.sale.apply_promotion()
+        self.sale.apply_promotions()
         for line in self.sale.order_line:
             self.check_discount_rule_set(line, self.promotion_rule_auto)
 
     def test_use_best_discount(self):
         first_line = self.sale.order_line[0]
         first_line.discount = 5
-        self.sale.apply_promotion()
+        self.sale.apply_promotions()
         self.assertEqual(first_line.discount, 10)
         for line in self.sale.order_line:
             self.check_discount_rule_set(line, self.promotion_rule_auto)
