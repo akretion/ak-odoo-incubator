@@ -21,7 +21,8 @@
                     type="object"
                     class="oe_edit_only oe_link"/>
             </div>
-            <field name="promotion_rule_id" nolabel="1" string="Promo"/>
+            <field name="promotion_rule_ids" nolabel="1"/>
+            <field name="coupon_code"/>
         </field>
     </field>
 </record>

@@ -37,7 +37,7 @@
                             <field name="promo_type" widget="radio"/>
                             <field name="discount_type"/>
                             <field name="discount_amount"/>
-                            <field name="use_best_discount"/>
+                            <field name="multi_rule_strategy"/>
                         </group>
                         <group name="condition" string="Condition" col="3">
                             <label for="date_from" string="Date début/fin"/>
