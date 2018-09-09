@@ -9,10 +9,9 @@
 				<button type="object"
                     name="action_view_task"
                     class="oe_stat_button"
-                    icon="fa-tasks" attrs="{'invisible':[('task_id','=',[])]}"
-                    string="Task">
+                    icon="fa-tasks" attrs="{'invisible':[('task_id','=', False)]}"
+                    string="Task"/>
                     <field name="task_id" invisible="1"/>
-                </button>
             </field>
             <field name="origin" position="after">
             	<field name="project_id" invisible="1"/>
