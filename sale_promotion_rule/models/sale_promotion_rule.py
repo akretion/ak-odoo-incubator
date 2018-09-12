@@ -222,23 +222,6 @@ according to the strategy
         ])
         auto_rules._apply(orders)
 
-    @api.multi
-    def unset(self, orders):
-        """
-        Remove the rules from the sale orders and recompute remaining rules.
-        """
-        self.ensure_one()
-        for order in orders:
-            applied_rules = order.promotion_rule_ids + \
-                order.coupon_promotion_rule_id
-            if self not in applied_rules:
-                continue
-            self.reset_promitions()
-            for r in applied_rules:
-                if r == self:
-                    continue
-                r.apply(order)
-
     @api.model
     def remove_promotions(self, orders):
         orders.write({
