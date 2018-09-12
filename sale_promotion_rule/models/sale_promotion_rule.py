@@ -271,13 +271,14 @@ according to the strategy
 
     @api.multi
     def _apply(self, orders):
-        self.ensure_one()
-        orders = orders.filtered(lambda o, r=self: r._is_promotion_valid(o))
-        self._apply_rule_to_order_lines(orders.mapped('order_line'))
-        if self.rule_type == 'coupon':
-            orders.write({'coupon_promotion_rule_id': self.id})
-        else:
-            orders.write({'promotion_rule_ids': [(4, self.id)]})
+        for rule in self:
+            orders = orders.filtered(
+                lambda o, r=rule: r._is_promotion_valid(o))
+            rule._apply_rule_to_order_lines(orders.mapped('order_line'))
+            if rule.rule_type == 'coupon':
+                orders.write({'coupon_promotion_rule_id': rule.id})
+            else:
+                orders.write({'promotion_rule_ids': [(4, rule.id)]})
 
     @api.multi
     def _apply_rule_to_order_lines(self, lines):
