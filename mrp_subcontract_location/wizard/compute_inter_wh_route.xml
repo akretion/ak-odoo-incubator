@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_compute_inter_wh_route_form" model="ir.ui.view">
+        <field name="name">Compute Inter Warehouse Routes</field>
+        <field name="model">compute.interwh.route.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Parameters">
+                <group>
+                    <label string="Wizard checks all boms and compute the inter warehouse routes on the raw material."/>
+                </group>
+                <footer>
+                    <button name="recompute_wh_route_global" string="Compute Routes" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_compute_inter_wh_route" model="ir.actions.act_window">
+        <field name="name">Run Inter Warehouse Route Update</field>
+        <field name="res_model">compute.interwh.route.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_mrp_sched" name="Schedulers" parent="mrp.menu_mrp_root" groups="mrp.group_mrp_manager" sequence="22"/>
+
+    <menuitem id="menu_interwh_route_compute" parent="menu_mrp_sched" sequence="20" action="action_compute_inter_wh_route"/>
+
+</odoo>

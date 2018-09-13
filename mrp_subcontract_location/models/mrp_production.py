@@ -15,33 +15,32 @@ _logger = logging.getLogger(__name__)
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
-    def update_locations(self, supplier):
+    def update_locations(self, supplier_wh, supplier_loc):
         self.ensure_one()
-        if not supplier.location_id:
+        if not supplier_loc:
             raise exceptions.ValidationError(
                 _('No location configured on the subcontractor'))
-        self.location_src_id = supplier.location_id.id
-        self.location_dest_id = supplier.location_id.id
-        wh = supplier.location_id.get_warehouse()
-        self.picking_type_id = wh.manu_type_id.id
+        self.location_src_id = supplier_loc.id
+        self.location_dest_id = supplier_loc.id
+        self.picking_type_id = supplier_wh.manu_type_id.id
         self.move_raw_ids.write({
-            'warehouse_id': wh.id,
-            'location_id': supplier.location_id.id,
+            'warehouse_id': supplier_wh.id,
+            'location_id': supplier_loc.id,
         })
         self.move_finished_ids.write({
-            'warehouse_id': wh.id,
-            'location_dest_id': supplier.location_id.id,
+            'warehouse_id': supplier_wh.id,
+            'location_dest_id': supplier_loc.id,
         })
 
     @api.multi
-    def update_moves_before_production(self, supplier):
+    def update_moves_before_production(self, supplier, supplier_wh,
+                                       supplier_loc):
         """Change products locations according to mo's location
         """
         self.ensure_one()
 
         moves_in = self.env['stock.move']
         proc_obj = self.env['procurement.order']
-        supplier_wh = supplier.location_id.get_warehouse()
         intra_location_id, inter_location_id = (
             supplier_wh._get_transit_locations()
         )
@@ -86,7 +85,7 @@ class MrpProduction(models.Model):
                 # change pickings
                 old_pickings |= move_in.picking_id
                 move_in.picking_id = False
-                move_in.location_dest_id = supplier.location_id.id
+                move_in.location_dest_id = supplier_loc.id
                 move_in.warehouse_id = supplier_wh.id
                 move_in.picking_type_id = supplier_wh.in_type_id.id
                 move_in.assign_picking()
@@ -107,12 +106,12 @@ class MrpProduction(models.Model):
         return moves_in
 
     @api.multi
-    def update_moves_after_production(self, supplier):
+    def update_moves_after_production(self, supplier, supplier_wh,
+                                      supplier_loc):
         # Modify outgoing move and create a second one herebefore
         # It's easier to add new move before the existing one
         moves_out = self.env['stock.move']
         moves_out_dest = self.env['stock.move']
-        supplier_wh = supplier.location_id.get_warehouse()
         old_pickings = self.env['stock.picking']
         for finish_move in self.move_finished_ids:
             if not finish_move.move_dest_id:
@@ -127,7 +126,7 @@ class MrpProduction(models.Model):
             old_pickings |= move_out.picking_id
             # TODO update procurements?
             move_out.picking_id = False
-            move_out.location_id = supplier.location_id.id
+            move_out.location_id = supplier_loc.id
             move_out.warehouse_id = supplier_wh.id
             move_out.picking_type_id = supplier_wh.out_type_id.id
             move_out.assign_picking()

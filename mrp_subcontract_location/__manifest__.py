@@ -14,8 +14,8 @@
     ],
     'data': [
         'data/data.xml',
-        'views/res_partner.xml',
         'views/purchase.order.xml',
+        'wizard/compute_inter_wh_route.xml',
     ],
     'installable': True,
     'application': False,

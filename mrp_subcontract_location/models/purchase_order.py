@@ -23,13 +23,15 @@ class PurchaseOrder(models.Model):
         supplier = self.partner_id
         if line._is_service_procurement():
             mo = line.procurement_ids.production_id
-            if mo.location_dest_id != self.partner_id.location_id:
-                mo.update_locations(supplier)
+            supplier_wh, supplier_loc = self.partner_id.\
+                    _get_supplier_wh_and_location()
+            if mo.location_dest_id != supplier_loc:
+                mo.update_locations(supplier_wh, supplier_loc)
                 moves_in = mo.update_moves_before_production(
-                    supplier)
+                    supplier, supplier_wh, supplier_loc)
                 moves_out, moves_out_dest = (
                     mo.update_moves_after_production(
-                        supplier)
+                        supplier, supplier_wh, supplier_loc)
                 )
             else:
                 # in order to link existing move to po
