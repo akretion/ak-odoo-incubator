@@ -33,6 +33,8 @@
         "views/mrp_production_view.xml",
         "views/purchase_order_line_view.xml",
         "views/mrp_bom_view.xml",
+        'views/product.xml',
+        "views/make_procurement_views.xml",
     ],
     'installable': True,
     'application': False,

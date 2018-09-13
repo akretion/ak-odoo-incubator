@@ -21,6 +21,7 @@ class MrpBom(models.Model):
     dlt = fields.Float(
         string="Decoupled Lead Time (days)",
         compute="_compute_dlt",
+        store=True,
     )
     has_mto_rule = fields.Boolean(
         string="MTO",
@@ -101,8 +102,13 @@ class MrpBom(models.Model):
         dlt += self._get_longest_path()
         return dlt
 
+    @api.depends(
+        'product_id.produce_delay',
+        'product_tmpl_id.produce_delay',
+        'bom_line_ids.dlt')
     def _compute_dlt(self):
         for rec in self:
+            _logger.info("bom.compute_dlt")
             rec.dlt = rec._get_manufactured_dlt()
 
 
@@ -119,7 +125,7 @@ class MrpBomLine(models.Model):
     )
     dlt = fields.Float(
         string="Decoupled Lead Time (days)",
-        compute="_compute_dlt",
+        related="product_id.dlt",
     )
     has_mto_rule = fields.Boolean(
         string="MTO",
@@ -146,14 +152,6 @@ class MrpBomLine(models.Model):
                 domain, limit=1)
             line.orderpoint_id = orderpoint
             line.is_buffered = True if orderpoint else False
-
-    def _compute_dlt(self):
-        for rec in self:
-            if rec.product_id.bom_ids:
-                rec.dlt = rec.product_id.bom_ids[0].dlt
-            else:
-                rec.dlt = rec.product_id.seller_ids and \
-                    rec.product_id.seller_ids[0].delay or 0.0
 
     def _compute_mto_rule(self):
         for rec in self:
