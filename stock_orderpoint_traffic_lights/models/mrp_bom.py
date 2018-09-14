@@ -105,7 +105,7 @@ class MrpBom(models.Model):
     @api.depends(
         'product_id.produce_delay',
         'product_tmpl_id.produce_delay',
-        'bom_line_ids.dlt')
+        'bom_line_ids.product_id.dlt')
     def _compute_dlt(self):
         for rec in self:
             _logger.info("bom.compute_dlt")
