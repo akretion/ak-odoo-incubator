@@ -29,14 +29,24 @@ env:
 
   matrix:
   - TESTS="0" LINT_CHECK="1"
+<<<<<<< HEAD
   - ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
+=======
+  - ODOO_REPO="odoo/odoo" EXCLUDE="product_categ_available_pos"
+  - ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
+  - UNIT_TEST="1" ODOO_REPO="odoo/odoo" EXCLUDE="product_categ_available_pos"
+>>>>>>> REFactor and add test
   - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
+<<<<<<< HEAD
   - printf '[options]\n\nrunning_env = dev\nkeychain_key_dev = HRdthrkXp28SCHX0kmwOgIob-82N-w8zWoE_UsctE7E=' > ${HOME}/.openerp_serverrc
+=======
+  - printf '[options]\n\nrunning_env = dev\n' > ${HOME}/.openerp_serverrc
+>>>>>>> REFactor and add test
   - git clone https://github.com/akretion/akretion-quality-tools ${HOME}/akretion-quality-tools
   - export PATH=${HOME}/akretion-quality-tools/travis:${PATH}
   - travis_configure
