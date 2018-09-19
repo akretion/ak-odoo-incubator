@@ -32,7 +32,7 @@ class InvoiceWizard(models.TransientModel):
             'name': _("Invoice Generated"),
             'target': 'current',
             'domain': [('id', 'in', invoices.ids)]
-            })
+        })
         return action
 
     @api.multi

@@ -57,7 +57,7 @@ class BaseHoldingInvoicing(models.AbstractModel):
         return vals
 
     @api.model
-    def _prepare_invoice(self, data):
+    def _prepare_invoice(self, data, lines):
         # get default from native method _prepare_invoice
         # use first sale order as partner and agreement are the same
         sale = self.env['sale.order'].search(data['__domain'], limit=1)
@@ -66,6 +66,7 @@ class BaseHoldingInvoicing(models.AbstractModel):
             'origin': _('Holding Invoice'),
             'company_id': self.env.context['force_company'],
             'user_id': self.env.uid,
+            'invoice_line_ids': [(6, 0, lines.ids)],
         })
         # Remove fiscal position from vals
         # Because fiscal position in vals is not that of the 'force_company'
@@ -92,6 +93,10 @@ class BaseHoldingInvoicing(models.AbstractModel):
         return NotImplemented
 
     @api.model
+    def _link_sale_order_line(self, invoice_lines, sale_lines):
+        return NotImplemented
+
+    @api.model
     def _create_inv_lines(self, val_lines):
         inv_line_obj = self.env['account.invoice.line']
         lines = inv_line_obj.browse(False)
@@ -106,7 +111,6 @@ class BaseHoldingInvoicing(models.AbstractModel):
         _logger.debug('Retrieve data for generating the invoice')
         for data in self._get_invoice_data(domain):
             company = self._get_company_invoice(data)
-
             agree = self.env['agreement'].browse(data['agreement_id'][0])
             # add company and agreement info in the context
             loc_self = self.with_context(
@@ -114,21 +118,23 @@ class BaseHoldingInvoicing(models.AbstractModel):
                 invoice_date=invoice_date,
                 agreement_id=agree.id,
                 agree_group_by=agree.holding_invoice_group_by)
-
             _logger.debug('Prepare vals for holding invoice')
             data_lines = loc_self._get_invoice_line_data(data)
             val_lines = []
             for data_line in data_lines:
                 val_lines.append(loc_self._prepare_invoice_line(data_line))
-            invoice_line_ids = loc_self._create_inv_lines(val_lines)
-            lines = [(4, x.id) for x in invoice_line_ids]
-            invoice_vals = loc_self._prepare_invoice(data)
-            invoice_vals.update({'invoice_line_ids': lines})
+            invoice_lines = loc_self._create_inv_lines(val_lines)
+            _logger.debug('Link the invoice line with the sale order line')
+            sales = self.env['sale.order'].search(data['__domain'])
+            sale_lines = self.env['sale.order.line'].search([
+                ('order_id', 'in', sales.ids)])
+            self._link_sale_order_line(invoice_lines, sale_lines)
+            invoice_vals = loc_self._prepare_invoice(data, invoice_lines)
             _logger.debug('Generate the holding invoice')
+            import pdb;pdb.set_trace()
             invoice = loc_self.env['account.invoice'].create(invoice_vals)
             # invoice.button_reset_taxes()
             _logger.debug('Link the invoice with the sale order')
-            sales = self.env['sale.order'].search(data['__domain'])
             self._link_sale_order(invoice, sales)
             invoices |= invoice
         return invoices
@@ -177,6 +183,10 @@ class ChildInvoicing(models.TransientModel):
         order_lines._store_set_values(['invoiced'])
 
     @api.model
+    def _link_sale_order_line(self, invoice_lines, sale_lines):
+        sale_lines.write({'invoice_lines': [(6, 0, invoice_lines.ids)]})
+
+    @api.model
     def _get_invoice_line_data(self, data):
         agree = self.env['agreement'].browse(
             data['agreement_id'][0])
@@ -194,12 +204,6 @@ class ChildInvoicing(models.TransientModel):
     def _prepare_invoice_line(self, data_line):
         val_line = super(ChildInvoicing, self).\
             _prepare_invoice_line(data_line)
-        if data_line.get('__domain'):
-            order_ids = self.env['sale.order'].search(
-                data_line['__domain']).ids
-            line_ids = self.env['sale.order.line'].search([
-                ('order_id', 'in', order_ids)]).ids
-            val_line['sale_line_ids'] = [(6, 0, line_ids)]
         # TODO the code is too complicated
         # we should simplify the _get_invoice_line_data
         # and _prepare_invoice_line to avoid this kind of hack
@@ -221,10 +225,14 @@ class ChildInvoicing(models.TransientModel):
         vals['partner_id'] = holding_invoice.company_id.partner_id.id
         agree = self.env['agreement'].browse(data['agreement_id'][0])
         vals['journal_id'] = agree.journal_id.id
-        partner_data = self.env['account.invoice'].onchange_partner_id(
-            'out_invoice', holding_invoice.company_id.partner_id.id,
-            company_id=self.env.context['force_company'])
-        vals['account_id'] = partner_data['value'].get('account_id', False)
+        partner_data = {
+            'type': 'out_invoice',
+            'partner_id': holding_invoice.company_id.partner_id.id,
+            'company_id': self.env.context['force_company'],
+        }
+        partner_data = self.env['account.invoice'].play_onchanges(
+            partner_data, ['partner_id'])
+        vals['account_id'] = partner_data.get('account_id', False)
         return vals
 
     @api.model

@@ -14,7 +14,6 @@
      'account_invoice_inter_company',
      'agreement_sale',
      'base_suspend_security',
-     'onchange_helper',
      # Note we depend of this module for having the sale_ids field
      # on the invoice
      'sale_automatic_workflow',
