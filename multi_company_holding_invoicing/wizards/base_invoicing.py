@@ -6,6 +6,7 @@
 
 
 from odoo import models, api, _
+from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -131,7 +132,6 @@ class BaseHoldingInvoicing(models.AbstractModel):
             self._link_sale_order_line(invoice_lines, sale_lines)
             invoice_vals = loc_self._prepare_invoice(data, invoice_lines)
             _logger.debug('Generate the holding invoice')
-            import pdb;pdb.set_trace()
             invoice = loc_self.env['account.invoice'].create(invoice_vals)
             # invoice.button_reset_taxes()
             _logger.debug('Link the invoice with the sale order')
@@ -177,10 +177,9 @@ class ChildInvoicing(models.TransientModel):
     def _link_sale_order(self, invoice, sales):
         sales.write({'invoice_ids': [(6, 0, [invoice.id])],
                      'state': 'done'})
-        order_lines = self.env['sale.order.line'].search([
-            ('order_id', 'in', sales.ids),
-        ])
-        order_lines._store_set_values(['invoiced'])
+        for order_line in self.env['sale.order.line'].search([
+                ('order_id', 'in', sales.ids)]):
+            order_line.invoice_status = 'invoiced'
 
     @api.model
     def _link_sale_order_line(self, invoice_lines, sale_lines):
@@ -224,7 +223,16 @@ class ChildInvoicing(models.TransientModel):
         vals['origin'] = holding_invoice.name
         vals['partner_id'] = holding_invoice.company_id.partner_id.id
         agree = self.env['agreement'].browse(data['agreement_id'][0])
-        vals['journal_id'] = agree.journal_id.id
+        if agree.journal_id:
+            journal_id = agree.journal_id
+        else:
+            journal_id = self.env['account.invoice'].with_context(
+                company_id=data['company_id'][0])._default_journal()
+        if not journal_id:
+            raise UserError(_(
+                'Please define an accounting sale journal for the company %s.',
+                data['company_id'][1]))
+        vals['journal_id'] = journal_id.id
         partner_data = {
             'type': 'out_invoice',
             'partner_id': holding_invoice.company_id.partner_id.id,

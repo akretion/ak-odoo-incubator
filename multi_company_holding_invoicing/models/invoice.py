@@ -124,13 +124,3 @@ class AccountInvoice(models.Model):
         for child_invoice in child_invoices:
             child_invoice.signal_workflow('invoice_open')
         return True
-
-
-class AccountInvoiceLine(models.Model):
-    _inherit = 'account.invoice.line'
-
-    sale_line_ids = fields.Many2many(
-        comodel_name='sale.order.line',
-        relation='sale_order_line_invoice_rel',
-        column1='invoice_id',
-        column2='order_line_id')

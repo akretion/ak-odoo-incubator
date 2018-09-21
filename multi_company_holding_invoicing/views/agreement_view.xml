@@ -28,6 +28,9 @@
         </group>
       </page>
     </xpath>
+    <xpath expr="//group[@name='sale_left']" position="inside">
+        <field name="journal_id"/>
+    </xpath>
   </field>
 </record>
 
