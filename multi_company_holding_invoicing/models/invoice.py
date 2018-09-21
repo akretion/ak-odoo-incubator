@@ -19,10 +19,10 @@ class AccountInvoice(models.Model):
         compute='_compute_holding_sale_count',
         string='# of Sales Order',
         compute_sudo=True)
-    sale_count = fields.Integer(
-        compute='_compute_sale_count',
-        string='# of Sales Order',
-        compute_sudo=True)
+    #sale_count = fields.Integer(
+    #    compute='_compute_sale_count',
+    #    string='# of Sales Order',
+    #    compute_sudo=True)
     holding_invoice_id = fields.Many2one('account.invoice', 'Holding Invoice')
     child_invoice_ids = fields.One2many(
         'account.invoice', 'holding_invoice_id')
@@ -40,10 +40,10 @@ class AccountInvoice(models.Model):
         for inv in self:
             inv.holding_sale_count = len(inv.holding_sale_ids)
 
-    def _compute_sale_count(self):
-        for inv in self:
-            inv.sale_count = 0
-            # inv.sale_count = len(inv.sale_ids)
+    #def _compute_sale_count(self):
+    #    for inv in self:
+    #        inv.sale_count = 0
+    #        inv.sale_count = len(inv.sale_ids)
 
     def _compute_child_invoice_count(self):
         for inv in self:
@@ -51,6 +51,8 @@ class AccountInvoice(models.Model):
 
     def _compute_child_invoice_job_count(self):
         for inv in self:
+            if inv.state == 'open':
+                import pdb;pdb.set_trace()
             child_invoice_jobs = self.env['queue.job'].sudo().search([
                 ('id', 'in', inv.sudo().child_invoice_job_ids.ids),
                 ('state', '!=', 'done')
@@ -76,7 +78,7 @@ class AccountInvoice(models.Model):
             sale_obj = self.env['sale.order']
             sales = sale_obj.search([('holding_invoice_id', '=', invoice.id)])
             super(AccountInvoice, invoice).unlink()
-            sales._set_invoice_state('invoiceable')
+            sales._set_invoice_state('to invoice')
         return True
 
     @api.multi
@@ -106,6 +108,7 @@ class AccountInvoice(models.Model):
                     description=description).generate_child_invoice_job({
                         'company_id': sale_company['company_id'][0],
                     })
+                import pdb;pdb.set_trace()
                 job = self.env['queue.job'].search(
                     [('uuid', '=', job_uuid)], limit=1)
                 job.write({'holding_invoice_id': invoice.id})
@@ -122,5 +125,5 @@ class AccountInvoice(models.Model):
         child_invoices = self.env['child.invoicing']._generate_invoice(domain)
         child_invoices.write({'holding_invoice_id': self.id})
         for child_invoice in child_invoices:
-            child_invoice.signal_workflow('invoice_open')
+            child_invoice.action_invoice_open()
         return True

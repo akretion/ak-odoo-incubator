@@ -72,8 +72,7 @@
             <button name="generate_child_invoice"
                     type="object"
                     string="Generate Child Invoices"
-                    />
-<!-- attrs="{'invisible':['|', '|', '|',('holding_sale_count','=', 0), ('child_invoice_count','!=', 0), ('child_invoice_job_count','!=', 0), ('state', '=', 'draft')]}" -->
+                    attrs="{'invisible':['|', '|', '|',('holding_sale_count','=', 0), ('child_invoice_count','!=', 0), ('child_invoice_job_count','!=', 0), ('state', '=', 'draft')]}"/>
         </button>
          <xpath expr="//sheet/field[@name='type']" position="after">
             <div class="oe_right oe_button_box" name="buttons">
@@ -89,18 +88,18 @@
                     name="%(act_account_invoice_2_account_invoice)d"
                     attrs="{'invisible':[('child_invoice_count','=', 0)]}"
                     icon="fa-strikethrough">
-                    <field string="Invoice"
+                    <field string="Child Invoices"
                            name="child_invoice_count"
                            widget="statinfo"/>
                 </button>
-                <button class="oe_inline oe_stat_button" type="action"
-                    name="%(act_account_invoice_2_sale_order)d"
-                    attrs="{'invisible':[('sale_count','=', 0)]}"
-                    icon="fa-strikethrough">
-                    <field string="Sales"
-                           name="sale_count"
-                           widget="statinfo"/>
-                </button>
+                <!--<button class="oe_inline oe_stat_button" type="action"-->
+                <!--    name="%(act_account_invoice_2_sale_order)d"-->
+                <!--    attrs="{'invisible':[('sale_count','=', 0)]}"-->
+                <!--    icon="fa-strikethrough">-->
+                <!--    <field string="Sales"-->
+                <!--           name="sale_count"-->
+                <!--           widget="statinfo"/>-->
+                <!--</button>-->
                 <button class="oe_inline oe_stat_button" type="action"
                     name="%(action_queue_child_invoice_job)d"
                     attrs="{'invisible':[('child_invoice_job_count', '=', 0)]}"

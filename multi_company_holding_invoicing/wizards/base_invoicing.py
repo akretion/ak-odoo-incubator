@@ -133,7 +133,6 @@ class BaseHoldingInvoicing(models.AbstractModel):
             invoice_vals = loc_self._prepare_invoice(data, invoice_lines)
             _logger.debug('Generate the holding invoice')
             invoice = loc_self.env['account.invoice'].create(invoice_vals)
-            # invoice.button_reset_taxes()
             _logger.debug('Link the invoice with the sale order')
             self._link_sale_order(invoice, sales)
             invoices |= invoice

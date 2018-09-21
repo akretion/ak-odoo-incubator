@@ -29,9 +29,8 @@ class SaleOrder(models.Model):
         ('invoiceable', 'Invoiceable'),
         ('pending', 'Pending'),
         ('invoiced', 'Invoiced'),
-        ], string='Invoice State',
+    ], string='Invoice State',
         copy=False, store=True,
-        # compute='_compute_invoice_state',
         help="Kept for history")
     invoice_status = fields.Selection(selection_add=[
         ('pending', 'Pending')])
@@ -39,33 +38,18 @@ class SaleOrder(models.Model):
     @api.depends('state', 'order_line.invoice_status',
                  'agreement_id.holding_company_id')
     def _get_invoiced(self):
-        super(SaleOrder, self)._get_invoiced()
         for sale in self:
             if not sale.agreement_id.holding_company_id:
-                sale.invoice_status = 'no'
+                return super(SaleOrder, sale)._get_invoiced()
             elif sale.holding_invoice_id:
                 if sale.holding_invoice_id.state in ('open', 'paid'):
                     sale.invoice_status = 'invoiced'
                 else:
                     sale.invoice_status = 'pending'
-
-    # @api.depends('agreement_id.holding_company_id')
-    def _compute_invoice_state(self):
-        # Note for perf issue the 'holding_invoice_id.state' is not set here
-        # as a dependency. Indeed the dependency is manually triggered when
-        # the holding_invoice is generated or the state is changed
-        for sale in self:
-            if not sale.agreement_id.holding_company_id:
-                sale.invoice_state = 'none'
-            elif sale.holding_invoice_id:
-                if sale.holding_invoice_id.state in ('open', 'paid'):
-                    sale.invoice_state = 'invoiced'
-                else:
-                    sale.invoice_state = 'pending'
-            elif sale.shipped:
-                sale.invoice_state = 'invoiceable'
+            elif sale.all_qty_delivered:
+                sale.invoice_status = 'to invoice'
             else:
-                sale.invoice_state = 'not_ready'
+                sale.invoice_status = 'no'
 
     @api.multi
     def _set_invoice_state(self, state):
