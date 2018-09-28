@@ -16,7 +16,7 @@ class InvoiceWizard(models.TransientModel):
         required=True,
         default=fields.Datetime.now)
     agreement_id = fields.Many2one(
-        comodel_name='agreement', string="Agreement", required=True)
+        comodel_name='agreement', string=u"Agreement", required=True)
 
     def _get_invoice_domain(self):
         self.ensure_one()

@@ -17,11 +17,11 @@ class SaleOrder(models.Model):
     holding_company_id = fields.Many2one(
         comodel_name='res.company',
         related='agreement_id.holding_company_id',
-        string='Holding Company for Invoicing',
+        string=u'Holding Company for Invoicing',
         readonly=True, copy=False, store=True)
     holding_invoice_id = fields.Many2one(
         comodel_name='account.invoice',
-        string='Holding Invoice',
+        string=u'Holding Invoice',
         copy=False, readonly=True)
     invoice_state = fields.Selection([
         ('none', 'Not Applicable'),
@@ -29,11 +29,12 @@ class SaleOrder(models.Model):
         ('invoiceable', 'Invoiceable'),
         ('pending', 'Pending'),
         ('invoiced', 'Invoiced'),
-    ], string='Invoice State',
+    ], string=u'Invoice State',
         copy=False, store=True,
-        help="Kept for history")
+        help=u"Kept for history")
     invoice_status = fields.Selection(selection_add=[
         ('pending', 'Pending')])
+    invoice_ids = fields.Many2many(store=True)
 
     @api.depends('state', 'order_line.invoice_status',
                  'agreement_id.holding_company_id')

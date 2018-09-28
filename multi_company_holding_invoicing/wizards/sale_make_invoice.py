@@ -14,7 +14,7 @@ class SaleMakeInvoice(models.TransientModel):
 
     error = fields.Text(readonly=True, default=lambda s: s._compute_error())
     agreement_id = fields.Many2one(
-        comodel_name='agreement', string="Agreement", readonly=True,
+        comodel_name='agreement', string=u"Agreement", readonly=True,
         default=lambda s: s._compute_agree())
 
     def _get_info(self):
@@ -32,8 +32,8 @@ class SaleMakeInvoice(models.TransientModel):
             if agree.holding_company_id:
                 if len(agrees) != 1:
                     return {
-                        'error':
-                            _('Holding Invoice must be invoiced per agree')}
+                        'error': _(
+                            'Holding Invoice must be invoiced per agree')}
                 if agree.holding_invoice_generated_by == 'holding':
                     user = self.env['res.users'].browse(self.env.uid)
                     if user.company_id == agree.holding_company_id:
