@@ -66,7 +66,7 @@ class AccountInvoice(models.Model):
         for invoice in self:
             if invoice.holding_sale_ids and invoice.user_id.id == self.env.uid:
                 invoice = invoice.suspend_security()
-            invoice.holding_sale_ids._set_invoice_state('invoiced')
+            invoice.holding_sale_ids._set_holding_invoice_state('invoiced')
             super(AccountInvoice, self).invoice_validate()
         return True
 
@@ -80,7 +80,7 @@ class AccountInvoice(models.Model):
             sale_obj = self.env['sale.order']
             sales = sale_obj.search([('holding_invoice_id', '=', invoice.id)])
             super(AccountInvoice, invoice).unlink()
-            sales._set_invoice_state('to invoice')
+            sales._set_holding_invoice_state('invoiceable')
         return True
 
     @api.multi

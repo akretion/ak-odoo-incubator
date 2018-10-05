@@ -110,7 +110,9 @@
                 </button>
             </div>
         </xpath>
-
+        <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+            <attribute name="attrs">{'invisible': True}</attribute>
+        </xpath>
     </field>
 </record>
 

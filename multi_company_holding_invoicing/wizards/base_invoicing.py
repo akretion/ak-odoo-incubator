@@ -73,6 +73,10 @@ class BaseHoldingInvoicing(models.AbstractModel):
         # Because fiscal position in vals is not that of the 'force_company'
         if vals.get('fiscal_position'):
             vals['fiscal_position'] = False
+        # Remove partner shipping from vals
+        # Because there are potentially several delivery addresses
+        if vals.get('partner_shipping_id'):
+            vals['partner_shipping_id'] = False
         return vals
 
     @api.model
@@ -159,7 +163,7 @@ class HoldingInvoicing(models.TransientModel):
     @api.model
     def _link_sale_order(self, invoice, sales):
         self._cr.execute("""UPDATE sale_order
-            SET holding_invoice_id=%s, invoice_state='pending'
+            SET holding_invoice_id=%s, holding_invoice_state='pending'
             WHERE id in %s""", (invoice.id, tuple(sales.ids)))
         invoice.invalidate_cache()
 
@@ -173,16 +177,14 @@ class ChildInvoicing(models.TransientModel):
         return self.env['res.company'].browse(data['company_id'][0])
 
     @api.model
-    def _link_sale_order(self, invoice, sales):
-        sales.write({'invoice_ids': [(6, 0, [invoice.id])],
-                     'state': 'done'})
-        for order_line in self.env['sale.order.line'].search([
-                ('order_id', 'in', sales.ids)]):
-            order_line.invoice_status = 'invoiced'
-
-    @api.model
     def _link_sale_order_line(self, invoice_lines, sale_lines):
-        sale_lines.write({'invoice_lines': [(6, 0, invoice_lines.ids)]})
+        for sale_line in sale_lines:
+            for invoice_line in invoice_lines:
+                self._cr.execute("""INSERT INTO sale_order_line_invoice_rel (
+                    invoice_line_id, order_line_id)
+                    VALUES (%s, %s)""", (invoice_line.id, sale_line.id))
+                invoice_line.invalidate_cache()
+        sale_lines._compute_invoice_status()
 
     @api.model
     def _get_invoice_line_data(self, data):

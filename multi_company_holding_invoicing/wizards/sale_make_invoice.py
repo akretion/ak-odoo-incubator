@@ -45,7 +45,7 @@ class SaleMakeInvoice(models.TransientModel):
                 else:
                     not_invoiceable = self.env['sale.order'].browse()
                     for sale in sales:
-                        if sale.invoice_state != 'to invoice':
+                        if sale.holding_invoice_state != 'invoiceable':
                             not_invoiceable |= sale
                     if not_invoiceable:
                         return {

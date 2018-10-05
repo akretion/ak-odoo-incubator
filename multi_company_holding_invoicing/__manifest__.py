@@ -17,6 +17,9 @@
      'sale',
      'queue_job',
      'base_onchange_rule',
+     # Note we depend of this module for having the all_qty_delivered field
+     # on the sale
+     'sale_automatic_workflow',
  ],
  'data': [
      # 'demo/config.xml',

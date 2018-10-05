@@ -22,7 +22,7 @@ class InvoiceWizard(models.TransientModel):
         self.ensure_one()
         return [
             ('agreement_id', '=', self.agreement_id.id),
-            ('invoice_status', '=', 'to invoice'),
+            ('holding_invoice_state', '=', 'invoiceable'),
             ('holding_invoice_id', '=', False),
             ]
 

@@ -6,11 +6,9 @@
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="sale.view_order_form"/>
     <field name="arch" type="xml">
-        <field name="company_id" position="after">
-           <field name="invoice_state"/>
-        </field>
         <field name="fiscal_position_id" position="after">
            <field name="holding_invoice_id"/>
+           <field name="holding_invoice_state"/>
         </field>
     </field>
 </record>
