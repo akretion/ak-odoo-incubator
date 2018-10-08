@@ -65,3 +65,26 @@ class SaleOrder(models.Model):
                 SET holding_invoice_state=%s
                 WHERE id in %s""", (state, tuple(self.ids)))
             self.invalidate_cache()
+
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
+    def _get_invoice_qty(self):
+        if self.env.context.get('child_invoicing'):
+            for line in self:
+                qty_invoiced = 0.0
+                for invoice_line in line.invoice_lines.filtered(
+                        lambda r: r.product_id != r.agreement_id.
+                        holding_royalty_product_id):
+                    if (invoice_line.invoice_id.state != 'cancel' and
+                            invoice_line.invoice_id.type == 'out_invoice'):
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(
+                            invoice_line.quantity, line.product_uom)
+                line.qty_invoiced = qty_invoiced
+        else:
+            return super(SaleOrderLine, self)._get_invoice_qty()
+
+
+

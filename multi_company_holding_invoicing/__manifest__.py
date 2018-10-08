@@ -28,7 +28,6 @@
      'views/account_invoice_view.xml',
      'views/queue_view.xml',
      'wizards/wizard_holding_view.xml',
-     # 'wizards/sale_make_invoice_view.xml',
  ],
  'demo': [
      'demo/res_company_demo.xml',

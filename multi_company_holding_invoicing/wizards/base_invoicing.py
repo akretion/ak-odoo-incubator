@@ -184,7 +184,6 @@ class ChildInvoicing(models.TransientModel):
                     invoice_line_id, order_line_id)
                     VALUES (%s, %s)""", (invoice_line.id, sale_line.id))
                 invoice_line.invalidate_cache()
-        sale_lines._compute_invoice_status()
 
     @api.model
     def _get_invoice_line_data(self, data):
@@ -202,6 +201,8 @@ class ChildInvoicing(models.TransientModel):
 
     @api.model
     def _prepare_invoice_line(self, data_line):
+        self.env.context = dict(self.env.context).copy()
+        self.env.context.update({'child_invoicing': True})
         val_line = super(ChildInvoicing, self).\
             _prepare_invoice_line(data_line)
         # TODO the code is too complicated
