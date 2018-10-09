@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
+<record id="holding_product" model="product.product">
+    <field name="name">Holding Product</field>
+    <field name="uom_id" ref="product.product_uom_hour"/>
+    <field name="uom_po_id" ref="product.product_uom_hour"/>
+    <field name="categ_id" ref="product.product_category_3"/>
+    <field name="type">service</field>
+    <field name="company_id" ref=""/>
+</record>
+
+<record id="holding_royalty_product" model="product.product">
+    <field name="name">Holding Royalty Product</field>
+    <field name="uom_id" ref="product.product_uom_hour"/>
+    <field name="uom_po_id" ref="product.product_uom_hour"/>
+    <field name="categ_id" ref="product.product_category_3"/>
+    <field name="type">service</field>
+    <field name="company_id" ref=""/>
+</record>
+
 
 <record id="section_market_1" model="agreement">
     <field name="name">Holding Market 1</field>
@@ -11,10 +29,10 @@
     <field name="holding_discount">10</field>
     <field
         name="holding_product_id"
-        ref="account_invoice_inter_company.product_consultant_multi_company"/>
+        ref="holding_product"/>
     <field
         name="holding_royalty_product_id"
-        ref="account_invoice_inter_company.product_consultant_multi_company"/>
+        ref="holding_royalty_product"/>
 </record>
 
 <record id="section_market_2" model="agreement">
@@ -26,10 +44,10 @@
     <field name="holding_discount">15</field>
     <field
         name="holding_product_id"
-        ref="account_invoice_inter_company.product_consultant_multi_company"/>
+        ref="holding_product"/>
     <field
         name="holding_royalty_product_id"
-        ref="account_invoice_inter_company.product_consultant_multi_company"/>
+        ref="holding_royalty_product"/>
 </record>
 
 
