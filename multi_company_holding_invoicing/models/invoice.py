@@ -126,5 +126,8 @@ class AccountInvoice(models.Model):
         child_invoices = self.env['child.invoicing']._generate_invoice(domain)
         child_invoices.write({'holding_invoice_id': self.id})
         for child_invoice in child_invoices:
-            child_invoice.with_context(child_invoicing=True).action_invoice_open()
+            # add child_invoicing info in the context
+            # used in_get_invoice_qty method in sale order line
+            child_invoice.with_context(
+                child_invoicing=True).action_invoice_open()
         return True

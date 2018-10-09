@@ -27,23 +27,46 @@ class BaseHoldingInvoicing(models.AbstractModel):
 
     @api.model
     def _get_accounting_value_from_product(self, data_line, product):
-        # We do not have access to the partner here so we can not
-        # play correctly the onchange
-        # We need to refactor the way to generate the line
-        # Refactor will be done in V10
-        # for now we just read the info on the product
-        # you need to set the tax by yourself
+        company = self.env['res.company'].browse(
+            self.env.context['force_company'])
         if self.env.context.get('agree_group_by') == 'none':
             name = product.name
         else:
             name = '%s - %s' % (
                 data_line['name'], data_line.get('client_order_ref', ''))
+        # get invoice line data from product onchange
+        invoice = self.env['account.invoice'].browse(
+            data_line.get('invoice_id'))
+        line_data = {
+            'product_id': product.id,
+            'uom_id': product.uom_id.id,
+            'name': '',
+            'company_id': company.id,
+            'partner_id': invoice.partner_id,
+            'invoice_id': data_line.get('invoice_id'),
+        }
+        line_data = self.env['account.invoice.line'].play_onchanges(
+            line_data, ['product_id'])
+        account_id = line_data.get('account_id', False)
+        if account_id:
+            account = self.env['account.account'].browse(account_id)
+        else:
+            account = self.env['account.account'].search([
+                ('user_type_id', '=', self.env.ref(
+                    'account.data_account_type_revenue').id),
+                ('company_id', '=', company.id)], limit=1)
+            if not account:
+                raise UserError(_(
+                    'Please define %s account for this company: "%s" (id:%d).')
+                    % (self.env.ref('account.data_account_type_revenue').name,
+                       company.name, company.id))
+        tax_ids = line_data.get('invoice_line_tax_ids', False)
         return {
             'name': name,
-            'product_id': product.id,
-            'account_id': (product.property_account_income_id or
-                           product.categ_id.property_account_income_categ_id
-                           ).id,
+            'product_id': product.id or False,
+            'uom_id': product.uom_id.id,
+            'invoice_line_tax_ids': tax_ids or [],
+            'account_id': account.id or False,
         }
 
     @api.model
@@ -58,7 +81,7 @@ class BaseHoldingInvoicing(models.AbstractModel):
         return vals
 
     @api.model
-    def _prepare_invoice(self, data, lines):
+    def _prepare_invoice(self, data):
         # get default from native method _prepare_invoice
         # use first sale order as partner and agreement are the same
         sale = self.env['sale.order'].search(data['__domain'], limit=1)
@@ -67,7 +90,6 @@ class BaseHoldingInvoicing(models.AbstractModel):
             'origin': _('Holding Invoice'),
             'company_id': self.env.context['force_company'],
             'user_id': self.env.uid,
-            'invoice_line_ids': [(6, 0, lines.ids)],
         })
         # Remove fiscal position from vals
         # Because fiscal position in vals is not that of the 'force_company'
@@ -124,21 +146,24 @@ class BaseHoldingInvoicing(models.AbstractModel):
                 agreement_id=agree.id,
                 agree_group_by=agree.holding_invoice_group_by)
             _logger.debug('Prepare vals for holding invoice')
-            data_lines = loc_self._get_invoice_line_data(data)
-            val_lines = []
-            for data_line in data_lines:
-                val_lines.append(loc_self._prepare_invoice_line(data_line))
-            invoice_lines = loc_self._create_inv_lines(val_lines)
-            _logger.debug('Link the invoice line with the sale order line')
-            sales = self.env['sale.order'].search(data['__domain'])
-            sale_lines = self.env['sale.order.line'].search([
-                ('order_id', 'in', sales.ids)])
-            self._link_sale_order_line(invoice_lines, sale_lines)
-            invoice_vals = loc_self._prepare_invoice(data, invoice_lines)
+            invoice_vals = loc_self._prepare_invoice(data)
             _logger.debug('Generate the holding invoice')
             invoice = loc_self.env['account.invoice'].create(invoice_vals)
             _logger.debug('Link the invoice with the sale order')
+            sales = self.env['sale.order'].search(data['__domain'])
             self._link_sale_order(invoice, sales)
+            data_lines = loc_self._get_invoice_line_data(data)
+            val_lines = []
+            for data_line in data_lines:
+                data_line.update({'invoice_id': invoice.id})
+                val_lines.append(loc_self._prepare_invoice_line(data_line))
+            invoice_lines = loc_self._create_inv_lines(val_lines)
+            _logger.debug('Link the invoice line with the sale order line')
+            sale_lines = self.env['sale.order.line'].search([
+                ('order_id', 'in', sales.ids)])
+            self._link_sale_order_line(invoice_lines, sale_lines)
+            invoice.update({'invoice_line_ids': [(6, 0, invoice_lines.ids)]})
+            invoice.compute_taxes()
             invoices |= invoice
         return invoices
 
@@ -201,6 +226,8 @@ class ChildInvoicing(models.TransientModel):
 
     @api.model
     def _prepare_invoice_line(self, data_line):
+        # add child_invoicing info in the context
+        # used in_get_invoice_qty method in sale order line
         self.env.context = dict(self.env.context).copy()
         self.env.context.update({'child_invoicing': True})
         val_line = super(ChildInvoicing, self).\
@@ -218,8 +245,8 @@ class ChildInvoicing(models.TransientModel):
         return val_line
 
     @api.model
-    def _prepare_invoice(self, data, lines):
-        vals = super(ChildInvoicing, self)._prepare_invoice(data, lines)
+    def _prepare_invoice(self, data):
+        vals = super(ChildInvoicing, self)._prepare_invoice(data)
         sale = self.env['sale.order'].search(data['__domain'], limit=1)
         holding_invoice = sale.holding_invoice_id
         vals['origin'] = holding_invoice.name
