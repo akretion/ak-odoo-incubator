@@ -2,14 +2,14 @@
 <odoo>
     <data>
         <template id="stock_picking_wave_report.report_picking_wave">
-            <t t-call="web.html_container">
+            <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <t t-set="move_line_ids" t-value="o.picking_ids.mapped('move_line_ids')"/>
+                    <t t-set="move_line_ids" t-value="o.picking_ids.mapped('pack_operation_ids')"/>
                     <t t-set="has_package" t-value="move_line_ids.filtered('result_package_id')" groups="stock.group_tracking_lot"/>
                     <t t-set="has_serial_number" t-value="move_line_ids.filtered('lot_id')" groups="stock.group_production_lot"/>
                     <t t-set="has_barcode" t-value="move_line_ids.mapped('product_id').filtered('barcode')"/>
                     <t t-set="locations" t-value="move_line_ids.mapped('location_id')"/>
-                    <t t-call="web.external_layout">
+                    <t t-call="report.external_layout">
                         <div class="page">
                             <h3>Summary: <span t-field="o.name"/></h3>
                             <div t-if="o.user_id">
@@ -37,7 +37,7 @@
                                             <span t-field="pick.date"/>
                                         </td>
                                         <td >
-                                            <span t-field="pick.scheduled_date"/>
+                                            <span t-field="pick.min_date"/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -70,7 +70,7 @@
                                     <tbody>
                                         <tr t-foreach="loc_move_line" t-as="move_operation">
                                             <td>
-                                                <span t-field="move_operation.display_name"/>
+                                                <span t-field="move_operation.product_id.display_name"/>
                                             </td>
                                             <td>
                                                 <t t-if="not has_package">
@@ -78,7 +78,7 @@
                                                         <span t-esc="sum(move_operation.mapped('qty_done'))"/>
                                                     </t>
                                                     <t t-else="">
-                                                        <span t-esc="sum(move_operation.mapped('product_uom_qty'))"/>
+                                                        <span t-esc="sum(move_operation.mapped('product_qty'))"/>
                                                     </t>
                                                 </t>
                                                 <t t-if="has_package">

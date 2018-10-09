@@ -13,5 +13,5 @@ class StockPickingWave(models.Model):
         pickings = self.mapped('picking_ids')
         if not pickings:
             raise UserError(_('Nothing to print.'))
-        return self.env.ref('stock_picking_wave_report.action_report_picking_wave').report_action(self)
+        return self.env["report"].get_action(self, 'stock_picking_wave_report.report_picking_wave')
 

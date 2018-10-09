@@ -7,8 +7,8 @@
             model="stock.picking.wave"
             report_type="qweb-pdf"
             menu="False"
-            name="stock_picking_wave.report_picking_wave"
-            file="stock_picking_wave.report_picking_wave"
+            name="stock_picking_wave_report.report_picking_wave"
+            file="stock_picking_wave_report.report_picking_wave"
         />
     </data>
 </odoo>
