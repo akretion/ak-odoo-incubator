@@ -26,7 +26,8 @@ class SalePromotionRule(models.Model):
             ],
         required=True,
         default='coupon')
-    name = fields.Char(required=True)
+    name = fields.Char(required=True,
+                       translate=True)
     code = fields.Char()
     discount_amount = fields.Float(
         digits=dp.get_precision('Discount'),
@@ -138,9 +139,9 @@ according to the strategy
             return order.coupon_code is False
         return True
 
-    def _is_promotion_valid(self, order):
-        self.ensure_one()
-        restrictions = [
+    @api.model
+    def _get_restrictions(self):
+        return [
             'date',
             'total_amount',
             'partner_list',
@@ -148,8 +149,11 @@ according to the strategy
             'newsletter',
             'usage',
             'rule_type',
-            'multi_rule_strategy',
-            ]
+            'multi_rule_strategy']
+
+    def _is_promotion_valid(self, order):
+        self.ensure_one()
+        restrictions = self._get_restrictions()
         for key in restrictions:
             if not getattr(self, '_check_valid_%s' % key)(order):
                 _logger.debug('Invalid restriction %s', key)
