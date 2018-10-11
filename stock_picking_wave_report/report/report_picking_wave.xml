@@ -43,14 +43,14 @@
                                 </tbody>
                             </table>
                             <p style="page-break-after: always;"/>
+                            <h3><span t-field="o.name"/></h3>
+                            <div t-if="o.user_id">
+                                <strong>Responsible:</strong>
+                                <span t-field="o.user_id"/>
+                            </div><br/>
                             <t t-foreach="locations" t-as="location">
                                 <t t-set="loc_move_line" t-value="move_line_ids.filtered(lambda x: x.location_id==location)"/>
                                 <t t-set="products" t-value="loc_move_line.mapped('product_id')"/>
-                                <h3><span t-field="o.name"/></h3>
-                                <div t-if="o.user_id">
-                                    <strong>Responsible:</strong>
-                                    <span t-field="o.user_id"/>
-                                </div><br/>
                                 <h4><strong>To take from: <span t-field="location.display_name"/></strong></h4>
                                 <table class="table table-condensed">
                                     <thead>
@@ -104,7 +104,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p style="page-break-after: always;"/>
                             </t>
                          </div>
                      </t>
