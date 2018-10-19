@@ -86,4 +86,4 @@ class SalePromotionRule(models.Model):
                 self.minimal_amount,
                 line_amount,
                 precision_digits=precision) < 0
-        return super(SalePromotionRule, self)._check_valid_total_amount()
+        return super(SalePromotionRule, self)._check_valid_total_amount(order)
