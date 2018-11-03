@@ -4,7 +4,7 @@
 {
     'name': 'Account Invoice Pricelist Stock - Account',
     'summary': 'Set pricelist from PO in invoice created from picking.',
-    'author': 'Akretion,Odoo Community Association (OCA)',
+    'author': 'Akretion',
     'license': 'AGPL-3',
     'website': 'https://www.akretion.com',
     'category': 'Warehouse Management',

@@ -4,7 +4,7 @@
 {
     'name': 'Account Invoice Pricelist - Purchase',
     'summary': 'Module to fill pricelist from purchase order in invoice.',
-    'author': 'Akretion,Odoo Community Association (OCA)',
+    'author': 'Akretion',
     'license': 'AGPL-3',
     'website': 'https://www.akretion.com',
     'category': 'Purchase Management',
