@@ -32,6 +32,8 @@ class GollumController(http.Controller):
         base_path = request.env['ir.config_parameter'].get_param('gollum_path')
         url = base_path + "/wiki/%s" % kwargs.pop('path')
         user = request.env.user
+        if not user.email:
+            raise Exception('Your user should have an email to use the wiki')
         if user.has_group('gollum.group_gollum_edit'):
             access = 'edit'
         else:
