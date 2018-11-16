@@ -6,7 +6,13 @@
 from collections import defaultdict
 
 from odoo import api, models, fields, _
+from odoo.exceptions import UserError
 import odoo.addons.decimal_precision as dp
+
+
+""" TODO FIX
+    Ce module n'est pas générique il fait appel à un champ custom
+"""
 
 
 class StockInventory(models.Model):
@@ -102,6 +108,10 @@ class StockInventoryLine(models.Model):
             if not cost_price:
                 # get cost price from supplier info
                 sup_info = line.product_id.seller_id
+                if not hasattr(line.product_id, 'standard_price_'):
+                    raise UserError(
+                        "Il manque le champ 'standard_price_' "
+                        "sur le model 'product.product' (champ custom)")
                 if line.product_id.standard_price_:
                     cost_price = line.product_id.standard_price_
                     explanation = _('Product standard_price')
@@ -162,18 +172,16 @@ class StockInventoryLine(models.Model):
             # no AFS company in db
             return {}
         query = """
-            SELECT sp.product_id, sp.product_tmpl_id,
-                   pp.min_quantity, pp.price, sp.id
+            SELECT product_id, product_tmpl_id, min_qty, price, id
             FROM product_supplierinfo sp
-                LEFT JOIN pricelist_partnerinfo pp ON sp.id = pp.suppinfo_id
-            WHERE sp.product_id IN %s AND sp.company_id = %s
-            ORDER BY pp.min_quantity DESC
+            WHERE product_id IN %s AND company_id = %s
+            ORDER BY min_qty DESC
         """
         self.env.cr.execute(query, (tuple(product_ids), company_id))
         res = self.env.cr.fetchall()
         product, template = defaultdict(dict), defaultdict(dict)
         for elm in res:
-            dico = {'min_quantity': elm[2], 'price': elm[3], 'id': elm[4]}
+            dico = {'min_qty': elm[2], 'price': elm[3], 'id': elm[4]}
             template[elm[1]].update(dico)
             if elm[0]:
                 product[elm[0]].update(dico)
