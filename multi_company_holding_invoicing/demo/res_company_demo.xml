@@ -1,18 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-
 <record id="child_company_a" model="res.company">
-    <field name="name">My Company A</field>
+    <field name="name">Child Company A</field>
     <field name="parent_id" ref="base.main_company"/>
     <field name="currency_id" ref="base.EUR"/>
 </record>
 
 <record id="child_company_b" model="res.company">
-    <field name="name">My Company B</field>
+    <field name="name">Child Company B</field>
     <field name="parent_id" ref="base.main_company"/>
     <field name="currency_id" ref="base.EUR"/>
 </record>
 
+<!--
+        Account Journal Sequences for each company (Holding, Child A and Child B)
+        -->
+    <record id="sequence_sale_journal_child_company_a" model="ir.sequence">
+        <field name="name">Account Sales Journal Child Company A</field>
+        <field eval="3" name="padding"/>
+        <field name="prefix">SAJ-CA/%(year)s/</field>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="sequence_sale_journal_child_company_b" model="ir.sequence">
+        <field name="name">Account Sales Journal Child Company B</field>
+        <field eval="3" name="padding"/>
+        <field name="prefix">SAJ-CB/%(year)s/</field>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="sequence_sale_journal_holding_company" model="ir.sequence">
+        <field name="name">Account Sales Journal Holding Company</field>
+        <field eval="3" name="padding"/>
+        <field name="prefix">SAJ-HC/%(year)s/</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+<!--
+        Create account account for each company (Holding, Child A and Child B)
+        -->
+    <record id="a_sale_child_company_a" model="account.account">
+        <field name="code">X2001-CA</field>
+        <field name="name">Product Sales - (Child Company A)</field>
+        <field name="internal_type">other</field>
+        <field name="user_type_id" ref="account.data_account_type_revenue"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="a_sale_child_company_b" model="account.account">
+        <field name="code">X2001-CB</field>
+        <field name="name">Product Sales - (Child Company B)</field>
+        <field name="internal_type">other</field>
+        <field name="user_type_id" ref="account.data_account_type_revenue"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="a_sale_holding_company" model="account.account">
+        <field name="code">X2001-HC</field>
+        <field name="name">Product Sales - (Holding Company)</field>
+        <field name="internal_type">other</field>
+        <field name="user_type_id" ref="account.data_account_type_revenue"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+<!--
+        Create account journal for each company (Holding, Child A and Child B)
+        -->
+    <record id="sales_journal_child_company_a" model="account.journal">
+        <field name="name">Sales Journal - (Child Company A)</field>
+        <field name="code">SAJ-CA</field>
+        <field name="type">sale</field>
+        <field name="sequence_id" ref="sequence_sale_journal_child_company_a"/>
+        <field name="default_credit_account_id" ref="a_sale_child_company_a"/>
+        <field name="default_debit_account_id" ref="a_sale_child_company_a"/>
+        <field name="update_posted" eval="True"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="sales_journal_child_company_b" model="account.journal">
+        <field name="name">Sales Journal - (Child Company B)</field>
+        <field name="code">SAJ-CB</field>
+        <field name="type">sale</field>
+        <field name="sequence_id" ref="sequence_sale_journal_child_company_b"/>
+        <field name="default_credit_account_id" ref="a_sale_child_company_b"/>
+        <field name="default_debit_account_id" ref="a_sale_child_company_b"/>
+        <field name="update_posted" eval="True"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="sales_journal_holding_company" model="account.journal">
+        <field name="name">Sales Journal - (Holding Company)</field>
+        <field name="code">SAJ-HC</field>
+        <field name="type">sale</field>
+        <field name="sequence_id" ref="sequence_sale_journal_holding_company"/>
+        <field name="default_credit_account_id" ref="a_sale_holding_company"/>
+        <field name="default_debit_account_id" ref="a_sale_holding_company"/>
+        <field name="update_posted" eval="True"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
 
 </odoo>

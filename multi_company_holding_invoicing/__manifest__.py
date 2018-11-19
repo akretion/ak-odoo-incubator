@@ -33,8 +33,6 @@
      'demo/res_users_demo.xml',
      'demo/agreement_demo.xml',
      'demo/sale_order_demo.xml',
-     'demo/config.xml',
-     'demo/account_config.yml',
  ],
  'installable': True,
  }

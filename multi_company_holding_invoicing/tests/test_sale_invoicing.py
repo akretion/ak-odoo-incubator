@@ -5,8 +5,8 @@
 
 from .common import (
     CommonInvoicing,
-    XML_SECTION_1,
-    XML_SECTION_2,
+    XML_AGREEMENT_1,
+    XML_AGREEMENT_2,
     XML_COMPANY_A,
     XML_PARTNER_ID,
     )
@@ -44,60 +44,60 @@ class TestChildInvoicing(CommonInvoicing):
 
     def test_invoice_market_1_one_company_one_partner(self):
         self._set_partner([1, 2, 3, 4], XML_PARTNER_ID)
-        self._set_section([1, 2, 3, 4], XML_SECTION_1)
+        self._set_agreement([1, 2, 3, 4], XML_AGREEMENT_1)
         self._set_company([1, 2, 3, 4], XML_COMPANY_A)
-        self.env.ref(XML_SECTION_1).holding_invoice_generated_by = 'child'
+        self.env.ref(XML_AGREEMENT_1).holding_invoice_generated_by = 'child'
         self._start_scenario([1, 2, 3, 4], [1, 2])
         sales = self._get_sales([3, 4])
         self._check_sale_state(sales, 'invoiceable')
 
     def test_have_error_message_holding(self):
-        self._set_section([1, 2, 3, 4], XML_SECTION_1)
+        self._set_agreement([1, 2, 3, 4], XML_AGREEMENT_1)
         self._set_company([1, 2, 3, 4], XML_COMPANY_A)
-        self.env.ref(XML_SECTION_1).holding_invoice_generated_by = 'holding'
-        date_invoice = datetime.today()
+        self.env.ref(XML_AGREEMENT_1).holding_invoice_generated_by = 'holding'
+        invoice_date = datetime.today()
         self._validate_and_deliver_sale([1, 2, 3, 4])
         sales = self._get_sales([1, 2, 3, 4])
         wizard = self.env['sale.make.invoice']\
             .with_context(active_ids=sales.ids).create({
-                'invoice_date': date_invoice,
-                })
+                'invoice_date': invoice_date,
+            })
         self.assertIn('must be invoiced from the holding company',
                       wizard.error)
 
-    def test_have_error_message_section(self):
-        self._set_section([1, 2], XML_SECTION_1)
-        self._set_section([3, 4], XML_SECTION_2)
+    def test_have_error_message_agreement(self):
+        self._set_agreement([1, 2], XML_AGREEMENT_1)
+        self._set_agreement([3, 4], XML_AGREEMENT_2)
         self._set_company([1, 2, 3, 4], XML_COMPANY_A)
-        self.env.ref(XML_SECTION_1).holding_invoice_generated_by = 'child'
-        self.env.ref(XML_SECTION_2).holding_invoice_generated_by = 'child'
-        date_invoice = datetime.today()
+        self.env.ref(XML_AGREEMENT_1).holding_invoice_generated_by = 'child'
+        self.env.ref(XML_AGREEMENT_2).holding_invoice_generated_by = 'child'
+        invoice_date = datetime.today()
         self._validate_and_deliver_sale([1, 2, 3, 4])
         sales = self._get_sales([1, 2, 3, 4])
         wizard = self.env['sale.make.invoice']\
             .with_context(active_ids=sales.ids).create({
-                'invoice_date': date_invoice,
-                })
+                'invoice_date': invoice_date,
+            })
         self.assertEqual(
-            'Holding Invoice must be invoiced per section', wizard.error)
+            'Holding Invoice must be invoiced per agreement', wizard.error)
 
     def test_no_error_message(self):
-        self._set_section([1, 2, 3, 4], XML_SECTION_1)
+        self._set_agreement([1, 2, 3, 4], XML_AGREEMENT_1)
         self._set_company([1, 2, 3, 4], XML_COMPANY_A)
-        self.env.ref(XML_SECTION_1).holding_invoice_generated_by = 'child'
-        date_invoice = datetime.today()
+        self.env.ref(XML_AGREEMENT_1).holding_invoice_generated_by = 'child'
+        invoice_date = datetime.today()
         self._validate_and_deliver_sale([1, 2, 3, 4])
         sales = self._get_sales([1, 2, 3, 4])
         wizard = self.env['sale.make.invoice']\
             .with_context(active_ids=sales.ids).create({
-                'invoice_date': date_invoice,
-                })
+                'invoice_date': invoice_date,
+            })
         self.assertFalse(wizard.error)
 
     def test_raise_error(self):
-        self._set_section([1, 2, 3, 4], XML_SECTION_1)
+        self._set_agreement([1, 2, 3, 4], XML_AGREEMENT_1)
         self._set_company([1, 2, 3, 4], XML_COMPANY_A)
-        self.env.ref(XML_SECTION_1).holding_invoice_generated_by = 'holding'
+        self.env.ref(XML_AGREEMENT_1).holding_invoice_generated_by = 'holding'
         with self.assertRaises(UserError) as error:
             self._start_scenario([1, 2, 3, 4], [1, 2])
         self.assertIn('must be invoiced from the holding company',

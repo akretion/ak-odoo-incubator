@@ -8,7 +8,7 @@
         <field name="partner_shipping_id" ref="base.res_partner_2"/>
         <field name="user_id" ref="base.user_demo"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="agreement_id" ref="section_market_1"/>
+        <field name="agreement_id" ref="agreement_market_1"/>
         <field name="company_id" ref="child_company_a"/>
         <field name="date_order" eval="(DateTime.today() - relativedelta(months=1)).strftime('%Y-%m-%d %H:%M')"/>
     </record>
@@ -18,7 +18,6 @@
         <field name="name">Laptop E5023</field>
         <field name="product_id" ref="product.product_product_25"/>
         <field name="product_uom_qty">3</field>
-        <field name="product_uos_qty">3</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">2950.00</field>
     </record>
@@ -28,7 +27,6 @@
         <field name="name">Ipod, 16GB</field>
         <field name="product_id" ref="product.product_product_11"/>
         <field name="product_uom_qty">5</field>
-        <field name="product_uos_qty">5</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">145.00</field>
     </record>
@@ -38,7 +36,6 @@
         <field name="name">Bose Mini bluetooth speaker</field>
         <field name="product_id" ref="product.product_product_5b"/>
         <field name="product_uom_qty">2</field>
-        <field name="product_uos_qty">2</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">65.00</field>
     </record>
@@ -49,8 +46,7 @@
         <field name="partner_shipping_id" ref="base.res_partner_2"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="order_policy">manual</field>
-        <field name="agreement_id" ref="section_market_1"/>
+        <field name="agreement_id" ref="agreement_market_1"/>
         <field name="company_id" ref="child_company_a"/>
         <field name="date_order" eval="(DateTime.today() - relativedelta(months=1)).strftime('%Y-%m-%d %H:%M')"/>
     </record>
@@ -60,7 +56,6 @@
         <field name="name">Laptop E5023</field>
         <field name="product_id" ref="product.product_product_25"/>
         <field name="product_uom_qty">3</field>
-        <field name="product_uos_qty">3</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">2950.00</field>
     </record>
@@ -70,11 +65,9 @@
         <field name="name">Ipod, 16GB</field>
         <field name="product_id" ref="product.product_product_5b"/>
         <field name="product_uom_qty">5</field>
-        <field name="product_uos_qty">5</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">145.00</field>
     </record>
-
 
     <record id="sale_order_3" model="sale.order">
         <field name="partner_id" ref="base.res_partner_3"/>
@@ -82,8 +75,7 @@
         <field name="partner_shipping_id" ref="base.res_partner_3"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="order_policy">manual</field>
-        <field name="agreement_id" ref="section_market_1"/>
+        <field name="agreement_id" ref="agreement_market_1"/>
         <field name="company_id" ref="child_company_b"/>
     </record>
 
@@ -92,7 +84,6 @@
         <field name="name">Laptop E5023</field>
         <field name="product_id" ref="product.product_product_25"/>
         <field name="product_uom_qty">3</field>
-        <field name="product_uos_qty">3</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">2950.00</field>
     </record>
@@ -102,12 +93,9 @@
         <field name="name">Mouse Wireless</field>
         <field name="product_id" ref="product.product_product_12"/>
         <field name="product_uom_qty">1</field>
-        <field name="product_uos_qty">1</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">70.00</field>
     </record>
-
-
 
     <record id="sale_order_4" model="sale.order">
         <field name="partner_id" ref="base.res_partner_10"/>
@@ -115,7 +103,7 @@
         <field name="partner_shipping_id" ref="base.res_partner_address_25"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="agreement_id" ref="section_market_1"/>
+        <field name="agreement_id" ref="agreement_market_1"/>
         <field name="company_id" ref="child_company_b"/>
     </record>
 
@@ -124,7 +112,6 @@
         <field name="name">Mouse Wireless</field>
         <field name="product_id" ref="product.product_product_12"/>
         <field name="product_uom_qty">1</field>
-        <field name="product_uos_qty">1</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">70.00</field>
     </record>
@@ -134,7 +121,6 @@
         <field name="name">Mouse Optical</field>
         <field name="product_id" ref="product.product_product_10"/>
         <field name="product_uom_qty">10</field>
-        <field name="product_uos_qty">10</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">45.00</field>
     </record>
@@ -144,7 +130,6 @@
         <field name="name">Ipad mini</field>
         <field name="product_id" ref="product.product_product_6"/>
         <field name="product_uom_qty">3</field>
-        <field name="product_uos_qty">3</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">150.00</field>
     </record>
@@ -154,7 +139,6 @@
         <field name="name">Carte mère</field>
         <field name="product_id" ref="product.product_product_20"/>
         <field name="product_uom_qty">2</field>
-        <field name="product_uos_qty">2</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">70.00</field>
     </record>
@@ -165,7 +149,7 @@
         <field name="partner_shipping_id" ref="base.res_partner_2"/>
         <field name="user_id" ref="base.user_demo"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="agreement_id" ref="section_market_2"/>
+        <field name="agreement_id" ref="agreement_market_2"/>
         <field name="company_id" ref="child_company_a"/>
         <field name="date_order" eval="(DateTime.today() - relativedelta(months=1)).strftime('%Y-%m-%d %H:%M')"/>
     </record>
@@ -175,7 +159,6 @@
         <field name="name">External Hard disk</field>
         <field name="product_id" ref="product.product_product_17"/>
         <field name="product_uom_qty">1</field>
-        <field name="product_uos_qty">1</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">405.00</field>
     </record>
@@ -186,7 +169,7 @@
         <field name="partner_shipping_id" ref="base.res_partner_18"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="agreement_id" ref="section_market_2"/>
+        <field name="agreement_id" ref="agreement_market_2"/>
         <field name="company_id" ref="child_company_a"/>
     </record>
 
@@ -195,7 +178,6 @@
         <field name="name">PC Assamble + 2GB RAM</field>
         <field name="product_id" ref="product.product_product_5"/>
         <field name="product_uom_qty">1</field>
-        <field name="product_uos_qty">1</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">750.00</field>
     </record>
@@ -206,10 +188,8 @@
         <field name="partner_shipping_id" ref="base.res_partner_address_15"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="order_policy">manual</field>
-        <field name="agreement_id" ref="section_market_2"/>
+        <field name="agreement_id" ref="agreement_market_2"/>
         <field name="company_id" ref="child_company_b"/>
-        <field name="date_confirm" eval="(DateTime.today() - relativedelta(months=1)).strftime('%Y-%m-%d %H:%M')"/>
     </record>
 
     <record id="sale_order_line_16" model="sale.order.line">
@@ -217,7 +197,6 @@
         <field name="name">Laptop E5023</field>
         <field name="product_id" ref="product.product_product_25"/>
         <field name="product_uom_qty">5</field>
-        <field name="product_uos_qty">5</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">2950.00</field>
     </record>
@@ -227,7 +206,6 @@
         <field name="name">RAM SR5</field>
         <field name="product_id" ref="product.product_product_13"/>
         <field name="product_uom_qty">1</field>
-        <field name="product_uos_qty">1</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">18.00</field>
     </record>
@@ -238,8 +216,7 @@
         <field name="partner_shipping_id" ref="base.res_partner_address_25"/>
         <field name="user_id" ref="base.user_demo"/>
         <field name="pricelist_id" ref="product.list0"/>
-        <field name="order_policy">manual</field>
-        <field name="agreement_id" ref="section_market_2"/>
+        <field name="agreement_id" ref="agreement_market_2"/>
         <field name="company_id" ref="child_company_b"/>
     </record>
 
@@ -248,7 +225,6 @@
         <field name="name">Laptop Customized</field>
         <field name="product_id" ref="product.product_product_27"/>
         <field name="product_uom_qty">2</field>
-        <field name="product_uos_qty">2</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">3645.00</field>
     </record>
@@ -258,16 +234,8 @@
         <field name="name">Mouse, Wireless</field>
         <field name="product_id" ref="product.product_product_12"/>
         <field name="product_uom_qty">2</field>
-        <field name="product_uos_qty">2</field>
         <field name="product_uom" ref="product.product_uom_unit"/>
         <field name="price_unit">12.50</field>
     </record>
-
-
-  <function model="sale.order" name="action_confirm">
-    <function eval="[[('id', '=', ref('multi_company_holding_invoicing.sale_order_1'))]]" 
-              model="sale.order" name="search"/>
-    <function eval="[[('id', '=', ref('sale_order_2'))]]" model="sale.order" name="search"/>
-  </function>
-
+  
 </odoo>

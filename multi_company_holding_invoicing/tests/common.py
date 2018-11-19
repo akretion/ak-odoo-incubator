@@ -10,8 +10,8 @@ from datetime import datetime
 XML_COMPANY_A = 'multi_company_holding_invoicing.child_company_a'
 XML_COMPANY_B = 'multi_company_holding_invoicing.child_company_b'
 XML_COMPANY_HOLDING = 'base.main_company'
-XML_SECTION_1 = 'multi_company_holding_invoicing.section_market_1'
-XML_SECTION_2 = 'multi_company_holding_invoicing.section_market_2'
+XML_AGREEMENT_1 = 'multi_company_holding_invoicing.agreement_market_1'
+XML_AGREEMENT_2 = 'multi_company_holding_invoicing.agreement_market_2'
 XML_PARTNER_ID = 'base.res_partner_2'
 
 
@@ -22,6 +22,57 @@ class CommonInvoicing(TransactionCase):
         # tests are called before register_hook
         # register suspend_security hook
         self.env['ir.rule']._register_hook()
+
+        # Install COA for each company (Holding, Child A and Child B)
+        self.wizard_obj = self.env['wizard.multi.charts.accounts']
+        self.chart_template = self.env['account.chart.template'].create({
+            'name': 'Test account_chart_update chart',
+            'currency_id': self.env.ref('base.EUR').id,
+            'code_digits': 6,
+            'transfer_account_id': self.env.ref(
+                'account_invoice_inter_company.pcg_X58').id,
+        })
+        wizard_child_comp_a = self.wizard_obj.create({
+            'company_id': self.env.ref(
+                'multi_company_holding_invoicing.child_company_a').id,
+            'chart_template_id': self.chart_template.id,
+            'code_digits': self.chart_template.code_digits,
+            'transfer_account_id': self.env.ref(
+                'account_invoice_inter_company.pcg_X58').id,
+            'currency_id': self.chart_template.currency_id.id,
+            'bank_account_code_prefix': '572',
+            'cash_account_code_prefix': '570',
+        })
+        wizard_child_comp_a.onchange_chart_template_id()
+        wizard_child_comp_a.execute()
+
+        wizard_child_comp_b = self.wizard_obj.create({
+            'company_id': self.env.ref(
+                'multi_company_holding_invoicing.child_company_b').id,
+            'chart_template_id': self.chart_template.id,
+            'code_digits': self.chart_template.code_digits,
+            'transfer_account_id': self.env.ref(
+                'account_invoice_inter_company.pcg_X58').id,
+            'currency_id': self.chart_template.currency_id.id,
+            'bank_account_code_prefix': '572',
+            'cash_account_code_prefix': '570',
+        })
+        wizard_child_comp_b.onchange_chart_template_id()
+        wizard_child_comp_b.execute()
+
+        wizard_holding_comp = self.wizard_obj.create({
+            'company_id': self.env.ref(
+                'base.main_company').id,
+            'chart_template_id': self.chart_template.id,
+            'code_digits': self.chart_template.code_digits,
+            'transfer_account_id': self.env.ref(
+                'account_invoice_inter_company.pcg_X58').id,
+            'currency_id': self.chart_template.currency_id.id,
+            'bank_account_code_prefix': '572',
+            'cash_account_code_prefix': '570',
+        })
+        wizard_holding_comp.onchange_chart_template_id()
+        wizard_holding_comp.execute()
 
     def _get_sales(self, xml_ids):
         sales = self.env['sale.order'].browse(False)
@@ -34,7 +85,7 @@ class CommonInvoicing(TransactionCase):
     def _validate_and_deliver_sale(self, xml_ids):
         sales = self._get_sales(xml_ids)
         for sale in sales:
-            sale.action_button_confirm()
+            sale.action_confirm()
             for picking in sale.picking_ids:
                 picking.force_assign()
                 picking.do_transfer()
@@ -47,34 +98,34 @@ class CommonInvoicing(TransactionCase):
             'partner_id': partner.id,
             'partner_invoice_id': partner.id,
             'partner_shipping_id': partner.id,
-            })
+        })
 
     def _set_company(self, sale_xml_ids, company_xml_id):
         company = self.env.ref(company_xml_id)
         sales = self._get_sales(sale_xml_ids)
         sales.write({'company_id': company.id})
 
-    def _set_section(self, sale_xml_ids, section_xml_id):
-        section = self.env.ref(section_xml_id)
+    def _set_agreement(self, sale_xml_ids, agreement_xml_id):
+        agreement = self.env.ref(agreement_xml_id)
         sales = self._get_sales(sale_xml_ids)
-        sales.write({'agreement_id': section.id})
+        sales.write({'agreement_id': agreement.id})
 
-    def _generate_holding_invoice(self, section_xml_id):
-        date_invoice = datetime.today()
+    def _generate_holding_invoice(self, agreement_xml_id):
+        invoice_date = datetime.today()
         wizard = self.env['wizard.holding.invoicing'].create({
-            'agreement_id': self.ref(section_xml_id),
-            'date_invoice': date_invoice,
-            })
+            'agreement_id': self.env.ref(agreement_xml_id).id,
+            'invoice_date': invoice_date,
+        })
         res = wizard.create_invoice()
         invoices = self.env['account.invoice'].browse(res['domain'][0][2])
         return invoices
 
     def _generate_holding_invoice_from_sale(self, sales):
-        date_invoice = datetime.today()
+        invoice_date = datetime.today()
         wizard = self.env['sale.make.invoice'].with_context(
             active_ids=sales.ids).create({
-                'invoice_date': date_invoice,
-                })
+                'invoice_date': invoice_date,
+            })
         res = wizard.make_invoices()
         invoices = self.env['account.invoice'].browse(res['domain'][0][2])
         return invoices
@@ -146,6 +197,6 @@ class CommonInvoicing(TransactionCase):
     def _check_sale_state(self, sales, expected_state):
         for sale in sales:
             self.assertEqual(
-                sale.invoice_state, expected_state,
+                sale.holding_invoice_state, expected_state,
                 msg="Invoice state is '%s' indeed of '%s'"
-                    % (sale.invoice_state, expected_state))
+                    % (sale.holding_invoice_state, expected_state))

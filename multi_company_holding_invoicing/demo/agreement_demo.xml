@@ -20,7 +20,7 @@
 </record>
 
 
-<record id="section_market_1" model="agreement">
+<record id="agreement_market_1" model="agreement">
     <field name="name">Holding Market 1</field>
     <field name="holding_company_id" ref="base.main_company"/>
     <field name="code">HM1</field>
@@ -35,7 +35,7 @@
         ref="holding_royalty_product"/>
 </record>
 
-<record id="section_market_2" model="agreement">
+<record id="agreement_market_2" model="agreement">
     <field name="name">Holding Market 2</field>
     <field name="holding_company_id" ref="base.main_company"/>
     <field name="code">HM2</field>
