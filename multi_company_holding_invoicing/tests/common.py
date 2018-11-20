@@ -23,57 +23,6 @@ class CommonInvoicing(TransactionCase):
         # register suspend_security hook
         self.env['ir.rule']._register_hook()
 
-        # Install COA for each company (Holding, Child A and Child B)
-        self.wizard_obj = self.env['wizard.multi.charts.accounts']
-        self.chart_template = self.env['account.chart.template'].create({
-            'name': 'Test account_chart_update chart',
-            'currency_id': self.env.ref('base.EUR').id,
-            'code_digits': 6,
-            'transfer_account_id': self.env.ref(
-                'account_invoice_inter_company.pcg_X58').id,
-        })
-        wizard_child_comp_a = self.wizard_obj.create({
-            'company_id': self.env.ref(
-                'multi_company_holding_invoicing.child_company_a').id,
-            'chart_template_id': self.chart_template.id,
-            'code_digits': self.chart_template.code_digits,
-            'transfer_account_id': self.env.ref(
-                'account_invoice_inter_company.pcg_X58').id,
-            'currency_id': self.chart_template.currency_id.id,
-            'bank_account_code_prefix': '572',
-            'cash_account_code_prefix': '570',
-        })
-        wizard_child_comp_a.onchange_chart_template_id()
-        wizard_child_comp_a.execute()
-
-        wizard_child_comp_b = self.wizard_obj.create({
-            'company_id': self.env.ref(
-                'multi_company_holding_invoicing.child_company_b').id,
-            'chart_template_id': self.chart_template.id,
-            'code_digits': self.chart_template.code_digits,
-            'transfer_account_id': self.env.ref(
-                'account_invoice_inter_company.pcg_X58').id,
-            'currency_id': self.chart_template.currency_id.id,
-            'bank_account_code_prefix': '572',
-            'cash_account_code_prefix': '570',
-        })
-        wizard_child_comp_b.onchange_chart_template_id()
-        wizard_child_comp_b.execute()
-
-        wizard_holding_comp = self.wizard_obj.create({
-            'company_id': self.env.ref(
-                'base.main_company').id,
-            'chart_template_id': self.chart_template.id,
-            'code_digits': self.chart_template.code_digits,
-            'transfer_account_id': self.env.ref(
-                'account_invoice_inter_company.pcg_X58').id,
-            'currency_id': self.chart_template.currency_id.id,
-            'bank_account_code_prefix': '572',
-            'cash_account_code_prefix': '570',
-        })
-        wizard_holding_comp.onchange_chart_template_id()
-        wizard_holding_comp.execute()
-
     def _get_sales(self, xml_ids):
         sales = self.env['sale.order'].browse(False)
         for xml_id in xml_ids:
@@ -120,15 +69,15 @@ class CommonInvoicing(TransactionCase):
         invoices = self.env['account.invoice'].browse(res['domain'][0][2])
         return invoices
 
-    def _generate_holding_invoice_from_sale(self, sales):
-        invoice_date = datetime.today()
-        wizard = self.env['sale.make.invoice'].with_context(
-            active_ids=sales.ids).create({
-                'invoice_date': invoice_date,
-            })
-        res = wizard.make_invoices()
-        invoices = self.env['account.invoice'].browse(res['domain'][0][2])
-        return invoices
+    #def _generate_holding_invoice_from_sale(self, sales):
+    #    invoice_date = datetime.today()
+    #    wizard = self.env['sale.make.invoice'].with_context(
+    #        active_ids=sales.ids).create({
+    #            'invoice_date': invoice_date,
+    #        })
+    #    res = wizard.make_invoices()
+    #    invoices = self.env['account.invoice'].browse(res['domain'][0][2])
+    #    return invoices
 
     def _check_number_of_invoice(self, invoices, number):
         self.assertEqual(
@@ -191,7 +140,7 @@ class CommonInvoicing(TransactionCase):
         self.assertAlmostEqual(
             expected_amount,
             computed_amount,
-            msg="The total amoutn of child invoice is %s expected %s"
+            msg="The total amount of child invoice is %s expected %s"
                 % (computed_amount, expected_amount))
 
     def _check_sale_state(self, sales, expected_state):

@@ -3,7 +3,7 @@
 # Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-
+from odoo.addons.queue_job.tests.common import JobMixin
 from .common import (
     CommonInvoicing,
     XML_AGREEMENT_1,
@@ -12,10 +12,10 @@ from .common import (
     XML_COMPANY_B,
     XML_COMPANY_HOLDING,
     XML_PARTNER_ID,
-    )
+)
 
 
-class TestInvoicing(CommonInvoicing):
+class TestInvoicing(CommonInvoicing, JobMixin):
 
     def _start_scenario(
             self, agreement_xml_id, sale_xml_ids, expected_xml_ids):
@@ -41,8 +41,8 @@ class TestInvoicing(CommonInvoicing):
         expected_amount = sum(sales_expected.mapped('amount_total'))
         self._check_expected_invoice_amount(invoice, expected_amount)
 
-        # Validad Invoice and check sale invoice state
-        invoice.signal_workflow('invoice_open')
+        # Validate Invoice and check sale invoice state
+        invoice.action_invoice_open()
         self._check_sale_state(sales_expected, 'invoiced')
 
         # Generate the child invoice and check
@@ -50,7 +50,12 @@ class TestInvoicing(CommonInvoicing):
         # - that the partner on child invoice is correct
         # - check the invoiced amount
         # - check the sale state
+        jobs = self.job_counter()
+        sale_companies = sales.mapped('company_id')
         invoice.generate_child_invoice()
+        # check that a job have been created for each child company
+        self.assertEqual(jobs.count_created(), len(sale_companies))
+        self.perform_jobs(jobs)
         self._check_child_invoice(invoice)
         self._check_child_invoice_partner(invoice)
         self._check_child_invoice_amount(invoice)
