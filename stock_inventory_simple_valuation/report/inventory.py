@@ -92,8 +92,12 @@ class InventoryValuation(ReportXlsx):
 
     def _set_notice(self, workbook):
         sheet = workbook.add_worksheet('notice')
-        sheet.write(0, 0, u"Voici l'ordre de recherche des coûts dans l'ERP")
-        sheet.write(1, 1, '\n'.join(SELECTION_ORDER))
+        cell_format = workbook.add_format()
+        cell_format.set_text_wrap()
+        sheet.set_row(1, 70)
+        sheet.set_column(1, 1, 50)
+        sheet.write(0, 0, u"Voici l'ordre de recherche des coûts dans l'ERP :")
+        sheet.write(1, 1, ' - ' + '\n - '.join(SELECTION_ORDER), cell_format)
 
     def _set_format_definition(self, workbook):
         base_format = {
