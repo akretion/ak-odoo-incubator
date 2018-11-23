@@ -8,6 +8,7 @@ except ImportError:
     class ReportXlsx(object):
         def __init__(self, *args, **kwargs):
             pass
+from ..models.inventory import SELECTION_ORDER
 
 
 INV_FIELDS = [
@@ -87,6 +88,12 @@ class InventoryValuation(ReportXlsx):
                             myfield = line[key]['name']
                     sheet.write(y + 1, x, myfield)
                     x += 1
+        self._set_notice(workbook)
+
+    def _set_notice(self, workbook):
+        sheet = workbook.add_worksheet('notice')
+        sheet.write(0, 0, u"Voici l'ordre de recherche des coûts dans l'ERP")
+        sheet.write(1, 1, '\n'.join(SELECTION_ORDER))
 
     def _set_format_definition(self, workbook):
         base_format = {
