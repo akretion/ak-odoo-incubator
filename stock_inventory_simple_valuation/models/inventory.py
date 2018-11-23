@@ -48,6 +48,7 @@ class StockInventoryLine(models.Model):
     @api.depends('product_id', 'product_qty', 'manual_product_cost',
                  'inventory_id.state', 'inventory_id.to_recompute')
     def _compute_product_cost(self):
+        custom_data_source = self._get_custom_data_source()
         po_l_obj = self.env['purchase.order.line']
         product_ids = [x.product_id.id for x in self]
         # product_ids == [False] for first created line
@@ -67,6 +68,8 @@ class StockInventoryLine(models.Model):
             cost_price = 0
             reference = False
             if not cost_price:
+                if custom_data_source:
+                    cost_price = self._get_custom_cost(custom_data_source)
                 # get cost price from supplier info
                 sup_info = line.product_id.seller_ids
                 if sup_info and sup_info[0].price:
@@ -104,6 +107,12 @@ class StockInventoryLine(models.Model):
             line.cost_origin = explanation
             if reference:
                 line.reference = reference
+
+    def _get_custom_data_source(self):
+        return None
+
+    def _get_custom_cost(self, custom_data_source):
+        return None
 
     @api.multi
     @api.depends('calc_product_cost', 'manual_product_cost')
