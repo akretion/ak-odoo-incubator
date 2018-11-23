@@ -10,4 +10,7 @@ from odoo import models, fields
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    standard_price_ = fields.Float(digits=dp.get_precision('Product Price'))
+    standard_price_ = fields.Float(
+        string='Cout manuel', digits=dp.get_precision('Product Price'),
+        help="Ce champ est utilisé pour le rapport de valorisation "
+             "d'inventaire afin de spécifier un coût manuel")

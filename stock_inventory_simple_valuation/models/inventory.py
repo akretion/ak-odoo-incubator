@@ -9,6 +9,15 @@ from odoo import api, models, fields, _
 import odoo.addons.decimal_precision as dp
 
 
+# Used in report for documentation
+SELECTION_ORDER = [
+    u"les infos founisseur de la fiche produit",
+    u"les dernières factures d'achats",
+    u"les dernières commandes d'achats",
+    u"le champ cout manuel de la fiche produit"
+]
+
+
 class StockInventory(models.Model):
     _inherit = 'stock.inventory'
 
@@ -57,6 +66,8 @@ class StockInventoryLine(models.Model):
         invoices = self._get_invoice_data(
             product_ids, company=self.env.user.company_id)
         for line in self:
+            # DON'T FORGET TO update SELECTION_ORDER
+            # when changes are done in the order of the blocks
             if line.inventory_id.state not in ('done') and \
                     not line.inventory_id.to_recompute:
                 line.cost_origin = _("Click on 'Compute cost'")
@@ -68,14 +79,15 @@ class StockInventoryLine(models.Model):
             cost_price = 0
             reference = False
             if not cost_price:
-                if custom_data_source:
-                    cost_price = self._get_custom_cost(custom_data_source)
                 # get cost price from supplier info
                 sup_info = line.product_id.seller_ids
                 if sup_info and sup_info[0].price:
                     cost_price = sup_info[0].price
                     explanation = _('Supplier info')
                     reference = 'product.supplierinfo,%s' % sup_info[0].id
+            if not cost_price and custom_data_source:
+                cost_price, explanation, reference = self._get_custom_cost(
+                    custom_data_source, product_ids)
             if not cost_price and invoices:
                 cost_price = invoices[line.product_id.id].get(
                     'price_unit')
@@ -94,7 +106,6 @@ class StockInventoryLine(models.Model):
                     explanation = _('Purchase')
                     reference = 'purchase.order,%s' % po_line.order_id.id
             if not cost_price:
-                # get cost price from supplier info
                 sup_info = line.product_id.seller_id
                 if line.product_id.standard_price_:
                     cost_price = line.product_id.standard_price_
@@ -111,8 +122,8 @@ class StockInventoryLine(models.Model):
     def _get_custom_data_source(self):
         return None
 
-    def _get_custom_cost(self, custom_data_source):
-        return None
+    def _get_custom_cost(self, custom_data_source, product_ids):
+        return (None, None, None)
 
     @api.multi
     @api.depends('calc_product_cost', 'manual_product_cost')
