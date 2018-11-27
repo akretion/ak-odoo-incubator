@@ -15,6 +15,7 @@
     'website': 'http://www.akretion.com/',
     'data': [
         'views/pricelist_view.xml',
+        'views/invoice_view.xml',
     ],
     'demo': [
         'demo/demo.xml',

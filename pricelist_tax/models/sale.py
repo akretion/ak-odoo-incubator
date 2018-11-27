@@ -2,7 +2,6 @@
 # © 2018  Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from collections import defaultdict
 import logging
 
 from odoo import models, api
@@ -12,30 +11,6 @@ _logger = logging.getLogger(__name__)
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
-
-    def _map_exclude_tax(self):
-        """ return a dict
-            mtax[company_id or 0][tax amount]['include'|'exclude'] = tax_id
-        """
-        mtax = defaultdict(dict)
-        prev_cpny = False
-        for tax in self.env['account.tax'].search(
-                [('type_tax_use', '=', 'sale')],
-                order='company_id ASC, price_include DESC'):
-            cpny = tax.company_id
-            if cpny != prev_cpny:
-                tamount = defaultdict(dict)
-            if tax.price_include:
-                tamount[tax.amount].update({'include': tax.id})
-            else:
-                tamount[tax.amount].update({'exclude': tax.id})
-            if tax.amount in mtax[tax.company_id.id or 0]:
-                mtax[tax.company_id.id or 0][tax.amount].update(
-                    tamount[tax.amount])
-            else:
-                mtax[tax.company_id.id or 0][tax.amount] = tamount[tax.amount]
-            prev_cpny = cpny
-        return mtax
 
     @api.multi
     def _compute_tax_id(self):
@@ -55,19 +30,6 @@ class SaleOrderLine(models.Model):
             line.tax_id = (fpos.map_tax(
                 taxes, line.product_id, line.order_id.partner_shipping_id)
                 if fpos else taxes)
-
-    def _get_substitute_taxes(self, taxes, map_tax):
-        cpny = self.order_id.company_id.id or self.company_id.id or 0
-        mytaxes = []
-        for tax in taxes:
-            if map_tax[cpny].get(tax.amount):
-                if map_tax[cpny][tax.amount].get('exclude'):
-                    mytaxes.append(map_tax[cpny][tax.amount]['exclude'])
-                else:
-                    mytaxes.append(tax.id)
-            else:
-                mytaxes.append(tax.id)
-        return self.env['account.tax'].browse(mytaxes)
 
     @api.multi
     @api.onchange('product_id')

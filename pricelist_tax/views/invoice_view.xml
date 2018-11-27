@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_account_invoice_customer_form" model="ir.ui.view">
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account_invoice_pricelist.view_account_invoice_customer_form"/>
+        <field name="arch" type="xml">
+            <button name="button_update_prices_from_pricelist" position="after">
+                <span title="You should rewrite your product lines in this case" 
+                	  colspan="2">Update of lines with pricelist change is not supported for now.
+                	</span>
+            </button>
+            <button name="button_update_prices_from_pricelist" position="attributes">
+                <attribute name="attrs">{'invisible': True}</attribute>
+            </button>
+        </field>
+    </record>
+
+</odoo>

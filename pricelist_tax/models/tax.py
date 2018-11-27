@@ -2,6 +2,7 @@
 # © 2018  Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from collections import defaultdict
 import logging
 
 from collections import defaultdict
