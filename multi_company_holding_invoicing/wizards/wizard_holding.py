@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (http://www.akretion.com)
-# Sébastien BEAU <sebastien.beau@akretion.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-
-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
@@ -24,6 +19,7 @@ class InvoiceWizard(models.TransientModel):
             ('agreement_id', '=', self.agreement_id.id),
             ('holding_invoice_state', '=', 'invoiceable'),
             ('holding_invoice_id', '=', False),
+            ('company_id', '!=', self.agreement_id.holding_company_id.id)
             ]
 
     def _return_open_action(self, invoices):

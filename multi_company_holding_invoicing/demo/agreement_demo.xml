@@ -3,8 +3,8 @@
 
 <record id="holding_product" model="product.product">
     <field name="name">Holding Product</field>
-    <field name="uom_id" ref="product.product_uom_hour"/>
-    <field name="uom_po_id" ref="product.product_uom_hour"/>
+    <field name="uom_id" ref="product.product_uom_unit"/>
+    <field name="uom_po_id" ref="product.product_uom_unit"/>
     <field name="categ_id" ref="product.product_category_3"/>
     <field name="type">service</field>
     <field name="company_id" ref=""/>
@@ -12,8 +12,8 @@
 
 <record id="holding_royalty_product" model="product.product">
     <field name="name">Holding Royalty Product</field>
-    <field name="uom_id" ref="product.product_uom_hour"/>
-    <field name="uom_po_id" ref="product.product_uom_hour"/>
+    <field name="uom_id" ref="product.product_uom_unit"/>
+    <field name="uom_po_id" ref="product.product_uom_unit"/>
     <field name="categ_id" ref="product.product_category_3"/>
     <field name="type">service</field>
     <field name="company_id" ref=""/>

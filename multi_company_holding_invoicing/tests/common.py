@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (http://www.akretion.com)
-# Sébastien BEAU <sebastien.beau@akretion.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-
-
 from odoo.tests.common import TransactionCase
 from datetime import datetime
 
@@ -69,16 +64,6 @@ class CommonInvoicing(TransactionCase):
         invoices = self.env['account.invoice'].browse(res['domain'][0][2])
         return invoices
 
-    #def _generate_holding_invoice_from_sale(self, sales):
-    #    invoice_date = datetime.today()
-    #    wizard = self.env['sale.make.invoice'].with_context(
-    #        active_ids=sales.ids).create({
-    #            'invoice_date': invoice_date,
-    #        })
-    #    res = wizard.make_invoices()
-    #    invoices = self.env['account.invoice'].browse(res['domain'][0][2])
-    #    return invoices
-
     def _check_number_of_invoice(self, invoices, number):
         self.assertEqual(
             len(invoices), 1,
@@ -112,12 +97,18 @@ class CommonInvoicing(TransactionCase):
                 expected_sales_name = ', '.join(expected_sales.mapped('name'))
             else:
                 expected_sales_name = ''
-            if child.sale_ids:
-                found_sales_name = ', '.join(child.sale_ids.mapped('name'))
+            sale_ids = []
+            for invoice_line in child.invoice_line_ids:
+                for sale_line in invoice_line.sale_line_ids:
+                    if sale_line.order_id.id not in sale_ids:
+                        sale_ids.append(sale_line.order_id.id)
+            sales = self.env['sale.order'].browse(sale_ids)
+            if sales:
+                found_sales_name = ', '.join(sales.mapped('name'))
             else:
                 found_sales_name = ''
             self.assertEqual(
-                child.sale_ids, expected_sales,
+                sales, expected_sales,
                 msg="The child invoice generated is not linked to the "
                     "expected sale order. Found %s, expected %s"
                     % (found_sales_name, expected_sales_name))

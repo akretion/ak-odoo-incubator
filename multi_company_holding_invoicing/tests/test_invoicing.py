@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (http://www.akretion.com)
-# Sébastien BEAU <sebastien.beau@akretion.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-
 from odoo.addons.queue_job.tests.common import JobMixin
 from .common import (
     CommonInvoicing,
@@ -26,8 +22,10 @@ class TestInvoicing(CommonInvoicing, JobMixin):
 
         # Validate the sale order (sale_xml_ids) and check the state
         self._validate_and_deliver_sale(sale_xml_ids)
-        sales = self._get_sales(expected_xml_ids)
-        self._check_sale_state(sales, 'invoiceable')
+        sales = self._get_sales(sale_xml_ids)
+        sales_invoiceable = sales.filtered(
+            lambda r: r.company_id != r.agreement_id.holding_company_id)
+        self._check_sale_state(sales_invoiceable, 'invoiceable')
 
         # Generate the holding invoice and check the :
         # - sales invoiced
@@ -51,7 +49,7 @@ class TestInvoicing(CommonInvoicing, JobMixin):
         # - check the invoiced amount
         # - check the sale state
         jobs = self.job_counter()
-        sale_companies = sales.mapped('company_id')
+        sale_companies = sales_invoiceable.mapped('company_id')
         invoice.generate_child_invoice()
         # check that a job have been created for each child company
         self.assertEqual(jobs.count_created(), len(sale_companies))
@@ -86,19 +84,3 @@ class TestInvoicing(CommonInvoicing, JobMixin):
         self._start_scenario(XML_AGREEMENT_1, [1, 2, 3, 4], [1, 2, 3])
         sales = self._get_sales([4])
         self._check_sale_state(sales, 'none')
-
-    def test_invoice_market_1_one_company_one_partner_by_sale(self):
-        agreement = self.env.ref(XML_AGREEMENT_1)
-        agreement.write({'holding_invoice_group_by': 'sale'})
-        self.test_invoice_market_1_one_company_one_partner()
-
-    def test_invoice_market_1_multi_company_one_partner_by_sale(self):
-        agreement = self.env.ref(XML_AGREEMENT_1)
-        agreement.write({'holding_invoice_group_by': 'sale'})
-        self.test_invoice_market_1_multi_company_one_partner()
-
-    def test_invoice_market_1_multi_company_with_holding_one_partner_by_sale(
-            self):
-        agreement = self.env.ref(XML_AGREEMENT_1)
-        agreement.write({'holding_invoice_group_by': 'sale'})
-        self.test_invoice_market_1_multi_company_with_holding_one_partner()

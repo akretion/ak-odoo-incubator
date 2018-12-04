@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-# © 2015 Akretion (http://www.akretion.com)
-# Sébastien BEAU <sebastien.beau@akretion.com>
-# Chafique Delli <chafique.delli@akretion.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-
-
 from odoo import models, fields, api
 import logging
 
@@ -46,7 +40,8 @@ class SaleOrder(models.Model):
         # Indeed the dependency is manually triggered when
         # the holding_invoice is generated or the state is changed
         for sale in self:
-            if not sale.agreement_id.holding_company_id:
+            if (not sale.agreement_id.holding_company_id or
+                    sale.company_id == sale.agreement_id.holding_company_id):
                 sale.holding_invoice_state = 'none'
             elif sale.holding_invoice_id:
                 if sale.holding_invoice_id.state in ('open', 'paid'):
@@ -76,7 +71,7 @@ class SaleOrderLine(models.Model):
             for line in self:
                 qty_invoiced = 0.0
                 for invoice_line in line.invoice_lines.filtered(
-                        lambda r: r.product_id != r.agreement_id.
+                        lambda r: r.product_id != r.invoice_id.agreement_id.
                         holding_royalty_product_id):
                     if (invoice_line.invoice_id.state != 'cancel' and
                             invoice_line.invoice_id.type == 'out_invoice'):
