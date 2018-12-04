@@ -106,7 +106,6 @@ class StockInventoryLine(models.Model):
                     explanation = _('Purchase')
                     reference = 'purchase.order,%s' % po_line.order_id.id
             if not cost_price:
-                sup_info = line.product_id.seller_id
                 if line.product_id.standard_price_:
                     cost_price = line.product_id.standard_price_
                     explanation = _('Product standard_price')
