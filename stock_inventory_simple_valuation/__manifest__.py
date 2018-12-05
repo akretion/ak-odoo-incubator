@@ -14,6 +14,7 @@
     'depends': [
         'stock',
         'report_xlsx',
+        'purchase',
     ],
     'data': [
         'views/inventory_view.xml',
