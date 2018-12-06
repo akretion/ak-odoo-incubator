@@ -145,14 +145,14 @@ class SaleOrderLineOption(models.Model):
     def _get_bom_line_price(self):
         self.ensure_one()
         pricelist = self.sale_line_id.pricelist_id.with_context({
-            'uom': self.bom_line_id.product_uom.id,
+            'uom': self.product_id.uom_id.id,
             'date': self.sale_line_id.order_id.date_order,
         })
         price = pricelist.price_get(
             self.product_id.id,
-            self.bom_line_id.product_qty or 1.0,
+            self.qty,
             self.sale_line_id.order_id.partner_id.id)
-        return price[pricelist.id] * self.bom_line_id.product_qty * self.qty
+        return price[pricelist.id] * self.qty
 
     @api.multi
     @api.depends('qty', 'product_id')
