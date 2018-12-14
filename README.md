@@ -2,14 +2,13 @@
 [![Coverage Status](https://coveralls.io/repos/github/akretion/ak-odoo-incubator/badge.svg?branch=12.0)](https://coveralls.io/github/akretion/ak-odoo-incubator?branch=12.0)
 [![Code Climate](https://codeclimate.com/github/akretion/ak-odoo-incubator/badges/gpa.svg)](https://codeclimate.com/github/akretion/ak-odoo-incubator)
 
-### Misc modules 12.0
+### Misc Odoo modules 12.0
 
 
-
-### Environmental considerations
+#### Environmental considerations
 
 For environmental purpose we only limit test to OCB (odoo clone), no more Odoo
 
-[![Code Climate](https://github/akretion/ak-odoo-incubator/wegreenit.jpg)](https://github/akretion/ak-odoo-incubator)
+![green it](https://github.com/akretion/ak-odoo-incubator/raw/12.0/wegreenit.jpg)
 
-Act at your level, to limit impact on environment
+We act at our level to reduce expensive automatic computing tasks for restrict impact on environment.
