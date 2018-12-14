@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Groupes -->
+        <record id="group_gollum_edit" model="res.groups">
+            <field name="name">Gollum Wiki editor</field>
+            <field name="comment">Give the right to the user to edit the wiki</field>
+        </record>
+
+    </data>
+</odoo>
