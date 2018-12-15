@@ -23,10 +23,10 @@ class StockInventory(models.Model):
 
     to_recompute = fields.Boolean()
 
-    @api.one
     def button_compute_cost(self):
         "Compute or reset"
-        self.write({'to_recompute': not self.to_recompute})
+        for rec in self:
+            rec.write({'to_recompute': not rec.to_recompute})
 
 
 class StockInventoryLine(models.Model):
