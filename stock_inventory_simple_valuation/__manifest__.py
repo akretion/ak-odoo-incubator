@@ -4,9 +4,7 @@
 
 {
     'name': "Stock Inventory Simple Valuation",
-    'summary': "... ",
-    'description': """
-        Display cost information from different sources in inventory line""",
+    'summary': "Get cost information from different sources in inventory",
     'author': "Akretion",
     'website': "http://www.akretion.com",
     'category': 'Stock',
