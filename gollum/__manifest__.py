@@ -9,7 +9,7 @@
     "name": "Gollum wiki integration",
     "summary": "Gollum wiki integration",
     "version": "10.0.1.0.0",
-    "category": "Uncategorized",
+    "category": "Tools",
     "website": "www.akretion.com",
     "author": " Akretion",
     "license": "AGPL-3",
