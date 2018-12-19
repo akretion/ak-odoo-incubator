@@ -17,7 +17,8 @@ class TestGeneratePutaway(TransactionCase):
         self.account_model = self.env['account.account']
         self.res_users_model = self.env['res.users']
         self.stock_location_model = self.env['stock.location']
-        self.putaway_strategy_model = self.env['putaway.strategy']
+        self.putaway_strategy_model = self.env[
+                'stock.product.putaway.strategy']
         self.stock_inventory_model = self.env['stock.inventory']
         self.stock_inventory_line_model = self.env['stock.inventory.line']
 
