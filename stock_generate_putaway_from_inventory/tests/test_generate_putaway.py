@@ -18,7 +18,7 @@ class TestGeneratePutaway(TransactionCase):
         self.res_users_model = self.env['res.users']
         self.stock_location_model = self.env['stock.location']
         self.putaway_strategy_model = self.env[
-                'stock.product.putaway.strategy']
+            'stock.product.putaway.strategy']
         self.stock_inventory_model = self.env['stock.inventory']
         self.stock_inventory_line_model = self.env['stock.inventory.line']
 
@@ -29,7 +29,8 @@ class TestGeneratePutaway(TransactionCase):
         self.group_stock_user = self.env.ref(
             'stock.group_stock_user')
 
-        strategy = self.putaway_strategy_model.create({'name': 'test'})
+        strategy = self.putaway_strategy_model.create(
+            {'name': 'test', 'method': 'per_product'})
         parent = self.stock_location_model.search([('name', '=', 'WH')])
         self.location = self.stock_location_model.create({
             'location_id': parent.id,
