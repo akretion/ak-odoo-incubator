@@ -24,7 +24,6 @@ class Base(models.AbstractModel):
             field_name, json_key = field_name.split(':')
         return field_name, json_key, subparser
 
-
     @api.multi
     def jsonify(self, parser):
         """ Convert the record according to the parser given
@@ -41,8 +40,8 @@ class Base(models.AbstractModel):
         return a list of object even if there is only one element in input
 
         By default the key into the json is the name of the field extracted
-        from the model. If you need to specify an alternate name to use as key, you
-        can define your mapping as follow into the parser definition:
+        from the model. If you need to specify an alternate name to use as
+        key, you can define your mapping as follow into the parser definition:
 
         parser = [
              'field_name:json_key'
@@ -50,12 +49,6 @@ class Base(models.AbstractModel):
 
         """
         result = []
-        empty_value = {
-            'char': None,
-            'int': None,
-            # 'float': None, TODO:  0.0 != False
-            'text': None,
-            }
 
         for rec in self:
             res = {}
@@ -67,14 +60,16 @@ class Base(models.AbstractModel):
                         res[json_key] = rec[field_name].jsonify(subparser)
                     elif field_type in ('many2one', 'reference'):
                         if rec[field_name]:
-                            res[json_key] = rec[field_name].jsonify(subparser)[0]
+                            res[json_key] =\
+                                rec[field_name].jsonify(subparser)[0]
                         else:
                             res[json_key] = None
                     else:
                         raise UserError(_('Wrong parser configuration'))
                 else:
-                    res[json_key] = rec[field_name]
-                    if not res[json_key] and field_type in empty_value:
-                        res[json_key] = empty_value[field_type]
+                    value = rec[field_name]
+                    if value is False and field_type != 'boolean':
+                        value = None
+                    res[json_key] = value
             result.append(res)
         return result

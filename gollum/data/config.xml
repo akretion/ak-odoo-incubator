@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+        <!-- Add gollum default configuration parameter -->
+        <record id="default_gollum_path" model="ir.config_parameter">
+            <field name="key">gollum_path</field>
+            <field name="value">http://gollum:4567</field>
+        </record>
+
+</odoo>
