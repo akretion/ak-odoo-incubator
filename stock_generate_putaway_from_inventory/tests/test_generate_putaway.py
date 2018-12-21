@@ -100,7 +100,7 @@ class TestGeneratePutaway(TransactionCase):
 
     def test_generate(self):
         """Test default methods"""
-        self.inventory.generate_putaway_strategy()
+        self.inventory.generate_putaway_strategy_multi()
         self.assertEquals(
             len(self.product_1.product_putaway_ids), 2,
             'pas le bon nombre de putaway strategy créées')
