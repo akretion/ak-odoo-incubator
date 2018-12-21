@@ -9,6 +9,7 @@
     'website': "http://www.akretion.com",
     'category': 'Stock',
     'version': '10.0.1.0.1',
+    'license': "AGPL-3",
     'depends': [
         'stock',
         'report_xlsx',
@@ -19,4 +20,5 @@
         'views/product_view.xml',
         'report/report_view.xml',
     ],
+    'installable': True,
 }

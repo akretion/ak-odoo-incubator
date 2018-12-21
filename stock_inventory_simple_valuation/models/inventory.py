@@ -108,6 +108,11 @@ class StockInventoryLine(models.Model):
             if not cost_price:
                 if line.product_id.standard_price_:
                     cost_price = line.product_id.standard_price_
+                    explanation = _('Product manual standard_price_')
+                    reference = 'product.product,%s' % line.product_id.id
+            if not cost_price:
+                if line.product_id.standard_price:
+                    cost_price = line.product_id.standard_price
                     explanation = _('Product standard_price')
                     reference = 'product.product,%s' % line.product_id.id
             if not cost_price:
