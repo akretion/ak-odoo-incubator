@@ -20,6 +20,6 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.open_order:
                 raise exceptions.Warning(
-                    _('The picking %s comes from an Open Order. It is not '
-                      'possible to transfer it.' % picking.name))
+                    _('The picking comes from an Open Order. It is not '
+                      'possible to transfer it.'))
         return super(StockPicking, self).do_transfer()

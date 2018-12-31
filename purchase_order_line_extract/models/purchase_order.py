@@ -13,6 +13,7 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     open_order = fields.Boolean(
+        track_visibility='onchange',
         help="This kind of order can't be tranfered. The lines and "
              "quantity can be extract to a normal PO")
 
@@ -33,8 +34,8 @@ class PurchaseOrder(models.Model):
         for po in self:
             if not po.open_order:
                 raise exceptions.Warning(
-                    _('Order %s is not an open order, it is not possible '
-                      'to extract lines from it to a new order.' % po.name))
+                    _('The Order is not an open order, it is not possible '
+                      'to extract lines from it to a new order.'))
             for line in po.order_line:
                 if line.state == 'cancel' or not line.product_qty:
                     continue
@@ -61,12 +62,14 @@ class PurchaseOrder(models.Model):
 
     @api.multi
     def write(self, vals):
-        if vals.get('open_order', False):
+        if 'open_order' in vals:
             for po in self:
                 pickings = po.picking_ids
                 if any([p.state  in ('cancel', 'done') for p in pickings]):
                     raise exceptions.Warning(
-                        _('Impossible to change order %s to an open order '
+                        _('Impossible to change the order to an open order '
+                          'or to make it a classic order '
                           'because some actions have already been made on '
-                          'linked incoming shipments' % po.name))
+                          'linked incoming shipments'))
+                pickings.write({'open_order': vals['open_order']})
         return super(PurchaseOrder, self).write(vals)

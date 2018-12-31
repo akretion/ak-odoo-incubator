@@ -104,10 +104,10 @@ msgid "ID"
 msgstr "Identifiant"
 
 #. module: purchase_order_line_extract
-#: code:addons/purchase_order_line_extract/models/purchase_order.py:69
+#: code:addons/purchase_order_line_extract/models/purchase_order.py:70
 #, python-format
-msgid "Impossible to change order %s to an open order because some actions have already been made on linked incoming shipments"
-msgstr "Impossible de marquer la commande %s en commande ouverte parce que certaines actions ont déjà été faîtes sur les réceptions associées"
+msgid "Impossible to change the order to an open order or to make it a classic order because some actions have already been made on linked incoming shipments"
+msgstr "Impossible de marquer la commande en commande ouverte ou en commande ferme parce que certaines actions ont déjà été faîtes sur les réceptions associées"
 
 #. module: purchase_order_line_extract
 #: model:ir.model.fields,field_description:purchase_order_line_extract.field_purchase_line_extractor_wizard___last_update
@@ -146,12 +146,6 @@ msgstr "Aucune ligne de commande d'achat trouvées"
 #: field:stock.picking,open_order:0
 msgid "Open order"
 msgstr "PO Ouverte"
-
-#. module: purchase_order_line_extract
-#: code:addons/purchase_order_line_extract/models/purchase_order.py:36
-#, python-format
-msgid "Order %s is not an open order, it is not possible to extract lines from it to a new order."
-msgstr "La commande %s n'est pas une commande ouverte, Il est impossible de créer une PO de réception depuis celle-ci."
 
 #. module: purchase_order_line_extract
 #: model:ir.model.fields,field_description:purchase_order_line_extract.field_purchase_order_extract_line_purchase_id
@@ -251,10 +245,16 @@ msgid "Supplier"
 msgstr "Fournisseur"
 
 #. module: purchase_order_line_extract
+#: code:addons/purchase_order_line_extract/models/purchase_order.py:37
+#, python-format
+msgid "The Order is not an open order, it is not possible to extract lines from it to a new order."
+msgstr "La commande n'est pas une commande ouverte, Il est impossible de créer une PO de réception depuis celle-ci."
+
+#. module: purchase_order_line_extract
 #: code:addons/purchase_order_line_extract/models/stock_picking.py:23
 #, python-format
-msgid "The picking %s comes from an Open Order. It is not possible to transfer it."
-msgstr "La réception %s vient d'une commande ouverte. Il est impossible de la transférer"
+msgid "The picking comes from an Open Order. It is not possible to transfer it."
+msgstr "La réception vient d'une commande ouverte. Il est impossible de la transférer"
 
 #. module: purchase_order_line_extract
 #: help:purchase.order,open_order:0
