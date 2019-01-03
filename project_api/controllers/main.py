@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 class ExternalTaskController(main.RestController):
-    _root_path = '/externaltask/'
+    _root_path = '/project-api/'
     _collection_name = 'project.project'
     _default_auth = 'api_key'
 
@@ -36,28 +36,3 @@ class ExternalTaskController(main.RestController):
 #        res['partner'] = self._get_partner_from_headers(headers)
         res['project'] = self._get_project_from_request()
         return res
-
-    @route([
-        '<string:_service_name>/read',
-    ], methods=['GET'])
-    def read(self, _service_name, **params):
-        return self._process_method(_service_name, 'read', params=params)
-
-    @route([
-        '<string:_service_name>/read_group',
-    ], methods=['GET'])
-    def read_group(self, _service_name, **params):
-        return self._process_method(_service_name, 'read_group', params=params)
-
-
-    @route(
-        '/externaltask/message', methods=['GET', 'POST'], auth="externaltask")
-    def message_list(self, **params):
-        method = request.httprequest.method
-        service = request.env['task.service']
-        service.project = request.project
-        if method == 'GET':
-            res = service.get_message(params)
-        elif method == 'POST':
-            res = service.create_message(params)
-        return request.make_response(res)

@@ -18,8 +18,8 @@
 #
 ##############################################################################
 {
-    'name': 'Internal Project Akretion',
-    'summary': 'Custom for Akretion',
+    'name': 'Project API',
+    'summary': 'Expose a json-rpx like API on top of base_rest',
     "version": "10.0.1.0.0",
     "category": "Project Management",
     'author': "Akretion",
@@ -32,6 +32,7 @@
     ],
     'data': [
         'views/project_view.xml',
+        'demo/project_demo.xml',
     ],
     'installable': True,
     'application': True,

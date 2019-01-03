@@ -18,20 +18,22 @@
 #
 ##############################################################################
 {
-    'name': 'External Project Akretion',
-    'summary': 'Custom for Akretion',
+    'name': 'Project API client',
+    'summary': 'Module add a new entry to follow'
+               'your project in the integrator ERP',
     "version": "8.0.1.0.0",
     "category": "Project Management",
     'author': "Akretion",
     'website': '',
     'license': 'AGPL-3',
     'depends': [
-        'project',
         'keychain',
         'base_suspend_security',
     ],
     'data': [
-        'views/project_view.xml'
+        'views/project_view.xml',
+        'demo/keychain_demo.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'application': True,

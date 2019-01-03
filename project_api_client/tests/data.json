@@ -1,0 +1,298 @@
+{
+    "test_create": {
+        "input": {
+            "contact_email": "admin@yourcompany.example.com", 
+            "contact_mobile": "", 
+            "description": "Creation test", 
+            "external_user_id": 1, 
+            "model_reference": "", 
+            "name": "Test"
+        }, 
+        "method": "create", 
+        "output": 92, 
+        "service_name": "task"
+    }, 
+    "test_message_format": {
+        "input": {
+            "ids": [
+                261, 
+                260, 
+                259
+            ]
+        }, 
+        "method": "message_format", 
+        "output": [
+            {
+                "attachment_ids": [], 
+                "author_id": [
+                    3, 
+                    "YourCompany, Administrator"
+                ], 
+                "body": "<p>Dear Agrolait,</p>\n<p>Thank you for your enquiry.<br></p>\n<p>If you have any questions, please let us know.</p>\n<p>Best regards,</p>", 
+                "channel_ids": [], 
+                "customer_email_data": [], 
+                "customer_email_status": "sent", 
+                "date": "2019-01-02 17:00:09", 
+                "email_from": "Administrator <admin@yourcompany.example.com>", 
+                "id": 261, 
+                "is_note": false, 
+                "message_type": "email", 
+                "model": "external.task", 
+                "needaction_partner_ids": [], 
+                "partner_ids": [], 
+                "record_name": false, 
+                "res_id": "external/47", 
+                "starred_partner_ids": [], 
+                "subject": "Reception of Bug when sending email", 
+                "subtype_description": false, 
+                "subtype_id": false, 
+                "tracking_value_ids": []
+            }, 
+            {
+                "attachment_ids": [], 
+                "author_id": [
+                    3, 
+                    "YourCompany, Administrator"
+                ], 
+                "body": "", 
+                "channel_ids": [], 
+                "customer_email_data": [], 
+                "customer_email_status": "sent", 
+                "date": "2019-01-02 17:00:09", 
+                "email_from": "Administrator <admin@yourcompany.example.com>", 
+                "id": 260, 
+                "is_note": false, 
+                "message_type": "notification", 
+                "model": "external.task", 
+                "needaction_partner_ids": [], 
+                "partner_ids": [], 
+                "record_name": "Bug when sending email", 
+                "res_id": "external/47", 
+                "starred_partner_ids": [], 
+                "subject": false, 
+                "subtype_description": "Task opened", 
+                "subtype_id": [
+                    3, 
+                    "Task Opened"
+                ], 
+                "tracking_value_ids": [
+                    {
+                        "changed_field": "Stage", 
+                        "field_type": "many2one", 
+                        "id": 279, 
+                        "new_value": "To Do", 
+                        "old_value": ""
+                    }, 
+                    {
+                        "changed_field": "Kanban State", 
+                        "field_type": "selection", 
+                        "id": 280, 
+                        "new_value": "In Progress", 
+                        "old_value": ""
+                    }, 
+                    {
+                        "changed_field": "Project", 
+                        "field_type": "many2one", 
+                        "id": 281, 
+                        "new_value": "Agrolait Project", 
+                        "old_value": ""
+                    }, 
+                    {
+                        "changed_field": "Assigned to", 
+                        "field_type": "many2one", 
+                        "id": 282, 
+                        "new_value": "Demo User", 
+                        "old_value": ""
+                    }, 
+                    {
+                        "changed_field": "Task Title", 
+                        "field_type": "char", 
+                        "id": 283, 
+                        "new_value": "Bug when sending email", 
+                        "old_value": false
+                    }
+                ]
+            }, 
+            {
+                "attachment_ids": [], 
+                "author_id": [
+                    3, 
+                    "YourCompany, Administrator"
+                ], 
+                "body": "<p>Dear Demo User,</p>\n            <p>You have been assigned to the task Bug when sending email.</p>\n            <p>\n                <a style=\"border-radius:5px; font-size:16px; color:#fff; text-decoration:none; padding:10px; margin-top:10px; background-color:#9E588B\" href=\"http://shopinvader-odoo.dy/mail/view?model=project.task&amp;res_id=47\">\n                    View task\n                </a>\n            </p>\n            <p style=\"color:#9E588B\">Powered by <a href=\"https://www.odoo.com\">Odoo</a>.</p>\n        ", 
+                "channel_ids": [], 
+                "customer_email_data": [], 
+                "customer_email_status": "sent", 
+                "date": "2019-01-02 17:00:09", 
+                "email_from": "Administrator <admin@yourcompany.example.com>", 
+                "id": 259, 
+                "is_note": false, 
+                "message_type": "email", 
+                "model": "external.task", 
+                "needaction_partner_ids": [], 
+                "partner_ids": [], 
+                "record_name": false, 
+                "res_id": "external/47", 
+                "starred_partner_ids": [], 
+                "subject": "Re: Bug when sending email", 
+                "subtype_description": false, 
+                "subtype_id": false, 
+                "tracking_value_ids": []
+            }
+        ], 
+        "service_name": "task"
+    }, 
+    "test_read": {
+        "input": {
+            "fields": [
+                "stage_name", 
+                "name"
+            ], 
+            "ids": [
+                47, 
+                48
+            ], 
+            "load": "_classic_read"
+        }, 
+        "method": "read", 
+        "output": [
+            {
+                "id": 47, 
+                "name": "Bug when sending email", 
+                "stage_name": "To Do"
+            }, 
+            {
+                "id": 48, 
+                "name": "Need to add a new columns in report A", 
+                "stage_name": "In Progress"
+            }
+        ], 
+        "service_name": "task"
+    }, 
+    "test_read_group": {
+        "input": {
+            "domain": [], 
+            "fields": [
+                "stage_name", 
+                "name"
+            ], 
+            "groupby": [
+                "stage_name"
+            ], 
+            "lazy": true, 
+            "limit": false, 
+            "offset": 0, 
+            "orderby": ""
+        }, 
+        "method": "read_group", 
+        "output": [
+            {
+                "__domain": [
+                    "&", 
+                    [
+                        "stage_name", 
+                        "=", 
+                        "To Do"
+                    ], 
+                    [
+                        "project_id", 
+                        "=", 
+                        11
+                    ]
+                ], 
+                "__fold": false, 
+                "stage_name": "To Do", 
+                "stage_name_count": 1
+            }, 
+            {
+                "__domain": [
+                    "&", 
+                    [
+                        "stage_name", 
+                        "=", 
+                        "In Progress"
+                    ], 
+                    [
+                        "project_id", 
+                        "=", 
+                        11
+                    ]
+                ], 
+                "__fold": false, 
+                "stage_name": "In Progress", 
+                "stage_name_count": 5
+            }, 
+            {
+                "__domain": [
+                    "&", 
+                    [
+                        "stage_name", 
+                        "=", 
+                        "Done"
+                    ], 
+                    [
+                        "project_id", 
+                        "=", 
+                        11
+                    ]
+                ], 
+                "__fold": true, 
+                "stage_name": "Done", 
+                "stage_name_count": 1
+            }
+        ], 
+        "service_name": "task"
+    }, 
+    "test_search": {
+        "input": {
+            "count": false, 
+            "domain": [
+                [
+                    "stage_name", 
+                    "=", 
+                    "To Do"
+                ]
+            ], 
+            "limit": 0, 
+            "offset": 0, 
+            "order": ""
+        }, 
+        "method": "search", 
+        "output": [
+            47
+        ], 
+        "service_name": "task"
+    }, 
+    "test_search__count": {
+        "input": {
+            "count": true, 
+            "domain": [
+                [
+                    "stage_name", 
+                    "=", 
+                    "To Do"
+                ]
+            ], 
+            "limit": 0, 
+            "offset": 0, 
+            "order": ""
+        }, 
+        "method": "search", 
+        "output": 1, 
+        "service_name": "task"
+    }, 
+    "test_write": {
+        "input": {
+            "ids": [
+                47, 
+                48
+            ], 
+            "vals": {
+                "description": "Duplicated task of issue #112"
+            }
+        }, 
+        "method": "write", 
+        "output": true, 
+        "service_name": "task"
+    }
+}

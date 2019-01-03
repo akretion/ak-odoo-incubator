@@ -3,54 +3,14 @@
    :alt: License: AGPL-3
 
 ==============
-{module_title}
+Project API
 ==============
 
-This module extends the functionality of ... to support ...
-and to allow you to ...
-
-Installation
-============
-
-To install this module, you need to:
-
-#. Do this ...
-
-Configuration
-=============
-
-To configure this module, you need to:
-
-#. Go to ...
-
-Usage
-=====
-
-To use this module, you need to:
-
-#. Go to ...
-
-Known issues / Roadmap
-======================
-
-* Nothing
-
-Bug Tracker
-===========
-
-Bugs are tracked on `GitHub Issues
-<https://github.com/OCA/{project_repo}/issues>`_. In case of trouble, please
-check there if your issue has already been reported. If you spotted it first,
-help us smashing it by providing a detailed and welcomed feedback.
-
-Credits
-=======
-
-Images
-------
+This module add a restricted json-rpc like API for exposing your project customer
+into the ERP of your customer
 
 Contributors
 ------------
 
-* Firstname Lastname <email.address@example.org>
-* Second Person <second.person@example.org>
+* Sébastien BEAU <sebastien.beau@akretion.com>
+* Benoit Guillot <benoit.guillot@akretion.com>
