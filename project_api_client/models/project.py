@@ -20,9 +20,35 @@ Voilà comment cela devrait fonctionner:
 -----------------------------------------------------------
 """
 
+class RemoteObject(models.AbstractModel):
+    _name = 'remote.object'
+
+    def get_url_key(self):
+        keychain = self.env['keychain.account']
+        if self.env.user.has_group('base.group_user'):
+            retrieve = keychain.suspend_security().retrieve
+        else:
+            retrieve = keychain.retrieve
+        account = retrieve(
+            [['namespace', '=', 'support']])[0]
+        return {
+            'url': account.get_data()['url'],
+            'api_key': account._get_password()
+        }
+
+    @api.model
+    def _call_odoo(self, method, params):
+        url_key = self.get_url_key()
+        url = '%s/project-api/%s/%s' % (url_key['url'], self._path, method)
+        headers = {'API_KEY': url_key['api_key']}
+        res = requests.post(url, headers=headers, json=params)
+        return res.json()
+
 
 class ExternalTask(models.Model):
+    _inherit = 'remote.object'
     _name = 'external.task'
+    _path = 'task'
 
     @api.model
     def _get_default_external_user(self):
@@ -63,39 +89,8 @@ class ExternalTask(models.Model):
         comodel_name='res.users', string='Reviewer')
     assignee_name = fields.Char('Assignee name')
 
-    def get_url_key(self):
-        keychain = self.env['keychain.account']
-        if self.env.user.has_group('base.group_user'):
-            retrieve = keychain.suspend_security().retrieve
-        else:
-            retrieve = keychain.retrieve
-
-        account = retrieve(
-            [['namespace', '=', 'external_project']])[0]
-        return {
-            'url': account.login,
-            'api_key': account._get_password()
-        }
-
-    @api.model
-    def _call_odoo(self, reqtype, params, method=None, _id=None):
-        url_key = self.get_url_key()
-        url = '%s/externaltask/project_task' % url_key['url']
-        if _id:
-            url = '%s/%s' % (url, _id)
-        if method:
-            url = '%s/%s' % (url, method)
-        if reqtype == 'get':
-            kwargs = {'params': params}
-        else:
-            kwargs = {'json': params}
-        headers = {'API_KEY': url_key['api_key']}
-        res = getattr(requests, reqtype)(url, headers=headers, **kwargs)
-        return res.json()
-
     @api.model
     def create(self, vals):
-        reqtype = 'post'
         vals = self._add_missing_default_values(vals)
         if vals.get('external_user_id', False):
             user = self.env['res.users'].browse(vals['external_user_id'])
@@ -105,18 +100,12 @@ class ExternalTask(models.Model):
             })
         if not vals.get('model_reference', False):
             vals['model_reference'] = ''
-        task_id = self._call_odoo(reqtype, vals)
+        task_id = self._call_odoo('create', vals)
         return self.browse(task_id)
 
     @api.multi
     def write(self, vals):
-        reqtype = 'put'
-        for task_id in self.ids:
-            payload = {
-                'vals': vals
-            }
-            self._call_odoo(reqtype, payload, _id=task_id)
-        return True
+        return self._call_odoo('write', {'ids': self.ids, 'vals': vals})
 
     @api.multi
     def unlink(self):
@@ -128,42 +117,39 @@ class ExternalTask(models.Model):
 
     @api.multi
     def read(self, fields=None, load='_classic_read'):
-        reqtype = 'get'
-        payload = {
-            'ids': json.dumps(self.ids),
-            'fields': json.dumps(fields),
+        return self._call_odoo('read', {
+            'ids': self.ids,
+            'fields': fields,
             'load': load
-        }
-        return self._call_odoo(reqtype, payload, method='read')
+            })
 
     @api.model
-    def search(self, args, offset=0, limit=0, order=None, count=False):
-        reqtype = 'get'
-        payload = {
-            'args': json.dumps(args),
+    def search(self, domain, offset=0, limit=0, order=None, count=False):
+        result = self._call_odoo('search', {
+            'domain': domain,
             'offset': offset,
             'limit': limit,
-            'order': json.dumps(order),
+            'order': order or '',
             'count': count
-        }
-        ids =  self._call_odoo(reqtype, payload)
-        return self.browse(ids)
+            })
+        if count:
+            return result
+        else:
+            return self.browse(result)
 
     @api.model
     def read_group(
         self, domain, fields, groupby, offset=0,
             limit=None, orderby=False, lazy=True):
-        reqtype = 'get'
-        payload = {
-            'domain': json.dumps(domain),
-            'fields': json.dumps(fields),
-            'groupby': json.dumps(groupby),
+        return self._call_odoo('read_group', {
+            'domain': domain,
+            'fields': fields,
+            'groupby': groupby or [],
             'offset': offset,
-            'limit': limit or None,
-            'orderby': json.dumps(orderby),
+            'limit': limit,
+            'orderby': orderby or '',
             'lazy': lazy
-        }
-        return self._call_odoo(reqtype, payload, method='read_group')
+            })
 
     @api.multi
     def message_get_suggested_recipients(self):
@@ -251,40 +237,18 @@ class ExternalMessage(models.Model):
 
 
 class MailMessage(models.Model):
-    _inherit = 'mail.message'
+    _inherit = ['mail.message', 'remote.object']
+    _name = 'mail.message'
+    _path = 'task'
 
-    @api.model
-    def _call_odoo(self, method, params):
-        url_key = self.env['external.task'].get_url_key()
-        url = '%s/externaltask/message' % url_key['url']
-        if method == 'get':
-            kwargs = {'params': params}
+    @api.multi
+    def message_format(self):
+        ids = self.ids
+        if isinstance(ids[0], (str, unicode)) and 'external' in ids[0]:
+            external_ids = [int(mid.replace('external/', '')) for mid in ids]
+            return self._call_odoo('message_format', {'ids': external_ids})
         else:
-            kwargs = {'json': params}
-        headers = {'API_KEY': url_key['api_key']}
-        res = getattr(requests, method)(url, headers=headers, **kwargs)
-        return res.json()
-
-    @api.cr_uid_context
-    def message_read(
-            self, domain=None, message_unload_ids=None,
-            thread_level=0, context=None, parent_id=False, limit=None):
-        if context.get('default_model', '') == 'external.task':
-            method = 'get'
-            payload = {
-                'ids': json.dumps(self.ids),
-                'domain': json.dumps(domain),
-                'message_unload_ids': json.dumps(message_unload_ids),
-                'thread_level': thread_level or None,
-                'context': json.dumps(context),
-                'parent_id': parent_id,
-                'limit': limit,
-            }
-            return self._call_odoo(method, payload)
-        return super(MailMessage, self).message_read(
-            domain=domain,
-            message_unload_ids=message_unload_ids, thread_level=thread_level,
-            context=context, parent_id=parent_id, limit=limit)
+            return super(MailMessage, self).message_format()
 
 
 class IrActionActWindows(models.Model):
