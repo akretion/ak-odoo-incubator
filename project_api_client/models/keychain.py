@@ -10,10 +10,4 @@ class KeychainAccount(models.Model):
     _inherit = 'keychain.account'
 
     namespace = fields.Selection(
-        selection_add=[('external_project', 'External Project')])
-
-    def _external_project_init_data(self):
-        return {}
-
-    def _external_project_validate_data(self, data):
-        return True
+        selection_add=[('support', 'Support')])
