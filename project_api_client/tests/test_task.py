@@ -51,9 +51,9 @@ class TestTask(TransactionCase):
         with open(DATA_PATH, 'w') as f:
             f.write(json.dumps(data, indent=4, sort_keys=True))
 
-    def _activate_mock(self, m):
-        case = self._testMethodName
-        method = self._get_method()
+    def _activate_mock(self, m, case=None, method=None):
+        case = case or self._testMethodName
+        method = method or self._get_method()
         url = 'http://localhost:8069/project-api/task/%s' % (method)
         if LEARN:
             result = {} # we do not care
@@ -173,9 +173,34 @@ class TestTask(TransactionCase):
                 self._check_input(request_input)
                 self.assertEqual(res, True)
 
-    def test_message_format(self):
+    def test_read_support_author(self):
         with requests_mock.Mocker() as m:
             self._activate_mock(m)
+            if LEARN:
+                uid = self.env.user.partner_id.id
+            else:
+                uid = DATA['test_read_support_author']['input']['uid']
+            res = self.env['external.task']._call_odoo(
+                'read_support_author', {'uid': uid})
+            request_input = m.request_history[0].json()
+            if LEARN:
+                self._update_json_data(request_input)
+            else:
+                self._check_input(request_input)
+                self.assertEqual(res['uid'], uid)
+                self.assertIn('name', res)
+                self.assertIn('image', res)
+                self.assertIn('update_date', res)
+
+    def test_message_format(self):
+        with requests_mock.Mocker() as m:
+            support_team = self.env.ref('project_api_client.support_team')
+            # Ensure that there is not partner in the team
+            self.assertEqual(len(support_team.child_ids), 0)
+            self._activate_mock(m)
+            #
+            self._activate_mock(
+                m, 'test_read_support_author', 'read_support_author')
             res = self.env['mail.message'].browse([
                 'external/261',
                 'external/260',
@@ -185,11 +210,15 @@ class TestTask(TransactionCase):
             if LEARN:
                 self._update_json_data(request_input)
             else:
-                print 'ok'
-
+                self._check_input(request_input)
+                self.assertEqual(len(res), 3)
+                # Check that support partner have been created
+                self.assertEqual(len(support_team.child_ids), 1)
 
     def test_message_post(self):
         with requests_mock.Mocker() as m:
+            customer = self.env.ref('base.res_partner_2')
+            task_id = self._get_task_ids(['project_api.project_task_6'])[0]
             self._activate_mock(m)
             res = self.env['external.task'].browse(52).message_post(
                 body= "my comment",
@@ -198,6 +227,5 @@ class TestTask(TransactionCase):
             if LEARN:
                 self._update_json_data(request_input)
             else:
-                print 'ok'
-
-
+                self._check_input(request_input)
+                self.assertIn('external/', res)
