@@ -63,8 +63,15 @@ class TestTask(TransactionComponentCase):
             if LEARN:
                 self._update_json_data(case, result)
             else:
-                if case == 'test_create':
+                if case in ('test_create', 'test_message_post', 'test_write'):
                     self.assertIsInstance(result, int)
+                    # check that a contact customer have been created
+                    customer = self.env.ref('base.res_partner_2')
+                    contact = self.env['res.partner'].search([
+                        ('customer_uid', '!=', False),
+                        ('parent_id', '=', customer.id),
+                        ])
+                    self.assertEqual(len(contact), 1)
                 else:
                     self._check_output(case, result)
             self.env.cr.rollback()

@@ -34,6 +34,7 @@
     'data': [
         'views/project_view.xml',
         'demo/keychain_demo.xml',
+        'data/partner_data.xml',
         'security/ir.model.access.csv',
     ],
     'installable': True,

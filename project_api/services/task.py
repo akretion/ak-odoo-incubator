@@ -6,7 +6,10 @@
 from odoo.addons.component.core import Component
 from odoo.addons.base_rest.components.service import to_bool
 from odoo.exceptions import UserError, MissingError, AccessError
+from odoo.tools.translate import _
 import json
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class ExternalTaskService(Component):
@@ -38,15 +41,16 @@ class ExternalTaskService(Component):
         tasks = self.env['project.task'].search(
             [('id', 'in', ids),
              ('project_id', '=', self.project.id)])
-        tasks = tasks.read(
-            fields=fields,
-            load=load)
+        tasks = tasks.read(fields=fields, load=load)
         if tasks:
-            for record in tasks:
-                if 'message_ids' in record:
-                    record['message_ids'] = [
-                        'external/%s' % mid
-                        for mid in record['message_ids']]
+            for task in tasks:
+                if 'message_ids' in task:
+                    messages = self.env['mail.message'].search([
+                        ('id', 'in', task['message_ids']),
+                        ('subtype_id.internal', '=', False),
+                        ])
+                    task['message_ids'] = [
+                        'external/%s' % mid for mid in messages.ids]
             return tasks
         return self.env['project.tasks'].browse([])
 
@@ -84,10 +88,12 @@ class ExternalTaskService(Component):
         return tasks
 
     def create(self, **params):
+        partner = self._get_partner(params.pop('author'))
         params['project_id'] = self.project.id
         return self.env['project.task'].create(params).id
 
-    def write(self, ids, vals):
+    def write(self, ids, vals, author):
+        partner = self._get_partner(author)
         tasks = self.env['project.task'].search(
             [('id', 'in', ids),
              ('project_id', '=', self.project.id)])
@@ -109,11 +115,38 @@ class ExternalTaskService(Component):
                 else:
                     message.update({
                         'model': 'external.task',
-                        'res_id': 'external/%s' % message['res_id'],
+                        'id': 'external/%s' % message['id'],
                         })
-            # TODO manage correctly the author
+                    author = self.env['res.partner'].browse(
+                        message['author_id'][0])
+                    if not author.customer_uid: # support team
+                        message.pop('author_id')
+                        message['support_author'] = {
+                            'uid': author.id,
+                            'name': author.name,
+                            'update_date': author.write_date\
+                                or author.create_date,
+                            }
+                    else:
+                        message['author_id'] = (
+                            author.customer_uid,
+                            author.name)
             return messages
         return []
+
+    def read_support_author(self, uid):
+        """All res.user are exposed to this read only api"""
+        partner = self.env['res.partner'].browse(uid)
+        if partner.sudo().user_ids:
+            return {
+                'name': partner.name,
+                'uid': uid,
+                'image': partner.image,
+                'update_date': partner.write_date or partner.create_date,
+                }
+        else:
+            raise AccessError(
+                _('You can not read information about this partner'))
 
     def get_message(self, params):
         messages = self.env['mail.message'].message_read(
@@ -127,11 +160,47 @@ class ExternalTaskService(Component):
             return messages
         return []
 
-    def message_post(self, _id, body):
-        message = self.env['project.task'].browse(_id).message_post(
-            body=body,
-            message_type="comment",
-            subtype="mail.mt_comment")
+    def _get_partner(self, data):
+        customer = self.project.partner_id
+        partner = self.env['res.partner'].search([
+            ('parent_id', '=', customer.id),
+            ('customer_uid', '=', data['uid']),
+            ])
+        if not partner:
+            partner = self.env['res.partner'].create({
+                'parent_id': customer.id,
+                'image': data['image'],
+                'name': data['name'],
+                'customer_uid': data['uid'],
+                })
+        elif partner.name != data['name'] \
+                or partner.image != data['image']:
+            _logger.debug('Update partner information')
+            partner.write({
+                'name': data['name'],
+                'image': data['image'],
+                })
+        return partner
+
+    def message_post(self, _id, body, author):
+        partner = self._get_partner(author)
+        parent = self.env['mail.message'].search([
+            ('res_id', '=', _id),
+            ('model', '=', 'project.task'),
+            ('message_type', '=', 'email'),
+            ], order="id ASC", limit=1)
+        message = self.env['mail.message'].create({
+            'body': body,
+            'model': 'project.task',
+            'attachment_ids': [],
+            'res_id': _id,
+            'parent_id': 347,
+            'subtype_id': self.env.ref('mail.mt_comment').id,
+            'author_id': partner.id,
+            'message_type': 'comment',
+            'partner_ids': [],
+            'subject': False,
+            })
         return message.id
 
     # Validator
@@ -176,6 +245,7 @@ class ExternalTaskService(Component):
             'contact_mobile': {'type': 'string', 'nullable': True},
             'model_reference': {'type': 'string'},
             'action_id': {'type': 'integer'},
+            'author': self._partner_validator()
         }
 
     def _validator_write(self):
@@ -190,7 +260,8 @@ class ExternalTaskService(Component):
                     'external_reviewer_id': {
                         'type': 'integer', 'nullable': True, 'default': 0},
                 }
-            }
+            },
+            'author': self._partner_validator()
         }
 
     def _validator_message_format(self):
@@ -213,4 +284,19 @@ class ExternalTaskService(Component):
         return {
             '_id': {'type': 'integer'},
             'body': {'type': 'string'},
+            'author': self._partner_validator()
+            }
+
+    def _partner_validator(self):
+        return {
+            'type': 'dict',
+            'schema': {
+                'name': {'type': 'string'},
+                'uid': {'type': 'integer'},
+                'image': {'type': 'string'},
+                }
+            }
+    def _validator_read_support_author(self):
+        return {
+            'uid': {'type': 'integer'},
             }

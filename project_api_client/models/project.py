@@ -92,6 +92,7 @@ class ExternalTask(models.Model):
     @api.model
     def create(self, vals):
         vals = self._add_missing_default_values(vals)
+        vals['author'] = self._get_author_info()
         if vals.get('external_user_id', False):
             user = self.env['res.users'].browse(vals['external_user_id'])
             vals.update({
@@ -105,7 +106,11 @@ class ExternalTask(models.Model):
 
     @api.multi
     def write(self, vals):
-        return self._call_odoo('write', {'ids': self.ids, 'vals': vals})
+        return self._call_odoo('write', {
+            'ids': self.ids,
+            'vals': vals,
+            'author': self._get_author_info(),
+            })
 
     @api.multi
     def unlink(self):
@@ -156,15 +161,57 @@ class ExternalTask(models.Model):
         result = dict((task.id, []) for task in self)
         return result
 
+    def _get_author_info(self):
+        partner = self.env.user.partner_id
+        return {
+            'uid': partner.id,
+            'name': partner.name,
+            'image': partner.image_small,
+            }
+
     @api.multi
     def message_post(self, body='', **kwargs):
         mid = self._call_odoo('message_post', {
             '_id': self.id,
             'body': body,
+            'author': self._get_author_info(),
             })
         return 'external/%s' % mid
 
+    def _get_support_author_vals(self, support_uid):
+        vals = self._call_odoo('read_support_author', {'uid': support_uid})
+        return {
+            'name': vals['name'],
+            'support_last_update_date': vals['update_date'],
+            'image': vals['image'],
+            'support_uid': vals['uid'],
+            'parent_id': self.env.ref('project_api_client.support_team').id,
+            }
+
+    def _get_support_author(self, data):
+        """ This method will return the partner info in the client database
+        If the partner is missing it will be created
+        If the partner information are obsolet their will be updated"""
+        partner = self.env['res.partner'].search([
+            ('support_uid', '=', data['uid'])
+            ])
+        if not partner:
+            vals = self._get_support_author_vals(data['uid'])
+            partner = self.env['res.partner'].create(vals)
+        elif partner.support_last_update_date < data['update_date']:
+            vals = self._get_support_author_data(data['uid'])
+            partner.write(vals)
+        return (partner.id, partner.name)
+
     @api.model
+    def message_get(self, external_ids):
+        messages = self._call_odoo('message_format', {'ids': external_ids})
+        for message in messages:
+            if 'support_author' in message:
+                message['author_id'] = self._get_support_author(
+                    message.pop('support_author'))
+        return messages
+
     def fields_view_get(
             self, view_id=None, view_type=False, toolbar=False, submenu=False):
         res = super(ExternalTask, self).fields_view_get(
@@ -235,9 +282,19 @@ class MailMessage(models.Model):
         ids = self.ids
         if isinstance(ids[0], (str, unicode)) and 'external' in ids[0]:
             external_ids = [int(mid.replace('external/', '')) for mid in ids]
-            return self._call_odoo('message_format', {'ids': external_ids})
+            return self.env['external.task'].message_get(external_ids)
         else:
             return super(MailMessage, self).message_format()
+
+    @api.multi
+    def set_message_done(self):
+        ids = self.ids
+        for _id in self.ids:
+            if isinstance(_id, (str, unicode)) and 'external' in _id:
+                return True
+        else:
+            return super(MailMessage, self).set_message_done()
+
 
 
 class IrActionActWindows(models.Model):
