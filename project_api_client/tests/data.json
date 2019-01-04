@@ -9,7 +9,7 @@
             "name": "Test"
         }, 
         "method": "create", 
-        "output": 92, 
+        "output": 98, 
         "service_name": "task"
     }, 
     "test_message_format": {
@@ -26,7 +26,7 @@
                 "attachment_ids": [], 
                 "author_id": [
                     3, 
-                    "YourCompany, Administrator"
+                    "Akretion, support boss"
                 ], 
                 "body": "<p>Dear Agrolait,</p>\n<p>Thank you for your enquiry.<br></p>\n<p>If you have any questions, please let us know.</p>\n<p>Best regards,</p>", 
                 "channel_ids": [], 
@@ -52,7 +52,7 @@
                 "attachment_ids": [], 
                 "author_id": [
                     3, 
-                    "YourCompany, Administrator"
+                    "Akretion, support boss"
                 ], 
                 "body": "", 
                 "channel_ids": [], 
@@ -117,7 +117,7 @@
                 "attachment_ids": [], 
                 "author_id": [
                     3, 
-                    "YourCompany, Administrator"
+                    "Akretion, support boss"
                 ], 
                 "body": "<p>Dear Demo User,</p>\n            <p>You have been assigned to the task Bug when sending email.</p>\n            <p>\n                <a style=\"border-radius:5px; font-size:16px; color:#fff; text-decoration:none; padding:10px; margin-top:10px; background-color:#9E588B\" href=\"http://shopinvader-odoo.dy/mail/view?model=project.task&amp;res_id=47\">\n                    View task\n                </a>\n            </p>\n            <p style=\"color:#9E588B\">Powered by <a href=\"https://www.odoo.com\">Odoo</a>.</p>\n        ", 
                 "channel_ids": [], 
@@ -142,6 +142,15 @@
         ], 
         "service_name": "task"
     }, 
+    "test_message_post": {
+        "input": {
+            "_id": 52, 
+            "body": "my comment"
+        }, 
+        "method": "message_post", 
+        "output": 359, 
+        "service_name": "task"
+    }, 
     "test_read": {
         "input": {
             "fields": [
@@ -159,7 +168,7 @@
             {
                 "id": 47, 
                 "name": "Bug when sending email", 
-                "stage_name": "To Do"
+                "stage_name": "In Progress"
             }, 
             {
                 "id": 48, 
@@ -259,7 +268,7 @@
         }, 
         "method": "search", 
         "output": [
-            47
+            52
         ], 
         "service_name": "task"
     }, 

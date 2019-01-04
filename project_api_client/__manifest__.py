@@ -29,6 +29,7 @@
     'depends': [
         'keychain',
         'base_suspend_security',
+        'mail',
     ],
     'data': [
         'views/project_view.xml',

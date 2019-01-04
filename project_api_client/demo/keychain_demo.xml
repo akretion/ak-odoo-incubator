@@ -8,7 +8,7 @@
             <field name="namespace">support</field>
             <field name="technical_name">support</field>
             <field name="environment">dev</field>
-            <field name="data">{"url": "http://localhost:8069/project-api"}</field>
+            <field name="data">{"url": "http://localhost:8069"}</field>
         </record>
 
     </data>

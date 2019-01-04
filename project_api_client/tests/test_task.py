@@ -186,3 +186,18 @@ class TestTask(TransactionCase):
                 self._update_json_data(request_input)
             else:
                 print 'ok'
+
+
+    def test_message_post(self):
+        with requests_mock.Mocker() as m:
+            self._activate_mock(m)
+            res = self.env['external.task'].browse(52).message_post(
+                body= "my comment",
+                )
+            request_input = m.request_history[0].json()
+            if LEARN:
+                self._update_json_data(request_input)
+            else:
+                print 'ok'
+
+

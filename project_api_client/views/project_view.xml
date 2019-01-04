@@ -40,7 +40,7 @@
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
-                        <field name="message_ids" widget="mail_thread" context="{'external_message': True}"/>
+                        <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>
             </field>
