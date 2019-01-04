@@ -40,6 +40,11 @@
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
+                        <style type="text/css" media="screen">
+                            .fa-paperclip {visibility: hidden;}
+                            .fa-pencil-square-o {visibility: hidden;}
+                            .o_thread_message_star {visibility: hidden;}
+                        </style>
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>
