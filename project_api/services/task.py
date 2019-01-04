@@ -127,23 +127,12 @@ class ExternalTaskService(Component):
             return messages
         return []
 
-    def create_message(self, params):
-        kwargs = params['kwargs']
-        message = self.pool['project.task'].message_post(
-            self._cr, self._uid,
-            thread_id=params['thread_id'],
-            body=params['body'],
-            subject=params['subject'],
-            type=params['type'],
-            subtype=params['subtype'],
-            parent_id=params['parent_id'],
-            attachments=params['attachments'],
-            context=self._context,
-            content_subtype=params['content_subtype'],
-            **kwargs)
-        if message:
-            return message
-        return []
+    def message_post(self, _id, body):
+        message = self.env['project.task'].browse(_id).message_post(
+            body=body,
+            message_type="comment",
+            subtype="mail.mt_comment")
+        return message.id
 
     # Validator
     def _validator_read(self):
@@ -220,24 +209,8 @@ class ExternalTaskService(Component):
             'limit': {'coerce': int, 'nullable': True, 'default': 0},
             }
 
-    def _validator_create_message(self):
+    def _validator_message_post(self):
         return {
-            'thread_id': {
-                'anyof_type': ['integer', 'list'],
-                'nullable': True,
-                'default': 0},
+            '_id': {'type': 'integer'},
             'body': {'type': 'string'},
-            'subject': {'type': 'string', 'nullable': True},
-            'type': {'type': 'string'},
-            'subtype': {'type': 'string'},
-            'parent_id': {'coerce': int, 'nullable': True, 'default': 0},
-            'attachments': {'type': 'string', 'nullable': True},
-            'content_subtype': {'type': 'string'},
-            'kwargs': {
-                'type': 'dict',
-                'schema': {
-                    'partner_ids': {'type': 'list'},
-                    'attachment_ids': {'type': 'list'}
-                    }
-                }
             }

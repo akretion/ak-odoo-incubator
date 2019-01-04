@@ -156,24 +156,13 @@ class ExternalTask(models.Model):
         result = dict((task.id, []) for task in self)
         return result
 
-    @api.cr_uid_ids_context
-    def message_post(
-            self, thread_id, body='', subject=None,
-            type='notification', subtype=None, parent_id=False,
-            attachments=None, context=None, content_subtype='html', **kwargs):
-        method = 'post'
-        payload = {
-            'thread_id': thread_id or 0,
+    @api.multi
+    def message_post(self, body='', **kwargs):
+        mid = self._call_odoo('message_post', {
+            '_id': self.id,
             'body': body,
-            'subject': subject or '',
-            'type': type,
-            'subtype': subtype,
-            'parent_id': parent_id or 0,
-            'attachments': attachments,
-            'content_subtype': content_subtype,
-            'kwargs': kwargs
-        }
-        return self.pool['mail.message']._call_odoo(method, payload)
+            })
+        return 'external/%s' % mid
 
     @api.model
     def fields_view_get(
