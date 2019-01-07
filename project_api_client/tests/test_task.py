@@ -196,31 +196,39 @@ class TestTask(TransactionCase):
         with requests_mock.Mocker() as m:
             support_team = self.env.ref('project_api_client.support_team')
             # Ensure that there is not partner in the team
-            self.assertEqual(len(support_team.child_ids), 0)
+            support_team.child_ids.unlink()
             self._activate_mock(m)
-            #
             self._activate_mock(
                 m, 'test_read_support_author', 'read_support_author')
-            res = self.env['mail.message'].browse([
-                'external/261',
-                'external/260',
-                'external/259',
-                ]).message_format()
+            if LEARN:
+                task_id = self._get_task_ids(['project_api.project_task_3'])[0]
+                messages = self.env['mail.message'].search([
+                    ('res_id', '=', task_id),
+                    ('model', '=', 'project.task'),
+                    ])
+                mids = messages.ids
+            else:
+                mids = DATA['test_message_format']['input']['ids']
+            mids = ['external/%s' % mid for mid in mids]
+            res = self.env['mail.message'].browse(mids).message_format()
             request_input = m.request_history[0].json()
             if LEARN:
                 self._update_json_data(request_input)
             else:
                 self._check_input(request_input)
-                self.assertEqual(len(res), 3)
+                self.assertEqual(len(res), 1)
                 # Check that support partner have been created
                 self.assertEqual(len(support_team.child_ids), 1)
 
     def test_message_post(self):
         with requests_mock.Mocker() as m:
             customer = self.env.ref('base.res_partner_2')
-            task_id = self._get_task_ids(['project_api.project_task_6'])[0]
+            if LEARN:
+                task_id = self._get_task_ids(['project_api.project_task_6'])[0]
+            else:
+                task_id = DATA['test_message_post']['input']['_id']
             self._activate_mock(m)
-            res = self.env['external.task'].browse(52).message_post(
+            res = self.env['external.task'].browse(task_id).message_post(
                 body= "my comment",
                 )
             request_input = m.request_history[0].json()
