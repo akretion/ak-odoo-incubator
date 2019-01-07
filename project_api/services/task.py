@@ -22,6 +22,23 @@ class ExternalTaskService(Component):
     def project(self):
         return self.work.project
 
+    def _map_partner_read_to_data(self, partner_read):
+        if not partner_read:
+            return False
+        else:
+            partner = self.env['res.partner'].browse(partner_read[0])
+            if partner.customer_uid:
+                return {
+                    'type': 'customer',
+                    'vals': (partner.customer_uid, partner.name),
+                    }
+            else:
+                return {
+                    'type': 'support',
+                    'uid': partner.id,
+                    'update_date': partner.write_date or partner.create_date,
+                    }
+
     def search(self, domain, offset, limit, order, count):
         domain = [('project_id', '=', self.project.id)] + domain
         tasks = self.env['project.task'].search(
@@ -52,8 +69,14 @@ class ExternalTaskService(Component):
                         ])
                     task['message_ids'] = [
                         'external/%s' % mid for mid in messages.ids]
+                if 'author_id' in task:
+                    task['author_id'] = self._map_partner_read_to_data(
+                        task['author_id'])
+                if 'assignee_id' in task:
+                    task['assignee_id'] = self._map_partner_read_to_data(
+                        task['assignee_id'])
             return tasks
-        return self.env['project.tasks'].browse([])
+        return []
 
     def read_group(self, domain, fields, groupby, offset=0,
             limit=None, orderby=False, lazy=True):
@@ -121,20 +144,8 @@ class ExternalTaskService(Component):
                         'model': 'external.task',
                         'id': 'external/%s' % message['id'],
                         })
-                    author = self.env['res.partner'].browse(
-                        message['author_id'][0])
-                    if not author.customer_uid: # support team
-                        message.pop('author_id')
-                        message['support_author'] = {
-                            'uid': author.id,
-                            'name': author.name,
-                            'update_date': author.write_date\
-                                or author.create_date,
-                            }
-                    else:
-                        message['author_id'] = (
-                            author.customer_uid,
-                            author.name)
+                    message['author_id'] = self._map_partner_read_to_data(
+                        message['author_id'])
             return messages
         return []
 
@@ -255,11 +266,6 @@ class ExternalTaskService(Component):
         return {
             'name': {'type': 'string', 'required': True},
             'description': {'type': 'string', 'required': True},
-            'external_reviewer_id': {
-                'type': 'integer', 'nullable': True, 'default': 0},
-            'external_user_id': {'type': 'integer', 'required': True},
-            'contact_email': {'type': 'string', 'required': True},
-            'contact_mobile': {'type': 'string', 'nullable': True},
             'model_reference': {'type': 'string'},
             'action_id': {'type': 'integer'},
             'author': self._partner_validator()
@@ -274,8 +280,6 @@ class ExternalTaskService(Component):
                     'name': {'type': 'string'},
                     'stage_name': {'type': 'string'},
                     'description': {'type': 'string'},
-                    'external_reviewer_id': {
-                        'type': 'integer', 'nullable': True, 'default': 0},
                 }
             },
             'author': self._partner_validator()

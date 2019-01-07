@@ -51,9 +51,6 @@ class ExternalTask(models.Model):
     _path = 'task'
 
     @api.model
-    def _get_default_external_user(self):
-        return self.env.user
-
     @api.model
     def _get_origin(self):
         if self.model_reference:
@@ -82,23 +79,49 @@ class ExternalTask(models.Model):
     message_ids = fields.One2many(
         comodel_name='external.message', inverse_name='res_id')
     create_date = fields.Datetime('Create Date', readonly=True)
-    external_user_id = fields.Many2one(
-        comodel_name='res.users', string='Created by',
-        default=_get_default_external_user)
-    external_reviewer_id = fields.Many2one(
-        comodel_name='res.users', string='Reviewer')
-    assignee_name = fields.Char('Assignee name')
+    author_id = fields.Many2one(
+        'res.partner', string='Author', readonly=True)
+    assignee_id = fields.Many2one(
+        'res.partner', string='Assignee name', readonly=True)
+
+    def _get_support_partner_vals(self, support_uid):
+        vals = self._call_odoo('read_support_author', {'uid': support_uid})
+        return {
+            'name': vals['name'],
+            'support_last_update_date': vals['update_date'],
+            'image': vals['image'],
+            'support_uid': vals['uid'],
+            'parent_id': self.env.ref('project_api_client.support_team').id,
+            }
+
+    def _get_support_partner(self, data):
+        """ This method will return the partner info in the client database
+        If the partner is missing it will be created
+        If the partner information are obsolet their will be updated"""
+        partner = self.env['res.partner'].search([
+            ('support_uid', '=', data['uid'])
+            ])
+        if not partner:
+            vals = self._get_support_partner_vals(data['uid'])
+            partner = self.env['res.partner'].create(vals)
+        elif partner.support_last_update_date < data['update_date']:
+            vals = self._get_support_partner_vals(data['uid'])
+            partner.write(vals)
+        return partner
+
+    def _map_partner_data_to_id(self, data):
+        if not data:
+            return False
+        elif data['type'] == 'customer':
+            return data['vals']
+        else:
+            partner = self._get_support_partner(data)
+            return (partner.id, partner.name)
 
     @api.model
     def create(self, vals):
         vals = self._add_missing_default_values(vals)
         vals['author'] = self._get_author_info()
-        if vals.get('external_user_id', False):
-            user = self.env['res.users'].browse(vals['external_user_id'])
-            vals.update({
-                'contact_email': user.email,
-                'contact_mobile': user.mobile or '',
-            })
         if not vals.get('model_reference', False):
             vals['model_reference'] = ''
         task_id = self._call_odoo('create', vals)
@@ -122,11 +145,21 @@ class ExternalTask(models.Model):
 
     @api.multi
     def read(self, fields=None, load='_classic_read'):
-        return self._call_odoo('read', {
+        if not isinstance(self.ids, list):
+            multi = False
+        tasks = self._call_odoo('read', {
             'ids': self.ids,
             'fields': fields,
             'load': load
             })
+        for task in tasks:
+            if 'author_id' in fields:
+                task['author_id'] = self._map_partner_data_to_id(
+                    task['author_id'])
+            if 'assignee_id' in fields:
+                task['assignee_id'] = self._map_partner_data_to_id(
+                    task['assignee_id'])
+        return tasks
 
     @api.model
     def search(self, domain, offset=0, limit=0, order=None, count=False):
@@ -181,38 +214,13 @@ class ExternalTask(models.Model):
             })
         return 'external/%s' % mid
 
-    def _get_support_author_vals(self, support_uid):
-        vals = self._call_odoo('read_support_author', {'uid': support_uid})
-        return {
-            'name': vals['name'],
-            'support_last_update_date': vals['update_date'],
-            'image': vals['image'],
-            'support_uid': vals['uid'],
-            'parent_id': self.env.ref('project_api_client.support_team').id,
-            }
-
-    def _get_support_author(self, data):
-        """ This method will return the partner info in the client database
-        If the partner is missing it will be created
-        If the partner information are obsolet their will be updated"""
-        partner = self.env['res.partner'].search([
-            ('support_uid', '=', data['uid'])
-            ])
-        if not partner:
-            vals = self._get_support_author_vals(data['uid'])
-            partner = self.env['res.partner'].create(vals)
-        elif partner.support_last_update_date < data['update_date']:
-            vals = self._get_support_author_vals(data['uid'])
-            partner.write(vals)
-        return (partner.id, partner.name)
-
     @api.model
     def message_get(self, external_ids):
         messages = self._call_odoo('message_format', {'ids': external_ids})
         for message in messages:
-            if 'support_author' in message:
-                message['author_id'] = self._get_support_author(
-                    message.pop('support_author'))
+            if 'author_id' in message:
+                message['author_id'] = self._map_partner_data_to_id(
+                    message['author_id'])
         return messages
 
     def fields_view_get(

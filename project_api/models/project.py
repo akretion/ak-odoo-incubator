@@ -33,15 +33,8 @@ class ProjectTask(models.Model):
     stage_name = fields.Char(
         'Stage', compute='_compute_stage_name', inverse='_inverse_stage_name',
         store=True)
-    contact_mobile = fields.Char(string='Mobile')
-    contact_email = fields.Char(string='Email')
-    external_reviewer_id = fields.Integer(
-        string='Reviewer')
-    external_user_id = fields.Integer(
-        string='Created by')
-    assignee_name = fields.Char(
-        'Assignee name', related='user_id.name', store=True)
     author_id = fields.Many2one('res.partner', string='Create By')
+    assignee_id = fields.Many2one('res.partner', related='user_id.partner_id')
 
     @api.depends('stage_id')
     def _compute_stage_name(self):
