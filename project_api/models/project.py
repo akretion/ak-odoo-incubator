@@ -41,6 +41,7 @@ class ProjectTask(models.Model):
         string='Created by')
     assignee_name = fields.Char(
         'Assignee name', related='user_id.name', store=True)
+    author_id = fields.Many2one('res.partner', string='Create By')
 
     @api.depends('stage_id')
     def _compute_stage_name(self):
@@ -54,3 +55,15 @@ class ProjectTask(models.Model):
                 ('name', '=', self.stage_name)])
             if stages:
                 task.stage_id = stages[0].id
+
+    @api.multi
+    @api.returns('self', lambda value: value.id)
+    def message_post(self, body='', subject=None, message_type='notification',
+                     subtype=None, parent_id=False, attachments=None,
+                     content_subtype='html', **kwargs):
+        if self._context.get('force_message_author_id'):
+            kwargs['author_id'] = self._context['force_message_author_id']
+        return super(ProjectTask, self).message_post(
+            body=body, subject=subject, message_type=message_type,
+            subtype=subtype, parent_id=parent_id, attachments=attachments,
+            content_subtype=content_subtype, **kwargs)

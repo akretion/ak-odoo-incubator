@@ -47,7 +47,8 @@ class ExternalTaskService(Component):
                 if 'message_ids' in task:
                     messages = self.env['mail.message'].search([
                         ('id', 'in', task['message_ids']),
-                        ('subtype_id.internal', '=', False),
+                        '|', ('subtype_id.internal', '=', False),
+                        ('subtype_id', '=', False),
                         ])
                     task['message_ids'] = [
                         'external/%s' % mid for mid in messages.ids]
@@ -90,7 +91,9 @@ class ExternalTaskService(Component):
     def create(self, **params):
         partner = self._get_partner(params.pop('author'))
         params['project_id'] = self.project.id
-        return self.env['project.task'].create(params).id
+        params['author_id'] = partner.id
+        return self.env['project.task'].with_context(
+            force_message_author_id=partner.id).create(params).id
 
     def write(self, ids, vals, author):
         partner = self._get_partner(author)
@@ -100,7 +103,8 @@ class ExternalTaskService(Component):
         if len(tasks) < len(ids):
             raise AccessError(
                 _('You do not have the right to modify this records'))
-        return tasks.write(vals)
+        return tasks.with_context(
+            force_message_author_id=partner.id).write(vals)
 
     def message_format(self, ids):
         allowed_task_ids = self.env['project.task'].search([
@@ -172,29 +176,42 @@ class ExternalTaskService(Component):
                 'image': data['image'],
                 'name': data['name'],
                 'customer_uid': data['uid'],
+                'email': data['email'],
+                'mobile': data['mobile'],
+                'phone': data['phone'],
                 })
         elif partner.name != data['name'] \
-                or partner.image != data['image']:
+                or partner.image != data['image']\
+                or partner.email != data['email']\
+                or partner.mobile != data['mobile']:
             _logger.debug('Update partner information')
             partner.write({
                 'name': data['name'],
                 'image': data['image'],
+                'email': data['email'],
+                'mobile': data['mobile'],
+                'phone': data['phone'],
                 })
         return partner
 
     def message_post(self, _id, body, author):
         partner = self._get_partner(author)
-        parent = self.env['mail.message'].search([
+        domain = [
             ('res_id', '=', _id),
             ('model', '=', 'project.task'),
-            ('message_type', '=', 'email'),
-            ], order="id ASC", limit=1)
+            ]
+        parent = self.env['mail.message'].search(
+            domain + [('message_type', '=', 'email')],
+            order="id ASC", limit=1)
+        if not parent:
+            parent = self.env['mail.message'].search(
+                domain, order="id ASC", limit=1)
         message = self.env['mail.message'].create({
             'body': body,
             'model': 'project.task',
             'attachment_ids': [],
             'res_id': _id,
-            'parent_id': 347,
+            'parent_id': parent.id,
             'subtype_id': self.env.ref('mail.mt_comment').id,
             'author_id': partner.id,
             'message_type': 'comment',
@@ -294,6 +311,9 @@ class ExternalTaskService(Component):
                 'name': {'type': 'string'},
                 'uid': {'type': 'integer'},
                 'image': {'type': 'string'},
+                'email': {'type': 'string'},
+                'mobile': {'type': 'string'},
+                'phone': {'type': 'string'},
                 }
             }
     def _validator_read_support_author(self):
