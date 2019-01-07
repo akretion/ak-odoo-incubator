@@ -167,6 +167,9 @@ class ExternalTask(models.Model):
             'uid': partner.id,
             'name': partner.name,
             'image': partner.image_small,
+            'email': partner.email or '',
+            'mobile': partner.mobile or '',
+            'phone': partner.phone or '',
             }
 
     @api.multi
@@ -199,7 +202,7 @@ class ExternalTask(models.Model):
             vals = self._get_support_author_vals(data['uid'])
             partner = self.env['res.partner'].create(vals)
         elif partner.support_last_update_date < data['update_date']:
-            vals = self._get_support_author_data(data['uid'])
+            vals = self._get_support_author_vals(data['uid'])
             partner.write(vals)
         return (partner.id, partner.name)
 
