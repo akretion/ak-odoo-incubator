@@ -266,9 +266,12 @@ class ExternalTaskService(Component):
         return {
             'name': {'type': 'string', 'required': True},
             'description': {'type': 'string', 'required': True},
-            'model_reference': {'type': 'string'},
+            'origin_model': {'type': 'string'},
+            'origin_url': {'type': 'string'},
+            'origin_db': {'type': 'string'},
+            'origin_name': {'type': 'string'},
             'action_id': {'type': 'integer'},
-            'author': self._partner_validator()
+            'author': self._partner_validator(),
         }
 
     def _validator_write(self):

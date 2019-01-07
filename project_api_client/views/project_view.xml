@@ -10,26 +10,16 @@
                             <field name="name" placeholder="Task summary..." class="oe_inline" colspan="4"/>
                         </h1>
                         <group>
-                            <field name="author_id" readonly="1"/>
-                            <field name="create_date" readonly="1"/>
-                            <field name="assignee_id" readonly="1"/>
-                        </group>
-                        <group>
-                            <field name="model_reference" invisible="1"/>
-                            <label for="task_origin"
-                                attrs="{'invisible': ['|',
-                                                        ('model_reference', '=', False),
-                                                        ('name', '=', False)]}"/>
-                            <span>
-                                <field name="task_origin"
-                                    attrs="{'invisible': ['|',
-                                                            ('model_reference', '=', False),
-                                                            ('name', '=', False)]}"/>
-                                <button name="goto_document" type="object" string="Open"
-                                        attrs="{'invisible': [('model_reference', '=', False)]}"
-                                        class="oe_read_only" colspan="1"
-                                        help="Go to the window from which the task has been defined."/>
-                            </span>
+                            <group>
+                                <field name="author_id" readonly="1"/>
+                                <field name="create_date" readonly="1"/>
+                                <field name="assignee_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="origin_url" readonly="1" widget="url" string="Url"/>
+                                <field name="origin_db" readonly="1" string="DB"/>
+                                <field name="origin_name" readonly="1" string="Record name"/>
+                            </group>
                         </group>
                         <notebook>
                             <page string="Description">
@@ -116,7 +106,7 @@
               <p class="oe_view_nocontent_create">
                 Click to add an issue.
               </p><p>
-                An issue created in your ERP create an external task in your intergateur to treat them. If you cant' create an issue contact your Adminstrator to check External task configuration.
+                An issue created in your ERP create an external task in your integrateur to treat them. If you cant' create an issue contact your Adminstrator to check External task configuration.
               </p>
             </field>
         </record>

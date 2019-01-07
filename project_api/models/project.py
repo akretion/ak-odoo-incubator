@@ -35,6 +35,10 @@ class ProjectTask(models.Model):
         store=True)
     author_id = fields.Many2one('res.partner', string='Create By')
     assignee_id = fields.Many2one('res.partner', related='user_id.partner_id')
+    origin_name = fields.Char()
+    origin_url = fields.Char()
+    origin_db = fields.Char()
+    origin_model = fields.Char()
 
     @api.depends('stage_id')
     def _compute_stage_name(self):

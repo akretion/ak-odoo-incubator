@@ -20,14 +20,23 @@ class IrValues(models.Model):
         """ Add an action to all Model objects of the ERP """
         res = super(IrValues, self).get_actions(
             action_slot, model, res_id=res_id)
-        available_models = [
-            x[0] for x in self.env['external.task']._authorised_models()]
-        if action_slot == 'client_action_multi' and model in available_models:
-            action = self.set_external_task_action(model, res_id=res_id)
-            if action:
-                value = (UNIQUE_ACTION_ID, 'external_project', action)
-                res.insert(0, value)
-        return res
+        if UNIQUE_ACTION_ID in [x[0] for x in res]:
+            # Be careful the original fonction is cached in the ORM
+            # this method will return a list (mutable object)
+            # So if we call once this inherited method we will inject
+            # the action in the mutable object and so in the cache
+            # If the action is already here no need to add it again
+            return res
+        else:
+            available_models = [
+                x[0] for x in self.env['external.task']._authorised_models()]
+            if action_slot == 'client_action_multi'\
+                    and model in available_models:
+                action = self.set_external_task_action(model, res_id=res_id)
+                if action:
+                    value = (UNIQUE_ACTION_ID, 'external_project', action)
+                    res.insert(0, value)
+            return res
 
     @api.model
     def set_external_task_action(self, model, res_id=False):

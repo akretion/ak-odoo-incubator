@@ -18,6 +18,11 @@
             <field name="project_id" position="after">
                 <field name="author_id"/>
             </field>
+            <field name="tag_ids" position="after">
+                <field name="origin_url" readonly="1" widget="url" string="Url"/>
+                <field name="origin_db" readonly="1" string="DB"/>
+                <field name="origin_name" readonly="1" string="Record name"/>
+            </field>
         </field>
     </record>
 
