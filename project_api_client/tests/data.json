@@ -14,7 +14,7 @@
             "name": "Test"
         }, 
         "method": "create", 
-        "output": 49, 
+        "output": 54, 
         "service_name": "task"
     }, 
     "test_message_format": {
@@ -108,7 +108,7 @@
             "body": "my comment"
         }, 
         "method": "message_post", 
-        "output": 248, 
+        "output": 282, 
         "service_name": "task"
     }, 
     "test_read": {

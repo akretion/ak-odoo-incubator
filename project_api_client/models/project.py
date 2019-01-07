@@ -10,6 +10,7 @@ from odoo.tools.safe_eval import safe_eval
 from lxml import etree
 import requests
 import json
+import urllib
 
 
 ISSUE_DESCRIPTION = u"""Ce qui ne va pas:
@@ -83,6 +84,10 @@ class ExternalTask(models.Model):
         'res.partner', string='Author', readonly=True)
     assignee_id = fields.Many2one(
         'res.partner', string='Assignee name', readonly=True)
+    origin_name = fields.Char()
+    origin_url = fields.Char()
+    origin_db = fields.Char()
+    origin_model = fields.Char()
 
     def _get_support_partner_vals(self, support_uid):
         vals = self._call_odoo('read_support_author', {'uid': support_uid})
@@ -247,35 +252,6 @@ class ExternalTask(models.Model):
             vals['action_id'] = self._context['from_action']
         return vals
 
-    @api.multi
-    def goto_document(self):
-        self.ensure_one()
-        if self.model_reference:
-            action = {
-                'name': 'Task to original document',
-                'res_model': self.model_reference._model._name,
-                'res_id': self.model_reference.id,
-                'type': 'ir.actions.act_window',
-                'target': 'current',
-                'view_mode': 'form',
-            }
-            if self.action_id:
-                action['id'] = self.action_id.id
-                action['action_id'] = self.action_id.id
-                view = [x.view_id for x in self.action_id.view_ids
-                        if x.view_mode == 'form']
-                if view:
-                    view_ref = self.env['ir.model.data'].search(
-                        [('res_id', '=', view[0].id),
-                         ('model', '=', 'ir.ui.view')])
-                    if view_ref:
-                        action['context'] = {'form_view_ref': '%s.%s' % (
-                            view_ref.module, view_ref.name)}
-            return action
-        raise UserError(_(
-            "Field 'Task Origin' is not set.\n"
-            "Impossible to go to the original document."))
-
 
 class ExternalMessage(models.Model):
     _name = 'external.message'
@@ -307,36 +283,34 @@ class MailMessage(models.Model):
             return super(MailMessage, self).set_message_done()
 
 
-
 class IrActionActWindows(models.Model):
     _inherit = 'ir.actions.act_window'
 
-    # @api.multi
-    # def read(self, fields=None, load='_classic_read'):
-    #     if self.context.get('install_mode'):
-    #         return super(IrActionActWindows, self).read(
-    #             fields=fields, load=load)
+    def _set_origin_in_context(self, action):
+        context = {'default_origin_db': self._cr.dbname}
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        params = {}
+        action_id = self._context.get('params', {}).get('action')
+        _id = self._context.get('active_id')
+        model = self._context.get('active_model')
+        if _id and model:
+            record = self.env[model].browse(_id)
+            context['default_origin_name'] = record.display_name
+            context['default_origin_model'] = model
+        if action_id and _id:
+            path = urllib.urlencode({
+                'view_type': 'form',
+                'action_id': action_id,
+                'id': _id,
+                })
+            context['default_origin_url'] = '%s#%s' %(base_url, path)
+        action['context'] = context
 
-    #     def update_context(action):
-    #         action['context'] = safe_eval(action.get('context', '{}'))
-    #         action['context'].update({
-    #             'from_model': self.env.selfcontext.get('active_model'),
-    #             'from_id': self.env.context.get('active_id'),
-    #         })
-    #         if 'params' in self.env.context and 'action':
-    #             action['context'].update({
-    #                 'from_action': self.env.context['params'].get('action')})
-    #         if 'params' in self.env.context and 'action':
-    #             action['context'].update({
-    #                 'from_action': self.env.context['params'].get('action')})
-    #     res = super(IrActionActWindows, self).read(fields=fields, load=load)
-    #     action_id = self
-
-    #     task_action_id = self.env.ref('external_project.task_from_elsewhere')
-    #     if action_id == task_action_id:
-    #         if isinstance(res, list):
-    #             for elem in res:
-    #                 update_context(elem)
-    #         else:
-    #             update_context(res)
-    #     return res
+    def read(self, fields=None, load='_classic_read'):
+        res = super(IrActionActWindows, self).read(fields=fields, load=load)
+        if not self.env.context.get('install_mode'):
+            task_action_id = self.env.ref(
+                'project_api_client.task_from_elsewhere')
+            if self == task_action_id:
+                self._set_origin_in_context(res[0])
+        return res
