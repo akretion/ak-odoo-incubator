@@ -39,7 +39,11 @@ class ProjectTask(models.Model):
     stage_name = fields.Char(
         'Stage', compute='_compute_stage_name', inverse='_inverse_stage_name',
         store=True)
-    author_id = fields.Many2one('res.partner', string='Create By')
+    author_id = fields.Many2one(
+        'res.partner',
+        default=lambda self: self.env.user.partner_id.id,
+        string='Create By')
+    user_id = fields.Many2one(default=False)
     assignee_id = fields.Many2one('res.partner', related='user_id.partner_id')
     origin_name = fields.Char()
     origin_url = fields.Char()
