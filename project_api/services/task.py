@@ -19,8 +19,8 @@ class ExternalTaskService(Component):
     _usage = 'task'
 
     @property
-    def project(self):
-        return self.work.project
+    def partner(self):
+        return self.work.partner
 
     def _map_partner_read_to_data(self, partner_read):
         if not partner_read:
@@ -40,7 +40,7 @@ class ExternalTaskService(Component):
                     }
 
     def search(self, domain, offset, limit, order, count):
-        domain = [('project_id', '=', self.project.id)] + domain
+        domain = [('project_id.partner_id', '=', self.partner.id)] + domain
         tasks = self.env['project.task'].search(
             domain,
             offset=offset,
@@ -52,12 +52,12 @@ class ExternalTaskService(Component):
                 # count will return the number of task in the tasks variable
                 return tasks
             return tasks.ids
-        return self.env['project.tasks'].browse([])
+        return []
 
     def read(self, ids, fields, load):
         tasks = self.env['project.task'].search(
             [('id', 'in', ids),
-             ('project_id', '=', self.project.id)])
+             ('project_id.partner_id', '=', self.partner.id)])
         tasks = tasks.read(fields=fields, load=load)
         if tasks:
             for task in tasks:
@@ -80,7 +80,7 @@ class ExternalTaskService(Component):
 
     def read_group(self, domain, fields, groupby, offset=0,
             limit=None, orderby=False, lazy=True):
-        domain = [('project_id', '=', self.project.id)] + domain
+        domain = [('project_id.partner_id', '=', self.partner.id)] + domain
         tasks = self.env['project.task'].read_group(
             domain,
             fields,
@@ -113,16 +113,18 @@ class ExternalTaskService(Component):
 
     def create(self, **params):
         partner = self._get_partner(params.pop('author'))
-        params['project_id'] = self.project.id
+        params['project_id'] = self.partner.help_desk_project_id.id
         params['author_id'] = partner.id
-        return self.env['project.task'].with_context(
-            force_message_author_id=partner.id).create(params).id
+        task = self.env['project.task'].with_context(
+            force_message_author_id=partner.id).create(params)
+        task.message_subscribe([partner.id], force=False)
+        return task.id
 
     def write(self, ids, vals, author):
         partner = self._get_partner(author)
         tasks = self.env['project.task'].search(
             [('id', 'in', ids),
-             ('project_id', '=', self.project.id)])
+             ('project_id.partner_id', '=', self.partner.id)])
         if len(tasks) < len(ids):
             raise AccessError(
                 _('You do not have the right to modify this records'))
@@ -131,7 +133,7 @@ class ExternalTaskService(Component):
 
     def message_format(self, ids):
         allowed_task_ids = self.env['project.task'].search([
-            ('project_id', '=', self.project.id),
+            ('project_id.partner_id', '=', self.partner.id),
             ]).ids
         messages = self.env['mail.message'].browse(ids).message_format()
         if messages:
@@ -176,14 +178,13 @@ class ExternalTaskService(Component):
         return []
 
     def _get_partner(self, data):
-        customer = self.project.partner_id
         partner = self.env['res.partner'].search([
-            ('parent_id', '=', customer.id),
+            ('parent_id', '=', self.partner.id),
             ('customer_uid', '=', data['uid']),
             ])
         if not partner:
             partner = self.env['res.partner'].create({
-                'parent_id': customer.id,
+                'parent_id': self.partner.id,
                 'image': data['image'],
                 'name': data['name'],
                 'customer_uid': data['uid'],

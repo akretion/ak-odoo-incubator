@@ -33,11 +33,13 @@ class TestTask(TransactionComponentCase):
     def setUp(self, *args, **kwargs):
         super(TestTask, self).setUp(*args, **kwargs)
         self.project = self.env.ref('project_api.project_project_1')
+        self.partner = self.env.ref('project_api.partner_customer_help_desk')
+        self.partner.help_desk_project_id = self.project
         collection = _PseudoCollection('project.project',  self.env)
         self.work = WorkContext(
             model_name='rest.service.registration',
             collection=collection,
-            project=self.project)
+            partner=self.partner)
 
     def _update_json_data(self, case, vals):
         data = get_data()
@@ -66,10 +68,9 @@ class TestTask(TransactionComponentCase):
                 if case in ('test_create', 'test_message_post', 'test_write'):
                     self.assertIsInstance(result, int)
                     # check that a contact customer have been created
-                    customer = self.env.ref('base.res_partner_2')
                     contact = self.env['res.partner'].search([
                         ('customer_uid', '!=', False),
-                        ('parent_id', '=', customer.id),
+                        ('parent_id', '=', self.partner.id),
                         ])
                     self.assertEqual(len(contact), 1)
                 else:

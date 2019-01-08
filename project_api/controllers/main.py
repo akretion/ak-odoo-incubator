@@ -6,6 +6,7 @@
 import logging
 from odoo.http import Controller, request, route
 from odoo.addons.base_rest.controllers import main
+from odoo.exceptions import AccessError
 
 _logger = logging.getLogger(__name__)
 
@@ -16,14 +17,15 @@ class ExternalTaskController(main.RestController):
     _default_auth = 'api_key'
 
     @classmethod
-    def _get_project_from_request(cls):
+    def _get_partner_from_request(cls):
         auth_api_key = getattr(request, 'auth_api_key', None)
-        project_model = request.env['project.project']
         if auth_api_key:
-            return project_model.search([(
-                'auth_api_key_id', '=', auth_api_key.id
+            partner =  request.env['res.partner'].search([(
+                'project_auth_api_key_id', '=', auth_api_key.id
             )])
-        return project_model.browse([])
+            if partner:
+                return partner
+        raise AccessError('No partner match the API KEY')
 
     def _get_component_context(self):
         """
@@ -32,7 +34,5 @@ class ExternalTaskController(main.RestController):
         * the project
         """
         res = super(ExternalTaskController, self)._get_component_context()
-        headers = request.httprequest.environ
-#        res['partner'] = self._get_partner_from_headers(headers)
-        res['project'] = self._get_project_from_request()
+        res['partner'] = self._get_partner_from_request()
         return res

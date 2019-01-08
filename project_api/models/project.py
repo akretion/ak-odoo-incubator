@@ -21,12 +21,6 @@
 from odoo import fields, api, models
 
 
-class ProjectProject(models.Model):
-    _inherit = 'project.project'
-
-    auth_api_key_id = fields.Many2one('auth.api.key')
-
-
 class ProjectTask(models.Model):
     _inherit = 'project.task'
 

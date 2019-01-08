@@ -29,9 +29,14 @@
         'auth_api_key',
         'base_rest',
         'project',
+        'project_task_default_stage',
     ],
     'data': [
         'views/project_view.xml',
+        'views/partner_view.xml',
+   ],
+    'demo': [
+        'demo/partner_demo.xml',
         'demo/project_demo.xml',
     ],
     'installable': True,
