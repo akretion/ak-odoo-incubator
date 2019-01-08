@@ -25,6 +25,9 @@ Voilà comment cela devrait fonctionner:
 class ExternalTask(models.Model):
     _name = 'external.task'
 
+    def _get_select_project(self):
+        return self._call_odoo('project_list', {})
+
     name = fields.Char('Name')
     stage_name = fields.Char('Stage')
     description = fields.Text('Description', default=ISSUE_DESCRIPTION)
@@ -39,6 +42,9 @@ class ExternalTask(models.Model):
     origin_url = fields.Char()
     origin_db = fields.Char()
     origin_model = fields.Char()
+    project_id = fields.Selection(
+        selection=_get_select_project,
+        string='Project')
 
     def get_url_key(self):
         keychain = self.env['keychain.account']
@@ -215,12 +221,11 @@ class ExternalTask(models.Model):
         if view_type == 'search':
             doc = etree.XML(res['arch'])
             node = doc.xpath("//search")[0]
-            for project in self._call_odoo('project_list', {}):
+            for project_id, project_name in self._get_select_project():
                 elem = etree.Element(
                     'filter',
-                    string=project,
-                    domain="[('project_id.customer_project_name', '=', '%s')]"
-                    % project)
+                    string=project_name,
+                    domain="[('project_id', '=', %s)]" % project_id)
                 node.append(elem)
             res['arch'] = etree.tostring(doc, pretty_print=True)
         return res
