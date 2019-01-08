@@ -22,19 +22,27 @@ Forbid Record Creation
 Forbide to create Odoo objects by raising an alert to the user.
 This module is only useful before to reach 'production' step of ERP implementation project.
 
-These odoo objects are:
-
-- sale.order
-- purchase.order
-- stock.picking
-- account.invoice
-- mrp.production
-- pos.order
-
 **Table of contents**
 
 .. contents::
    :local:
+
+Configuration
+=============
+
+Put this code in your custom module according to model
+you want forbid creation.
+
+.. code:: python
+
+    class AccountInvoice(models.Model):
+        _inherit = ['account.invoice', 'forbidden.model']
+        _name = 'account.invoice'
+
+
+    class PosOrder(models.Model):
+        _inherit = ['pos.order', 'forbidden.model']
+        _name = 'pos.order'
 
 Bug Tracker
 ===========
@@ -62,9 +70,6 @@ Contributors
 Maintainers
 ~~~~~~~~~~~
 
-
-
 This module is part of the `akretion/ak-odoo-incubator <https://github.com/akretion/ak-odoo-incubator/tree/12.0/forbid_record_creation>`_ project on GitHub.
-
 
 You are welcome to contribute.
