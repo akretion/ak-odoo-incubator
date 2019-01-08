@@ -22,8 +22,23 @@ Voilà comment cela devrait fonctionner:
 """
 
 
-class RemoteObject(models.AbstractModel):
-    _name = 'remote.object'
+class ExternalTask(models.Model):
+    _name = 'external.task'
+
+    name = fields.Char('Name')
+    stage_name = fields.Char('Stage')
+    description = fields.Text('Description', default=ISSUE_DESCRIPTION)
+    message_ids = fields.One2many(
+        comodel_name='external.message', inverse_name='res_id')
+    create_date = fields.Datetime('Create Date', readonly=True)
+    author_id = fields.Many2one(
+        'res.partner', string='Author', readonly=True)
+    assignee_id = fields.Many2one(
+        'res.partner', string='Assignee name', readonly=True)
+    origin_name = fields.Char()
+    origin_url = fields.Char()
+    origin_db = fields.Char()
+    origin_model = fields.Char()
 
     def get_url_key(self):
         keychain = self.env['keychain.account']
@@ -41,54 +56,10 @@ class RemoteObject(models.AbstractModel):
     @api.model
     def _call_odoo(self, method, params):
         url_key = self.get_url_key()
-        url = '%s/project-api/%s/%s' % (url_key['url'], self._path, method)
+        url = '%s/project-api/task/%s' % (url_key['url'], method)
         headers = {'API_KEY': url_key['api_key']}
         res = requests.post(url, headers=headers, json=params)
         return res.json()
-
-
-class ExternalTask(models.Model):
-    _inherit = 'remote.object'
-    _name = 'external.task'
-    _path = 'task'
-
-    @api.model
-    @api.model
-    def _get_origin(self):
-        if self.model_reference:
-            rec_name = self.model_reference._rec_name
-            if rec_name:
-                self.task_origin = self.model_reference.display_name
-
-    @api.model
-    def _authorised_models(self):
-        """ Inherit this method to add more models depending of your
-            modules dependencies
-        """
-        models = self.env['ir.model'].search(
-            [('model', '!=', 'external.task')])
-        return [(x.model, x.name) for x in models]
-
-    action_id = fields.Many2one(
-        'ir.actions.act_window', string="Action",
-        help="Action called to go to the original window.")
-    model_reference = fields.Reference(
-        selection='_authorised_models')
-    task_origin = fields.Char(compute='_get_origin')
-    name = fields.Char('Name')
-    stage_name = fields.Char('Stage')
-    description = fields.Text('Description', default=ISSUE_DESCRIPTION)
-    message_ids = fields.One2many(
-        comodel_name='external.message', inverse_name='res_id')
-    create_date = fields.Datetime('Create Date', readonly=True)
-    author_id = fields.Many2one(
-        'res.partner', string='Author', readonly=True)
-    assignee_id = fields.Many2one(
-        'res.partner', string='Assignee name', readonly=True)
-    origin_name = fields.Char()
-    origin_url = fields.Char()
-    origin_db = fields.Char()
-    origin_model = fields.Char()
 
     def _get_support_partner_vals(self, support_uid):
         vals = self._call_odoo('read_support_author', {'uid': support_uid})
@@ -272,9 +243,7 @@ class ExternalMessage(models.Model):
 
 
 class MailMessage(models.Model):
-    _inherit = ['mail.message', 'remote.object']
-    _name = 'mail.message'
-    _path = 'task'
+    _inherit = 'mail.message'
 
     @api.multi
     def message_format(self):
