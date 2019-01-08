@@ -21,6 +21,14 @@
 from odoo import fields, api, models
 
 
+class ProjectProject(models.Model):
+    _inherit='project.project'
+
+    customer_project_name = fields.Char(
+        help='Name that will appear on customer support menu',
+        index=True)
+
+
 class ProjectTask(models.Model):
     _inherit = 'project.task'
 

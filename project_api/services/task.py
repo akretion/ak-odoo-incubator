@@ -232,6 +232,11 @@ class ExternalTaskService(Component):
             })
         return message.id
 
+    def project_list(self):
+        projects = self.env['project.project'].search([
+            ('partner_id', '=', self.partner.id)])
+        return projects.mapped('customer_project_name')
+
     # Validator
     def _validator_read(self):
         return {
@@ -328,3 +333,6 @@ class ExternalTaskService(Component):
         return {
             'uid': {'type': 'integer'},
             }
+
+    def _validator_project_list(self):
+        return {}
