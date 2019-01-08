@@ -28,10 +28,8 @@ class IrValues(models.Model):
             # If the action is already here no need to add it again
             return res
         else:
-            available_models = [
-                x[0] for x in self.env['external.task']._authorised_models()]
             if action_slot == 'client_action_multi'\
-                    and model in available_models:
+                    and model != 'external.task':
                 action = self.set_external_task_action(model, res_id=res_id)
                 if action:
                     value = (UNIQUE_ACTION_ID, 'external_project', action)
