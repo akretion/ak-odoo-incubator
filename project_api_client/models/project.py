@@ -21,6 +21,7 @@ Voilà comment cela devrait fonctionner:
 -----------------------------------------------------------
 """
 
+
 class RemoteObject(models.AbstractModel):
     _name = 'remote.object'
 
@@ -240,6 +241,17 @@ class ExternalTask(models.Model):
                 options.update({'display_log_button': False})
                 node.set('options', json.dumps(options))
             res['arch'] = etree.tostring(doc)
+        if view_type == 'search':
+            doc = etree.XML(res['arch'])
+            node = doc.xpath("//search")[0]
+            for project in self._call_odoo('project_list', {}):
+                elem = etree.Element(
+                    'filter',
+                    string=project,
+                    domain="[('project_id.customer_project_name', '=', '%s')]"
+                    % project)
+                node.append(elem)
+            res['arch'] = etree.tostring(doc, pretty_print=True)
         return res
 
     @api.model
