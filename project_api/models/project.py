@@ -27,6 +27,10 @@ class ProjectProject(models.Model):
     customer_project_name = fields.Char(
         help='Name that will appear on customer support menu',
         index=True)
+    assign_template_id = fields.Many2one(
+        'mail.template',
+        string='Assign Template',
+        help='If fill a mail will be send when the task is assigned')
 
 
 class ProjectTask(models.Model):
@@ -66,3 +70,14 @@ class ProjectTask(models.Model):
             body=body, subject=subject, message_type=message_type,
             subtype=subtype, parent_id=parent_id, attachments=attachments,
             content_subtype=content_subtype, **kwargs)
+
+    def _track_template(self, tracking):
+        res = super(ProjectTask, self)._track_template(tracking)
+        for task in self:
+            changes, tracking_value_ids = tracking[task.id]
+            if 'user_id' in changes\
+                    and task.project_id.assign_template_id and task.user_id:
+                res['user_id'] = (
+                    task.project_id.assign_template_id,
+                    {'composition_mode': 'mass_mail'})
+        return res
