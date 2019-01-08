@@ -235,7 +235,8 @@ class ExternalTaskService(Component):
     def project_list(self):
         projects = self.env['project.project'].search([
             ('partner_id', '=', self.partner.id)])
-        return projects.mapped('customer_project_name')
+        return [(project.id, project.customer_project_name)
+            for project in projects]
 
     # Validator
     def _validator_read(self):
@@ -277,6 +278,7 @@ class ExternalTaskService(Component):
             'origin_db': {'type': 'string'},
             'origin_name': {'type': 'string'},
             'action_id': {'type': 'integer'},
+            'project_id': {'type': 'integer'},
             'author': self._partner_validator(),
         }
 
@@ -289,6 +291,7 @@ class ExternalTaskService(Component):
                     'name': {'type': 'string'},
                     'stage_name': {'type': 'string'},
                     'description': {'type': 'string'},
+                    'project_id': {'type': 'integer'},
                 }
             },
             'author': self._partner_validator()
