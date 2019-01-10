@@ -23,7 +23,9 @@ class ExternalTaskService(Component):
         return self.work.partner
 
     def _map_partner_read_to_data(self, partner_read):
-        if not partner_read:
+        if not partner_read or not partner_read[0]:
+            # partner_read[0] can have the value 0 when their is not
+            # partner linked to the message
             return False
         else:
             partner = self.env['res.partner'].browse(partner_read[0])
@@ -177,10 +179,16 @@ class ExternalTaskService(Component):
         return []
 
     def _get_partner(self, data):
-        partner = self.env['res.partner'].search([
-            ('parent_id', '=', self.partner.id),
-            ('customer_uid', '=', data['uid']),
-            ])
+        domain = [('parent_id', '=', self.partner.id)]
+        if data.get('email'):
+            domain += [
+                '|',
+                ('customer_uid', '=', data['uid']),
+                ('email', '=', data['email']),
+                ]
+        else:
+            domain += [('customer_uid', '=', data['uid'])]
+        partner = self.env['res.partner'].search(domain)
         if not partner:
             partner = self.env['res.partner'].create({
                 'parent_id': self.partner.id,
@@ -202,6 +210,7 @@ class ExternalTaskService(Component):
                 'email': data['email'],
                 'mobile': data['mobile'],
                 'phone': data['phone'],
+                'customer_uid': data['customer_uid'],
                 })
         return partner
 

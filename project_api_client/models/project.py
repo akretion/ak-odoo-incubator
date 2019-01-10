@@ -253,7 +253,7 @@ class MailMessage(models.Model):
     @api.multi
     def message_format(self):
         ids = self.ids
-        if isinstance(ids[0], (str, unicode)) and 'external' in ids[0]:
+        if ids and isinstance(ids[0], (str, unicode)) and 'external' in ids[0]:
             external_ids = [int(mid.replace('external/', '')) for mid in ids]
             return self.env['external.task'].message_get(external_ids)
         else:
