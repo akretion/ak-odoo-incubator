@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import fields, api, models
+from odoo import fields, api, models, tools
 
 
 class ProjectProject(models.Model):
@@ -85,3 +85,40 @@ class ProjectTask(models.Model):
                     task.project_id.assign_template_id,
                     {'composition_mode': 'mass_mail'})
         return res
+
+    @api.model
+    def create(self, vals):
+        task = super(ProjectTask, self).create(vals)
+        if task.author_id:
+            task.message_subscribe([task.author_id.id], force=False)
+        return task
+
+    def write(self, vals):
+        res = super(ProjectTask, self).write(vals)
+        if vals.get('author_id'):
+            self.message_subscribe([vals['author_id']], force=False)
+        return res
+
+    @api.multi
+    def message_get_suggested_recipients(self):
+        # we do not need this feature
+        return {}
+
+    @api.model
+    def message_new(self, msg, custom_values=None):
+        custom_values['description'] = msg['body']
+        partner_email = tools.email_split(msg['from'])[0]
+        # Automatically create a partner
+        if not msg.get('author_id'):
+            alias = tools.email_split(msg['to'])[0].split('@')[0]
+            project = self.env['project.project'].search([
+                ('alias_name', '=', alias),
+                ])
+            partner = self.env['res.partner'].create({
+                'parent_id': project.partner_id.id,
+                'name': partner_email.split('@')[0],
+                'email': partner_email,
+                })
+            msg['author_id'] = partner.id
+        return super(ProjectTask, self).message_new(
+            msg, custom_values=custom_values)

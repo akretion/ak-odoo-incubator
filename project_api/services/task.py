@@ -117,7 +117,6 @@ class ExternalTaskService(Component):
         params['author_id'] = partner.id
         task = self.env['project.task'].with_context(
             force_message_author_id=partner.id).create(params)
-        task.message_subscribe([partner.id], force=False)
         return task.id
 
     def write(self, ids, vals, author):
