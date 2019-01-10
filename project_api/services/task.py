@@ -210,7 +210,7 @@ class ExternalTaskService(Component):
                 'email': data['email'],
                 'mobile': data['mobile'],
                 'phone': data['phone'],
-                'customer_uid': data['customer_uid'],
+                'customer_uid': data['uid'],
                 })
         return partner
 

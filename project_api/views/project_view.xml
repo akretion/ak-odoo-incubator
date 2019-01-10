@@ -8,7 +8,6 @@
             <field name="partner_id" position="after">
                 <newline/>
                 <field name="customer_project_name"/>
-                <field name="assign_template_id"/>
             </field>
         </field>
     </record>

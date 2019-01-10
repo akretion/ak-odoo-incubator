@@ -27,10 +27,6 @@ class ProjectProject(models.Model):
     customer_project_name = fields.Char(
         help='Name that will appear on customer support menu',
         index=True)
-    assign_template_id = fields.Many2one(
-        'mail.template',
-        string='Assign Template',
-        help='If fill a mail will be send when the task is assigned')
 
 
 class ProjectTask(models.Model):
@@ -43,6 +39,9 @@ class ProjectTask(models.Model):
         'res.partner',
         default=lambda self: self.env.user.partner_id.id,
         string='Create By')
+    partner_id = fields.Many2one(
+        related='project_id.partner_id',
+        readonly=True)
     user_id = fields.Many2one(default=False)
     assignee_id = fields.Many2one('res.partner', related='user_id.partner_id')
     origin_name = fields.Char()
@@ -75,38 +74,28 @@ class ProjectTask(models.Model):
             subtype=subtype, parent_id=parent_id, attachments=attachments,
             content_subtype=content_subtype, **kwargs)
 
-    def _track_template(self, tracking):
-        res = super(ProjectTask, self)._track_template(tracking)
-        for task in self:
-            changes, tracking_value_ids = tracking[task.id]
-            if 'user_id' in changes\
-                    and task.project_id.assign_template_id and task.user_id:
-                res['user_id'] = (
-                    task.project_id.assign_template_id,
-                    {'composition_mode': 'mass_mail'})
-        return res
-
     @api.model
     def create(self, vals):
-        task = super(ProjectTask, self).create(vals)
-        if task.author_id:
-            task.message_subscribe([task.author_id.id], force=False)
-        return task
+        vals.pop('partner_id', None) # readonly
+        return super(ProjectTask, self).create(vals)
 
     def write(self, vals):
-        res = super(ProjectTask, self).write(vals)
-        if vals.get('author_id'):
-            self.message_subscribe([vals['author_id']], force=False)
-        return res
+        vals.pop('partner_id', None) # readonly
+        return super(ProjectTask, self).write(vals)
 
-    @api.multi
+    def message_auto_subscribe(self, updated_fields, values=None):
+        super(ProjectTask, self).message_auto_subscribe(
+            updated_fields, values=values)
+        if values.get('author_id'):
+            self.message_subscribe([values['author_id']], force=False)
+        return True
+
     def message_get_suggested_recipients(self):
         # we do not need this feature
         return {}
 
     @api.model
     def message_new(self, msg, custom_values=None):
-        custom_values['description'] = msg['body']
         partner_email = tools.email_split(msg['from'])[0]
         # Automatically create a partner
         if not msg.get('author_id'):
@@ -120,5 +109,11 @@ class ProjectTask(models.Model):
                 'email': partner_email,
                 })
             msg['author_id'] = partner.id
+        if custom_values is None:
+            custom_values = {}
+        custom_values.update({
+            'description': msg['body'],
+            'author_id': msg['author_id'],
+            })
         return super(ProjectTask, self).message_new(
             msg, custom_values=custom_values)
