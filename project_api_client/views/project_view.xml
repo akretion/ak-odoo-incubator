@@ -66,9 +66,14 @@
                 <kanban default_group_by="stage_name" >
                     <field name="name"/>
                     <field name="stage_name"/>
+                    <field name="color"/>
+                    <field name="priority"/>
+                    <field name="date_deadline"/>
+                    <field name="assignee_id"/>
                     <templates>
                     <t t-name="kanban-box">
-                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+
                             <div class="o_dropdown_kanban dropdown" groups="base.group_user">
                                 <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
                                     <span class="fa fa-bars fa-lg"/>
@@ -78,9 +83,23 @@
                                     <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
                                 </ul>
                             </div>
-
                             <div class="oe_kanban_content">
-                                <div><b><field name="name"/></b></div>
+                                <div>
+                                    <strong><field name="id"/> - <field name="name"/></strong>
+                                </div>
+                                <div>
+                                    <field name="create_date"/>
+                                </div>
+                                <div class="text-muted">
+                                    <t t-if="record.date_deadline.raw_value and record.date_deadline.raw_value lt (new Date())" t-set="red">oe_kanban_text_red</t>
+                                    <span t-attf-class="#{red || ''}"><i><field name="date_deadline"/></i></span>
+                                </div>
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="priority" widget="priority"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <img t-att-src="kanban_image('res.partner', 'image_small', record.assignee_id.raw_value)" t-att-title="record.assignee_id.value" width="24" height="24" class="oe_kanban_avatar pull-right"/>
+                                </div>
                             </div>
                             <div class="oe_clear"></div>
                         </div>
