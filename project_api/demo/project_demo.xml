@@ -50,7 +50,6 @@
             <field name="project_id" ref="project_project_1"/>
             <field name="name">Develop module for Warehouse</field>
             <field name="kanban_state">done</field>
-            <field name="priority">0</field>
             <field name="date_deadline" eval="time.strftime('%Y-%m-%d')"/>
             <field name="stage_id" ref="project.project_stage_1"/>
         </record>

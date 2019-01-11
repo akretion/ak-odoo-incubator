@@ -7,6 +7,7 @@ import logging
 from odoo.http import request
 from odoo.addons.base_rest.controllers import main
 from odoo.exceptions import AccessError
+from odoo import _
 
 _logger = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ class ExternalTaskController(main.RestController):
             )])
             if partner:
                 return partner
-        raise AccessError('No partner match the API KEY')
+        raise AccessError(_('No partner match the API KEY'))
 
     def _get_component_context(self):
         """

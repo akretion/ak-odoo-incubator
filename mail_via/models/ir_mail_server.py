@@ -6,7 +6,7 @@
 from odoo import models
 
 
-class IrMail_Server(models.Model):
+class IrMailServer(models.Model):
     _inherit = 'ir.mail_server'
 
     def build_email(self, email_from, email_to, subject, body, **kwargs):
@@ -16,5 +16,5 @@ class IrMail_Server(models.Model):
                 "mail.catchall.domain")
             original_from = email_from.replace('<', '"').replace('>', '"')
             email_from = '%s <%s@%s>' % (original_from, via, domain)
-        return super(IrMail_Server, self).build_email(
+        return super(IrMailServer, self).build_email(
             email_from, email_to, subject, body, **kwargs)
