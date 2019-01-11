@@ -6,7 +6,6 @@
 from odoo.addons.component.tests.common import TransactionComponentCase
 from odoo.addons.base_rest.controllers.main import _PseudoCollection
 from odoo.addons.component.core import WorkContext
-import requests_mock
 import json
 from os import path, getenv
 import logging
@@ -15,15 +14,17 @@ _logger = logging.getLogger(__name__)
 DATA_PATH = path.join(path.dirname(path.abspath(__file__)), 'data.json')
 LEARN = getenv('LEARN')
 
+
 def get_data():
     with open(DATA_PATH, 'r') as f:
         try:
             return json.loads(f.read())
-        except:
+        except Exception:
             if LEARN:
                 return {}
             else:
                 raise
+
 
 DATA = get_data()
 

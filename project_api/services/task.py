@@ -5,7 +5,7 @@
 
 from odoo.addons.component.core import Component
 from odoo.addons.base_rest.components.service import to_bool
-from odoo.exceptions import UserError, MissingError, AccessError
+from odoo.exceptions import AccessError
 from odoo.tools.translate import _
 import json
 import logging
@@ -81,7 +81,7 @@ class ExternalTaskService(Component):
         return []
 
     def read_group(self, domain, fields, groupby, offset=0,
-            limit=None, orderby=False, lazy=True):
+                   limit=None, orderby=False, lazy=True):
         domain = [('project_id.partner_id', '=', self.partner.id)] + domain
         tasks = self.env['project.task'].read_group(
             domain,
@@ -244,7 +244,7 @@ class ExternalTaskService(Component):
         projects = self.env['project.project'].search([
             ('partner_id', '=', self.partner.id)])
         return [(project.id, project.customer_project_name)
-            for project in projects]
+                for project in projects]
 
     # Validator
     def _validator_read(self):
@@ -340,6 +340,7 @@ class ExternalTaskService(Component):
                 'phone': {'type': 'string'},
                 }
             }
+
     def _validator_read_support_author(self):
         return {
             'uid': {'type': 'integer'},

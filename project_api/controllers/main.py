@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import logging
-from odoo.http import Controller, request, route
+from odoo.http import request
 from odoo.addons.base_rest.controllers import main
 from odoo.exceptions import AccessError
 
@@ -20,7 +20,7 @@ class ExternalTaskController(main.RestController):
     def _get_partner_from_request(cls):
         auth_api_key = getattr(request, 'auth_api_key', None)
         if auth_api_key:
-            partner =  request.env['res.partner'].search([(
+            partner = request.env['res.partner'].search([(
                 'project_auth_api_key_id', '=', auth_api_key.id
             )])
             if partner:
