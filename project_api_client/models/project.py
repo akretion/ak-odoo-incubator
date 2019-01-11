@@ -26,7 +26,12 @@ class ExternalTask(models.Model):
     _name = 'external.task'
 
     def _get_select_project(self):
-        return self._call_odoo('project_list', {})
+        # solve issue during installation and test
+        # If we have an uid it's a real call from webclient
+        if self._context.get('uid'):
+            return self._call_odoo('project_list', {})
+        else:
+            return []
 
     name = fields.Char('Name')
     stage_name = fields.Char('Stage')
