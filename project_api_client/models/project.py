@@ -4,9 +4,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import fields, api, models
-from odoo.exceptions import Warning as UserError
-from odoo.tools.translate import _
-from odoo.tools.safe_eval import safe_eval
 from lxml import etree
 import requests
 import json
@@ -40,9 +37,9 @@ class ExternalTask(models.Model):
         comodel_name='external.message', inverse_name='res_id')
     create_date = fields.Datetime('Create Date', readonly=True)
     priority = fields.Selection([
-        ('0','Low'),
+        ('0', 'Low'),
         ('1', 'Normal'),
-        ('2','High')
+        ('2', 'High')
     ], default='1')
     date_deadline = fields.Datetime('Date deadline', readonly=True)
     author_id = fields.Many2one(
@@ -140,8 +137,6 @@ class ExternalTask(models.Model):
 
     @api.multi
     def read(self, fields=None, load='_classic_read'):
-        if not isinstance(self.ids, list):
-            multi = False
         tasks = self._call_odoo('read', {
             'ids': self.ids,
             'fields': fields,
@@ -273,7 +268,6 @@ class MailMessage(models.Model):
 
     @api.multi
     def set_message_done(self):
-        ids = self.ids
         for _id in self.ids:
             if isinstance(_id, (str, unicode)) and 'external' in _id:
                 return True
@@ -287,7 +281,6 @@ class IrActionActWindows(models.Model):
     def _set_origin_in_context(self, action):
         context = {'default_origin_db': self._cr.dbname}
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        params = {}
         action_id = self._context.get('params', {}).get('action')
         _id = self._context.get('active_id')
         model = self._context.get('active_model')
@@ -301,7 +294,7 @@ class IrActionActWindows(models.Model):
                 'action_id': action_id,
                 'id': _id,
                 })
-            context['default_origin_url'] = '%s#%s' %(base_url, path)
+            context['default_origin_url'] = '%s#%s' % (base_url, path)
         action['context'] = context
 
     def read(self, fields=None, load='_classic_read'):

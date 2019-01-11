@@ -11,15 +11,17 @@ from os import path, getenv
 DATA_PATH = path.join(path.dirname(path.abspath(__file__)), 'data.json')
 LEARN = getenv('LEARN')
 
+
 def get_data():
     with open(DATA_PATH, 'r') as f:
         try:
             return json.loads(f.read())
-        except:
+        except Exception:
             if LEARN:
                 return {}
             else:
                 raise
+
 
 DATA = get_data()
 
@@ -41,7 +43,7 @@ class TestTask(TransactionCase):
         data = get_data()
         case = self._testMethodName
         method = self._get_method()
-        if not case in data:
+        if case not in data:
             data[case] = {}
         data[case].update({
             'input': vals,
@@ -56,7 +58,7 @@ class TestTask(TransactionCase):
         method = method or self._get_method()
         url = 'http://localhost:8069/project-api/task/%s' % (method)
         if LEARN:
-            result = {} # we do not care
+            result = {}  # we do not care
         else:
             result = DATA[case]['output']
         m.post(url, json=result)
@@ -69,7 +71,7 @@ class TestTask(TransactionCase):
             self._activate_mock(m)
             res = self.env['external.task'].read_group(
                 groupby=["stage_name"],
-                fields=["stage_name","name"],
+                fields=["stage_name", "name"],
                 domain=[],
                 offset=0,
                 lazy=True,
@@ -89,7 +91,7 @@ class TestTask(TransactionCase):
         with requests_mock.Mocker() as m:
             self._activate_mock(m)
             res = self.env['external.task'].search(
-                domain=[["stage_name","=","To Do"]],
+                domain=[["stage_name", "=", "To Do"]],
                 )
             request_input = m.request_history[0].json()
             if LEARN:
@@ -103,7 +105,7 @@ class TestTask(TransactionCase):
         with requests_mock.Mocker() as m:
             self._activate_mock(m)
             res = self.env['external.task'].search(
-                domain=[["stage_name","=","To Do"]],
+                domain=[["stage_name", "=", "To Do"]],
                 count=True,
                 )
             request_input = m.request_history[0].json()
@@ -222,15 +224,13 @@ class TestTask(TransactionCase):
 
     def test_message_post(self):
         with requests_mock.Mocker() as m:
-            customer = self.env.ref('base.res_partner_2')
             if LEARN:
                 task_id = self._get_task_ids(['project_api.project_task_6'])[0]
             else:
                 task_id = DATA['test_message_post']['input']['_id']
             self._activate_mock(m)
             res = self.env['external.task'].browse(task_id).message_post(
-                body= "my comment",
-                )
+                body="my comment")
             request_input = m.request_history[0].json()
             if LEARN:
                 self._update_json_data(request_input)
