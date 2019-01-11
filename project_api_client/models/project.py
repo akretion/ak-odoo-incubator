@@ -39,6 +39,12 @@ class ExternalTask(models.Model):
     message_ids = fields.One2many(
         comodel_name='external.message', inverse_name='res_id')
     create_date = fields.Datetime('Create Date', readonly=True)
+    priority = fields.Selection([
+        ('0','Low'),
+        ('1', 'Normal'),
+        ('2','High')
+    ], default='1')
+    date_deadline = fields.Datetime('Date deadline', readonly=True)
     author_id = fields.Many2one(
         'res.partner', string='Author', readonly=True)
     assignee_id = fields.Many2one(
@@ -50,6 +56,7 @@ class ExternalTask(models.Model):
     project_id = fields.Selection(
         selection=_get_select_project,
         string='Project')
+    color = fields.Integer(string='Color Index')
 
     def get_url_key(self):
         keychain = self.env['keychain.account']
@@ -68,7 +75,7 @@ class ExternalTask(models.Model):
     def _call_odoo(self, method, params):
         url_key = self.get_url_key()
         url = '%s/project-api/task/%s' % (url_key['url'], method)
-        headers = {'API_KEY': url_key['api_key']}
+        headers = {'API-KEY': url_key['api_key']}
         res = requests.post(url, headers=headers, json=params)
         return res.json()
 
