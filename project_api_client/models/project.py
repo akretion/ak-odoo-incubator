@@ -2,13 +2,13 @@
 # Copyright 2016 Akretion (http://www.akretion.com)
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+# pylint: disable=W8106
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from lxml import etree
 from odoo.tools.safe_eval import safe_eval
 import requests
-import json
 import urllib
 import logging
 _logger = logging.getLogger(__name__)
@@ -148,7 +148,7 @@ class ExternalTask(models.Model):
     def unlink(self):
         return True
 
-    @api.model
+    @api.multi
     def copy(self, default):
         return self
 
