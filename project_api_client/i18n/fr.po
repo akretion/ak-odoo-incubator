@@ -1,0 +1,313 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* project_api_client
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-01-13 17:12+0000\n"
+"PO-Revision-Date: 2019-01-13 17:12+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
+msgid "Add a Description..."
+msgstr "Saisir une description..."
+
+#. module: project_api_client
+#: model:ir.actions.act_window,help:project_api_client.action_view_external_task
+msgid "An issue created in your ERP create an external task in your integrateur to treat them. If you cant' create an issue contact your Adminstrator to check External task configuration."
+msgstr "Un ticket créé depuis votre ERP créera un ticket dans le l'ERP de votre integrateur. En cas de soucis veuillez contacter votre Responsable"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_assignee_id
+msgid "Assignee name"
+msgstr "Assigné à"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_author_id
+msgid "Author"
+msgstr "Auteur"
+
+#. module: project_api_client
+#: model:ir.actions.act_window,help:project_api_client.action_view_external_task
+msgid "Click to add an issue."
+msgstr "Cliquer pour créer un ticket."
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_color
+msgid "Color Index"
+msgstr "Couleur"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_create_date
+msgid "Create Date"
+msgstr "Date de création"
+
+#. module: project_api_client
+#: code:addons/project_api_client/models/action.py:44
+#, python-format
+msgid "Create a Ticket"
+msgstr "Créer un ticket de support"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message_create_uid
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
+msgid "DB"
+msgstr "DB"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_date_deadline
+msgid "Date deadline"
+msgstr "Date deadline"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_kanban
+msgid "Delete"
+msgstr "Supprimer"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_description
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
+msgid "Description"
+msgstr "Description"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message_display_name
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_kanban
+msgid "Edit Task"
+msgstr "Editer la ticket"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_search
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_tree
+msgid "External Task"
+msgstr "Ticket"
+
+#. module: project_api_client
+#: model:ir.actions.act_window,name:project_api_client.action_view_external_task
+msgid "External task"
+msgstr "Ticket"
+
+#. module: project_api_client
+#: selection:external.task,priority:0
+msgid "High"
+msgstr "Haute"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message_id
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_id
+msgid "ID"
+msgstr "ID"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message___last_update
+#: model:ir.model.fields,field_description:project_api_client.field_external_task___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message_write_uid
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message_write_date
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: project_api_client
+#: selection:external.task,priority:0
+msgid "Low"
+msgstr "Basse"
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_mail_message
+msgid "Message"
+msgstr "Message"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_message_ids
+msgid "Message ids"
+msgstr "Messages"
+
+#. module: project_api_client
+#: model:ir.actions.act_window,name:project_api_client.task_from_elsewhere
+msgid "Model to task creation"
+msgstr "Creation de ticket"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_name
+msgid "Name"
+msgstr "Nom"
+
+#. module: project_api_client
+#: selection:external.task,priority:0
+msgid "Normal"
+msgstr "Normal"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_origin_db
+msgid "Origin db"
+msgstr "DB d'origine"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_origin_model
+msgid "Origin model"
+msgstr "Modèle d'origine"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_origin_name
+msgid "Origin name"
+msgstr "Nom de l'origine"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_origin_url
+msgid "Origin url"
+msgstr "Url de l'origine"
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_priority
+msgid "Priority"
+msgstr "Priorité"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_project_id
+msgid "Project"
+msgstr "Projet"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
+msgid "Record name"
+msgstr "Nom de l'enregistrement"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_message_res_id
+msgid "Res id"
+msgstr "Res id"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_stage_name
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_search
+msgid "Stage"
+msgstr "Étape"
+
+#. module: project_api_client
+#: model:ir.ui.menu,name:project_api_client.external_project
+msgid "Support"
+msgstr "Support"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_res_partner_support_last_update_date
+#: model:ir.model.fields,field_description:project_api_client.field_res_users_support_last_update_date
+msgid "Support last update date"
+msgstr "Support last update date"
+
+#. module: project_api_client
+#: model:ir.model.fields,field_description:project_api_client.field_res_partner_support_uid
+#: model:ir.model.fields,field_description:project_api_client.field_res_users_support_uid
+msgid "Support uid"
+msgstr "Support uid"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
+msgid "Task"
+msgstr "Tache"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
+msgid "Task summary..."
+msgstr "Résumé de la tache"
+
+#. module: project_api_client
+#: code:addons/project_api_client/models/project.py:81
+#, python-format
+msgid "There is an issue with support. Please send an email"
+msgstr "Un soucis est apparue, veuillez contacter le support par email"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
+msgid "Url"
+msgstr "Url"
+
+#. module: project_api_client
+#: code:addons/project_api_client/models/project.py:17
+#, python-format
+msgid "What is not working:\n"
+"</br>\n"
+"</br>\n"
+"</br>\n"
+"</br>\n"
+"How this should work:\n"
+""
+msgstr "Ce qui ne va pas:\n"
+"</br>\n"
+"</br>\n"
+"</br>\n"
+"</br>\n"
+"Voilà comment cela devrait fonctionner:\n"
+""
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_external_message
+msgid "external.message"
+msgstr "external.message"
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_external_task
+msgid "external.task"
+msgstr "external.task"
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_ir_actions_act_window
+msgid "ir.actions.act_window"
+msgstr "ir.actions.act_window"
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_ir_values
+msgid "ir.values"
+msgstr "ir.values"
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_keychain_account
+msgid "keychain.account"
+msgstr "keychain.account"
+
+#. module: project_api_client
+#: model:ir.ui.view,arch_db:project_api_client.view_external_task_kanban
+msgid "oe_kanban_text_red"
+msgstr "oe_kanban_text_red"
+
+#. module: project_api_client
+#: model:ir.model,name:project_api_client.model_remote_object
+msgid "remote.object"
+msgstr "remote.object"
+

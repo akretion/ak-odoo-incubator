@@ -1,2 +1,4 @@
 pos
 reporting-engine
+project
+odoo-shopinvader https://github.com/akretion/odoo-shopinvader 10.0
