@@ -41,7 +41,7 @@ class IrValues(models.Model):
         action = self.env.ref('project_api_client.task_from_elsewhere')
         return {
             'id': action.id,
-            'name': _('Create a related task'),
+            'name': _('Create a Ticket'),
             'res_model': u'external.task',
             'src_model': model,
             'type': u'ir.actions.act_window',
