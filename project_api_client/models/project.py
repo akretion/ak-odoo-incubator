@@ -14,13 +14,13 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-ISSUE_DESCRIPTION = u"""Ce qui ne va pas:
----------------------------
-
-
-Voilà comment cela devrait fonctionner:
------------------------------------------------------------
-"""
+ISSUE_DESCRIPTION = _(u"""What is not working:
+</br>
+</br>
+</br>
+</br>
+How this should work:
+""")
 
 
 class ExternalTask(models.Model):
@@ -36,7 +36,7 @@ class ExternalTask(models.Model):
 
     name = fields.Char('Name')
     stage_name = fields.Char('Stage')
-    description = fields.Text('Description', default=ISSUE_DESCRIPTION)
+    description = fields.Html('Description', default=ISSUE_DESCRIPTION)
     message_ids = fields.One2many(
         comodel_name='external.message', inverse_name='res_id')
     create_date = fields.Datetime('Create Date', readonly=True)
