@@ -3,11 +3,15 @@
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, api, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 from lxml import etree
+from odoo.tools.safe_eval import safe_eval
 import requests
 import json
 import urllib
+import logging
+_logger = logging.getLogger(__name__)
 
 
 ISSUE_DESCRIPTION = u"""Ce qui ne va pas:
@@ -73,8 +77,21 @@ class ExternalTask(models.Model):
         url_key = self.get_url_key()
         url = '%s/project-api/task/%s' % (url_key['url'], method)
         headers = {'API-KEY': url_key['api_key']}
-        res = requests.post(url, headers=headers, json=params)
-        return res.json()
+        user_error_message =\
+            _('There is an issue with support. Please send an email')
+        try:
+            res = requests.post(url, headers=headers, json=params)
+        except Exception as e:
+            _logger.error('Error when calling odoo %s', e)
+            raise UserError(user_error_message)
+        data = res.json()
+        if isinstance(data, dict) and data.get('code', 0) >= 400:
+            _logger.error(
+                'Error Support API : %s : %s',
+                data.get('name'),
+                data.get('description'))
+            raise UserError(user_error_message)
+        return data
 
     def _get_support_partner_vals(self, support_uid):
         vals = self._call_odoo('read_support_author', {'uid': support_uid})
@@ -104,7 +121,7 @@ class ExternalTask(models.Model):
     def _map_partner_data_to_id(self, data):
         if not data:
             return False
-        elif data['type'] == 'customer':
+        elif data['type'] in ('customer', 'anonymous'):
             return data['vals']
         else:
             partner = self._get_support_partner(data)
@@ -221,9 +238,9 @@ class ExternalTask(models.Model):
         if view_type == 'form':
             doc = etree.XML(res['arch'])
             for node in doc.xpath("//field[@name='message_ids']"):
-                options = json.loads(node.get('options', '{}'))
+                options = safe_eval(node.get('options', '{}'))
                 options.update({'display_log_button': False})
-                node.set('options', json.dumps(options))
+                node.set('options', repr(options))
             res['arch'] = etree.tostring(doc)
         if view_type == 'search':
             doc = etree.XML(res['arch'])
