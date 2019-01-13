@@ -34,11 +34,16 @@ class ExternalTaskService(Component):
                     'type': 'customer',
                     'vals': (partner.customer_uid, partner.name),
                     }
-            else:
+            elif partner.user_ids:
                 return {
                     'type': 'support',
                     'uid': partner.id,
                     'update_date': partner.write_date or partner.create_date,
+                    }
+            else:
+                return {
+                    'type': 'anonymous',
+                    'vals': (0, partner.name),
                     }
 
     def search(self, domain, offset, limit, order, count):
