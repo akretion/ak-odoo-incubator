@@ -2,6 +2,7 @@
 # Copyright 2016 Akretion (http://www.akretion.com)
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+# pylint: disable=W8106
 
 from odoo.addons.component.core import Component
 from odoo.addons.base_rest.components.service import to_bool

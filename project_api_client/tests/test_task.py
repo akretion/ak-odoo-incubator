@@ -2,11 +2,13 @@
 # Copyright 2019 Akretion (http://www.akretion.com).
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# pylint: disable=C8107
 
 from odoo.tests.common import TransactionCase
 import requests_mock
 import json
 from os import path, getenv
+import base64
 
 DATA_PATH = path.join(path.dirname(path.abspath(__file__)), 'data.json')
 LEARN = getenv('LEARN')
@@ -27,6 +29,15 @@ DATA = get_data()
 
 
 class TestTask(TransactionCase):
+
+    def _get_image(self, name):
+        image_path = path.dirname(path.abspath(__file__))
+        f = open(path.join(image_path, 'static', name))
+        return base64.b64encode(f.read())
+
+    def setUp(self):
+        super(TestTask, self).setUp()
+        self.env.user.image = self._get_image('partner-customer-image.png')
 
     def _get_method(self):
         return self._testMethodName.split('__')[0].replace('test_', '')
