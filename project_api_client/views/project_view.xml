@@ -109,8 +109,8 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="task_from_elsewhere">
-            <field name="name">Model to task creation</field>
+        <record model="ir.actions.act_window" id="action_helpdesk">
+            <field name="name">Create a Ticket</field>
             <field name="res_model">external.task</field>
             <field name="view_mode">form</field>
         </record>
