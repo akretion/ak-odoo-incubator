@@ -349,7 +349,7 @@ class ExternalTaskService(Component):
             'schema': {
                 'name': {'type': 'string'},
                 'uid': {'type': 'integer'},
-                'image': {'type': 'string'},
+                'image': {'type': 'string', 'nullable': True},
                 'email': {'type': 'string'},
                 'mobile': {'type': 'string'},
                 'phone': {'type': 'string'},
