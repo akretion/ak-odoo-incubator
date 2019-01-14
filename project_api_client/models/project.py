@@ -108,7 +108,7 @@ class ExternalTask(models.Model):
         If the partner is missing it will be created
         If the partner information are obsolet their will be updated"""
         partner = self.env['res.partner'].search([
-            ('support_uid', '=', data['uid'])
+            ('support_uid', '=', str(data['uid']))
             ])
         if not partner:
             vals = self._get_support_partner_vals(data['uid'])
@@ -249,6 +249,7 @@ class ExternalTask(models.Model):
                 elem = etree.Element(
                     'filter',
                     string=project_name,
+                    name='project_%s' % project_id,
                     domain="[('project_id', '=', %s)]" % project_id)
                 node.append(elem)
             res['arch'] = etree.tostring(doc, pretty_print=True)
@@ -314,11 +315,25 @@ class IrActionActWindows(models.Model):
             context['default_origin_url'] = '%s#%s' % (base_url, path)
         action['context'] = context
 
+    def _set_default_project(self, action):
+        projects = self.env['external.task']._get_select_project()
+        if projects:
+            key = 'search_default_project_%s' % projects[0][0]
+            action['context'] = {key: 1}
+
+    @api.model
+    def _update_action(self, action):
+        action_support = self.env.ref(
+            'project_api_client.action_helpdesk', False)
+        if action_support and action['id'] == action_support.id:
+            self._set_origin_in_context(action)
+        action_external_task = self.env.ref(
+            'project_api_client.action_view_external_task', False)
+        if action_external_task and action['id'] == action_external_task.id:
+            self._set_default_project(action)
+
     def read(self, fields=None, load='_classic_read'):
         res = super(IrActionActWindows, self).read(fields=fields, load=load)
-        if not self.env.context.get('install_mode'):
-            task_action_id = self.env.ref(
-                'project_api_client.task_from_elsewhere')
-            if self == task_action_id:
-                self._set_origin_in_context(res[0])
+        for action in res:
+            self._update_action(action)
         return res

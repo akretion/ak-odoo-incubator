@@ -105,7 +105,7 @@ class ExternalTaskService(Component):
     def read_group(self, domain, fields, groupby, offset=0,
                    limit=None, orderby=False, lazy=True):
         domain = [('project_id.partner_id', '=', self.partner.id)] + domain
-        task_obj =self.env['project.task']
+        task_obj = self.env['project.task']
         if 'stage_name' in groupby[0]:
             groupby[0] = 'stage_id'
             fields[fields.index('stage_name')] = 'stage_id'
@@ -254,10 +254,12 @@ class ExternalTaskService(Component):
         return message.id
 
     def project_list(self):
+        helpdesk = self.partner.help_desk_project_id
         projects = self.env['project.project'].search([
-            ('partner_id', '=', self.partner.id)])
-        return [(project.id, project.customer_project_name)
-                for project in projects]
+            ('partner_id', '=', self.partner.id),
+            ('id', '!=', helpdesk.id)])
+        return [(helpdesk.id, helpdesk.customer_project_name)]\
+            + [(p.id, p.customer_project_name) for p in projects]
 
     # Validator
     def _validator_read(self):
