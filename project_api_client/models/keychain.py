@@ -3,7 +3,7 @@
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
+from openerp import fields, models
 
 
 class KeychainAccount(models.Model):
@@ -11,3 +11,9 @@ class KeychainAccount(models.Model):
 
     namespace = fields.Selection(
         selection_add=[('support', 'Support')])
+
+    def _support_init_data(self):
+        return {}
+
+    def _support_validate_data(self, data):
+        return True

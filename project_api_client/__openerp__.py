@@ -7,7 +7,7 @@
     'name': 'Project API client',
     'summary': 'Module add a new entry to follow'
                'your project in the integrator ERP',
-    "version": "10.0.1.0.0",
+    "version": "8.0.1.0.0",
     "category": "Project Management",
     'author': "Akretion",
     'website': '',

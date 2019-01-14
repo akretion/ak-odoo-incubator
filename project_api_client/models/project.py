@@ -4,10 +4,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 # pylint: disable=W8106
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from openerp import _, api, fields, models
+from openerp.exceptions import Warning as UserError
 from lxml import etree
-from odoo.tools.safe_eval import safe_eval
+from openerp.tools.safe_eval import safe_eval
 import requests
 import urllib
 import logging
@@ -69,7 +69,7 @@ class ExternalTask(models.Model):
             [['namespace', '=', 'support']])[0]
         return {
             'url': account.get_data()['url'],
-            'api_key': account._get_password()
+            'api_key': account.get_password()
         }
 
     @api.model
@@ -221,6 +221,29 @@ class ExternalTask(models.Model):
             })
         return 'external/%s' % mid
 
+    def _process_V8_compatibility(self, message):
+        message['is_private'] = False
+        message['type'] = 'notification'
+        if not message.get('body'):
+            elems = ""
+            for tracking in message.pop('tracking_value_ids', []):
+                if tracking['new_value'] == tracking['old_value']:
+                    elems += "<li>%s : <span>%s</span></li>" % (
+                        tracking['changed_field'],
+                        tracking['new_value'])
+                else:
+                    elems += """<li>
+                    %s :
+                    <span>%s</span>
+                    <span class="fa fa-long-arrow-right"></span>
+                    <span>%s</span>
+                    </li>""" % (
+                        tracking['changed_field'],
+                        tracking['old_value'],
+                        tracking['new_value'])
+            message['body'] =\
+                "<ul class='o_mail_thread_message_tracking'>" + elems + "</ul>"
+
     @api.model
     def message_get(self, external_ids):
         messages = self._call_odoo('message_format', {'ids': external_ids})
@@ -228,8 +251,10 @@ class ExternalTask(models.Model):
             if 'author_id' in message:
                 message['author_id'] = self._map_partner_data_to_id(
                     message['author_id'])
+            self._process_V8_compatibility(message)
         return messages
 
+    @api.model
     def fields_view_get(
             self, view_id=None, view_type=False, toolbar=False, submenu=False):
         res = super(ExternalTask, self).fields_view_get(
@@ -275,27 +300,34 @@ class ExternalMessage(models.Model):
 class MailMessage(models.Model):
     _inherit = 'mail.message'
 
-    @api.multi
-    def message_format(self):
-        ids = self.ids
+    @api.cr_uid_context
+    def message_read(
+            self, cr, uid, ids=None, domain=None, message_unload_ids=None,
+            thread_level=0, context=None, parent_id=False, limit=None):
         if ids and isinstance(ids[0], (str, unicode)) and 'external' in ids[0]:
             external_ids = [int(mid.replace('external/', '')) for mid in ids]
-            return self.env['external.task'].message_get(external_ids)
+            return self.pool.get('external.task').message_get(
+                cr, uid, external_ids, context=context)
         else:
-            return super(MailMessage, self).message_format()
+            return super(MailMessage, self).message_read(
+                cr, uid, ids=ids, domain=domain,
+                message_unload_ids=message_unload_ids, thread_level=thread_level,
+                context=context, parent_id=parent_id, limit=limit)
 
     @api.multi
-    def set_message_done(self):
+    def set_message_read(self, read, create_missing=True):
         for _id in self.ids:
             if isinstance(_id, (str, unicode)) and 'external' in _id:
                 return True
         else:
-            return super(MailMessage, self).set_message_done()
+            return super(MailMessage, self).set_message_read(
+                read, create_missing=create_missing)
 
 
 class IrActionActWindows(models.Model):
     _inherit = 'ir.actions.act_window'
 
+    @api.model
     def _set_origin_in_context(self, action):
         context = {'default_origin_db': self._cr.dbname}
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
@@ -332,8 +364,13 @@ class IrActionActWindows(models.Model):
         if action_external_task and action['id'] == action_external_task.id:
             self._set_default_project(action)
 
-    def read(self, fields=None, load='_classic_read'):
-        res = super(IrActionActWindows, self).read(fields=fields, load=load)
-        for action in res:
-            self._update_action(action)
+    def read(self, cr, uid, ids, fields=None, context=None,
+             load='_classic_read'):
+        res = super(IrActionActWindows, self).read(
+            cr, uid, ids, fields=fields, context=context, load=load)
+        if isinstance(ids, list):
+            for action in res:
+                self._update_action(cr, uid, action, context=context)
+        else:
+            self._update_action(cr, uid, res, context=context)
         return res

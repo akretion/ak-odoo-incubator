@@ -2,7 +2,7 @@
 # © 2015 David BEAL @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, models, _
+from openerp import api, models, _
 
 # Duplicate from module project_model_to_task
 # to create an external_task instead of a project_task

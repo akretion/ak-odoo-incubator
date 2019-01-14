@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-
+<openerp>
+   <data>
         <record id="view_external_task_form" model="ir.ui.view">
             <field name="model">external.task</field>
             <field name="arch" type="xml">
@@ -136,4 +136,5 @@
             name="Support"
             sequence="100"/>
 
-</odoo>
+    </data>
+</openerp>
