@@ -102,3 +102,11 @@ class ProjectTask(models.Model):
             })
         return super(ProjectTask, self).message_new(
             msg, custom_values=custom_values)
+
+    def _read_group_stage_ids(self, stages, domain, order):
+        project_ids = self._context.get('stage_from_project_ids')
+        if project_ids:
+            projects = self.env['project.project'].browse(project_ids)
+            stages |= projects.mapped('type_ids')
+        return super(ProjectTask, self)._read_group_stage_ids(
+            stages, domain, order)
