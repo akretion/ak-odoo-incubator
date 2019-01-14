@@ -13,7 +13,7 @@ class ResPartner(models.Model):
     support_last_update_date = fields.Datetime()
 
     _sql_constraints = [
-         ('support_uid_uniq',
-          'unique (support_uid)',
-          'Support UID already exist !'),
+        ('support_uid_uniq',
+         'unique (support_uid)',
+         'Support UID already exist !'),
     ]
