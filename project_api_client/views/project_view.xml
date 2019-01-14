@@ -35,6 +35,8 @@
                             .fa-paperclip {visibility: hidden;}
                             .fa-pencil-square-o {visibility: hidden;}
                             .o_thread_message_star {visibility: hidden;}
+                            button.oe_full {visibility: hidden;}
+                            .oe_attachment_file {visibility: hidden;}
                         </style>
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
