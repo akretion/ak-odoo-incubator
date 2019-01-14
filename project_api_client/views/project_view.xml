@@ -7,9 +7,10 @@
                 <form string="Task">
                     <sheet string="Task">
                         <h1>
+                            <field name="id"/> -
                             <field name="name" placeholder="Task summary..." class="oe_inline" colspan="4"/>
                         </h1>
-                        <group>
+                        <group attrs="{'invisible': [('id', '=', False)]}">
                             <group>
                                 <field name="project_id" readonly="1"/>
                                 <field name="author_id" readonly="1"/>
@@ -121,8 +122,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_external_task_search"/>
-<!--             <field name="view_id" ref="view_account_list"/>
- -->        <field name="help" type="html">
+            <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to add an issue.
               </p><p>
