@@ -38,7 +38,7 @@ class IrValues(models.Model):
 
     @api.model
     def set_external_task_action(self, model, res_id=False):
-        action = self.env.ref('project_api_client.task_from_elsewhere')
+        action = self.env.ref('project_api_client.action_helpdesk')
         return {
             'id': action.id,
             'name': _('Create a Ticket'),
