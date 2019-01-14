@@ -86,10 +86,33 @@ class ExternalTaskService(Component):
             return tasks
         return []
 
+    def _get_all_project_ids_from_domain(self, domain):
+        # Note we apply a filter on a project we will always
+        # show all stage of this project
+        # this is not a perfect solution aand will not work with
+        # advanced filtering on client side
+        all_project_ids = self.env['project.project'].search([
+            ('partner_id', '=', self.partner.id),
+            ]).ids
+        project_ids = []
+        for elem in domain:
+            if len(elem) == 3\
+                    and elem[0] == 'project_id' and elem[1] == '=':
+                if elem[2] in all_project_ids:
+                    project_ids.append(elem[2])
+        return project_ids
+
     def read_group(self, domain, fields, groupby, offset=0,
                    limit=None, orderby=False, lazy=True):
         domain = [('project_id.partner_id', '=', self.partner.id)] + domain
-        tasks = self.env['project.task'].read_group(
+        task_obj =self.env['project.task']
+        if 'stage_name' in groupby[0]:
+            groupby[0] = 'stage_id'
+            fields[fields.index('stage_name')] = 'stage_id'
+            project_ids = self._get_all_project_ids_from_domain(domain)
+            task_obj = task_obj.with_context(
+                stage_from_project_ids=project_ids)
+        groups = task_obj.read_group(
             domain,
             fields,
             groupby,
@@ -97,27 +120,11 @@ class ExternalTaskService(Component):
             limit=limit,
             orderby=orderby,
             lazy=lazy)
-        # Order stages from stage id order and add fold parameter
-        if 'stage_name' in groupby:
-            ordered_tasks = []
-            groupby = ['stage_id']
-            fields.append('stage_id')
-            stage_tasks = self.env['project.task'].read_group(
-                domain,
-                fields,
-                groupby,
-                offset=offset,
-                limit=limit,
-                orderby=orderby,
-                lazy=lazy)
-            for stage_task in stage_tasks:
-                for task in tasks:
-                    if task['stage_name'] == stage_task['stage_id'][1]:
-                        ordered_task = task
-                        ordered_task['__fold'] = stage_task['__fold']
-                        ordered_tasks.append(ordered_task)
-            tasks = ordered_tasks
-        return tasks
+        if groupby[0] == 'stage_id':
+            for group in groups:
+                group['stage_name'] = group.pop('stage_id')[1]
+                group['stage_name_count'] = group.pop('stage_id_count')
+        return groups
 
     def create(self, **params):
         partner = self._get_partner(params.pop('author'))
