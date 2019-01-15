@@ -22,7 +22,8 @@ class StockInventory(models.Model):
 
     @api.multi
     def button_recompute_reference(self):
-        "Recompute reference when the supplierinfo had deleted from product"
+        "Recompute reference when the supplierinfo "
+        "has been deleted from product"
         for inventory in self:
             for line in inventory.line_ids:
                 if line.cost_origin == _('Supplier info') and line.reference:
