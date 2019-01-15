@@ -11,6 +11,9 @@
                 <button name="button_compute_cost" type="object" 
                         attrs="{'invisible': [('state', '=', 'done')]}"
                         string="Compute cost"/>
+                <button name="button_recompute_reference" type="object"
+                        attrs="{'invisible': [('state', '!=', 'done')]}"
+                        string="Recompute Reference"/>
                 <span attrs="{'invisible': [('state', '=', 'done')]}">automatically computed when validated</span>
             </field>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
