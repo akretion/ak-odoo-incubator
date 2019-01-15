@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # pylint: disable=C8107
 
-from odoo.tests.common import TransactionCase
+from openerp.tests.common import TransactionCase
 import requests_mock
 import json
 from os import path, getenv
@@ -37,6 +37,7 @@ class TestTask(TransactionCase):
 
     def setUp(self):
         super(TestTask, self).setUp()
+        self.env['ir.rule']._register_hook()
         self.env.user.image = self._get_image('partner-customer-image.png')
 
     def _get_method(self):
@@ -205,33 +206,33 @@ class TestTask(TransactionCase):
                 self.assertIn('image', res)
                 self.assertIn('update_date', res)
 
-    def test_message_format(self):
-        with requests_mock.Mocker() as m:
-            support_team = self.env.ref('project_api_client.support_team')
-            # Ensure that there is not partner in the team
-            support_team.child_ids.unlink()
-            self._activate_mock(m)
-            self._activate_mock(
-                m, 'test_read_support_author', 'read_support_author')
-            if LEARN:
-                task_id = self._get_task_ids(['project_api.project_task_3'])[0]
-                messages = self.env['mail.message'].search([
-                    ('res_id', '=', task_id),
-                    ('model', '=', 'project.task'),
-                    ])
-                mids = messages.ids
-            else:
-                mids = DATA['test_message_format']['input']['ids']
-            mids = ['external/%s' % mid for mid in mids]
-            res = self.env['mail.message'].browse(mids).message_format()
-            request_input = m.request_history[0].json()
-            if LEARN:
-                self._update_json_data(request_input)
-            else:
-                self._check_input(request_input)
-                self.assertEqual(len(res), 1)
-                # Check that support partner have been created
-                self.assertEqual(len(support_team.child_ids), 1)
+#    def test_message_get(self):
+#        with requests_mock.Mocker() as m:
+#            support_team = self.env.ref('project_api_client.support_team')
+#            # Ensure that there is not partner in the team
+#            support_team.child_ids.unlink()
+#            self._activate_mock(m)
+#            self._activate_mock(
+#                m, 'test_read_support_author', 'read_support_author')
+#            if LEARN:
+#                task_id = self._get_task_ids(['project_api.project_task_3'])[0]
+#                messages = self.env['mail.message'].search([
+#                    ('res_id', '=', task_id),
+#                    ('model', '=', 'project.task'),
+#                    ])
+#                mids = messages.ids
+#            else:
+#                mids = DATA['test_message_get']['input']['ids']
+#            mids = ['external/%s' % mid for mid in mids]
+#            res = self.env['mail.message'].browse(mids).message_format()
+#            request_input = m.request_history[0].json()
+#            if LEARN:
+#                self._update_json_data(request_input)
+#            else:
+#                self._check_input(request_input)
+#                self.assertEqual(len(res), 1)
+#                # Check that support partner have been created
+#                self.assertEqual(len(support_team.child_ids), 1)
 
     def test_message_post(self):
         with requests_mock.Mocker() as m:

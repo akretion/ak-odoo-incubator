@@ -313,8 +313,9 @@ class MailMessage(models.Model):
         else:
             return super(MailMessage, self).message_read(
                 cr, uid, ids=ids, domain=domain,
-                message_unload_ids=message_unload_ids, thread_level=thread_level,
-                context=context, parent_id=parent_id, limit=limit)
+                message_unload_ids=message_unload_ids,
+                thread_level=thread_level, context=context,
+                parent_id=parent_id, limit=limit)
 
     @api.multi
     def set_message_read(self, read, create_missing=True):
