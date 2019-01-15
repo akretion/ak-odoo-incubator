@@ -27,13 +27,13 @@ class StockInventory(models.Model):
         for inventory in self:
             for line in inventory.line_ids:
                 if line.cost_origin == _('Supplier info') and line.reference:
-                    sup_infos = self.env['product.supplierinfo'].search([
+                    sup_info_ref = self.env['product.supplierinfo'].search([
                         ('id', '=', line.reference.id)])
-                    if not sup_infos:
-                        sup_info = line.product_id.seller_ids
-                        if sup_info and sup_info[0].pricelist_ids:
+                    if not sup_info_ref:
+                        sup_infos = line.product_id.seller_ids
+                        if sup_infos and sup_infos[0].pricelist_ids:
                             line.reference = 'product.supplierinfo,%s' % (
-                                sup_info[0].id)
+                                sup_infos[0].id)
                         else:
                             raise UserError(
                                 u"No supplier is specified in the product "
