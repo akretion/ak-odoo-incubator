@@ -6,6 +6,7 @@
 from collections import defaultdict
 
 from openerp import api, models, fields, _
+from openerp.exceptions import Warning as UserError
 import openerp.addons.decimal_precision as dp
 
 
@@ -18,6 +19,26 @@ class StockInventory(models.Model):
     def button_compute_cost(self):
         "Compute or reset"
         self.write({'to_recompute': not self.to_recompute})
+
+    @api.multi
+    def button_recompute_reference(self):
+        "Recompute reference when the supplierinfo "
+        "has been deleted from product"
+        for inventory in self:
+            for line in inventory.line_ids:
+                if line.cost_origin == _('Supplier info') and line.reference:
+                    sup_info_ref = self.env['product.supplierinfo'].search([
+                        ('id', '=', line.reference.id)])
+                    if not sup_info_ref:
+                        sup_infos = line.product_id.seller_ids
+                        if sup_infos and sup_infos[0].pricelist_ids:
+                            line.reference = 'product.supplierinfo,%s' % (
+                                sup_infos[0].id)
+                        else:
+                            raise UserError(
+                                u"No supplier is specified in the product "
+                                u"'%s' ."
+                                % (line.product_id.display_name))
 
 
 class StockInventoryLine(models.Model):
