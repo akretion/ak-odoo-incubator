@@ -3,3 +3,4 @@ product-attribute
 product-variant
 delivery-carrier
 bank-statement-reconcile
+account-invoicing
