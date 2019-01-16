@@ -109,6 +109,7 @@ class ExternalTask(models.Model):
         """ This method will return the partner info in the client database
         If the partner is missing it will be created
         If the partner information are obsolet their will be updated"""
+        self = self.with_context(bin_size=False)
         partner = self.env['res.partner'].search([
             ('support_uid', '=', str(data['uid']))
             ])
