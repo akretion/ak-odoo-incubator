@@ -8,6 +8,7 @@ from openerp import _, api, fields, models
 from openerp.exceptions import Warning as UserError
 from lxml import etree
 from openerp.tools.safe_eval import safe_eval
+from openerp.tools import config
 import requests
 import urllib
 import logging
@@ -359,6 +360,10 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
+        if not config.get('keychain_key_prod'):
+            # If this key is not there, we exclude the Support menu to avoid
+            # connection with ERP support master
+            return
         action_support = self.env.ref(
             'project_api_client.action_helpdesk', False)
         if action_support and action['id'] == action_support.id:
