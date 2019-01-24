@@ -323,6 +323,10 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
+        account = self.env['keychain.account'].sudo().retrieve(
+            [('namespace', '=', 'support')])
+        if not account:
+            return
         action_support = self.env.ref(
             'project_api_client.action_helpdesk', False)
         if action_support and action['id'] == action_support.id:
