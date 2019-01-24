@@ -8,7 +8,6 @@ from openerp import _, api, fields, models
 from openerp.exceptions import Warning as UserError
 from lxml import etree
 from openerp.tools.safe_eval import safe_eval
-from openerp.tools import config
 import requests
 import urllib
 import logging
@@ -360,9 +359,12 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
-        if not config.get('keychain_key_prod'):
-            # If this key is not there, we exclude the Support menu to avoid
-            # connection with ERP support master
+        try:
+            self.env['keychain.account'].sudo().retrieve(
+                [('namespace', '=', 'support')])
+        except Exception:
+            # We can't decode this namespace whatever the cause then
+            # we inactive external action
             return
         action_support = self.env.ref(
             'project_api_client.action_helpdesk', False)
