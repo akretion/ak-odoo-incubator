@@ -359,12 +359,9 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
-        try:
-            self.env['keychain.account'].sudo().retrieve(
-                [('namespace', '=', 'support')])
-        except Exception:
-            # We can't decode this namespace whatever the cause then
-            # we inactive external action
+        account = self.env['keychain.account'].sudo().retrieve(
+            [('namespace', '=', 'support')])
+        if not account:
             return
         action_support = self.env.ref(
             'project_api_client.action_helpdesk', False)

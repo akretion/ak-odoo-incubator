@@ -16,14 +16,11 @@ class IrUiMenu(models.Model):
         :rtype: list(int)
         """
         res = super(IrUiMenu, self).get_user_roots()
-        try:
-            self.env['keychain.account'].sudo().retrieve(
-                [('namespace', '=', 'support')])
-        except Exception:
-            # We can't decode this namespace whatever the cause then
-            # we exclude 'Support' menu
+        account = self.env['keychain.account'].sudo().retrieve(
+            [('namespace', '=', 'support')])
+        if not account:
             support_imd = self.env.ref('project_api_client.external_project')
             menu_domain = [
                 ('parent_id', '=', False), ('id', '!=', support_imd.id)]
-            res = self.search(menu_domain)
+            res = self.search(menu_domain).ids
         return res
