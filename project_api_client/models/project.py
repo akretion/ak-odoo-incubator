@@ -338,17 +338,20 @@ class IrActionActWindows(models.Model):
         action_id = self._context.get('params', {}).get('action')
         _id = self._context.get('active_id')
         model = self._context.get('active_model')
+        url_model = ''
         if _id and model:
             record = self.env[model].browse(_id)
             context['default_origin_name'] = record.display_name
             context['default_origin_model'] = model
+            url_model = '&model=%s' % model
         if action_id and _id:
             path = urllib.urlencode({
                 'view_type': 'form',
                 'action_id': action_id,
                 'id': _id,
                 })
-            context['default_origin_url'] = '%s#%s' % (base_url, path)
+            context['default_origin_url'] = '%s#%s%s' % (
+                base_url, path, url_model)
         action['context'] = context
 
     def _set_default_project(self, action):
