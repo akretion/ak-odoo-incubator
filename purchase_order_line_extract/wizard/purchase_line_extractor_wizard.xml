@@ -7,25 +7,25 @@
             <field name="model">purchase.line.extractor.wizard</field>
             <field name="arch" type="xml">
                 <form string="Purchase Line Extracor">
-                    <group>
-                        <field name="order_reference"/>
-                        <field name="origin"/>
-                        <field name="date_order" required="1"/>
-                        <field name="expected_date" required="1"/>
-                        <field name="picking_type_id" required="1"/>
+                    <!-- Display the button up and down because the po line list can be very large
+                         And it is more practical to have the button at the top and the bottom -->
+                    <header>
+                        <button
+                            name="extract_po_line" string="Create New Order"
+                            type="object" icon="gtk-apply"/>
+                        or
+                        <button
+                            special="cancel" string="Cancel" type="object"
+                            icon="gtk-cancel"/>
+                    </header>
+                    <group col="4">
+                        <field name="order_reference" colspan="4"/>
+                        <field name="origin" colspan="4"/>
+                        <field name="date_order" required="1" colspan="4"/>
+                        <field name="expected_date" required="1" colspan="4"/>
+                        <field name="picking_type_id" required="1" colspan="4"/>
                     </group>
                     <field name="line_ids"/>
-<!--                    <field name="line_ids" readonly="1">-->
-<!--                        <tree>-->
-<!--                            <field name="purchase_id"/>-->
-<!--                            <field name="partner_id"/>-->
-<!--                            <field name="product_id"/>-->
-<!--                            <field name="date_planned"/>-->
-<!--                            <field name="quantity"/>-->
-<!--                            <field name="extract_quantity"/>-->
-<!--                            <field name="product_uom"/>-->
-<!--                        </tree>-->
-<!--                    </field>-->
                     <footer>
                         <button
                             name="extract_po_line" string="Create New Order"
