@@ -8,6 +8,7 @@ from odoo.tools.translate import _
 import datetime
 from odoo.addons.account_move_base_import.parser.file_parser import FileParser
 from csv import Dialect
+# pylint: disable=W7935,W7936
 from _csv import QUOTE_MINIMAL, register_dialect
 
 
@@ -22,7 +23,7 @@ def format_date(val):
     return datetime.datetime.strptime(val, "%Y%m%d")
 
 
-class atos_dialect(Dialect):
+class AtosDialect(Dialect):
     """Describe the usual properties of Excel-generated CSV files."""
     delimiter = '\t'
     quotechar = '"'
@@ -32,7 +33,7 @@ class atos_dialect(Dialect):
     quoting = QUOTE_MINIMAL
 
 
-register_dialect("atos_dialect", atos_dialect)
+register_dialect("atos_dialect", AtosDialect)
 
 
 class AtosFileParser(FileParser):
@@ -49,7 +50,7 @@ class AtosFileParser(FileParser):
         super(AtosFileParser, self).__init__(
             journal, ftype=ftype,
             extra_fields=extra_fields,
-            dialect=atos_dialect, **kwargs)
+            dialect=AtosDialect, **kwargs)
 
     @classmethod
     def parser_for(cls, parser_name):
