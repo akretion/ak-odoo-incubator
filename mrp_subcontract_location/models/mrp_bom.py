@@ -9,30 +9,58 @@ _logger = logging.getLogger(__name__)
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'
 
+    def get_supplier(self):
+        """Supplier of the BOM.
 
-    def get_bom_supplier(self):
+        The seller of the service if any, or main_partner if internalized
+        """
         self.ensure_one()
         if self.service_id:
             supplier_info_bom = self.service_id.seller_ids
             supplier_bom = supplier_info_bom and supplier_info_bom[0].name \
-                           or False
+                or False
         else:
             # Manufactured internally, but I guess we still has to set
             # multi wh routes...
             supplier_bom = self.env.ref('base.main_partner')
         return supplier_bom
 
-    def check_manufacture_buy_route(self, buy_route_id, manuf_route_id):
+    def get_supplied_wh(self):
+        """Warehouse where the OF will take place by default.
+
+        It's the warehouse of the supplier of the service of the BOM
+        """
         self.ensure_one()
-        product = self.product_tmpl_id
-        product_route_ids = product.route_ids.ids
-        route_vals = []
-        if buy_route_id in product_route_ids:
-            route_vals.append((3, buy_route_id, 0))
-        if not manuf_route_id in product_route_ids:
-            route_vals.append((4, manuf_route_id, 0))
-        if route_vals:
-            product.write({'route_ids': route_vals})
+        wh_obj = self.env['stock.warehouse']
+        supplier_bom = self.get_supplier()
+        if not supplier_bom:
+            _logger.info("error : no supplier for bom %s" % self.id)
+            return
+        supplied_wh = wh_obj.search(
+            [('partner_id', '=', supplier_bom.id)], limit=1)
+        if not supplied_wh:
+            _logger.info("error : no wh found for supplier %s"
+                         % supplier_bom.id)
+            return
+        return supplied_wh
+
+    @api.multi
+    def ensure_manufacture_route(self):
+        """Add manufacture and remove buy route on product."""
+        manuf_route_id = self.env.ref('mrp.route_warehouse0_manufacture').id
+        buy_route_id = self.env.ref('purchase.route_warehouse0_buy').id
+        for bom in self:
+            product = bom.product_tmpl_id
+            product_route_ids = product.route_ids.ids
+            route_vals = []
+            if buy_route_id in product_route_ids:
+                # remove buy from product route
+                route_vals.append((3, buy_route_id, 0))
+            if manuf_route_id not in product_route_ids:
+                # adds manufacture from product_route
+                route_vals.append((4, manuf_route_id, 0))
+            if route_vals:
+                product.write({'route_ids': route_vals})
 
     @api.model
     def compute_product_routes_cron(self):
@@ -41,28 +69,22 @@ class MrpBom(models.Model):
 
     def check_and_set_product_routes(self):
         """
-            Recompute inter warehouse routes for all components of the bom
+            Recompute inter warehouse routes for all boms.
+
+        Buy and Manufcature routes should be set correctly on each product.
+        For manufactured products, vendors should be set on the service
+        This function will add needing inter warehouse routes.
         """
         manuf_route_id = self.env.ref('mrp.route_warehouse0_manufacture').id
-        buy_route_id = self.env.ref('purchase.route_warehouse0_buy').id
-        wh_obj = self.env['stock.warehouse']
         route_obj = self.env['stock.location.route']
         for bom in self:
-            bom.check_manufacture_buy_route(buy_route_id, manuf_route_id)
-            supplier_bom = bom.get_bom_supplier()
-            if not supplier_bom:
-                _logger.info("error : no supplier for bom %s" % bom.id)
-                continue
-            supplied_wh = wh_obj.search(
-                [('partner_id', '=', supplier_bom.id)], limit=1)
-            if not supplied_wh:
-                _logger.info("error : no wh found for supplier %s"
-                             % supplier_bom.id)
-                continue
+            # TODO: shall we do that ?
+            bom.ensure_manufacture_route()
+            supplied_wh = bom.get_supplied_wh()
             for line in bom.bom_line_ids:
                 product = line.product_id
                 product_routes = product.route_ids
-                if not manuf_route_id in product_routes.ids:
+                if manuf_route_id not in product_routes.ids:
                     # Product must be bought, ignore it
                     continue
                 line_bom = product.bom_ids and product.bom_ids[0] or False
@@ -70,19 +92,7 @@ class MrpBom(models.Model):
                 if not line_bom:
                     _logger.info("error : no bom found for component %s from "
                                  "bom %s" % (product.default_code, bom.id,))
-                line_supplier = line_bom.get_bom_supplier()
-                # Config error, raise something?
-                if not line_supplier:
-                    print line_bom.product_id.name
-                    continue
-                    _logger.info("error : no supplier for bom %s"
-                                 % line_bom.id)
-                supply_wh = wh_obj.search(
-                    [('partner_id', '=', line_supplier.id)], limit=1)
-                if not supply_wh:
-                    _logger.info("error : no wh found for supplier %s"
-                                 % line_supplier.id)
-                    continue
+                supply_wh = line_bom.get_supplied_wh()
                 # Product and raw material are manufactured in the same wh
                 # no need for inter wh routes.
                 if supply_wh == supplied_wh:
@@ -126,4 +136,4 @@ class MrpBom(models.Model):
                         ]
                         prod_vals['route_ids'] += remove_routes
                     prod_vals['route_ids'].append((4, route.id, 0))
-                    product.write(prod_vals)  
+                    product.write(prod_vals)
