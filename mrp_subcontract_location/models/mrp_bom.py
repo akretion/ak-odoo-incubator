@@ -81,6 +81,8 @@ class MrpBom(models.Model):
             # TODO: shall we do that ?
             bom.ensure_manufacture_route()
             supplied_wh = bom.get_supplied_wh()
+            if not supplied_wh:
+                continue
             for line in bom.bom_line_ids:
                 product = line.product_id
                 product_routes = product.route_ids
@@ -93,6 +95,8 @@ class MrpBom(models.Model):
                     _logger.info("error : no bom found for component %s from "
                                  "bom %s" % (product.default_code, bom.id,))
                 supply_wh = line_bom.get_supplied_wh()
+                if not supply_wh:
+                    continue
                 # Product and raw material are manufactured in the same wh
                 # no need for inter wh routes.
                 if supply_wh == supplied_wh:
