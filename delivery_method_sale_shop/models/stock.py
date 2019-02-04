@@ -38,7 +38,8 @@ class StockPicking(models.Model):
                 'At least 1 sale_shop_method should be found %s %s' %
                 (shop, method.id)
             )
-            raise UserError("Shop / Account / Delivery not well configured")
+            raise UserError("Shop / Account / Delivery not well configured \
+                             for picking %s" % self.name)
 
         accounts = retrieve(
             [
@@ -47,7 +48,8 @@ class StockPicking(models.Model):
             ])
         if len(accounts) != 1:
             _logger.debug('Searching an account for %s' % shop)
-            raise UserError("No account or multiple accounts found based on the shop")
+            raise UserError("No account or multiple accounts found based on \
+                             the shop, for picking %s" % self.name)
 
         return accounts[0]
 
