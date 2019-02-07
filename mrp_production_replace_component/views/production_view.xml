@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+<record id="mrp_production_form_view" model="ir.ui.view">
+    <field name="model">mrp.production</field>
+    <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+    <field name="arch" type="xml">
+        <xpath expr="//header/button[@name='button_unreserve']" position="after">
+            <button name="%(replace_component_transient_action)d" string="Replace component"
+                    attrs="{'invisible': ['|', ('unreserve_visible', '=', True), ('state', '!=', 'confirmed')]}"
+                    type="action"/>
+        </xpath>
+        <xpath expr="//button[@name='%(mrp.action_change_production_qty)d']" position="attributes">
+            <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ('confirmed')),
+                                                        ('id', '=', False)]}</attribute>
+        </xpath>
+   </field>
+</record>
+
+</odoo>
