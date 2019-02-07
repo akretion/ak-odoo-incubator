@@ -9,7 +9,7 @@
         <xpath expr="//header/button[@name='button_unreserve']" position="after">
             <button name="%(replace_component_transient_action)d" string="Replace component"
                     attrs="{'invisible': ['|', ('unreserve_visible', '=', True), ('state', '!=', 'confirmed')]}"
-                    type="action"/>
+                    type="action" help="Allows to substitute raw materials"/>
         </xpath>
         <xpath expr="//button[@name='%(mrp.action_change_production_qty)d']" position="attributes">
             <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ('confirmed')),
