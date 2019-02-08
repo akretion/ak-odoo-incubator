@@ -85,7 +85,7 @@ class Be2BillPaypalAmexeParser(Be2BillFileParser):
         res = self._parse_csv()
         self._moves = []
         for row in res:
-            if row['EXECCODE'] == '0':
+            if row['EXECCODE'] in ('0', '0000'):
                 self._moves.append(row)
         if self._moves:
             self.move_date = self._moves[0]['DATE']
@@ -125,6 +125,6 @@ class Be2BillCBFileParser(Be2BillFileParser):
         for row in self.result_row_list:
             if row['DATE'] > self.move_date:
                 self.move_date = row.get('DATE')
-            if row['EXECCODE'] == '0':
+            if row['EXECCODE'] in ('0', '0000'):
                 final_rows.append(row)
         self.result_row_list = final_rows
