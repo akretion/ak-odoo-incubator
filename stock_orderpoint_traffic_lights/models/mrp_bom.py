@@ -30,8 +30,6 @@ class MrpBom(models.Model):
         help="Follows an MTO Pull Rule",
         compute="_compute_mto_rule",
     )
-    cyclic_path = []  # not stored, used to detect cyclic dep
-    # and race condition with @api.depends
 
     def _get_search_buffer_domain(self):
         product = self.product_id or \
@@ -63,9 +61,10 @@ class MrpBom(models.Model):
     def _get_longest_path(self):
         if not self.bom_line_ids:
             return 0.0
-        if self.product_tmpl_id.id in self.cyclic_path:
+        cyclic_path = self.env.context.get('check_cyclic_path', [])
+        if self.product_tmpl_id.id in cyclic_path:
             raise UserError("Cyclic dependency")
-        self.cyclic_path.append(self.product_tmpl_id.id)
+        cyclic_path.append(self.product_tmpl_id.id)
         paths = [0] * len(self.bom_line_ids)
         i = 0
         for line in self.bom_line_ids:
@@ -79,11 +78,11 @@ class MrpBom(models.Model):
                     lambda bom: bom.location_id == location) or \
                     line_boms.filtered(lambda bom: not bom.location_id)
                 if bom:
-                    self.cyclic_path.append(bom[0].product_tmpl_id.id)
                     produce_delay = bom[0].product_id.produce_delay or \
                         bom[0].product_tmpl_id.produce_delay
                     paths[i] += produce_delay
-                    paths[i] += bom[0]._get_longest_path()
+                    paths[i] += bom[0].with_context(
+                        check_cyclic_path=cyclic_path)._get_longest_path()
                 else:
                     _logger.info(
                         "ddmrp (dlt): Product %s has no BOM for location "
@@ -105,9 +104,11 @@ class MrpBom(models.Model):
         """Computes the Decoupled Lead Time exploding all the branches of the
         BOM until a buffered position and then selecting the greatest."""
         self.ensure_one()
+        cyclic_path = [self.product_tmpl_id.id]
         dlt = self.product_id.produce_delay or \
             self.product_tmpl_id.produce_delay
-        dlt += self._get_longest_path()
+        dlt += self.with_context(
+            check_cyclic_path=cyclic_path)._get_longest_path()
         return dlt
 
     @api.depends(
