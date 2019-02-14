@@ -17,9 +17,9 @@ env:
 
   matrix:
   - TESTS="0" LINT_CHECK="1"
-  - ODOO_REPO="OCA/OCB" EXCLUDE='base_jsonify'
-  - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE='base_jsonify'
-  - UNIT_TEST="1" ODOO_REPO="odoo/odoo" EXCLUDE='base_jsonify'
+  - ODOO_REPO="OCA/OCB" EXCLUDE='base_jsonify,public_price_keeper'
+  - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE='base_jsonify,public_price_keeper'
+  - UNIT_TEST="1" ODOO_REPO="odoo/odoo" EXCLUDE='base_jsonify,public_price_keeper'
 
 virtualenv:
   system_site_packages: true
