@@ -3,9 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
-from odoo import api, fields, models
-from odoo.exceptions import UserError
-
+from openerp import api, fields, models
 _logger = logging.getLogger(__name__)
 
 
@@ -61,10 +59,6 @@ class MrpBom(models.Model):
     def _get_longest_path(self):
         if not self.bom_line_ids:
             return 0.0
-        cyclic_path = self.env.context.get('check_cyclic_path', [])
-        if self.product_tmpl_id.id in cyclic_path:
-            raise UserError("Cyclic dependency")
-        cyclic_path.append(self.product_tmpl_id.id)
         paths = [0] * len(self.bom_line_ids)
         i = 0
         for line in self.bom_line_ids:
@@ -81,8 +75,7 @@ class MrpBom(models.Model):
                     produce_delay = bom[0].product_id.produce_delay or \
                         bom[0].product_tmpl_id.produce_delay
                     paths[i] += produce_delay
-                    paths[i] += bom[0].with_context(
-                        check_cyclic_path=cyclic_path)._get_longest_path()
+                    paths[i] += bom[0]._get_longest_path()
                 else:
                     _logger.info(
                         "ddmrp (dlt): Product %s has no BOM for location "
@@ -104,11 +97,9 @@ class MrpBom(models.Model):
         """Computes the Decoupled Lead Time exploding all the branches of the
         BOM until a buffered position and then selecting the greatest."""
         self.ensure_one()
-        cyclic_path = [self.product_tmpl_id.id]
         dlt = self.product_id.produce_delay or \
             self.product_tmpl_id.produce_delay
-        dlt += self.with_context(
-            check_cyclic_path=cyclic_path)._get_longest_path()
+        dlt += self._get_longest_path()
         return dlt
 
     @api.depends(
