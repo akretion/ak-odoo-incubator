@@ -4,7 +4,7 @@
 
 ======================
 Stock Picking Printed
-=====================
+======================
 
 This module add the field "date_printed" on out picking.
 In order to follow what have been printed and so to know what is in preparation
