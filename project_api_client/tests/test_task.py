@@ -215,7 +215,8 @@ class TestTask(TransactionCase):
 #            self._activate_mock(
 #                m, 'test_read_support_author', 'read_support_author')
 #            if LEARN:
-#                task_id = self._get_task_ids(['project_api.project_task_3'])[0]
+#                task_id =\
+#                    self._get_task_ids(['project_api.project_task_3'])[0]
 #                messages = self.env['mail.message'].search([
 #                    ('res_id', '=', task_id),
 #                    ('model', '=', 'project.task'),

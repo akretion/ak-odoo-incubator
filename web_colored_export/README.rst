@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==============
+====================
 Web Colored Export
-==============
+====================
 
 This module will add a background color for excel export.
 The background color will alternate between white and gray

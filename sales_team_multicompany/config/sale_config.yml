@@ -6,4 +6,3 @@
     if not config.group_multi_salesteams:
         config.write({'group_multi_salesteams': True})
         config.execute()
-        

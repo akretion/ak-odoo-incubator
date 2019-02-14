@@ -5,7 +5,6 @@
 {
     'name': 'Demo Sales',
     'summary': 'Sales demo mini',
-    'description': 'jeu de démo minimaliste pour faciliter le dev',
     'version': '8.0.1.0.0',
     'author': 'Akretion',
     'maintainer': 'Akretion',
