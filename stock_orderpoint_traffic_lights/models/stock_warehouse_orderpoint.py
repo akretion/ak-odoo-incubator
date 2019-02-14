@@ -70,7 +70,8 @@ class StockWarehouseOrderpoint(models.Model):
             # elif rec.buffer_profile_id.item_type == 'distributed':
             #     rec.dlt = rec.lead_days
             # else:
-                rec.dlt = rec.product_id.dlt
+                rec.dlt = rec.product_id.seller_ids and \
+                    rec.product_id.seller_ids[0].delay or rec.lead_days
 
     dlt = fields.Float(string="Decoupled Lead Time (days)",
                        compute="_compute_dlt")
@@ -102,8 +103,8 @@ class StockWarehouseOrderpoint(models.Model):
         inverse_name="orderpoint_id",
     )
     horizon = fields.Float(string="horizon", help="Number of day to look at")
-    next_need = fields.Date(readonly=True)
-    least_order_date = fields.Date(readonly=True)
+    next_need = fields.Date()
+    least_order_date = fields.Date()
     _order = 'planning_priority_level asc'
 
     @api.multi
