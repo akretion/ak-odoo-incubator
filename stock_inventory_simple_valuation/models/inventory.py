@@ -13,12 +13,9 @@ import openerp.addons.decimal_precision as dp
 class StockInventory(models.Model):
     _inherit = 'stock.inventory'
 
-    to_recompute = fields.Boolean()
-
     @api.one
     def button_compute_cost(self):
-        "Compute or reset"
-        self.write({'to_recompute': not self.to_recompute})
+        self.mapped('line_ids')._compute_product_cost()
 
     @api.multi
     def button_recompute_reference(self):
@@ -59,6 +56,9 @@ class StockInventoryLine(models.Model):
     reference = fields.Reference(
         selection='_select_models', compute='_compute_product_cost',
         store=True)
+    reference_name = fields.Char(
+        compute='_compute_product_cost',
+        store=True)
 
     def _select_models(self):
         models = self.env['ir.model'].search(
@@ -67,7 +67,7 @@ class StockInventoryLine(models.Model):
 
     @api.multi
     @api.depends('product_id', 'product_qty', 'manual_product_cost',
-                 'inventory_id.state', 'inventory_id.to_recompute')
+                 'inventory_id.state')
     def _compute_product_cost(self):
         po_l_obj = self.env['purchase.order.line']
         product_ids = [x.product_id.id for x in self]
@@ -78,10 +78,6 @@ class StockInventoryLine(models.Model):
             product_ids, company=self.env.user.company_id)
         afs_infos = self._get_afs_supplier_info(product_ids)
         for line in self:
-            if line.inventory_id.state not in ('done') and \
-                    not line.inventory_id.to_recompute:
-                line.cost_origin = _("Click on 'Compute cost'")
-                continue
             if not line.inventory_id or not line.product_id:
                 continue
             # get cost from supplier invoice
@@ -134,6 +130,10 @@ class StockInventoryLine(models.Model):
             line.cost_origin = explanation
             if reference:
                 line.reference = reference
+                line.reference_name = line.reference.display_name
+            else:
+                line.reference = False
+                line.reference_name = ''
 
     @api.multi
     @api.depends('calc_product_cost', 'manual_product_cost')
@@ -213,14 +213,18 @@ class StockInventoryLine(models.Model):
     def button_info_origin(self):
         self.ensure_one()
         if self.reference:
-            return {
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': self.reference._model._name,
-                'res_id': self.reference.id,
-                'target': 'new',
-                'name': _("%s: %s: '%s'" % (
-                    self.reference._model._description,
-                    self.product_id.display_name, self.value)),
-            }
+            if not self.reference.exists():
+                raise UserError(_('This record have been deleted'))
+            else:
+                self.reference.check_access_rule('read')
+                return {
+                    'type': 'ir.actions.act_window',
+                    'view_mode': 'form',
+                    'res_model': self.reference._model._name,
+                    'res_id': self.reference.id,
+                    'target': 'new',
+                    'name': _("%s: %s: '%s'" % (
+                        self.reference._model._description,
+                        self.product_id.display_name, self.value)),
+                }
         return False

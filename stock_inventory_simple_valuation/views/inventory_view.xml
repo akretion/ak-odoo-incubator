@@ -8,8 +8,8 @@
         <field name="inherit_id" ref="stock.view_inventory_form"/>
         <field name="arch" type="xml">
             <field name="date" position="after">
-                <button name="button_compute_cost" type="object" 
-                        attrs="{'invisible': [('state', '=', 'done')]}"
+                <button name="button_compute_cost"
+                        type="object"
                         string="Compute cost"/>
                 <button name="button_recompute_reference" type="object"
                         attrs="{'invisible': [('state', '!=', 'done')]}"
@@ -23,9 +23,9 @@
                 <field name="value"/>
                 <button name="button_info_origin" type="object" icon="STOCK_INFO" string="🛈"
                         help="Information Origin"
-                        attrs="{'invisible': [('reference', '=', False)]}"/>
+                        attrs="{'invisible': [('reference_name', '=', False)]}"/>
                 <field name="cost_origin"/>
-                <field name="reference"/>
+                <field name="reference_name"/>
             </xpath>
         </field>
     </record>
