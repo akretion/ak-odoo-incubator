@@ -26,6 +26,12 @@ Allows to replace production orders components while these are not reserved or c
 .. contents::
    :local:
 
+Known issues / Roadmap
+======================
+
+- manage operation_id in created stock move
+- allow to use this feature on several manufacturing orders at one time
+
 Bug Tracker
 ===========
 
