@@ -8,8 +8,11 @@
         <field name="arch" type="xml">
             <form string="Replace component">
                 <sheet>
+                    <group>
+                        <field name="production_id" readonly="1"/>
+                    </group>
                     <group colspan="4" string="Raw materials to remove">
-                        <field name="remove_product_ids" widget="many2many_tags"
+                        <field name="remove_product_ids" widget="many2many_tags" domain="[('id', 'in', remove_product_domain_ids)]"
                                options="{'no_create_edit': True, 'no_create': True}"/>
                     </group>
                     <group col="2">
@@ -18,6 +21,7 @@
                                options="{'no_create_edit': True, 'no_create': True}"/>
                         <field name="product_uom_qty"/>
                         <field name="product_uom_id"/>
+                        <field name="remove_product_domain_ids" invisible="1"/>
                     </group>
                 </sheet>
             <footer>
