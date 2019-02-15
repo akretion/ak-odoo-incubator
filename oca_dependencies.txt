@@ -3,3 +3,4 @@ reporting-engine
 project
 odoo-shopinvader https://github.com/akretion/odoo-shopinvader 10.0
 account-reconcile https://github.com/damdam-s/bank-statement-reconcile 10.0-mig-account_move_transactionid_import
+account-invoice
