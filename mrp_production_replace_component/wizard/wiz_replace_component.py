@@ -54,7 +54,7 @@ class ReplaceComponent(models.TransientModel):
         self.ensure_one()
         routing = False
         if self.production_id.routing_id:
-            routing = self.routing_id
+            routing = self.production_id.routing_id
         if routing and routing.location_id:
             source_location = routing.location_id
         else:

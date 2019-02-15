@@ -8,7 +8,7 @@
     'version': '12.0.0.0.0',
     'author': 'Akretion',
     'maintainer': 'Akretion',
-    'category': 'Manufatcuring',
+    'category': 'Manufacturing',
     'depends': [
         'mrp',
     ],
