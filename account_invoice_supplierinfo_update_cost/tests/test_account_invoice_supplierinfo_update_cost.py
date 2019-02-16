@@ -19,6 +19,7 @@ class Tests(TransactionCase):
         self.product1 = self.env.ref('product.product_product_4b')
         self.product2 = self.env.ref('product.product_delivery_01')
         self.prod_account = self.env.ref('account.demo_coffee_machine_account')
+        unit = self.env.ref('product.product_uom_unit')
 
         self.invoice = self.invoice_model.create(
             {'journal_id': self.journal.id,
@@ -31,11 +32,13 @@ class Tests(TransactionCase):
                                           'name': 'iPad Retina Display',
                                           'quantity': 10.0,
                                           'price_unit': 400.0,
+                                          'uom_id': unit.id,
                                           'account_id': self.prod_account.id,
                                           }),
                                   (0, 0, {'name': 'line without product',
                                           'quantity': 1.0,
                                           'price_unit': 35.0,
+                                          'uom_id': unit.id,
                                           'account_id': self.prod_account.id,
                                           }),
                                   (0, 0, {'product_id': self.product2.id,
@@ -43,6 +46,7 @@ class Tests(TransactionCase):
                                           ' to update',
                                           'quantity': 1.0,
                                           'price_unit': 10.0,
+                                          'uom_id': unit.id,
                                           'account_id': self.prod_account.id,
                                           }),
                                   ],

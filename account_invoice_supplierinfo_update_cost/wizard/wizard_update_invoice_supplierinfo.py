@@ -14,7 +14,8 @@ class WizardUpdateInvoiceSupplierinfo(models.TransientModel):
     @api.multi
     def update_supplierinfo(self):
         super(WizardUpdateInvoiceSupplierinfo, self).update_supplierinfo()
-        if self.update_cost:
-            for line in self.line_ids:
-                if line.product_id:
-                    line.product_id.standard_price = line.new_price
+        for record in self:
+            if record.update_cost:
+                for line in record.line_ids:
+                    if line.product_id:
+                        line.product_id.standard_price = line.new_price
