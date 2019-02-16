@@ -13,4 +13,4 @@ class StockPickingWave(models.Model):
         if not pickings:
             raise UserError(_('Nothing to print.'))
         return self.env["report"].get_action(
-                self, 'stock_picking_wave_report.report_picking_wave')
+            self, 'stock_picking_wave_report.report_picking_wave')
