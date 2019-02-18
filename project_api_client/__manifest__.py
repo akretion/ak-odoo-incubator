@@ -18,9 +18,10 @@
         'mail',
     ],
     'data': [
+        'security/group.xml',
+        'security/ir.model.access.csv',
         'views/project_view.xml',
         'data/partner_data.xml',
-        'security/ir.model.access.csv',
     ],
     'demo': [
         'demo/keychain_demo.xml',
