@@ -20,11 +20,16 @@
                 <field
                     name="author_id"
                     domain="['|', ('parent_id', '=', partner_id), ('user_ids', '!=', False)]"/>
+                <field name="assignee_customer_id"/>
             </field>
             <field name="tag_ids" position="after">
                 <field name="origin_url" readonly="1" widget="url" string="Url"/>
                 <field name="origin_db" readonly="1" string="DB"/>
                 <field name="origin_name" readonly="1" string="Record name"/>
+            </field>
+            <field name="description" position="after">
+                <separator string="Technical Description" colspan="4"/>
+                <field name="technical_description"/>
             </field>
         </field>
     </record>

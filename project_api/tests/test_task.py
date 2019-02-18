@@ -108,6 +108,13 @@ class TestTask(TransactionComponentCase):
                         ('parent_id', '=', self.partner.id),
                         ])
                     self.assertEqual(len(contact), 1)
+                elif case == 'test_write__assigne':
+                    # check that two contact customer have been created
+                    contact = self.env['res.partner'].search([
+                        ('customer_uid', '!=', False),
+                        ('parent_id', '=', self.partner.id),
+                        ])
+                    self.assertEqual(len(contact), 2)
                 else:
                     self._check_output(case, result)
             self.env.cr.rollback()
