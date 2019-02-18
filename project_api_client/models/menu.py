@@ -3,6 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, api
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class IrUiMenu(models.Model):
@@ -19,6 +21,7 @@ class IrUiMenu(models.Model):
         account = self.env['keychain.account'].sudo().retrieve(
             [('namespace', '=', 'support')])
         if not account:
+            _logger.error('No keychain support key specify, hide the menu')
             support_imd = self.env.ref('project_api_client.external_project')
             menu_domain = [
                 ('parent_id', '=', False), ('id', '!=', support_imd.id)]
