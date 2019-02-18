@@ -261,6 +261,9 @@ class ExternalTask(models.Model):
                     name='project_%s' % project_id,
                     domain="[('project_id', '=', %s)]" % project_id)
                 node.append(elem)
+            node = doc.xpath("//filter[@name='my_task']")[0]
+            node.attrib['domain'] = "[('assignee_id.customer_uid', '=', %s)]"\
+                % self.env.user.partner_id.id
             res['arch'] = etree.tostring(doc, pretty_print=True)
         return res
 
