@@ -38,6 +38,8 @@ class TestTask(TransactionCase):
     def setUp(self):
         super(TestTask, self).setUp()
         self.env.user.image = self._get_image('partner-customer-image.png')
+        self.demo_user = self.env.ref('base.user_demo')
+        self.demo_user.image = self._get_image('partner-customer-image.png')
 
     def _get_method(self):
         return self._testMethodName.split('__')[0].replace('test_', '')
@@ -178,6 +180,26 @@ class TestTask(TransactionCase):
                 task_ids = DATA[self._testMethodName]['input']['ids']
             res = self.env['external.task'].browse(task_ids).write({
                 'description': 'Duplicated task of issue #112',
+                })
+            request_input = m.request_history[0].json()
+            if LEARN:
+                self._update_json_data(request_input)
+            else:
+                self._check_input(request_input)
+                self.assertEqual(res, True)
+
+    def test_write__assignee(self):
+        with requests_mock.Mocker() as m:
+            self._activate_mock(m)
+            if LEARN:
+                task_ids = self._get_task_ids([
+                    'project_api.project_task_1',
+                    'project_api.project_task_2',
+                    ])
+            else:
+                task_ids = DATA[self._testMethodName]['input']['ids']
+            res = self.env['external.task'].browse(task_ids).write({
+                'assignee_id': self.demo_user.partner_id.id,
                 })
             request_input = m.request_history[0].json()
             if LEARN:
