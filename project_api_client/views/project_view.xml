@@ -13,7 +13,10 @@
                         <group col="12" attrs="{'invisible': [('id', '=', False)]}">
                             <group>
                                 <field name="project_id" readonly="1"/>
-                                <field name="assignee_id" readonly="1"/>
+                                <field
+                                    name="assignee_id"
+                                    readonly="1"
+                                    domain="[('user_ids', '!=', False)]"/>
                             </group>
                             <group>
                                 <field name="author_id" readonly="1"/>

@@ -141,11 +141,18 @@ class ExternalTask(models.Model):
 
     @api.multi
     def write(self, vals):
-        return self._call_odoo('write', {
+        params = {
             'ids': self.ids,
             'vals': vals,
             'author': self._get_author_info(),
-            })
+            }
+        if vals.get('assignee_id'):
+            partner = self.env['res.partner'].browse(vals['assignee_id'])
+            if not partner.user_ids:
+                raise UserError(_('You can only assign ticket to your users'))
+            else:
+                params['assignee'] = self._get_partner_info(partner)
+        return self._call_odoo('write', params)
 
     @api.multi
     def unlink(self):
@@ -205,7 +212,9 @@ class ExternalTask(models.Model):
         return result
 
     def _get_author_info(self):
-        partner = self.env.user.partner_id
+        return self._get_partner_info(self.env.user.partner_id)
+
+    def _get_partner_info(self, partner):
         return {
             'uid': partner.id,
             'name': partner.name,
