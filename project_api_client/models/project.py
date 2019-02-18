@@ -355,10 +355,15 @@ class IrActionActWindows(models.Model):
         action['context'] = context
 
     def _set_default_project(self, action):
-        projects = self.env['external.task']._get_select_project()
-        if projects:
-            key = 'search_default_project_%s' % projects[0][0]
-            action['context'] = {key: 1}
+        # we add a try/except to avoid raising a pop-up want odoo server
+        # is down
+        try:
+            projects = self.env['external.task']._get_select_project()
+            if projects:
+                key = 'search_default_project_%s' % projects[0][0]
+                action['context'] = {key: 1}
+        except Exception:
+            _logger.warning('Fail to add the default project')
 
     @api.model
     def _update_action(self, action):
