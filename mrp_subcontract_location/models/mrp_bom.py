@@ -34,10 +34,12 @@ class MrpBom(models.Model):
         wh_obj = self.env['stock.warehouse']
         supplier_bom = self.get_supplier()
         if not supplier_bom:
-            _logger.info("error : no supplier for bom %s" % self.id)
+            _logger.warning("error : no supplier for bom %s" % self.id)
             return
         supplied_wh = wh_obj.search(
-            [('partner_id', '=', supplier_bom.id)], limit=1)
+            ('partner_id', 'in',
+                (supplier_bom | supplier_bom.child_ids).ids),
+            limit=1)
         if not supplied_wh:
             _logger.info("error : no wh found for supplier %s"
                          % supplier_bom.id)
@@ -92,8 +94,11 @@ class MrpBom(models.Model):
                 line_bom = product.bom_ids and product.bom_ids[0] or False
                 # Config error, raise something?
                 if not line_bom:
-                    _logger.info("error : no bom found for component %s from "
-                                 "bom %s" % (product.default_code, bom.id,))
+                    _logger.warning(
+                        "error : no bom found for component %s from "
+                        "bom %s" % (product.default_code, bom.id,)
+                    )
+                    continue
                 supply_wh = line_bom.get_supplied_wh()
                 if not supply_wh:
                     continue
@@ -120,8 +125,9 @@ class MrpBom(models.Model):
                         ('supplied_wh_id', '=', supplied_wh.id),
                         ('supplier_wh_id', '=', supply_wh.id)])
                     if not route:
-                        _logger.info("resupply route problem for wh %s"
-                                     % supplied_wh.id)
+                        _logger.warning(
+                            "resupply route problem for wh %s"
+                            % supplied_wh.id)
                         continue
                 if route.id not in product_routes.ids:
                     # Check if there is already an interwh route bringing the
