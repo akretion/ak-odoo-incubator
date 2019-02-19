@@ -28,11 +28,25 @@ class ProjectTask(models.Model):
         related='project_id.partner_id',
         readonly=True)
     user_id = fields.Many2one(default=False)
-    assignee_id = fields.Many2one('res.partner', related='user_id.partner_id')
+    assignee_id = fields.Many2one(
+        'res.partner',
+        compute='_compute_assignee',
+        store=True)
+    assignee_customer_id = fields.Many2one(
+        'res.partner',
+        string='Assignee To Customer',
+        track_visibility='always')
     origin_name = fields.Char()
     origin_url = fields.Char()
     origin_db = fields.Char()
     origin_model = fields.Char()
+    technical_description = fields.Html()
+
+    @api.depends('user_id', 'assignee_customer_id')
+    def _compute_assignee(self):
+        for record in self:
+            record.assignee_id =\
+                record.assignee_customer_id or record.user_id.partner_id
 
     @api.depends('stage_id')
     def _compute_stage_name(self):
@@ -43,7 +57,7 @@ class ProjectTask(models.Model):
         for task in self:
             stages = self.env['project.task.type'].search([
                 ('project_ids', 'in', [task.project_id.id]),
-                ('name', '=', self.stage_name)])
+                ('name', '=', task.stage_name)])
             if stages:
                 task.stage_id = stages[0].id
 
@@ -73,6 +87,9 @@ class ProjectTask(models.Model):
             updated_fields, values=values)
         if values.get('author_id'):
             self.message_subscribe([values['author_id']], force=False)
+        if values.get('assignee_customer_id'):
+            self.message_subscribe(
+                [values['assignee_customer_id']], force=False)
         return True
 
     def message_get_suggested_recipients(self):

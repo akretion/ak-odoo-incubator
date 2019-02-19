@@ -138,11 +138,18 @@ class ExternalTask(models.Model):
 
     @api.multi
     def write(self, vals):
-        return self._call_odoo('write', {
+        params = {
             'ids': self.ids,
             'vals': vals,
             'author': self._get_author_info(),
-            })
+            }
+        if vals.get('assignee_id'):
+            partner = self.env['res.partner'].browse(vals['assignee_id'])
+            if not partner.user_ids:
+                raise UserError(_('You can only assign ticket to your users'))
+            else:
+                params['assignee'] = self._get_partner_info(partner)
+        return self._call_odoo('write', params)
 
     @api.multi
     def unlink(self):
@@ -202,7 +209,9 @@ class ExternalTask(models.Model):
         return result
 
     def _get_author_info(self):
-        partner = self.env.user.partner_id
+        return self._get_partner_info(self.env.user.partner_id)
+
+    def _get_partner_info(self, partner):
         return {
             'uid': partner.id,
             'name': partner.name,
@@ -252,6 +261,9 @@ class ExternalTask(models.Model):
                     name='project_%s' % project_id,
                     domain="[('project_id', '=', %s)]" % project_id)
                 node.append(elem)
+            node = doc.xpath("//filter[@name='my_task']")[0]
+            node.attrib['domain'] = "[('assignee_id.customer_uid', '=', %s)]"\
+                % self.env.user.partner_id.id
             res['arch'] = etree.tostring(doc, pretty_print=True)
         return res
 
@@ -316,13 +328,22 @@ class IrActionActWindows(models.Model):
         action['context'] = context
 
     def _set_default_project(self, action):
-        projects = self.env['external.task']._get_select_project()
-        if projects:
-            key = 'search_default_project_%s' % projects[0][0]
-            action['context'] = {key: 1}
+        # we add a try/except to avoid raising a pop-up want odoo server
+        # is down
+        try:
+            projects = self.env['external.task']._get_select_project()
+            if projects:
+                key = 'search_default_project_%s' % projects[0][0]
+                action['context'] = {key: 1}
+        except Exception:
+            _logger.warning('Fail to add the default project')
 
     @api.model
     def _update_action(self, action):
+        account = self.env['keychain.account'].sudo().retrieve(
+            [('namespace', '=', 'support')])
+        if not account:
+            return
         action_support = self.env.ref(
             'project_api_client.action_helpdesk', False)
         if action_support and action['id'] == action_support.id:

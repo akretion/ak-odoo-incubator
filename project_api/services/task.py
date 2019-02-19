@@ -134,16 +134,18 @@ class ExternalTaskService(Component):
             force_message_author_id=partner.id).create(params)
         return task.id
 
-    def write(self, ids, vals, author):
-        partner = self._get_partner(author)
+    def write(self, ids, vals, author, assignee=None):
+        author = self._get_partner(author)
         tasks = self.env['project.task'].search(
             [('id', 'in', ids),
              ('project_id.partner_id', '=', self.partner.id)])
         if len(tasks) < len(ids):
             raise AccessError(
                 _('You do not have the right to modify this records'))
+        if assignee:
+            vals['assignee_customer_id'] = self._get_partner(assignee).id
         return tasks.with_context(
-            force_message_author_id=partner.id).write(vals)
+            force_message_author_id=author.id).write(vals)
 
     def message_format(self, ids):
         allowed_task_ids = self.env['project.task'].search([
@@ -317,7 +319,8 @@ class ExternalTaskService(Component):
                     'project_id': {'type': 'integer'},
                 }
             },
-            'author': self._partner_validator()
+            'author': self._partner_validator(),
+            'assignee': self._partner_validator()
         }
 
     def _validator_message_format(self):
