@@ -10,12 +10,17 @@
                             <field name="id"/> -
                             <field name="name" placeholder="Task summary..." class="oe_inline" colspan="4"/>
                         </h1>
-                        <group attrs="{'invisible': [('id', '=', False)]}">
+                        <group col="12" attrs="{'invisible': [('id', '=', False)]}">
                             <group>
                                 <field name="project_id" readonly="1"/>
+                                <field
+                                    name="assignee_id"
+                                    readonly="1"
+                                    domain="[('user_ids.active', '=', True)]"/>
+                            </group>
+                            <group>
                                 <field name="author_id" readonly="1"/>
                                 <field name="create_date" readonly="1"/>
-                                <field name="assignee_id" readonly="1"/>
                             </group>
                             <group>
                                 <field name="origin_url" readonly="1" widget="url" string="Url"/>
@@ -44,6 +49,20 @@
             </field>
         </record>
 
+        <record id="view_external_task_manager_form" model="ir.ui.view">
+            <field name="model">external.task</field>
+            <field name="inherit_id" ref="view_external_task_form"/>
+            <field name="groups_id" eval="[(4, ref('project_api_client.group_support_manager'))]"/>
+            <field name="arch" type="xml">
+                <field name="project_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="assignee_id" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+            </field>
+        </record>
+
         <record id="view_external_task_tree" model="ir.ui.view">
             <field name="model">external.task</field>
             <field name="arch" type="xml">
@@ -58,7 +77,11 @@
             <field name="arch" type="xml">
                 <search string="External Task">
                     <field name="name"/>
+                    <separator/>
+                    <filter string="My task" name="my_task"/>
+                    <separator/>
                     <filter string="Stage" context="{'group_by': 'stage_name'}" icon="terp-partner"/>
+                    <separator/>
                 </search>
             </field>
         </record>
