@@ -34,7 +34,8 @@ class ProjectTask(models.Model):
         store=True)
     assignee_customer_id = fields.Many2one(
         'res.partner',
-        string='Assignee To Customer')
+        string='Assignee To Customer',
+        track_visibility='always')
     origin_name = fields.Char()
     origin_url = fields.Char()
     origin_db = fields.Char()
@@ -86,6 +87,9 @@ class ProjectTask(models.Model):
             updated_fields, values=values)
         if values.get('author_id'):
             self.message_subscribe([values['author_id']], force=False)
+        if values.get('assignee_customer_id'):
+            self.message_subscribe(
+                [values['assignee_customer_id']], force=False)
         return True
 
     def message_get_suggested_recipients(self):
