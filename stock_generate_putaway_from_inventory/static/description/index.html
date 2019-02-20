@@ -373,10 +373,12 @@ ul.auto-toc {
 <div class="contents local topic" id="contents">
 <ul class="simple">
 <li><a class="reference internal" href="#usage" id="id1">Usage</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="id2">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="id3">Credits</a><ul>
-<li><a class="reference internal" href="#contributors" id="id4">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="id5">Maintainers</a></li>
+<li><a class="reference internal" href="#known-issues-roadmap" id="id2">Known issues / Roadmap</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="id3">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="id4">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="id5">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="id6">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="id7">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -385,13 +387,18 @@ ul.auto-toc {
 <h1><a class="toc-backref" href="#id1">Usage</a></h1>
 <p>Before using this module you should specify a putaway strategy on the stock location
 you want to generate putaway for. You can find similar instructions on the
-stock_putaway_product module which you have installed.</p>
+stock_putaway_product module which is a dependency.</p>
 <p>From a validated stock adjustment, use action -&gt; Generate putaway per product.</p>
 <p>Once this is done, the products of the stock adjustment without putaway locations
 will have one of the strategy defined on the inventory’s location.</p>
 </div>
+<div class="section" id="known-issues-roadmap">
+<h1><a class="toc-backref" href="#id2">Known issues / Roadmap</a></h1>
+<p>At the moment, the module only creates putaway locations and does not update
+the existing ones. It could be interesing to do so but can be destructive as well</p>
+</div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#id2">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#id3">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/akretion/ak-odoo-incubator/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
@@ -399,13 +406,19 @@ If you spotted it first, help us smashing it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#id3">Credits</a></h1>
+<h1><a class="toc-backref" href="#id4">Credits</a></h1>
+<div class="section" id="authors">
+<h2><a class="toc-backref" href="#id5">Authors</a></h2>
+<ul class="simple">
+<li>Akretion</li>
+</ul>
+</div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#id4">Contributors</a></h2>
+<h2><a class="toc-backref" href="#id6">Contributors</a></h2>
 <p>Pierrick Brun &lt;<a class="reference external" href="mailto:pierrick.brun&#64;akretion.com">pierrick.brun&#64;akretion.com</a>&gt; (akretion.com)</p>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#id5">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#id7">Maintainers</a></h2>
 <p>This module is part of the <a class="reference external" href="https://github.com/akretion/ak-odoo-incubator/tree/10.0/stock_generate_putaway_from_inventory">akretion/ak-odoo-incubator</a> project on GitHub.</p>
 <p>You are welcome to contribute.</p>
 </div>

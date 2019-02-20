@@ -31,12 +31,18 @@ Usage
 
 Before using this module you should specify a putaway strategy on the stock location
 you want to generate putaway for. You can find similar instructions on the 
-stock_putaway_product module which you have installed.
+stock_putaway_product module which is a dependency.
 
 From a validated stock adjustment, use action -> Generate putaway per product.
 
 Once this is done, the products of the stock adjustment without putaway locations 
 will have one of the strategy defined on the inventory's location.
+
+Known issues / Roadmap
+======================
+
+At the moment, the module only creates putaway locations and does not update
+the existing ones. It could be interesing to do so but can be destructive as well
 
 Bug Tracker
 ===========
@@ -51,6 +57,11 @@ Do not contact contributors directly about support or help with technical issues
 Credits
 =======
 
+Authors
+~~~~~~~
+
+* Akretion
+
 Contributors
 ~~~~~~~~~~~~
 
@@ -59,9 +70,6 @@ Pierrick Brun <pierrick.brun@akretion.com> (akretion.com)
 Maintainers
 ~~~~~~~~~~~
 
-
-
 This module is part of the `akretion/ak-odoo-incubator <https://github.com/akretion/ak-odoo-incubator/tree/10.0/stock_generate_putaway_from_inventory>`_ project on GitHub.
-
 
 You are welcome to contribute.
