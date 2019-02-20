@@ -36,9 +36,10 @@ class MrpBom(models.Model):
         if not supplier_bom:
             _logger.warning("error : no supplier for bom %s" % self.id)
             return
+
         supplied_wh = wh_obj.search(
-            ('partner_id', 'in',
-                (supplier_bom | supplier_bom.child_ids).ids),
+            [('partner_id', 'in',
+                (supplier_bom | supplier_bom.child_ids).ids)],
             limit=1)
         if not supplied_wh:
             _logger.info("error : no wh found for supplier %s"
