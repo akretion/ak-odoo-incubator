@@ -5,7 +5,7 @@
 {
     "name": "Stock Generate Putaway from Inventory",
     "summary": "generate Putaway locations per Product deduced from inventory",
-    "version": "10.0.1.0.0",
+    "version": "10.0.1.0.1",
     "author": "Akretion",
     "category": "Warehouse",
     "depends": ["stock_putaway_product"],

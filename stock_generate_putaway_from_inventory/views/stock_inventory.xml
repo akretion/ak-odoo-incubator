@@ -7,7 +7,7 @@
         <field name="type">ir.actions.server</field>
         <field name="condition">True</field>
         <field name="code">
-            action = model.browse(env.context['active_ids']).generate_putaway_strategy_multi()
+            action = model.browse(env.context['active_ids']).generate_putaway_strategy()
         </field>
     </record>
 
@@ -18,7 +18,7 @@
         <field name="key">action</field>
         <field name="model_id" ref="model_stock_inventory"/>
         <field name="model">stock.inventory</field>
-        <field name="key2">client_action_multi</field>
+        <field name="key2">client_action</field>
     </record>
 
 </odoo>

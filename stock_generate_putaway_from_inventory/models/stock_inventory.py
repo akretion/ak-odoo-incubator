@@ -20,20 +20,18 @@ class StockInventory(models.Model):
     _inherit = 'stock.inventory'
 
     @api.multi
-    def generate_putaway_strategy_multi(self):
+    def generate_putaway_strategy(self):
+        putaway_locations = {}
         for inventory in self:
-            inventory._generate_putaway_strategy()
-
-    def _generate_putaway_strategy(self):
-        self.ensure_one()
-        if self.state != 'done':
-            raise UserError(_('Please, validate the stock adjustment before'))
-        strategy = self.location_id._get_putaway_strategy()
-        if not strategy:
-            raise UserError(
-                _('Please, specify a Putaway Strategy '
-                  'on the inventory\'s location (or a parent one)'))
-        putaway_locations = self._prepare_putaway_locations(strategy)
+            if self.state != 'done':
+                raise UserError(_(
+                    'Please, validate the stock adjustment before'))
+            strategy = self.location_id._get_putaway_strategy()
+            if not strategy:
+                raise UserError(_(
+                    'Please, specify a Putaway Strategy '
+                    'on the inventory\'s location (or a parent one)'))
+            putaway_locations.update(self._prepare_putaway_locations(strategy))
         for putaway_location in putaway_locations.values():
             putaway_location.pop('qty')
             self.env['stock.product.putaway.strategy'].create(putaway_location)
@@ -42,12 +40,15 @@ class StockInventory(models.Model):
         self.ensure_one()
         putaway_locations = {}
         for line in self.line_ids:
-            if not line.product_id.product_putaway_ids:
-                if (line.product_id.id not in putaway_locations
-                        or line.product_qty >
-                        putaway_locations[line.product_id.id]['qty']):
-                    putaway_locations[line.product_id.id] = line.\
-                        _prepare_putaway_location(strategy)
+            if line.product_id.product_putaway_ids:
+                continue
+            if (line.product_id.id not in putaway_locations
+                    or line.product_qty >
+                    putaway_locations[line.product_id.id]['qty']):
+                # If there is several lines for a product, we will use the
+                # one having more products
+                putaway_locations[line.product_id.id] = line.\
+                    _prepare_putaway_location(strategy)
         return putaway_locations
 
 
