@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            string="Wave Picking"
+            id="action_report_picking_wave"
+            model="stock.picking.wave"
+            report_type="qweb-pdf"
+            menu="False"
+            name="stock_picking_wave_report.report_picking_wave"
+            file="stock_picking_wave_report.report_picking_wave"
+        />
+    </data>
+</odoo>
