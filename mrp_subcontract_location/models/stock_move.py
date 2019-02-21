@@ -12,36 +12,39 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-#class StockMove(models.Model):
-#    _inherit = 'stock.move'
+class StockMove(models.Model):
+    _inherit = 'stock.move'
 
-#    @api.multi
-#    def assign_picking_by_purchase(self):
-#        Picking = self.env['stock.picking']
-#        # TODO if we want to group by PO, the group_id is a problem.
-#        # Maybe create a group per PO and write it before assigning a picking.
-#        # Or set group_id to null??
-#        for move in self:
-#            recompute = False
-#            picking = Picking.search([
-#                # Group is not relevant here
-##                ('group_id', '=', move.group_id.id),
-#                ('location_id', '=', move.location_id.id),
-#                ('location_dest_id', '=', move.location_dest_id.id),
-#                ('picking_type_id', '=', move.picking_type_id.id),
-#                ('printed', '=', False),
-#                ('purchase_id', '=', move.purchase_line_id.order_id.id),
-#                ('state', 'in', ['draft', 'confirmed', 'waiting', 'partially_available', 'assigned'])], limit=1)
-#            if not picking:
-#                recompute = True
-#                picking = Picking.create(move._get_new_picking_values())
-#            move.write({'picking_id': picking.id})
+    def _search_picking_for_assignation(self):
+        self.ensure_one()
+        return self.env['stock.picking'].search([
+            ('partner_id', '=', self.partner_id.id),
+            ('group_id', '=', self.group_id.id),
+            ('location_id', '=', self.location_id.id),
+            ('location_dest_id', '=', self.location_dest_id.id),
+            ('picking_type_id', '=', self.picking_type_id.id),
+            ('printed', '=', False),
+            ('state', 'in', [
+                'draft', 'confirmed', 'waiting',
+                'partially_available', 'assigned'])], limit=1)
 
-#            # If this method is called in batch by a write on a one2many and
-#            # at some point had to create a picking, some next iterations could
-#            # try to find back the created picking. As we look for it by searching
-#            # on some computed fields, we have to force a recompute, else the
-#            # record won't be found.
-#            if recompute:
-#                move.recompute()
-#        return True
+    @api.multi
+    def assign_picking(self):
+        Picking = self.env['stock.picking']
+        # we want to group moves per supplier (receipt and ship)
+        # and per command (group.id)
+        # no super because the picking search in super don't
+        # care about the partner_id
+
+        # mig v12: remove this function since search_picking_for_assignation
+        # is in core
+        for move in self:
+            recompute = False
+            picking = self._search_picking_for_assignation()
+            if not picking:
+                recompute = True
+                picking = Picking.create(move._get_new_picking_values())
+            move.write({'picking_id': picking.id})
+            if recompute:
+                move.recompute()
+        return True

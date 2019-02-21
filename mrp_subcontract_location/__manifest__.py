@@ -11,6 +11,7 @@
  """,
     'depends': [
         'mrp_subcontracted',
+        'mrp_mto_with_stock_cancelable',
     ],
     'data': [
         'data/data.xml',

@@ -10,6 +10,7 @@ from odoo import models, fields, api, exceptions, _
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
@@ -23,8 +24,8 @@ class PurchaseOrder(models.Model):
         supplier = self.partner_id
         if line._is_service_procurement():
             mo = line.procurement_ids.production_id
-            supplier_wh, supplier_loc = self.partner_id.\
-                    _get_supplier_wh_and_location()
+            supplier_wh, supplier_loc = supplier.\
+                _get_supplier_wh_and_location()
             if mo.location_dest_id != supplier_loc:
                 mo.update_locations(supplier_wh, supplier_loc)
                 moves_in = mo.update_moves_before_production(
