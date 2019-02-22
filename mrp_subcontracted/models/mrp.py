@@ -96,7 +96,7 @@ class MrpProduction(models.Model):
             'name': "Service for %s " % self.name,
             'origin': origin,
             'company_id': self.company_id.id,
-            'date_planned': self.date_planned_start,
+            'date_planned': self.date_planned_finished,
             'product_id': self.service_id.id,
             'product_qty': self.product_qty,
             'product_uom': self.service_id.uom_po_id.id,
