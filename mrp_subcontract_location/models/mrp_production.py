@@ -131,7 +131,7 @@ class MrpProduction(models.Model):
             move_out.picking_type_id = supplier_wh.out_type_id.id
             move_out.assign_picking()
 
-            if moves_out_dest:
+            if move_out_dest:
                 old_pickings |= move_out_dest.picking_id
                 move_out_dest.picking_id = False
                 move_out_dest.partner_id = supplier.id
