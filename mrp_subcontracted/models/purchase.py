@@ -15,6 +15,20 @@ _logger = logging.getLogger(__name__)
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
+    mo_id = fields.Many2one(
+        'mrp.production', 'Mo',
+        compute='_calc_mo_id',
+        store=True,
+        readonly=True,
+    )
+
+    @api.multi
+    @api.depends('procurement_ids', 'procurement_ids.production_id')
+    def _calc_mo_id(self):
+        for rec in self:
+            if rec._is_service_procurement():
+                rec.mo_id = rec.procurement_ids.production_id
+
     @api.multi
     def _is_service_procurement(self):
         """Ensure the order line is a service procurement.
@@ -48,8 +62,7 @@ class Purchase(models.Model):
         for order in self:
             mos = self.env['mrp.production']
             for line in order.order_line:
-                if line._is_service_procurement():
-                    mos |= line.procurement_ids.production_id
+                mos |= line.mo_id
             order.manufacture_ids = mos
             order.mo_count = len(mos)
 
@@ -87,7 +100,7 @@ class Purchase(models.Model):
         for rec in self:
             if rec.state == 'purchase':
                 for line in rec.order_line:
-                    if line._is_service_procurement():
+                    if line.mo_id:
                         line.procurement_ids.check()
         return res
 
@@ -96,8 +109,8 @@ class Purchase(models.Model):
         """Forbid PO canceling of done production."""
         for rec in self:
             for line in rec.order_line:
-                if line._is_service_procurement():
-                    if line.procurement_ids.production_id.state == 'done':
+                if line.mo_id:
+                    if line.mo_id.state == 'done':
                         raise UserError(
                             _('Unable to cancel purchase order %s as some \
                             productions have already been done.')
@@ -114,5 +127,5 @@ class Purchase(models.Model):
         super(Purchase, self).button_draft()
         for rec in self:
             for line in rec.order_line:
-                if line._is_service_procurement():
+                if line.mo_id:
                     line.procurement_ids.state = 'running'

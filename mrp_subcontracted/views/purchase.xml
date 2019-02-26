@@ -22,6 +22,9 @@
                     <field name="manufacture_ids" invisible="1"/>
                 </button>
             </field>
+            <field name="picking_type_id" position="attributes">
+                <attribute name="domain">[('code','in',('incoming', 'mrp_operation'))]</attribute>
+            </field>
         </field>
     </record>
 </odoo>
