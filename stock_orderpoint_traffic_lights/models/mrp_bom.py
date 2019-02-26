@@ -134,11 +134,12 @@ class MrpBomLine(models.Model):
     )
 
     def _get_search_buffer_domain(self):
-        return []
         product = self.product_id or \
             self.product_tmpl_id.product_variant_ids[0]
-        domain = [('product_id', '=', product.id),
-                  ('buffer_profile_id', '!=', False)]
+        domain = [
+            ('product_id', '=', product.id),
+            #  ('buffer_profile_id', '!=', False)
+        ]
         if self.location_id:
             domain.append(('location_id', '=', self.location_id.id))
         return domain
