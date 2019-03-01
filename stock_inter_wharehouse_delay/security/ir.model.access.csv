@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+inter_wh_delay_manager,stock.inter_warehouse_delay.manager,model_stock_inter_warehouse_delay,stock.group_stock_manager,1,1,1,1
+inter_wh_delay_user,stock.inter_warehouse_delay.user,model_stock_inter_warehouse_delay,base.group_user,1,0,0,0
