@@ -3,7 +3,7 @@
     <data>
         <record id="view_inter_wh_tree" model="ir.ui.view">
             <field name="name">stock.inter_warehouse_delay.tree</field>
-            <field name="model">stock.inter_warehouse_delay.delay</field>
+            <field name="model">stock.inter_warehouse_delay</field>
             <field name="arch" type="xml">
                 <tree string="Inter Wh">
                     <field name="source_wh_id" />
@@ -13,8 +13,8 @@
             </field>
         </record>
         <record id="view_inter_wh_form" model="ir.ui.view">
-            <field name="name">stock.inter_warehouse_delay.delay.tree</field>
-            <field name="model">stock.inter_warehouse_delay.delay</field>
+            <field name="name">stock.inter_warehouse_delay.tree</field>
+            <field name="model">stock.inter_warehouse_delay</field>
             <field name="arch" type="xml">
                 <form string="Transit delay">
                     <sheet>

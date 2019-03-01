@@ -21,12 +21,12 @@ Go to Inventory > Warehouse Management > Warehouse,
 Specify a partner per warehouse.
 
 Go to Inventory > Global Procurement Rule, 
-check your interwarehouse rules* have a partner set in Partner Address
+check your interwarehouse rules(*) have a partner set in Partner Address
 
 Go to Inventory > Warehouse Management > Inter Warehouse
 Create a record per Sender WH -> Reciever WH with a delay.
 
-*interwarehouse rules are usually named 
+(*)interwarehouse rules are usually named
 "WH1: Stock -> My Company:Transit Location"
 
 
