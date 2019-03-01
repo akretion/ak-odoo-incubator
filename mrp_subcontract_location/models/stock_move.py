@@ -40,7 +40,7 @@ class StockMove(models.Model):
         # is in core
         for move in self:
             recompute = False
-            picking = self._search_picking_for_assignation()
+            picking = move._search_picking_for_assignation()
             if not picking:
                 recompute = True
                 picking = Picking.create(move._get_new_picking_values())
