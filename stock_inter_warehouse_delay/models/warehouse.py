@@ -16,7 +16,7 @@ class StockWarehouse(models.Model):
         It's the time in days, between the Picking Out
         and the Picking In
         """
-        return self.env['inter_wh.delay'].search([
+        return self.env['stock.inter_warehouse_delay'].search([
             ('source_wh_id', '=', self.id),
             ('dest_wh_id', '=', dest.id),
         ]).delay or 0
