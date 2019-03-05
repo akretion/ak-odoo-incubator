@@ -2,7 +2,6 @@
 <odoo>
     <data>
         <record id="view_inter_wh_tree" model="ir.ui.view">
-            <field name="name">stock.inter_warehouse_delay.tree</field>
             <field name="model">stock.inter_warehouse_delay</field>
             <field name="arch" type="xml">
                 <tree string="Inter Wh">
@@ -13,7 +12,6 @@
             </field>
         </record>
         <record id="view_inter_wh_form" model="ir.ui.view">
-            <field name="name">stock.inter_warehouse_delay.tree</field>
             <field name="model">stock.inter_warehouse_delay</field>
             <field name="arch" type="xml">
                 <form string="Transit delay">
@@ -28,13 +26,13 @@
             </field>
         </record>
         <record id="action_inter_wh_tree" model="ir.actions.act_window">
-            <field name="name">inter_warehouse_delay</field>
+            <field name="name">Inter Warehouse Delay</field>
             <field name="res_model">stock.inter_warehouse_delay</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem action="action_inter_wh_tree" id="menu_action_inter_wh_open" parent="stock.menu_warehouse_config" sequence="5" groups="base.group_no_one"/>
+        <menuitem action="action_inter_wh_tree" id="menu_action_inter_wh_open" parent="stock.menu_warehouse_config" sequence="5" groups="stock.group_stock_manager"/>
     </data>
 </odoo>
