@@ -136,7 +136,7 @@ class StockInventoryLine(models.Model):
                 line.reference_name = ''
 
     @api.multi
-    @api.depends('calc_product_cost', 'manual_product_cost')
+    @api.depends('calc_product_cost', 'manual_product_cost', 'product_qty')
     def _compute_value(self):
         for line in self:
             if line.manual_product_cost:
