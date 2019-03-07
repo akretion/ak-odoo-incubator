@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 
 class ReplaceComponent(models.TransientModel):
     _name = 'replace.component.transient'
+    _description = 'Replace compoenent in bom'
 
     production_id = fields.Many2one(
         comodel_name='mrp.production', required=True,
