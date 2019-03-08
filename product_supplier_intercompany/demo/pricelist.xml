@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-<data>
+<odoo>
     <record id="pricelist_intercompany" model="product.pricelist">
         <field name="name">Pricelist Intercompany</field>
         <field name="type">sale</field>
@@ -50,5 +49,4 @@
         <field name="sequence">20</field>
     </record>
 
-</data>
-</openerp>
+</odoo>

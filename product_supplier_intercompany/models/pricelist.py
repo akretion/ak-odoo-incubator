@@ -2,8 +2,8 @@
 # © 2019 Akretion (http://www.akretion.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import _, api, models, fields
-from openerp.exceptions import Warning as UserError
+from odoo import _, api, models, fields
+from odoo.exceptions import UserError
 
 
 class ProductPricelist(models.Model):
