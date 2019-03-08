@@ -2,8 +2,8 @@
 # © 2019 Akretion (http://www.akretion.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import _, api, models, fields
-from openerp.exceptions import Warning as UserError
+from odoo import _, api, models, fields
+from odoo.exceptions import UserError
 
 
 class ProductIntercompanySupplierMixin(models.AbstractModel):
@@ -142,21 +142,21 @@ class ProductSupplierinfo(models.Model):
         return super(ProductSupplierinfo, self).unlink()
 
 
-class PricelistPartnerinfo(models.Model):
-    _inherit = 'pricelist.partnerinfo'
+# class PricelistPartnerinfo(models.Model):
+#     _inherit = 'pricelist.partnerinfo'
 
-    @api.multi
-    def write(self, vals):
-        self.mapped('suppinfo_id')._check_intercompany_supplier()
-        return super(PricelistPartnerinfo, self).write(vals)
+#     @api.multi
+#     def write(self, vals):
+#         self.mapped('suppinfo_id')._check_intercompany_supplier()
+#         return super(PricelistPartnerinfo, self).write(vals)
 
-    @api.model
-    def create(self, vals):
-        record = super(PricelistPartnerinfo, self).create(vals)
-        record.suppinfo_id._check_intercompany_supplier()
-        return record
+#     @api.model
+#     def create(self, vals):
+#         record = super(PricelistPartnerinfo, self).create(vals)
+#         record.suppinfo_id._check_intercompany_supplier()
+#         return record
 
-    @api.multi
-    def unlink(self):
-        self.mapped('suppinfo_id')._check_intercompany_supplier()
-        return super(PricelistPartnerinfo, self).unlink()
+#     @api.multi
+#     def unlink(self):
+#         self.mapped('suppinfo_id')._check_intercompany_supplier()
+#         return super(PricelistPartnerinfo, self).unlink()

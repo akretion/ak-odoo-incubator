@@ -2,8 +2,8 @@
 # Copyright 2019 Akretion (http://www.akretion.com).
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
-from openerp.exceptions import Warning as UserError, ValidationError
+from odoo.tests.common import TransactionCase
+from odoo.exceptions import UserError, ValidationError
 
 
 class TestPricelist(TransactionCase):
