@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#  licence AGPL version 3 or later
-#  see licence in __openerp__.py or http://www.gnu.org/licenses/agpl-3.0.txt
-#  Copyright (C) 2018 Akretion (http://www.akretion.com).
-#
-##############################################################################
-from odoo import models, fields, api, exceptions, _
+# Copyright 2018 Akretion (http://www.akretion.com).
+# @author Raphaël Reverdy <raphael.reverdy@akretion.com>
+# @author Florian da Costa <florian.dacosta@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+from odoo import models, api, exceptions, _
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -40,7 +38,6 @@ class MrpProduction(models.Model):
         self.ensure_one()
 
         moves_in = self.env['stock.move']
-        proc_obj = self.env['procurement.order']
         intra_location_id, inter_location_id = (
             supplier_wh._get_transit_locations()
         )
@@ -49,15 +46,16 @@ class MrpProduction(models.Model):
         for raw_move in self.move_raw_ids:
             # If there is a purchase order or request, not validated yet
             # It seems complicated to change it manually, since it could be
-            # together with other product which do not need to change location...
+            # together with other product which do not need to change location
             # For now, the user should do it manually.
             # TODO
-            # Maybe we could display a wizard witl all impacted POs before validation
+            # Maybe we could display a wizard with all
+            # impacted POs before validation
             move_in = raw_move.move_orig_ids
             moves_in |= move_in
 
             if not move_in:
-                # Could happen for make to stock or make to order bought product
+                # Could happen for mts or mto bought product
                 # with PO not validated yet. But we do not handle this case
                 # for now.
                 # TODO manage make to order buy case
@@ -95,7 +93,8 @@ class MrpProduction(models.Model):
                 move_out.partner_id = supplier.id
                 move_out.assign_picking()
 
-            moves = self.move_raw_ids.filtered(lambda x: x.state not in ('done', 'cancel'))
+            moves = self.move_raw_ids.filtered(
+                lambda x: x.state not in ('done', 'cancel'))
             moves.do_unreserve()
 
             self.action_assign()

@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#  licence AGPL version 3 or later
-#  see licence in __openerp__.py or http://www.gnu.org/licenses/agpl-3.0.txt
-#  Copyright (C) 2015 Akretion (http://www.akretion.com).
-#
-##############################################################################
+# Copyright 2018 Akretion (http://www.akretion.com).
+# @author Raphaël Reverdy <raphael.reverdy@akretion.com>
+# @author Florian da Costa <florian.dacosta@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api
 import logging
 _logger = logging.getLogger(__name__)
@@ -33,7 +30,10 @@ class PurchaseOrderLine(models.Model):
             if line.order_id.state not in ['purchase', 'done']:
                 line.qty_received = 0.0
                 continue
-            if line.product_id.type not in ['consu', 'product'] and not line.move_ids:
+            if (
+                line.product_id.type not in ['consu', 'product'] and
+                not line.move_ids
+            ):
                 line.qty_received = line.product_qty
                 continue
 
@@ -43,14 +43,16 @@ class PurchaseOrderLine(models.Model):
                 if mo.state == 'done':
                     for move in mo.move_finished_ids:
                         if move.product_uom != line.product_uom:
-                            total += move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
+                            total += move.product_uom._compute_quantity(
+                                move.product_uom_qty, line.product_uom)
                         else:
                             total += move.product_uom_qty
             else:
                 for move in line.move_ids:
                     if move.state == 'done':
                         if move.product_uom != line.product_uom:
-                            total += move.product_uom._compute_quantity(move.product_uom_qty, line.product_uom)
+                            total += move.product_uom._compute_quantity(
+                                move.product_uom_qty, line.product_uom)
                         else:
                             total += move.product_uom_qty
             line.qty_received = total
