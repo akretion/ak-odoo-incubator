@@ -16,7 +16,12 @@ When MOs are chained, to avoid adding steps with internal picking between MO, we
 When subcontracting MOs, we also need to purchase and send the raw material directly at the subcontractor manufactory.
 This module display an address field on POs to indicate at which subcontractor we send the PO, the picking is created to the subcontractor location.
 
-To keep is simple, a global warehouse for all subcontractors is created and then one sublocation by subcontractor should be created to avoid having one warehouse by subcontractor, which could become very difficult to manage.
+A cron will create the inter warehouses routes automatically and set the right roots on products. (like Supplier2: Supply from Supplier 1)
+
+
+Remarks:
+
+- Use module stock_interwarehouse_delay if you want to manage transit delays.
 
 
 Configuration
@@ -24,9 +29,8 @@ Configuration
 
 To configure this module, you need to:
 
-#. Configure the new created warehouse (Change the name, code...)
-#. Change the warehouse main location to _view type_ (name of location is stock by default)
-#. Add one sublocation for each subcontractor and fill these new location on each subcontractor information (Sale & Purchase tab)
+#. Create as many warehouses as needed (At least one per supplier whom does manufacturing). Set the partner of the warehouse to the supplier (it can be his plant facility).
+#. Set the picking type id of the BOM to warehouse_of_the_supplier.manufacturing
 
 
 Known issues / Roadmap

@@ -9,43 +9,9 @@ _logger = logging.getLogger(__name__)
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'
 
-    def get_supplier(self):
-        """Supplier of the BOM.
-
-        The seller of the service if any, or main_partner if internalized
-        """
-        self.ensure_one()
-        if self.service_id:
-            supplier_info_bom = self.service_id.seller_ids
-            supplier_bom = supplier_info_bom and supplier_info_bom[0].name \
-                or False
-        else:
-            # Manufactured internally, but I guess we still has to set
-            # multi wh routes...
-            supplier_bom = self.env.ref('base.main_partner')
-        return supplier_bom
-
     def get_supplied_wh(self):
-        """Warehouse where the OF will take place by default.
-
-        It's the warehouse of the supplier of the service of the BOM
-        """
-        self.ensure_one()
-        wh_obj = self.env['stock.warehouse']
-        supplier_bom = self.get_supplier()
-        if not supplier_bom:
-            _logger.warning("error : no supplier for bom %s" % self.id)
-            return
-
-        supplied_wh = wh_obj.search(
-            [('partner_id', 'in',
-                (supplier_bom | supplier_bom.child_ids).ids)],
-            limit=1)
-        if not supplied_wh:
-            _logger.info("error : no wh found for supplier %s"
-                         % supplier_bom.id)
-            return
-        return supplied_wh
+        """Warehouse where the OF will take place by default."""
+        return self.picking_type_id.warehouse_id
 
     @api.multi
     def ensure_manufacture_route(self):
