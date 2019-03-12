@@ -63,14 +63,8 @@ class StockWarehouseOrderpoint(models.Model):
 
     def _compute_dlt(self):
         for rec in self:
-            # TODO : prendre l'info sur la BOM si y'en a une ?
-            # if rec.buffer_profile_id.item_type == 'manufactured':
-            #     bom = rec._get_manufactured_bom()
-            #     rec.dlt = bom.dlt
-            # elif rec.buffer_profile_id.item_type == 'distributed':
-            #     rec.dlt = rec.lead_days
-            # else:
-                rec.dlt = rec.product_id.dlt
+            # product_id est calculé en fonction de sa BOM
+            rec.dlt = rec.product_id.dlt
 
     dlt = fields.Float(string="Decoupled Lead Time (days)",
                        compute="_compute_dlt")

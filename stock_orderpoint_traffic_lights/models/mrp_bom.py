@@ -32,15 +32,13 @@ class MrpBom(models.Model):
     def _get_search_buffer_domain(self):
         product = self.product_id or \
             self.product_tmpl_id.product_variant_ids[0]
-        domain = [('product_id', '=', product.id),
-                  ('buffer_profile_id', '!=', False)]
+        domain = [('product_id', '=', product.id)]
         if self.location_id:
             domain.append(('location_id', '=', self.location_id.id))
         return domain
 
     def _compute_is_buffered(self):
         for bom in self:
-            return False  # TODO RAPH fix ici
             domain = bom._get_search_buffer_domain()
             orderpoint = self.env['stock.warehouse.orderpoint'].search(
                 domain, limit=1)
@@ -49,8 +47,9 @@ class MrpBom(models.Model):
 
     def _compute_mto_rule(self):
         for rec in self:
-            template = rec.product_id.product_tmpl_id or rec.product_tmpl_id
-            rec.has_mto_rule = False
+            # template = rec.product_id.product_tmpl_id
+            # or rec.product_tmpl_id
+            rec.has_mto_rule = True
             # True if (
             #    rec.location_id in
             #    template.mrp_mts_mto_location_ids) else False
@@ -138,16 +137,14 @@ class MrpBomLine(models.Model):
             self.product_tmpl_id.product_variant_ids[0]
         domain = [
             ('product_id', '=', product.id),
-            #  ('buffer_profile_id', '!=', False)
         ]
-        if self.location_id:
-            domain.append(('location_id', '=', self.location_id.id))
+        if self.bom_id.location_id:
+            domain.append(('location_id', '=', self.bom_id.location_id.id))
         return domain
 
     def _compute_is_buffered(self):
         for line in self:
             # fix raph
-            line.is_buffered = False
             domain = line._get_search_buffer_domain()
             orderpoint = self.env['stock.warehouse.orderpoint'].search(
                 domain, limit=1)
@@ -156,7 +153,7 @@ class MrpBomLine(models.Model):
 
     def _compute_mto_rule(self):
         for rec in self:
-            rec.has_mto_rule = False
+            rec.has_mto_rule = True
             # True if (
             #    rec.location_id in
              #   rec.product_id.mrp_mts_mto_location_ids) else False
