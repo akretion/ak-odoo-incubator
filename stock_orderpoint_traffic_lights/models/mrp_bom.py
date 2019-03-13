@@ -124,7 +124,7 @@ class MrpBomLine(models.Model):
     )
     dlt = fields.Float(
         string="Decoupled Lead Time (days)",
-        related="product_id.dlt",
+        compute='_compute_dlt',
     )
     has_mto_rule = fields.Boolean(
         string="MTO",
@@ -157,3 +157,8 @@ class MrpBomLine(models.Model):
             # True if (
             #    rec.location_id in
              #   rec.product_id.mrp_mts_mto_location_ids) else False
+
+    @api.depends('product_id.product_tmpl_id.dlt')
+    def _compute_dlt(self):
+        for rec in self:
+            rec.dlt = rec.product_id.dlt
