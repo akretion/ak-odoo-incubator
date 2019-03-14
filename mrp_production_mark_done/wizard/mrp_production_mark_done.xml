@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+<record id="view_mrp_production_mark_done_form" model="ir.ui.view">
+    <field name="model">mrp.production.mark.done</field>
+    <field name="arch" type="xml">
+        <form string="Mark as Done">
+            <p class="oe_gray">
+                Use this assistant to mark as 'Done' several manufacturing orders.
+            </p>
+            <group name="manufacturing_orders" string="Manufacturing Orders">
+                <field name="item_ids" nolabel="1">
+                    <tree string="Manufacturing Orders" create="0" edit="0" editable="top">
+                        <field name="name" readonly="1"/>
+                        <field name="service_provider_id" options="{'no_open':True}" readonly="1"/>
+                        <field name="service_id" options="{'no_open':True}" readonly="1"/>
+                        <field name="product_id" options="{'no_open':True}" readonly="1"/>
+                        <field name="product_qty" sum="Total Qty" string="Quantity" readonly="1"/>
+                        <field name="product_uom_id" string="Unit of Measure" groups="product.group_uom" options="{'no_open':True}" readonly="1"/>
+                        <field name="state" readonly="1"/>
+                    </tree>
+                </field>
+            </group>
+            <footer>
+                <button name="production_mark_done"
+                        string="Confirmer"
+                        type="object"/>
+                or
+                <button string="Cancel" class="oe_link" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+<act_window id="act_mrp_production_mark_done"
+            name="Mark as Done"
+            src_model="mrp.production"
+            res_model="mrp.production.mark.done"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"/>
+   
+</data>
+</odoo>
+
