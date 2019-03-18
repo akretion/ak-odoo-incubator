@@ -21,7 +21,7 @@ class MrpBom(models.Model):
     dlt = fields.Float(
         string="Decoupled Lead Time (days)",
         compute="_compute_dlt",
-        store=True,
+    #    store=True,
     )
     has_mto_rule = fields.Boolean(
         string="MTO",
@@ -101,10 +101,10 @@ class MrpBom(models.Model):
         dlt += self._get_longest_path()
         return dlt
 
-    @api.depends(
-        'product_id.produce_delay',
-        'product_tmpl_id.produce_delay',
-        'bom_line_ids.product_id.dlt')
+    #@api.depends(
+    #    'product_id.produce_delay',
+    #    'product_tmpl_id.produce_delay',
+    #    'bom_line_ids.product_id.dlt')
     def _compute_dlt(self):
         for rec in self:
             _logger.info("bom.compute_dlt")
