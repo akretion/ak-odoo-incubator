@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+<record id="purchase_request_action" model="ir.actions.act_window">
+    <field name="name">Purchase Requests</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">purchase.request</field>
+    <field name="domain">[]</field>
+    <field name="view_id" ref="purchase_request.view_purchase_request_form"/>
+</record>
+
+</odoo>

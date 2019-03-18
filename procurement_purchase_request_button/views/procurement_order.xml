@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<record id="procurement_form_view" model="ir.ui.view">
+    <field name="model">procurement.order</field>
+    <field name="inherit_id" ref="purchase_request_procurement.procurement_form_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//button[@name='do_view_procurements']" position="before">
+            <button name="open_purchase_request" string="Purchase Request" type="object"
+                    class="oe_stat_button" icon="fa-shopping-cart"
+                    context="{'active_id':request_id}"
+                    attrs="{'invisible':[('request_id', '=', False)]}">
+            </button>
+        </xpath>
+    </field>
+</record>
+
+</odoo>
