@@ -63,31 +63,8 @@ class MrpBom(models.Model):
         for line in self.bom_line_ids:
             if line.is_buffered:
                 i += 1
-            elif line.product_id.bom_ids:
-                # If the a component is manufactured we continue exploding.
-                location = line.location_id
-                line_boms = line.product_id.bom_ids
-                bom = line_boms.filtered(
-                    lambda bom: bom.location_id == location) or \
-                    line_boms.filtered(lambda bom: not bom.location_id)
-                if bom:
-                    produce_delay = bom[0].product_id.produce_delay or \
-                        bom[0].product_tmpl_id.produce_delay
-                    paths[i] += produce_delay
-                    paths[i] += bom[0]._get_longest_path()
-                else:
-                    _logger.info(
-                        "ddmrp (dlt): Product %s has no BOM for location "
-                        "%s." % (line.product_id.name, location.name))
-                i += 1
             else:
-                # assuming they are purchased,
-                if line.product_id.seller_ids:
-                    paths[i] = line.product_id.seller_ids[0].delay
-                else:
-                    _logger.info(
-                        "ddmrp (dlt): Product %s has no seller set." %
-                        line.product_id.name)
+                paths[i] = line.dlt
                 i += 1
         return max(paths)
 
