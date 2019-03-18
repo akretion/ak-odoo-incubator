@@ -8,5 +8,4 @@ class ComputeInterwhRouteWizard(models.TransientModel):
 
     def recompute_wh_route_global(self):
         self.ensure_one()
-        boms = self.env['mrp.bom'].search([])
-        boms.check_and_set_product_routes()
+        self.env['mrp.bom'].compute_product_routes_cron()
