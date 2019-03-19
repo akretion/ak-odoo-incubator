@@ -33,12 +33,9 @@ class SaleOrder(models.Model):
     invoice_count = fields.Integer(store=True)
 
     @api.multi
-    @api.depends('all_qty_delivered', 'agreement_id.holding_company_id')
+    @api.depends('all_qty_delivered', 'agreement_id.holding_company_id',
+                 'holding_invoice_id', 'holding_invoice_id.state')
     def _compute_holding_invoice_state(self):
-        # Note for perf issue the 'holding_invoice_id' and
-        # 'holding_invoice_id.state' are not set here as a dependency.
-        # Indeed the dependency is manually triggered when
-        # the holding_invoice is generated or the state is changed
         for sale in self:
             if (not sale.agreement_id.holding_company_id or
                     sale.company_id == sale.agreement_id.holding_company_id):
@@ -52,14 +49,6 @@ class SaleOrder(models.Model):
                 sale.holding_invoice_state = 'invoiceable'
             else:
                 sale.holding_invoice_state = 'not_ready'
-
-    @api.multi
-    def _set_holding_invoice_state(self, state):
-        if self:
-            self._cr.execute("""UPDATE sale_order
-                SET holding_invoice_state=%s
-                WHERE id in %s""", (state, tuple(self.ids)))
-            self.invalidate_cache()
 
 
 class SaleOrderLine(models.Model):
@@ -80,6 +69,3 @@ class SaleOrderLine(models.Model):
                 line.qty_invoiced = qty_invoiced
         else:
             return super(SaleOrderLine, self)._get_invoice_qty()
-
-
-

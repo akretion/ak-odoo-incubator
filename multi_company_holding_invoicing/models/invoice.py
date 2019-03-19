@@ -37,12 +37,12 @@ class AccountInvoice(models.Model):
 
     def _compute_sale_count(self):
         for inv in self:
-            sale_ids = []
-            for invoice_line in inv.invoice_line_ids:
-                for sale_line in invoice_line.sale_line_ids:
-                    if sale_line.order_id not in sale_ids:
-                        sale_ids += sale_line.order_id
-            inv.sale_count = len(sale_ids)
+            domain = [
+                ('invoice_lines', 'in', inv.invoice_line_ids.ids),
+            ]
+            sales = self.env['sale.order.line'].read_group(
+                domain, 'order_id', 'order_id')
+            inv.sale_count = len(sales)
 
     def _compute_child_invoice_count(self):
         for inv in self:
@@ -55,28 +55,6 @@ class AccountInvoice(models.Model):
                 ('state', '!=', 'done')
             ])
             inv.child_invoice_job_count = len(child_invoice_jobs)
-
-    @api.multi
-    def invoice_validate(self):
-        for invoice in self:
-            if invoice.holding_sale_ids and invoice.user_id.id == self.env.uid:
-                invoice = invoice.suspend_security()
-            invoice.holding_sale_ids._set_holding_invoice_state('invoiced')
-            super(AccountInvoice, self).invoice_validate()
-        return True
-
-    @api.multi
-    def unlink(self):
-        # Give some extra right to the user who have generated
-        # the holding invoice
-        for invoice in self:
-            if invoice.holding_sale_ids and invoice.user_id.id == self.env.uid:
-                invoice = invoice.suspend_security()
-            sale_obj = self.env['sale.order']
-            sales = sale_obj.search([('holding_invoice_id', '=', invoice.id)])
-            super(AccountInvoice, invoice).unlink()
-            sales._set_holding_invoice_state('invoiceable')
-        return True
 
     @api.multi
     def generate_child_invoice(self):
@@ -122,7 +100,7 @@ class AccountInvoice(models.Model):
         child_invoices.write({'holding_invoice_id': self.id})
         for child_invoice in child_invoices:
             # add child_invoicing info in the context
-            # used in_get_invoice_qty method in sale order line
+            # used in _get_invoice_qty method in sale order line
             child_invoice.with_context(
                 child_invoicing=True).action_invoice_open()
         return True

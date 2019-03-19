@@ -36,31 +36,23 @@ class BaseHoldingInvoicing(models.AbstractModel):
             'uom_id': product.uom_id.id,
             'name': '',
             'company_id': company.id,
-            'partner_id': invoice.partner_id,
+            'partner_id': invoice.partner_id.id,
             'invoice_id': data_line.get('invoice_id'),
         }
         line_data = self.env['account.invoice.line'].play_onchanges(
             line_data, ['product_id'])
-        account_id = line_data.get('account_id', False)
-        if account_id:
-            account = self.env['account.account'].browse(account_id)
-        else:
-            account = self.env['account.account'].search([
-                ('user_type_id', '=', self.env.ref(
-                    'account.data_account_type_revenue').id),
-                ('company_id', '=', company.id)], limit=1)
-            if not account:
-                raise UserError(_(
-                    'Please define %s account for this company: "%s" (id:%d).')
-                    % (self.env.ref('account.data_account_type_revenue').name,
-                       company.name, company.id))
-        tax_ids = line_data.get('invoice_line_tax_ids', False)
+        if not line_data.get('account_id'):
+            raise UserError(_(
+                'Please define %s account in the product "%s" for this '
+                'company: "%s" (id:%d).')
+                % (self.env.ref('account.data_account_type_revenue').name,
+                   product.name, company.name, company.id))
         return {
             'name': name,
             'product_id': product.id or False,
             'uom_id': product.uom_id.id,
-            'invoice_line_tax_ids': tax_ids or [],
-            'account_id': account.id or False,
+            'invoice_line_tax_ids': line_data.get('invoice_line_tax_ids', []),
+            'account_id': line_data.get('account_id', False),
         }
 
     @api.model
@@ -85,10 +77,10 @@ class BaseHoldingInvoicing(models.AbstractModel):
             'company_id': self.env.context['force_company'],
             'user_id': self.env.uid,
         })
-        # Remove fiscal position from vals
-        # Because fiscal position in vals is not that of the 'force_company'
-        if vals.get('fiscal_position'):
-            vals['fiscal_position'] = False
+        ## Remove fiscal position from vals
+        ## Because fiscal position in vals is not that of the 'force_company'
+        #if vals.get('fiscal_position'):
+        #    vals['fiscal_position'] = False
         # Remove partner shipping from vals
         # Because there are potentially several delivery addresses
         if vals.get('partner_shipping_id'):
