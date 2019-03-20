@@ -25,8 +25,7 @@ class InvoiceWizard(models.TransientModel):
     def _return_open_action(self, invoices):
         action = self.env.ref('account.action_invoice_tree').read()[0]
         action.update({
-            'name': _("Invoice Generated"),
-            'target': 'current',
+            'name': _("Holding Invoice Generated"),
             'domain': [('id', 'in', invoices.ids)]
         })
         return action

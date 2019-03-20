@@ -2,28 +2,30 @@
 <odoo>
   
 
-<record id="view_sale_order_make_invoice" model="ir.ui.view">
-    <field name="model">sale.make.invoice</field>
-    <field name="inherit_id" ref="sale.view_sale_order_make_invoice"/>
+<record id="view_sale_advance_payment_inv" model="ir.ui.view">
+    <field name="model">sale.advance.payment.inv</field>
+    <field name="inherit_id" ref="sale.view_sale_advance_payment_inv"/>
     <field name="arch" type="xml">
         <group position="before">
             <h1>
                 <field name="error"/>
             </h1>
+            <field name="agreement_holding_id" invisible="1"/>
+            <label for="invoice_date" attrs="{'invisible': ['|', ('error', '!=', False), ('agreement_holding_id', '=', False)]}"/>
+            <field name="invoice_date" attrs="{'invisible': ['|', ('error', '!=', False), ('agreement_holding_id', '=', False)]}"/>
+            <BR/>
+            <label for="agreement_id" attrs="{'invisible': ['|', ('error', '!=', False), ('agreement_holding_id', '=', False)]}"/>
+            <field name="agreement_id" attrs="{'invisible': ['|', ('error', '!=', False), ('agreement_holding_id', '=', False)]}"/>
         </group>
         <group position="attributes">
-            <attribute name="attrs">{'invisible': [('error', '!=', False)]}</attribute>
+            <attribute name="attrs">{'invisible': ['|', ('error', '!=', False), ('agreement_holding_id', '!=', False)]}</attribute>
         </group>
-        <button name="make_invoices" position="attributes">
+        <xpath expr="//footer/button[2]" position="attributes">
             <attribute name="attrs">{'invisible': [('error', '!=', False)]}</attribute>
-        </button>
-        <field name="grouped" position="after">
-            <field name="agreement_id"/>
-        </field>
-        <field name="grouped" position="attributes">
-            <attribute name="attrs">{'invisible': [('agreement_id', '!=', False)]}</attribute>
-        </field>
-
+        </xpath>
+        <xpath expr="//footer/button[1]" position="attributes">
+            <attribute name="attrs">{'invisible': ['|', ('error', '!=', False), ('agreement_holding_id', '!=', False)]}</attribute>
+        </xpath>
     </field>
 </record>
 

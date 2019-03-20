@@ -85,6 +85,16 @@ class BaseHoldingInvoicing(models.AbstractModel):
         # Because there are potentially several delivery addresses
         if vals.get('partner_shipping_id'):
             vals['partner_shipping_id'] = False
+        # Find the journal in the holding company
+        # when invoice created from sale wizard
+        journal = self.env['account.journal'].browse(
+            vals.get('journal_id', False))
+        if journal.company_id.id != vals['company_id']:
+            new_journal = self.env['account.journal'].search([
+                ('type', '=', 'sale'),
+                ('company_id', '=', vals['company_id'])
+            ], limit=1)
+            vals['journal_id'] = new_journal.id
         return vals
 
     @api.model
@@ -133,6 +143,7 @@ class BaseHoldingInvoicing(models.AbstractModel):
                 agree_group_by=agree.holding_invoice_group_by)
             _logger.debug('Prepare vals for holding invoice')
             invoice_vals = loc_self._prepare_invoice(data)
+            invoice_vals['date_invoice'] = invoice_date
             _logger.debug('Generate the holding invoice')
             invoice = loc_self.env['account.invoice'].create(invoice_vals)
             _logger.debug('Link the invoice with the sale order')
