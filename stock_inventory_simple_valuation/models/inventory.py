@@ -37,6 +37,15 @@ class StockInventory(models.Model):
                                 u"'%s' ."
                                 % (line.product_id.display_name))
 
+    @api.multi
+    def open_stock_inventory_line_view(self):
+        self.ensure_one()
+        action = self.env.ref(
+            'stock_inventory_simple_valuation.'
+            'act_open_stock_inventory_line_view').read()[0]
+        action['domain'] = [('inventory_id', '=', self.id)]
+        return action
+
 
 class StockInventoryLine(models.Model):
     _inherit = 'stock.inventory.line'

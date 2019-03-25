@@ -2,6 +2,73 @@
 <openerp>
     <data>
 
+    <record id="stock_inventory_line_view_tree" model="ir.ui.view">
+        <field name="model">stock.inventory.line</field>
+        <field name="arch" type="xml">
+            <tree string="Stock Inventory Line" create="0" delete="0" editable="bottom">
+                <field name="product_id" readonly="1"/>
+                <field name="product_uom_id" readonly="1"/>
+                <field name="location_id"/>
+                <field name="theoretical_qty"/>
+                <field name="product_qty"/>
+                <field name="calc_product_cost"/>
+                <field name="manual_product_cost"/>
+                <field name="value"/>
+                <button name="button_info_origin" type="object" icon="STOCK_INFO" string="🛈"
+                        help="Information Origin"
+                        attrs="{'invisible': [('reference_name', '=', False)]}"/>
+                <field name="cost_origin"/>
+                <field name="reference_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_inventory_line_view_search" model="ir.ui.view">
+        <field name="model">stock.inventory.line</field>
+        <field name="arch" type="xml">
+            <search string="Stock Inventory Line">
+                <field name="product_id"/>
+                <field name="product_qty"/>
+                <field name="calc_product_cost"/>
+                <field name="manual_product_cost"/>
+                <field name="value"/>
+                <filter
+                    string="Value 0"
+                    name="value_is_zero"
+                    domain="[('value', '=', 0)]"/>
+                <filter
+                    string="Value > 0"
+                    name="value_sup_zero"
+                    domain="[('value', '>', 0)]"/>
+                <filter
+                    string="Qty = 0"
+                    name="qty_is_zero"
+                    domain="[('product_qty', '=', 0)]"/>
+                <filter
+                    string="Qty > 0"
+                    name="qty_sup_zero"
+                    domain="[('product_qty', '>', 0)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_stock_inventory_line_view">
+        <field name="name">Stock Inventory Line</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.inventory.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="stock_inventory_line_view_search"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="act_open_stock_inventory_line_view_tree">
+        <field name="act_window_id" ref="act_open_stock_inventory_line_view"/>
+        <field name="sequence" eval="10"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="stock_inventory_line_view_tree"/>
+    </record>
 
     <record model="ir.ui.view" id="view_inventory_form">
         <field name="model">stock.inventory</field>
@@ -16,6 +83,14 @@
                         string="Recompute Reference"/>
                 <span attrs="{'invisible': [('state', '=', 'done')]}">automatically computed when validated</span>
             </field>
+            <button name="reset_real_qty" position="before">
+                <button
+                    string="Open line in new page"
+                    type="object"
+                    name="open_stock_inventory_line_view"
+                    class="oe_link oe_left"
+                    />
+            </button>
             <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
                 position="after">
                 <field name="calc_product_cost"/>
@@ -29,7 +104,6 @@
             </xpath>
         </field>
     </record>
-
 
     </data>
 </openerp>
