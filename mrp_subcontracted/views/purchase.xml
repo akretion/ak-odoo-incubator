@@ -25,6 +25,10 @@
             <field name="picking_type_id" position="attributes">
                 <attribute name="domain">[('code','in',('incoming', 'mrp_operation'))]</attribute>
             </field>
+            <field name="date_planned" position="before">
+                <field name="date_planned_start" widget="date" />
+                <field name="date_planned_finished" widget="date" />
+            </field>
         </field>
     </record>
 </odoo>

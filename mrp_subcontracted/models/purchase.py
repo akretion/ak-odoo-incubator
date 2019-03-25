@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # ajouter les fournisseurs sur les services
 
-
+from datetime import timedelta
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import logging
@@ -21,6 +21,17 @@ class PurchaseOrderLine(models.Model):
         store=True,
         readonly=True,
     )
+    date_planned_start = fields.Datetime(
+        string=u'Schedule start',
+        help=u'Start date of the production order if any',
+        related='mo_id.date_planned_start',
+        track_visibility='onchange')
+
+    date_planned_finished = fields.Datetime(
+        string=u'Schedule end',
+        help=u'End date of the production order if any',
+        related='mo_id.date_planned_finished',
+        track_visibility='onchange')
 
     @api.multi
     @api.depends('procurement_ids', 'procurement_ids.production_id')
@@ -49,6 +60,47 @@ class PurchaseOrderLine(models.Model):
         if is_service and self.procurement_ids:
             has_mo = len(self.procurement_ids.production_id) == 1
         return is_service and has_mo
+
+    @api.multi
+    def write(self, values):
+        """postpone (manufacturing orders)
+        when changing (order line).schedule date.
+
+        Count the number of days the line is postponed.
+        Add this count to mo.date_planned_start and mo.date_planned_finished.
+
+        line.date_planned can be different than mo.date_planned_finished
+        for instnace, it can be a date of picking out or picking in
+        if it's managed by an incoterm
+
+        # TODO @api.onchange ? instead of write ?
+        """
+        date_from_string = fields.Datetime.from_string
+        if 'date_planned' not in values:
+            return super(PurchaseOrderLine, self).write(values)
+        for rec in self:
+            if not rec.mo_id:
+                continue
+            prev_date_planned = date_from_string(rec.date_planned)
+            next_date_planned = date_from_string(values['date_planned'])
+            delta = next_date_planned - prev_date_planned
+            _logger.info(
+                'Changing MO date_planned_finished, +%s days'
+                % delta)
+            next_date_planned_start = (
+                date_from_string(rec.mo_id.date_planned_start) + delta)
+            next_date_planned_finished = (
+                date_from_string(rec.mo_id.date_planned_finished) + delta)
+            # if user had set both date_planned_* and date_planned
+            # we assume there is no postpone to do
+            rec.mo_id.date_planned_finished = values.get(
+                'date_planned_finished', next_date_planned_finished)
+            rec.mo_id.date_planned_start = values.get(
+                'date_planned_start', next_date_planned_start)
+        result = super(PurchaseOrderLine, self).write(values)
+
+        return result
+
 
 
 class Purchase(models.Model):
