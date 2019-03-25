@@ -152,27 +152,27 @@ class MrpProduction(models.Model):
             moves_out_dest |= move_out_dest
         return moves_out, moves_out_dest
 
-    @api.multi
-    def write(self, vals):
-        """Propagate date_planned start to previous move."""
+    # @api.multi
+    # def write(self, vals):
+    #     """Propagate date_planned start to previous move."""
 
-        # lorsqu'on change la date de la mo
-        #  on change la date de reception associée
-        # est-ce vraiment utile ??
-        res = super(MrpProduction, self).write(vals)
-        if 'date_planned_start' in vals:
-            inter_wh = self.env.ref('stock.stock_location_inter_wh')
+    #     # lorsqu'on change la date de la mo
+    #     #  on change la date de reception associée
+    #     # est-ce vraiment utile ??
+    #     res = super(MrpProduction, self).write(vals)
+    #     if 'date_planned_start' in vals:
+    #         inter_wh = self.env.ref('stock.stock_location_inter_wh')
 
-            for move_in in self.move_raw_ids.filtered(
-                lambda r: r.state not in ['done', 'cancel']
-            ):
-                for previous_move in move_in.move_orig_ids:
-                    if previous_move.location_id != inter_wh:
-                        _logger.warning('precedent non concernee')
-                        continue
-                    if len(move_in.move_orig_ids) > 1:
-                        _logger.warning('devrait pas arriver !')
-                    previous_move.date_expected = move_in.date_expected
-                    _logger.info('date du precedent pickng changee')
-            _logger.info('pour le moment on fait pas les move out')
-        return res
+    #         for move_in in self.move_raw_ids.filtered(
+    #             lambda r: r.state not in ['done', 'cancel']
+    #         ):
+    #             for previous_move in move_in.move_orig_ids:
+    #                 if previous_move.location_id != inter_wh:
+    #                     _logger.warning('precedent non concernee')
+    #                     continue
+    #                 if len(move_in.move_orig_ids) > 1:
+    #                     _logger.warning('devrait pas arriver !')
+    #                 previous_move.date_expected = move_in.date_expected
+    #                 _logger.info('date du precedent pickng changee')
+    #         _logger.info('pour le moment on fait pas les move out')
+    #     return res
