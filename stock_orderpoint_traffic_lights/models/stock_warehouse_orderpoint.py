@@ -52,22 +52,18 @@ class StockWarehouseOrderpoint(models.Model):
     def _compute_procure_recommended_qty(self):
         print "on devrait compter ici la minimum recomm qty!"
 
-    def _get_manufactured_bom(self):
-        return self.env['mrp.bom'].search(
-            ['|',
-             ('product_id', '=', self.product_id.id),
-             ('product_tmpl_id', '=', self.product_id.product_tmpl_id.id),
-             '|',
-             ('location_id', '=', self.location_id.id),
-             ('location_id', '=', False)], limit=1)
-
     def _compute_dlt(self):
         for rec in self:
             # product_id est calculé en fonction de sa BOM
-            rec.dlt = rec.product_id.dlt
+            # TODO: ajouter le temps de transport en partant
+            # de product_id.transit(rec.location_id)
+            rec.dlt = rec.product_id.dlt # + rec.transit_to(rec.warehouse_id)
 
-    dlt = fields.Float(string="Decoupled Lead Time (days)",
-                       compute="_compute_dlt")
+    dlt = fields.Float(
+        string="Decoupled Lead Time (days)",
+        # TODO mettre en releated
+        compute="_compute_dlt")
+
     order_cycle = fields.Float(string="Minimum Order Cycle (days)")
     minimum_order_quantity = fields.Float(string="Minimum Order Quantity",
                                           digits=UNIT)

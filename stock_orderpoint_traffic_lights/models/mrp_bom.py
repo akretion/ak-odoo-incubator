@@ -23,6 +23,10 @@ class MrpBom(models.Model):
         compute="_compute_dlt",
     #    store=True,
     )
+    mlt = fields.Float(
+        string="Max lead Time",
+        compute="_compute_dlt",
+)
     has_mto_rule = fields.Boolean(
         string="MTO",
         help="Follows an MTO Pull Rule",
@@ -59,6 +63,7 @@ class MrpBom(models.Model):
         if not self.bom_line_ids:
             return 0.0
         paths = [0] * len(self.bom_line_ids)
+        paths_mlt = []
         i = 0
         for line in self.bom_line_ids:
             if line.is_buffered:
@@ -66,6 +71,8 @@ class MrpBom(models.Model):
             else:
                 paths[i] = line.dlt
                 i += 1
+            paths_mlt.append(line.mlt)
+        self.mlt += max(paths_mlt)
         return max(paths)
 
     @api.multi
@@ -74,6 +81,8 @@ class MrpBom(models.Model):
         BOM until a buffered position and then selecting the greatest."""
         self.ensure_one()
         dlt = self.product_id.produce_delay or \
+            self.product_tmpl_id.produce_delay
+        self.mlt = self.product_id.produce_delay or \
             self.product_tmpl_id.produce_delay
         dlt += self._get_longest_path()
         return dlt
@@ -103,6 +112,9 @@ class MrpBomLine(models.Model):
         string="Decoupled Lead Time (days)",
         compute='_compute_dlt',
     )
+    mlt = fields.Float(
+        string="Maximum Lead Time (days)",
+        compute="_compute_mlt")
     has_mto_rule = fields.Boolean(
         string="MTO",
         help="Follows an MTO Pull Rule",
@@ -139,3 +151,8 @@ class MrpBomLine(models.Model):
     def _compute_dlt(self):
         for rec in self:
             rec.dlt = rec.product_id.dlt
+
+    @api.depends('product_id.product_tmpl_id.mlt')
+    def _compute_mlt(self):
+        for rec in self:
+            rec.mlt = rec.product_id.mlt

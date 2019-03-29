@@ -9,6 +9,7 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     dlt = fields.Float(related='product_variant_ids.dlt')
+    mlt = fields.Float(related='product_variant_ids.mlt')
 
 
 class ProductProduct(models.Model):
@@ -19,16 +20,24 @@ class ProductProduct(models.Model):
         compute="_compute_dlt",
         store=True,
     )
+    mlt = fields.Float(
+        string="Max lead time (days)",
+        compute="_compute_dlt",
+        store=True)
 
     @api.depends(
         'seller_ids.delay',
-        'bom_ids.dlt', 'produce_delay', 'product_tmpl_id.produce_delay'
+        'bom_ids.dlt',  # TODO fix it here, bom_ids.dlt no longer stored
+        'produce_delay', 'product_tmpl_id.produce_delay'
     )
     def _compute_dlt(self):
         for rec in self:
-            _logger.info("product.compute_dlt")
+            _logger.info("product.compute_dlt id: %s" % rec.id or '?')
             if rec.bom_ids:
                 rec.dlt = rec.bom_ids[0].dlt
+                rec.mlt = rec.bom_ids[0].mlt
             else:
                 rec.dlt = rec.seller_ids and \
+                    rec.seller_ids[0].delay or 0.0
+                rec.mlt = rec.seller_ids and \
                     rec.seller_ids[0].delay or 0.0

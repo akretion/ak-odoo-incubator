@@ -10,15 +10,15 @@
         <field name="arch" type="xml">
             <field name="routing_id" position="before">
                 <field name="is_buffered"/>
-                <field name="has_mto_rule"/>
                 <field name="orderpoint_id"/>
                 <field name="dlt"/>
+                <field name="mlt"/>
             </field>
             <xpath expr="//field[@name='bom_line_ids']/tree/field[@name='product_uom_id']" position="after">
                 <field name="is_buffered"/>
-                <field name="has_mto_rule"/>
                 <field name="orderpoint_id"/>
                 <field name="dlt"/>
+                <field name="mlt"/>
             </xpath>
         </field>
     </record>
