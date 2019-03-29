@@ -11,6 +11,7 @@
                 <field name="dlt"/>
                 <field name="order_cycle"/>
                 <field name="minimum_order_quantity"/>
+                <field name="forcasted_qty" />
             </field>
         </field>
     </record>
@@ -96,9 +97,12 @@
                     <field name="incoming_dlt_qty"/>
 <!--                    <field name="execution_priority_level" />-->
                     <field name="planning_priority_level" />
-<!--                    <field name="qualified_demand"/>
--->                    <field name="least_order_date" />
+                    <field name="least_order_date" />
                     <field name="next_need" />
+                    <field name="procure_recommended_qty" string="Qty to order"/>
+                    <field name="qualified_demand"/>
+                    <field name="forcasted_qty" />
+                    <field name="net_flow_position"/>
                 </group>
             </xpath>
             <sheet position="inside">
@@ -124,6 +128,7 @@
                 <field name="planning_priority_level"
                        bg_color="red:planning_priority_level=='1_red';yellow:planning_priority_level=='2_yellow';green:planning_priority_level == '3_green'"
                        fg_color="white:planning_priority_level=='1_red';black:planning_priority_level=='2_yellow';white:planning_priority_level == '3_green'"/>
+                 <field name="product_location_qty_available_not_res" />
    <!--             <field name="execution_priority_level"
                        bg_color="red:execution_priority_level=='1_red';yellow:execution_priority_level=='2_yellow';green:execution_priority_level == '3_green'"
                        fg_color="white:execution_priority_level=='1_red';black:execution_priority_level=='2_yellow';white:execution_priority_level == '3_green'"/>
@@ -135,6 +140,7 @@
                 <field name="incoming_dlt_qty" string="Incoming within DLT"/>
                 <field name="incoming_location_qty"
                        string="Total Incoming"/>
+                <field name="forcasted_qty" />
 <!--                 <field name="qualified_demand"/>
  -->                <field name="next_need"/>
                 <field name="procure_uom_id"/>

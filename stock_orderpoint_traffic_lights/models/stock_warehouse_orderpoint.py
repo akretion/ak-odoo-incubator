@@ -99,8 +99,11 @@ class StockWarehouseOrderpoint(models.Model):
         inverse_name='orderpoint_id')
 
     horizon = fields.Float(string="horizon", help="Number of day to look at")
+    # TODO: faire la difference entre l'horizon
+    # pour capter les besoins futurs
     next_need = fields.Date(readonly=True)
     least_order_date = fields.Date(readonly=True)
+    forcasted_qty = fields.Float(compute='_calc_forcast')
     _order = 'planning_priority_level asc'
 
     @api.multi
@@ -225,79 +228,133 @@ class StockWarehouseOrderpoint(models.Model):
 
     @api.multi
     def _calc_execution_priority(self):
+        # grosse divergence
         for rec in self:
             rec.execution_priority_level = '3_green'
 
     @api.multi
     def _calc_qualified_demand(self):
+        # grosse différence avec ddmrp
+
+        # todo: substract_procurements_from-orderoints
+        # tenir compte de quand ces procurements vont arriver
         subtract_qty = self.subtract_procurements_from_orderpoints()
         for rec in self:
             rec.refresh()
-            rec.qualified_demand = 0.0
             inc_domain = rec._search_stock_moves_incoming_domain()
             out_domain = rec._search_stock_moves_qualified_demand_domain()
             inc_moves = self.env['stock.move'].search(inc_domain)
             out_moves = self.env['stock.move'].search(out_domain)
             all_moves = inc_moves + out_moves
+            forcasts = rec._forcast_needs()
             demand_by_days = {}
-            move_dates = [fields.Datetime.from_string(dt).date() for dt in
-                          all_moves.mapped('date_expected')]
+            qualified_demand = 0.0
+
+            move_dates = [
+                fields.Date.from_string(dt)
+                for dt in (
+                    all_moves.mapped('date_expected') +
+                    forcasts.mapped('date')
+                )]
+
             for move_date in move_dates:
                 demand_by_days[move_date] = {
-                    'inc': 0.0, 'out': 0.0, 'sum': 0.0}
+                    'inc': 0.0, 'out': 0.0, 'sum': 0.0, 'ideal': 0}
             for move in inc_moves:
-                date = fields.Datetime.from_string(move.date_expected).date()
+                date = fields.Date.from_string(move.date_expected)
                 demand_by_days[date]['inc'] += \
                     move.product_qty - move.reserved_availability
             for move in out_moves:
-                date = fields.Datetime.from_string(move.date_expected).date()
+                date = fields.Date.from_string(move.date_expected)
                 demand_by_days[date]['out'] -= move.product_qty
+            for forcast in forcasts:
+                print 'on ajoute un besoin de %s' % forcast.qty
+                date = fields.Date.from_string(forcast.date)
+                demand_by_days[date]['out'] -= forcast.qty
 
             demand_sorted = demand_by_days.keys()
             demand_sorted.sort()
-            min_date = False
-            future_stock = 0.0
+            min_date = False  # when stock will be negative for the first time
+            interval_to_look_at = (demand_sorted or [None])[-1]
+            # how many days we want to procure after min_date
+            # it will be fixed when min_date is set
+            ideal_order_qty = 0.0
+            # ideal_order_quantity: current_stock + ideal_order_qty should be
+            # enough to cover the needs until min_date + interval_to_look_at
+            # it's mainly procurement_qty
+
+            already_in_stock = rec.with_context(
+                location=rec.location_id.id
+            ).product_id.qty_available
+            incoming = subtract_qty[rec.id]
+            future_stock = already_in_stock + incoming
+            # future stock is what we will have if we do nothing
+
+            if len(demand_sorted) > 0:
+                demand_by_days[demand_sorted[0]]['sum'] = future_stock
+                # we initate with qty in stock and qty to come
+                # TODO:put substract_qty on the good dates instead of beggining
+            else:
+                future_stock_ideal = future_stock
             for i in xrange(len(demand_sorted)):
+                current_date = demand_sorted[i]
                 day = demand_by_days[demand_sorted[i]]
                 prev = demand_by_days[demand_sorted[max(i - 1, 0)]]
                 day['sum'] = day['inc'] + day['out'] + prev['sum']
-                #if date <= fields.date.today():
-                rec.qualified_demand += demand_by_days[date]['inc']
+                day['ideal'] = day['inc'] + day['out'] + prev['ideal']
+
+                qualified_demand += day['out'] * -1
                 if not min_date:
                     if day['sum'] < 0:
-                        min_date = demand_sorted[i]
-                if day['sum'] < 0:
-                    future_stock = future_stock + day['sum']
-            rec.next_need = min_date
+                        min_date = current_date
+                        interval_to_look_at = (
+                            min_date + timedelta(days=rec.order_cycle))
+                if current_date <= interval_to_look_at:
+                    if day['ideal'] < 0:
+                        # day['ideal'] < 0 instead of < rec.product_min_qty
+                        # because it's ok to take in safety stock
+                        ideal_order_qty += day['ideal'] * -1
+                        day['ideal'] = 0  # we cover only the need of the day
+                    future_stock_ideal = day['ideal']
+                    # future_stock_ideal is what will I have in stock
+                    # if I order ideal_order_qty now
+
             product_qty = 0.0
-            # qty needed from future stock move (withing the horizon)
-#            sum_to_order = sum_to_order * -1
-            # qty needed taking into account the current stock
-            future_stock += rec.with_context(
-                location=rec.location_id.id).product_id.qty_available
-            if float_compare(future_stock, rec.product_min_qty,
-                             precision_rounding=rec.product_uom.rounding) < 0:
-                sum_to_order = max(rec.product_min_qty, rec.product_max_qty) - future_stock
-                sum_to_order -= subtract_qty[rec.id]
-                if sum_to_order > 0.0:
-                    reste = rec.qty_multiple > 0 and \
-                        sum_to_order % rec.qty_multiple or 0.0
-                    if rec.procure_uom_id:
-                        rounding = rec.procure_uom_id.rounding
-                    else:
-                        rounding = rec.product_uom.rounding
-                    if float_compare(
-                            reste, 0.0,
-                            precision_rounding=rounding) > 0:
-                        sum_to_order += rec.qty_multiple - reste
-                    if rec.procure_uom_id:
-                        product_qty = rec.product_id.uom_id._compute_quantity(
-                            sum_to_order, rec.procure_uom_id)
-                    else:
-                        product_qty = sum_to_order
+            # we need to order something if ideal_qty_order > 0
+            # OR we are under min buffer limit
+            # in both cases we should refill up to max
+            if float_compare(
+                future_stock_ideal, rec.product_min_qty,
+                precision_rounding=rec.product_uom.rounding
+            ) < 0 or ideal_order_qty > 0:
+                max_limit = max(rec.product_min_qty, rec.product_max_qty)
+                sum_to_order = max(max_limit, ideal_order_qty)
+                product_qty = self._calc_qty_from_uom(sum_to_order)
             rec.procure_recommended_qty = product_qty
+            rec.next_need = min_date
+            rec.qualified_demand = qualified_demand
             print "sum to order : %s" % product_qty
         return True
+
+    def _calc_qty_from_uom(self, sum_to_order):
+        if self.qty_multiple > 0:
+            reste = sum_to_order % self.qty_multiple
+        else:
+            reste = 0.0
+        if self.procure_uom_id:
+            rounding = self.procure_uom_id.rounding
+        else:
+            rounding = self.product_uom.rounding
+        if float_compare(
+                reste, 0.0,
+                precision_rounding=rounding) > 0:
+            sum_to_order += self.qty_multiple - reste
+        if self.procure_uom_id:
+            product_qty = self.product_id.uom_id._compute_quantity(
+                sum_to_order, self.procure_uom_id)
+        else:
+            product_qty = sum_to_order
+        return product_qty
 
     @api.multi
     def _calc_incoming_dlt_qty(self):
@@ -331,6 +388,9 @@ class StockWarehouseOrderpoint(models.Model):
         orderpoints = self.search([])
         i = 0
         j = len(orderpoints)
+        self.env['stock.orderpoint.forcast.table'].build_forcast_table()
+        self.env['stock.orderpoint.forcast'].generate_forcast()
+
         for op in orderpoints:
             i += 1
             _logger.debug("ddmrp cron: %s. (%s/%s)" % (op.name, i, j))
@@ -349,3 +409,12 @@ class StockWarehouseOrderpoint(models.Model):
         _logger.info("End cron_ddmrp.")
 
         return True
+
+    def _forcast_needs(self):
+        return self.env['stock.orderpoint.forcast'].search(
+            [['orderpoint_id', '=', self.id]])
+
+    @api.multi
+    def _calc_forcast(self):
+        for rec in self:
+            rec.forcasted_qty = sum(rec._forcast_needs().mapped('qty'))

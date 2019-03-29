@@ -8,3 +8,4 @@ from . import purchase_order
 from . import mrp_bom
 from . import product
 from . import make_procurement
+from . import create_demand
