@@ -10,6 +10,16 @@ from odoo import api, fields, models
 class ProcurementOrder(models.Model):
     _inherit = 'procurement.order'
 
+    @api.multi
+    def _prepare_purchase_order_line(self, po, supplier):
+        vals = super(ProcurementOrder, self)._prepare_purchase_order_line(
+            po, supplier)
+        # If the procurement was run directly by a reordering rule.
+        if self.orderpoint_id.id:
+            vals['orderpoint_ids'] = [
+                (4, self.orderpoint_id.id)]
+        return vals
+
     add_to_net_flow_equation = fields.Boolean(
         string='Pending add net flow equation', default=True,
         readonly=True,
@@ -35,6 +45,7 @@ class ProcurementOrder(models.Model):
         With DDMRP it is in the hands of the planner to manually
         create procurements, based on the procure recommendations."""
         return {}
+
 
     @api.multi
     def write(self, vals):

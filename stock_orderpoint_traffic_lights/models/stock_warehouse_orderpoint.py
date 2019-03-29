@@ -73,12 +73,22 @@ class StockWarehouseOrderpoint(models.Model):
         string="Incoming (Within DLT)",
         readonly=True,
     )
+    net_flow_position = fields.Float(
+        string="Net flow position", digits=UNIT,
+        readonly=True)
     planning_priority_level = fields.Selection(
         string="Planning Priority Level", selection=_PRIORITY_LEVEL,
         readonly=True)
     execution_priority_level = fields.Selection(
         string="On-Hand Alert Level",
         selection=_PRIORITY_LEVEL, store=True, readonly=True)
+    product_location_qty_available_not_res = fields.Float(
+        # rename string from stock_warehouse_orderpoint_stock_info_unreserved
+        string='On-Hand',
+        help='Quantity On Location (Unreserved)',  # previsous name
+    )
+    on_hand_percent = fields.Float(string="On Hand/TOR (%)",
+        store=True, readonly=True)
     # We override the calculation method for the procure recommended qty
     procure_recommended_qty = fields.Float(
         compute="_compute_procure_recommended_qty", store=True)
@@ -87,14 +97,49 @@ class StockWarehouseOrderpoint(models.Model):
     mrp_production_ids = fields.One2many(
         string='Manufacturing Orders', comodel_name='mrp.production',
         inverse_name='orderpoint_id')
-    purchase_lines_ids = fields.One2many(
-        string="Purchase Order Lines", comodel_name="purchase.order.line",
-        inverse_name="orderpoint_id",
-    )
+
     horizon = fields.Float(string="horizon", help="Number of day to look at")
     next_need = fields.Date(readonly=True)
     least_order_date = fields.Date(readonly=True)
     _order = 'planning_priority_level asc'
+
+    @api.multi
+    def _search_open_stock_moves_domain(self):
+        self.ensure_one()
+        return [('product_id', '=', self.product_id.id),
+                ('state', 'in', ['draft', 'waiting', 'confirmed',
+                                 'assigned']),
+                ('location_dest_id', '=', self.location_id.id)]
+
+    @api.multi
+    def open_moves(self):
+        self.ensure_one()
+        # Utility method used to add an "Open Moves" button in the buffer
+        # planning view
+        domain = self._search_open_stock_moves_domain()
+        records = self.env['stock.move'].search(domain)
+        return self._stock_move_tree_view(records)
+
+    @api.model
+    def _stock_move_tree_view(self, lines):
+        views = []
+        tree_view = self.env.ref('stock.view_move_tree', False)
+        if tree_view:
+            views += [(tree_view.id, 'tree')]
+        form_view = self.env.ref(
+            'stock.view_move_form', False)
+        if form_view:
+            views += [(form_view.id, 'form')]
+
+        return {
+            'name': _('Non-completed Moves'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'stock.move',
+            'view_type': 'form',
+            'views': views,
+            'view_mode': 'tree,form',
+            'domain': str([('id', 'in', lines.ids)]),
+        }
 
     @api.multi
     def _search_stock_moves_qualified_demand_domain(self):
@@ -125,7 +170,22 @@ class StockWarehouseOrderpoint(models.Model):
                 ('date_expected', '<=', date_to)]
 
     @api.multi
+    def _calc_net_flow_position(self):
+        for rec in self:
+            rec.net_flow_position = \
+                rec.product_location_qty_available_not_res + \
+                rec.incoming_dlt_qty - rec.qualified_demand
+            # on a desactivé top_of_green
+            # usage = 0.0
+            # if rec.top_of_green:
+            #     usage = round(
+            #         (rec.net_flow_position / rec.top_of_green*100), 2)
+            # rec.net_flow_position_percent = usage
+        return True
+
+    @api.multi
     def _calc_planning_priority(self):
+        # grosse divergence avec ddmrp
         for rec in self:
             rec.refresh()
             if not rec.next_need:
@@ -254,11 +314,12 @@ class StockWarehouseOrderpoint(models.Model):
         enhance extensibility."""
         self.ensure_one()
         self._calc_qualified_demand()
+        self._calc_net_flow_position()
         self._calc_incoming_dlt_qty()
         self._calc_planning_priority()
         self._calc_execution_priority()
         self.mrp_production_ids._calc_execution_priority()
-        self.purchase_lines_ids._calc_execution_priority()
+        self.mapped('purchase_line_ids')._calc_execution_priority()
         return True
 
     @api.model

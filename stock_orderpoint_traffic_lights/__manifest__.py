@@ -25,6 +25,7 @@
         "stock_orderpoint_manual_procurement",
     #    "mrp_mto_with_stock",
         "base_cron_exclusion",
+        "stock_orderpoint_purchase_link",  # v11
     ],
     'data': [
         'data/ir_cron.xml',
