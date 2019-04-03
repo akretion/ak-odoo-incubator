@@ -83,11 +83,14 @@ class ExternalTaskService(Component):
                 if 'assignee_id' in task:
                     task['assignee_id'] = self._map_partner_read_to_data(
                         task['assignee_id'])
-                if 'tag_ids' in task and task['tag_ids']:
-                    task['tag_ids'] = task['tag_ids'][0]
+                if 'tag_ids' in task:
+                    task['tag_ids'] = task['tag_ids'] and task['tag_ids'][0] or False
                     if 'color' in task:
-                        task['color'] = self.env['project.tags'].search(
-                                [('id', '=', task['tag_ids'])]).color
+                        if task['tag_ids']:
+                            task['color'] = self.env['project.tags'].search(
+                                    [('id', '=', task['tag_ids'])]).color
+                        else:
+                            task['color'] = 0
             return tasks
         return []
 
