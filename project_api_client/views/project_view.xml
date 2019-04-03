@@ -7,12 +7,14 @@
                 <form string="Task">
                     <sheet string="Task">
                         <h1>
-                            <field name="id"/> -
+                            <field name="priority" widget="priority" readonly="1"/>
+                            <field name="id" class="oe_inline"/> -
                             <field name="name" placeholder="Task summary..." class="oe_inline" colspan="4"/>
                         </h1>
                         <group col="12" attrs="{'invisible': [('id', '=', False)]}">
                             <group>
                                 <field name="project_id" readonly="1"/>
+                                <field name="tag_ids" readonly="1"/>
                                 <field
                                     name="assignee_id"
                                     readonly="1"
@@ -30,7 +32,51 @@
                         </group>
                         <notebook>
                             <page string="Description">
-                                <field name="description" placeholder="Add a Description..."/>
+                                <field name="description" placeholder="Add a Description..." colspan="4"/>
+                                <group string="Attachments" colspan="4">
+                                    <field name="attachment_ids" nolabel="1">
+                                        <tree>
+                                            <field name="name" invisible="1"/>
+                                            <field name="datas" filename="datas_fname"/>
+                                            <field name="datas_fname" invisible="1"/>
+                                        </tree>
+                                        <kanban>
+                                            <field name="id"/>
+                                            <field name="mimetype"/>
+                                            <field name="type"/>
+                                            <field name="datas_fname"/>
+                                            <field name="name"/>
+                                            <templates>
+                                                <t t-name="kanban-box">
+                                                    <div class="oe_kanban_global_click">
+                                                        <div class="oe_kanban_vignette">
+                                                            <div class="oe_attachment">
+                                                                <div class="oe_name">
+                                                                    <field name="name"/>
+                                                                </div>
+                                                                <div t-if="record.type.raw_value == 'binary'">
+                                                                    <t t-set="webimage" t-value="new RegExp('image.*(gif|jpeg|jpg|png)').test(record.mimetype.value)"/>
+                                                                    <div t-if="!webimage" class="o_image" t-att-data-mimetype="record.mimetype.value">
+                                                                        <img t-att-src="'/mail/static/src/img/mimetypes/' + record.mimetype.value + '.png'"></img>
+                                                                    </div>
+                                                                    <div t-if="webimage" class="o_kanban_attachment_image">
+                                                                        <img t-att-src="kanban_image('ir.attachment', 'datas', record.id.value)"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </templates>
+                                        </kanban>
+                                        <form>
+                                            <field name="datas" filename="datas_fname"/>
+                                            <field name="datas_fname" invisible="1"/>
+                                            <field name="name" invisible="1"/>
+                                            <field name="res_model" invisible="1"/>
+                                        </form>
+                                    </field>
+                                </group>
                                 <div class="oe_clear"/>
                             </page>
                             <page string="Customer Report">
@@ -55,6 +101,12 @@
             <field name="inherit_id" ref="view_external_task_form"/>
             <field name="groups_id" eval="[(4, ref('project_api_client.group_support_manager'))]"/>
             <field name="arch" type="xml">
+                <field name="priority" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
+                <field name="tag_ids" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </field>
                 <field name="project_id" position="attributes">
                     <attribute name="readonly">0</attribute>
                 </field>
@@ -97,19 +149,20 @@
                     <field name="priority"/>
                     <field name="date_deadline"/>
                     <field name="assignee_id"/>
+                    <field name="tag_ids"/>
                     <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
-
-                            <div class="o_dropdown_kanban dropdown" groups="base.group_user">
-                                <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
-                                    <span class="fa fa-bars fa-lg"/>
-                                </a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                    <t t-if="widget.editable"><li><a type="edit">Edit Task</a></li></t>
-                                    <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                            <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user">
+                                <span class="oe_e">í</span>
+                                <ul class="oe_dropdown_menu">
+                                    <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit...</a></li></t>
+                                    <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t>
+                                    <br/>
+                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
                                 </ul>
                             </div>
+
                             <div class="oe_kanban_content">
                                 <div>
                                     <strong><field name="id"/> - <field name="name"/></strong>
@@ -120,6 +173,9 @@
                                 <div class="text-muted">
                                     <t t-if="record.date_deadline.raw_value and record.date_deadline.raw_value lt (new Date())" t-set="red">oe_kanban_text_red</t>
                                     <span t-attf-class="#{red || ''}"><i><field name="date_deadline"/></i></span>
+                                </div>
+                                <div class="oe_kanban_footer_left" style="margin-top:5px;">
+                                    <field name="tag_ids"/>
                                 </div>
                                 <div class="oe_kanban_bottom_left">
                                     <field name="priority" widget="priority"/>
@@ -160,6 +216,7 @@
         <menuitem action="action_view_external_task"
             id="external_project"
             name="Support"
-            sequence="100"/>
+            sequence="100"
+            groups="project_api_client.group_support_user"/>
 
 </odoo>
