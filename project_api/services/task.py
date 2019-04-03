@@ -83,6 +83,11 @@ class ExternalTaskService(Component):
                 if 'assignee_id' in task:
                     task['assignee_id'] = self._map_partner_read_to_data(
                         task['assignee_id'])
+                if 'tag_ids' in task and task['tag_ids']:
+                    task['tag_ids'] = task['tag_ids'][0]
+                    if 'color' in task:
+                        task['color'] = self.env['project.tags'].search(
+                                [('id', '=', task['tag_ids'])]).color
             return tasks
         return []
 
@@ -144,6 +149,8 @@ class ExternalTaskService(Component):
                 _('You do not have the right to modify this records'))
         if assignee:
             vals['assignee_customer_id'] = self._get_partner(assignee).id
+        if 'tag_ids' in vals:
+            vals['tag_ids'] = [(6, 0, [vals['tag_ids']])]
         return tasks.with_context(
             force_message_author_id=author.id).write(vals)
 
@@ -263,6 +270,16 @@ class ExternalTaskService(Component):
         return [(helpdesk.id, helpdesk.customer_project_name)]\
             + [(p.id, p.customer_project_name) for p in projects]
 
+    def type_list(self):
+        projects = self.partner.help_desk_project_id
+        projects |= self.env['project.project'].search([
+            ('partner_id', '=', self.partner.id),
+            ('id', '!=', projects.id)])
+        tags = self.env['project.tags']
+        for project in projects:
+            tags |= project.tag_ids
+        return [(tag.id, tag.name) for tag in tags]
+
     # Validator
     def _validator_read(self):
         return {
@@ -304,8 +321,11 @@ class ExternalTaskService(Component):
             'origin_name': {'type': 'string'},
             'action_id': {'type': 'integer'},
             'project_id': {'type': 'integer'},
+            'tag_ids': {'type': 'integer'},
+            'priority': {'type': 'string'},
             'author': self._partner_validator(),
-        }
+            'attachment_ids': {'type': 'list'},
+            }
 
     def _validator_write(self):
         return {
@@ -317,10 +337,22 @@ class ExternalTaskService(Component):
                     'stage_name': {'type': 'string'},
                     'description': {'type': 'string'},
                     'project_id': {'type': 'integer'},
+                    'tag_ids': {'type': 'integer'},
+                    'priority': {'type': 'string'},
+                    'attachment_ids': {'type': 'list'},
                 }
             },
             'author': self._partner_validator(),
             'assignee': self._partner_validator()
+        }
+
+    def _attachment_validator(self):
+        return {
+            'type': 'dict',
+            'schema': {
+                'res_id': {'type': 'integer'},
+                'db_datas': {'type': 'string'},
+            }
         }
 
     def _validator_message_format(self):
@@ -366,3 +398,38 @@ class ExternalTaskService(Component):
 
     def _validator_project_list(self):
         return {}
+
+    def _validator_type_list(self):
+        return {}
+
+
+class ExternalAttachmentService(Component):
+    _inherit = 'base.rest.service'
+    _name = 'external.attachment.service'
+    _collection = 'project.project'
+    _usage = 'attachment'
+
+    @property
+    def partner(self):
+        return self.work.partner
+
+    def read(self, ids, fields, load):
+        tasks = self.env['project.task'].search(
+            [('project_id.partner_id', '=', self.partner.id)])
+        attachments = self.env['ir.attachment'].search(
+            [('id', 'in', ids),
+             ('res_id', 'in', tasks.ids),
+             ('res_model', '=', 'project.task')])
+        attachments = attachments.read(fields=fields, load=load)
+        if attachments:
+            return attachments
+        return []
+
+    # Validator
+    def _validator_read(self):
+        return {
+            'ids': {'type': 'list'},
+            'fields': {'type': 'list'},
+            'load': {'type': 'string'},
+            'context': {'type': 'dict'},
+            }

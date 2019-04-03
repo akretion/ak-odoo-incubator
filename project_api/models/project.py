@@ -12,6 +12,7 @@ class ProjectProject(models.Model):
     customer_project_name = fields.Char(
         help='Name that will appear on customer support menu',
         index=True)
+    tag_ids = fields.Many2many('project.tags', string='Tags')
 
 
 class ProjectTask(models.Model):
@@ -41,6 +42,9 @@ class ProjectTask(models.Model):
     origin_db = fields.Char()
     origin_model = fields.Char()
     technical_description = fields.Html()
+    attachment_ids = fields.One2many(
+        comodel_name='ir.attachment', inverse_name='res_id',
+        domain=[('res_model', '=', 'project.task')])
 
     @api.depends('user_id', 'assignee_customer_id')
     def _compute_assignee(self):
