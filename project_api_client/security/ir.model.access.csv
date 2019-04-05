@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_external_task,access_external_task,model_external_task,base.group_user,1,1,1,1
 access_external_message,access_external_message,model_external_message,base.group_user,1,0,0,0
+access_external_attachment,access_external_attachment,model_external_attachment,base.group_user,1,1,1,0
