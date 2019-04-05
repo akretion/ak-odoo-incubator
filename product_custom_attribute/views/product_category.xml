@@ -7,7 +7,7 @@
       <field name="model">product.category</field>
       <field name="inherit_id" ref="product.product_category_form_view"/>
       <field name="arch" type="xml">
-        <field name="type" position="after">
+        <field name="name" position="after">
           <field name="attribute_set_id"/>
           <newline/>
         </field>

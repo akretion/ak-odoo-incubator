@@ -33,7 +33,7 @@
       <menuitem
               action="open_product_by_attribute_set"
               id="open_product_wizard"
-              parent="sales_team.menu_sales"
+              parent="sale.sale_order_menu"
               sequence="60"/>
 
   </data>
