@@ -320,6 +320,10 @@ class ExternalTask(models.Model):
             vals['action_id'] = self._context['from_action']
         return vals
 
+    def message_partner_info_from_emails(
+            self, cr, uid, id, emails, link_mail=False, context=None):
+        return []
+
 
 class ExternalMessage(models.Model):
     _name = 'external.message'
