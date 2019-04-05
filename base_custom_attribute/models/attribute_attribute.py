@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2011 Akretion (http://www.akretion.com).
 # @author Benoît GUILLOT <benoit.guillot@akretion.com>
 # @author Raphaël VALYI <raphael.valyi@akretion.com>
@@ -219,8 +218,8 @@ class AttributeAttribute(models.Model):
 
             else:
                 f_vals = {
-                    'name': u'x_custom_json_attrs',
-                    'field_description': u'Serialized JSON Attributes',
+                    'name': 'x_custom_json_attrs',
+                    'field_description': 'Serialized JSON Attributes',
                     'ttype': 'serialized',
                     'model_id': vals['model_id'],
                 }
@@ -234,18 +233,18 @@ class AttributeAttribute(models.Model):
     @api.onchange('field_description')
     def onchange_field_description(self):
         if self.field_description and not self.create_date:
-            self.name = unicode(
+            self.name = str(
                 'x_' + safe_column_name(self.field_description))
 
     @api.onchange('name')
     def onchange_name(self):
         name = self.name
         if not name.startswith('x_'):
-            self.name = u'x_%s' % name
+            self.name = 'x_%s' % name
 
     @api.multi
     def write(self, vals):
-        if 'attribute_type' in vals.keys():
+        if 'attribute_type' in list(vals.keys()):
             if self.search([
                     ('attribute_type', '!=', vals['attribute_type']),
                     ('id', 'in', self.ids),
