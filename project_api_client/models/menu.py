@@ -25,5 +25,5 @@ class IrUiMenu(models.Model):
             support_imd = self.env.ref('project_api_client.external_project')
             menu_domain = [
                 ('parent_id', '=', False), ('id', '!=', support_imd.id)]
-            res = self.search(menu_domain).ids
+            res = self.search(menu_domain)
         return res
