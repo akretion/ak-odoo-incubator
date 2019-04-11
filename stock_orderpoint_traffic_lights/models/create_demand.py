@@ -4,9 +4,14 @@
 
 import logging
 from datetime import timedelta
-import networkx as nx
 from odoo import api, fields, models
+
 _logger = logging.getLogger(__name__)
+
+try:
+    import networkx as nx
+except ImportError:  # pragma: no cover
+    _logger.debug('Cannot import networkx lib')
 
 # TODO:
 # verifier facteur
