@@ -311,3 +311,43 @@ msgstr "oe_kanban_text_red"
 msgid "remote.object"
 msgstr "remote.object"
 
+#. module: project_api_client
+#: selection:external.task,functional_area:0
+msgid "Account"
+msgstr "Comptabilité"
+
+#. module: project_api_client
+#: field:external.task,attachment_ids:0
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_attachment_ids
+msgid "Attachment ids"
+msgstr "Pièces jointes"
+
+#. module: project_api_client
+#: view:external.task:project_api_client.view_external_task_form
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+#. module: project_api_client
+#: selection:external.task,functional_area:0
+msgid "Crm"
+msgstr "Service client"
+
+#. module: project_api_client
+#: selection:external.task,functional_area:0
+msgid "Management"
+msgstr "Exploitation"
+
+#. module: project_api_client
+#: selection:external.task,functional_area:0
+msgid "Procurement"
+msgstr "Approvisionnement"
+
+#. module: project_api_client
+#: selection:external.task,functional_area:0
+msgid "Sale"
+msgstr "Vente"
+
+#. module: project_api_client
+#: selection:external.task,functional_area:0
+msgid "Stock"
+msgstr "Logistique"

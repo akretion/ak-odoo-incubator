@@ -70,9 +70,20 @@ class ExternalTask(models.Model):
     color = fields.Integer(string="Color Index")
     tag_ids = fields.Selection(selection=_get_select_type, string="Type")
     attachment_ids = fields.One2many(
-        comodel_name='external.attachment', inverse_name='res_id')
-
-
+        comodel_name="external.attachment", inverse_name="res_id"
+    )
+    functional_area = fields.Selection(
+        selection=[
+            ("purchase", "Purchase"),
+            ("account", "Account"),
+            ("sale", "Sale"),
+            ("stock", "Stock"),
+            ("crm", "Crm"),
+            ("procurement", "Procurement"),
+            ("management", "Management"),
+        ],
+        string="Functional Area",
+    )
 
     def get_url_key(self):
         keychain = self.env["keychain.account"]
