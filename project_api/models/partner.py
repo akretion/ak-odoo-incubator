@@ -7,12 +7,12 @@ from odoo import fields, models
 
 
 class ResPartner(models.Model):
-    _inherit = 'res.partner'
+    _inherit = "res.partner"
 
     customer_uid = fields.Integer()
     project_auth_api_key_id = fields.Many2one(
-        'auth.api.key',
-        string="Project API KEY")
+        "auth.api.key", string="Project API KEY"
+    )
     help_desk_project_id = fields.Many2one(
-        'project.project',
-        string="Help Desk Project")
+        "project.project", string="Help Desk Project"
+    )
