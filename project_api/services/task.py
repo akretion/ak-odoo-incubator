@@ -328,6 +328,7 @@ class ExternalTaskService(Component):
             'priority': {'type': 'string'},
             'author': self._partner_validator(),
             'attachment_ids': {'type': 'list'},
+            'functional_area': {'type': 'string'},
             }
 
     def _validator_write(self):
@@ -343,6 +344,7 @@ class ExternalTaskService(Component):
                     'tag_ids': {'type': 'integer'},
                     'priority': {'type': 'string'},
                     'attachment_ids': {'type': 'list'},
+                    'functional_area': {'type': 'string'},
                 }
             },
             'author': self._partner_validator(),

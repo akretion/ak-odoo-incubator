@@ -45,6 +45,19 @@ class ProjectTask(models.Model):
     attachment_ids = fields.One2many(
         comodel_name='ir.attachment', inverse_name='res_id',
         domain=[('res_model', '=', 'project.task')])
+    functional_area = fields.Selection(
+        selection=[
+            ('purchase', 'Purchase'),
+            ('account', 'Account'),
+            ('sale', 'Sale'),
+            ('stock', 'Stock'),
+            ('crm', 'Crm'),
+            ('procurement', 'Procurement'),
+            ('management', 'Management')
+        ],
+        string="Functional Area",
+    )
+
 
     @api.depends('user_id', 'assignee_customer_id')
     def _compute_assignee(self):
