@@ -251,7 +251,7 @@ msgstr "Résumé de la tache"
 #: code:addons/project_api_client/models/project.py:81
 #, python-format
 msgid "There is an issue with support. Please send an email"
-msgstr "Un soucis est apparue, veuillez contacter le support par email"
+msgstr "Un soucis est apparu, veuillez contacter le support par email"
 
 #. module: project_api_client
 #: model:ir.ui.view,arch_db:project_api_client.view_external_task_form
