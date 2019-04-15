@@ -7,7 +7,7 @@
             <field name="url">/wiki/home</field>
             <field name="target">new</field>
         </record>
-        
+
         <menuitem
             action="action_open_wiki"
             id="menu_open_wiki"

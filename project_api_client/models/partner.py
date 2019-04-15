@@ -7,13 +7,15 @@ from odoo import fields, models
 
 
 class ResPartner(models.Model):
-    _inherit = 'res.partner'
+    _inherit = "res.partner"
 
     support_uid = fields.Char()
     support_last_update_date = fields.Datetime()
 
     _sql_constraints = [
-        ('support_uid_uniq',
-         'unique (support_uid)',
-         'Support UID already exist !'),
+        (
+            "support_uid_uniq",
+            "unique (support_uid)",
+            "Support UID already exist !",
+        )
     ]

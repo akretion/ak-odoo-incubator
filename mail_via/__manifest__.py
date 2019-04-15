@@ -6,8 +6,7 @@
 
 {
     "name": "Mail Via",
-    "summary":
-        "Change the from email with a via email when sending back email",
+    "summary": "Change the from email with via email when sending back email",
     "version": "10.0.1.0.0",
     "category": "Mail",
     "website": "www.akretion.com",
@@ -15,18 +14,9 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "external_dependencies": {
-        "python": [],
-        "bin": [],
-    },
-    "depends": [
-        "mail",
-    ],
-    "data": [
-        "data/mail_data.xml",
-    ],
-    "demo": [
-    ],
-    "qweb": [
-    ]
+    "external_dependencies": {"python": [], "bin": []},
+    "depends": ["mail"],
+    "data": ["data/mail_data.xml"],
+    "demo": [],
+    "qweb": [],
 }

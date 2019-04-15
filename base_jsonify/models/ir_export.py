@@ -4,14 +4,15 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from collections import OrderedDict
+
 from odoo import api, models
 
 
 def update_dict(data, fields):
     field = fields[0]
     if len(fields) == 1:
-        if field == '.id':
-            field = 'id'
+        if field == ".id":
+            field = "id"
         data[field] = True
     else:
         if field not in data:
@@ -30,15 +31,15 @@ def convert_dict(dict_parser):
 
 
 class IrExport(models.Model):
-    _inherit = 'ir.exports'
+    _inherit = "ir.exports"
 
     @api.multi
     def get_json_parser(self):
         self.ensure_one()
         dict_parser = OrderedDict()
         for line in self.export_fields:
-            names = line.name.split('/')
+            names = line.name.split("/")
             if line.alias:
-                names = line.alias.split('/')
+                names = line.alias.split("/")
             update_dict(dict_parser, names)
         return convert_dict(dict_parser)

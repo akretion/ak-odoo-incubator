@@ -14,17 +14,8 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "external_dependencies": {
-        "python": [],
-        "bin": [],
-    },
-    "depends": [
-        "base",
-    ],
-    "data": [
-    ],
-    "demo": [
-        'demo/export_demo.xml',
-        'demo/ir.exports.line.csv',
-    ],
+    "external_dependencies": {"python": [], "bin": []},
+    "depends": ["base"],
+    "data": [],
+    "demo": ["demo/export_demo.xml", "demo/ir.exports.line.csv"],
 }

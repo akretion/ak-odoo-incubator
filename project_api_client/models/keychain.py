@@ -7,7 +7,6 @@ from odoo import fields, models
 
 
 class KeychainAccount(models.Model):
-    _inherit = 'keychain.account'
+    _inherit = "keychain.account"
 
-    namespace = fields.Selection(
-        selection_add=[('support', 'Support')])
+    namespace = fields.Selection(selection_add=[("support", "Support")])

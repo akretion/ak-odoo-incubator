@@ -17,7 +17,7 @@ Stock Picking Wave Report
     :target: https://github.com/akretion/ak-odoo-incubator/tree/10.0/stock_picking_wave_report
     :alt: akretion/ak-odoo-incubator
 
-|badge1| |badge2| |badge3| 
+|badge1| |badge2| |badge3|
 
 This is a backport from stock_pickin_batch in 12.0 version
 this adds a report to stock_picking_wave module in order to

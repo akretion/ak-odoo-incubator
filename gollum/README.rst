@@ -17,7 +17,7 @@ Gollum wiki integration
     :target: https://github.com/akretion/ak-odoo-incubator/tree/10.0/gollum
     :alt: akretion/ak-odoo-incubator
 
-|badge1| |badge2| |badge3| 
+|badge1| |badge2| |badge3|
 
 
 ![Gollum wiki](https://github.com/gollum/gollum) integration with odoo

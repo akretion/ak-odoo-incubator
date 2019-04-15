@@ -12,19 +12,9 @@
     "author": "Akretion",
     "license": "AGPL-3",
     "application": False,
-    'installable': True,
-    "external_dependencies": {
-        "python": [],
-        "bin": [],
-    },
-    "depends": [
-        "stock",
-        "pos_backend_communication",
-    ],
-    "data": [
-        'views/stock_picking.xml',
-        'views/assets.xml',
-    ],
-    "qweb": [
-    ]
+    "installable": True,
+    "external_dependencies": {"python": [], "bin": []},
+    "depends": ["stock", "pos_backend_communication"],
+    "data": ["views/stock_picking.xml", "views/assets.xml"],
+    "qweb": [],
 }

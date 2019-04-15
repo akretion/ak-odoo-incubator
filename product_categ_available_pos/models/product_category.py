@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class ProductCategory(models.Model):
-    _inherit = 'product.category'
+    _inherit = "product.category"
 
     available_in_pos = fields.Boolean(
         sting="Available in POS",
         help="Toggle visiblity in Point of sale",
-        company_dependent=True)
+        company_dependent=True,
+    )
 
     available_in_pos_view = fields.Boolean(
         # only for the form view : force the use of compute
         string="This category and its products are visible in Point of sale",
         name="Available in POS",
         help="Switching this will impact all children categories.",
-        compute='_compute_available_in_pos_view',
-        inverse='_inverse_available_in_pos_view',
-        store=False)
+        compute="_compute_available_in_pos_view",
+        inverse="_inverse_available_in_pos_view",
+        store=False,
+    )
 
     def _compute_available_in_pos_view(self):
         for rec in self:
@@ -29,11 +31,11 @@ class ProductCategory(models.Model):
 
     @api.model
     def get_parents_category_domain(self, arg):
-        return [('child_id', 'parent_of', arg)]
+        return [("child_id", "parent_of", arg)]
 
     @api.model
     def get_children_category_domain(self, arg):
-        return [('parent_id', 'child_of', arg)]
+        return [("parent_id", "child_of", arg)]
 
     @api.multi
     def set_available_in_pos(self, active):
@@ -55,4 +57,4 @@ class ProductCategory(models.Model):
         else:
             get_domain = self.get_children_category_domain
         categs = self.search(get_domain(self.id))
-        categs.write({'available_in_pos': active})
+        categs.write({"available_in_pos": active})

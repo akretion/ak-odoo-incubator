@@ -4,12 +4,13 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 # pylint: disable=W8106
 
-from odoo.addons.component.core import Component
-from odoo.addons.base_rest.components.service import to_bool
-from odoo.exceptions import AccessError
-from odoo.tools.translate import _
 import json
 import logging
+
+from odoo.addons.base_rest.components.service import to_bool
+from odoo.addons.component.core import Component
+from odoo.exceptions import AccessError
+from odoo.tools.translate import _
 
 _logger = logging.getLogger(__name__)
 

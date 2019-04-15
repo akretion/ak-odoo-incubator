@@ -4,10 +4,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import logging
-from odoo.http import request
+
+from odoo import _
 from odoo.addons.base_rest.controllers import main
 from odoo.exceptions import AccessError
-from odoo import _
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 

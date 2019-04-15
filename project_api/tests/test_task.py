@@ -3,13 +3,14 @@
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.addons.component.tests.common import TransactionComponentCase
+import base64
+import json
+import logging
+from os import getenv, path
+
 from odoo.addons.base_rest.controllers.main import _PseudoCollection
 from odoo.addons.component.core import WorkContext
-import json
-import base64
-from os import path, getenv
-import logging
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 _logger = logging.getLogger(__name__)
 
@@ -93,7 +94,9 @@ class TestTask(TransactionComponentCase):
         for case, vals in data.items():
             service_name = vals["service_name"]
             method = vals["method"]
-            _logger.info("Run automatic test %s, %s" % (service_name, method))
+            _logger.info(
+                "Run automatic test {}, {}".format(service_name, method)
+            )
             service = self.work.component(usage=service_name)
             self._prepare_input(case, vals["input"])
             result = service.dispatch(method, params=vals["input"])

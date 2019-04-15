@@ -15,12 +15,6 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": [
-        "base",
-    ],
-    "data": [
-        'security/group.xml',
-        'data/config.xml',
-        'views/menu.xml',
-    ]
+    "depends": ["base"],
+    "data": ["security/group.xml", "data/config.xml", "views/menu.xml"],
 }

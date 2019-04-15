@@ -14,8 +14,6 @@
     # We should only depend on 'product'... but the product category
     # menu entry is located in the 'sale' module, so we depend on 'sale' :-(
     "depends": ["sale"],
-    "data": [
-        "views/product_category_view.xml",
-    ],
+    "data": ["views/product_category_view.xml"],
     "installable": True,
 }
