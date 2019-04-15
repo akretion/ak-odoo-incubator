@@ -9,6 +9,7 @@
                 <newline/>
                 <field name="customer_project_name"/>
                 <field name="tag_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                <field name="subscribe_assigned_only"/>
             </field>
         </field>
     </record>
