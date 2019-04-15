@@ -13,6 +13,10 @@ class ProjectProject(models.Model):
         help="Name that will appear on customer support menu", index=True
     )
     tag_ids = fields.Many2many("project.tags", string="Tags")
+    subscribe_assigned_only = fields.Boolean(
+        string="Subscribe assigned only",
+        help="When a user get assigned, unscubscribe automaticaly other users",
+    )
 
 
 class ProjectTask(models.Model):
@@ -118,6 +122,15 @@ class ProjectTask(models.Model):
 
     def write(self, vals):
         vals.pop("partner_id", None)  # readonly
+        if "user_id" in vals and self.project_id.subscribe_assigned_only:
+            followers = self.message_follower_ids.mapped("partner_id")
+            unsubscribe_users = self.env["res.users"].search(
+                [
+                    ("partner_id", "in", followers.ids),
+                    ("id", "!=", vals["user_id"]),
+                ]
+            )
+            self.message_unsubscribe_users(user_ids=unsubscribe_users.ids)
         return super(ProjectTask, self).write(vals)
 
     def message_auto_subscribe(self, updated_fields, values=None):
