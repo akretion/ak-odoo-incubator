@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 
 class InterWarehouseDelay(models.Model):
     _name = 'stock.inter_warehouse_delay'
+    _order = 'source_wh_id asc'
 
     source_wh_id = fields.Many2one('stock.warehouse')
     dest_wh_id = fields.Many2one('stock.warehouse')
