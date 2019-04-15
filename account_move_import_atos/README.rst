@@ -17,7 +17,7 @@ Account Move Import Atos
     :target: https://github.com/akretion/ak-odoo-incubator/tree/10.0/account_move_import_atos
     :alt: akretion/ak-odoo-incubator
 
-|badge1| |badge2| |badge3| 
+|badge1| |badge2| |badge3|
 
 This module allows to import bank statements from atos, using the operations.xls file atos provides.
 
