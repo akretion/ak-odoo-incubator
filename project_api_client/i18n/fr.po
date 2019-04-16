@@ -351,3 +351,14 @@ msgstr "Vente"
 #: selection:external.task,functional_area:0
 msgid "Stock"
 msgstr "Logistique"
+
+#. module: project_api_client
+#: field:external.task,functional_area:0
+#: model:ir.model.fields,field_description:project_api_client.field_external_task_functional_area
+msgid "Functional Area"
+msgstr "Domaine fonctionnel"
+
+#. module: project_api_client
+#: selection:external.task,functional_area:0
+msgid "Purchase"
+msgstr "Achat"
