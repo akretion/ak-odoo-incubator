@@ -28,7 +28,7 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="sale.product_form_view_sale_order_button" />
             <field name="arch" type="xml">
-               <button name="%(action_product_sale_list)d" position="attributes">
+               <button name="%(sale.action_product_sale_list)d" position="attributes">
                     <attribute name="string">Sales</attribute>
                </button>
                <field name="sales_count" position="replace"/>
