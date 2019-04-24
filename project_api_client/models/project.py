@@ -159,6 +159,8 @@ class ExternalTask(models.Model):
     def create(self, vals):
         vals = self._add_missing_default_values(vals)
         vals["author"] = self._get_author_info()
+        if not vals.get("functional_area", False):
+            vals["functional_area"] = ""
         if not vals.get("model_reference", False):
             vals["model_reference"] = ""
         task_id = self._call_odoo("create", vals)
