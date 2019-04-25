@@ -78,6 +78,7 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_uom', 'product_uom_qty')
     def product_uom_change(self):
         self._upd_onchange_ctx()
+        self._compute_tax_id()
         return super(SaleOrderLine, self).product_uom_change()
 
     def _upd_onchange_ctx(self):
