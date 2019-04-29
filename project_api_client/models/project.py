@@ -76,6 +76,9 @@ class ExternalTask(models.Model):
         string='Type')
     attachment_ids = fields.One2many(
         comodel_name='external.attachment', inverse_name='res_id')
+    to_invoice = fields.Boolean(readonly=True)
+    customer_report = fields.Html(readonly=True)
+    customer_kanban_report = fields.Html(readonly=True)
 
     def get_url_key(self):
         keychain = self.env["keychain.account"]
