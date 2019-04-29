@@ -7,7 +7,7 @@ odoo.define('pos_backend_delivery.delivery', function (require) {
     var _t = translation._t;
     var action_url = null;
     var pos_instance = null;
-    
+
     function open_backend() {
       action_url = action_url || session.rpc(
         '/web/action/load', { "action_id":"pos_backend_delivery.simple_delivery_action"})

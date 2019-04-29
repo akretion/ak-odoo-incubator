@@ -7,16 +7,16 @@ from odoo import fields, models
 
 
 class ProductCategory(models.Model):
-    _inherit = 'product.category'
-    _parent_order = 'sequence, name'
-    _order = 'parent_left'
+    _inherit = "product.category"
+    _parent_order = "sequence, name"
+    _order = "parent_left"
 
-    sequence = fields.Integer('Sequence', index=True)
+    sequence = fields.Integer("Sequence", index=True)
 
     def write(self, vals):
         res = super(ProductCategory, self).write(vals)
         # TODO we should be more smart when updating the parent compute
         # in order to avoid computing and recomputing again
-        if 'sequence' in vals:
+        if "sequence" in vals:
             self._parent_store_compute()
         return res

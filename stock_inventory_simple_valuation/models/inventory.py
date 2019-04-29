@@ -5,77 +5,93 @@
 
 from collections import defaultdict
 
-from odoo import api, models, fields, _
 import odoo.addons.decimal_precision as dp
-
+from odoo import _, api, fields, models
 
 # Used in report for documentation
 SELECTION_ORDER = [
     u"les infos founisseur de la fiche produit",
     u"les dernières factures d'achats",
     u"les dernières commandes d'achats",
-    u"le champ cout manuel de la fiche produit"
+    u"le champ cout manuel de la fiche produit",
 ]
 
 
 class StockInventory(models.Model):
-    _inherit = 'stock.inventory'
+    _inherit = "stock.inventory"
 
     to_recompute = fields.Boolean()
 
     def button_compute_cost(self):
         "Compute or reset"
         for rec in self:
-            rec.write({'to_recompute': not rec.to_recompute})
+            rec.write({"to_recompute": not rec.to_recompute})
 
 
 class StockInventoryLine(models.Model):
-    _inherit = 'stock.inventory.line'
+    _inherit = "stock.inventory.line"
 
     calc_product_cost = fields.Float(
-        compute='_compute_product_cost', string='Computed cost', store=True,
-        digits=dp.get_precision('Account'))
+        compute="_compute_product_cost",
+        string="Computed cost",
+        store=True,
+        digits=dp.get_precision("Account"),
+    )
     manual_product_cost = fields.Float(
-        string='Manual cost',
-        digits=dp.get_precision('Account'))
+        string="Manual cost", digits=dp.get_precision("Account")
+    )
     value = fields.Float(
-        compute='_compute_value', string='Value', store=True,
-        digits=dp.get_precision('Account'))
+        compute="_compute_value",
+        string="Value",
+        store=True,
+        digits=dp.get_precision("Account"),
+    )
     cost_origin = fields.Text(
-        compute='_compute_product_cost', store=True,
-        help='Explain computation method for each product')
+        compute="_compute_product_cost",
+        store=True,
+        help="Explain computation method for each product",
+    )
     reference = fields.Reference(
-        selection='_select_models', compute='_compute_product_cost',
-        store=True)
+        selection="_select_models", compute="_compute_product_cost", store=True
+    )
 
     def _select_models(self):
-        models = self.env['ir.model'].search(
-            [('model', 'in', self._get_models())])
-        return [(x['model'], x['name']) for x in models] + [('', '')]
+        models = self.env["ir.model"].search(
+            [("model", "in", self._get_models())]
+        )
+        return [(x["model"], x["name"]) for x in models] + [("", "")]
 
     @api.multi
-    @api.depends('product_id', 'product_qty', 'manual_product_cost',
-                 'inventory_id.state', 'inventory_id.to_recompute')
+    @api.depends(
+        "product_id",
+        "product_qty",
+        "manual_product_cost",
+        "inventory_id.state",
+        "inventory_id.to_recompute",
+    )
     def _compute_product_cost(self):
         custom_data_source = self._get_custom_data_source()
-        po_l_obj = self.env['purchase.order.line']
+        po_l_obj = self.env["purchase.order.line"]
         product_ids = [x.product_id.id for x in self]
         # product_ids == [False] for first created line
         if not product_ids or not product_ids[0]:
             return
         invoices = self._get_invoice_data(
-            product_ids, company=self.env.user.company_id)
+            product_ids, company=self.env.user.company_id
+        )
         for line in self:
             # DON'T FORGET TO update SELECTION_ORDER
             # when changes are done in the order of the blocks
-            if line.inventory_id.state not in ('done') and \
-                    not line.inventory_id.to_recompute:
+            if (
+                line.inventory_id.state not in ("done")
+                and not line.inventory_id.to_recompute
+            ):
                 line.cost_origin = _("Click on 'Compute cost'")
                 continue
             if not line.inventory_id or not line.product_id:
                 continue
             # get cost from supplier invoice
-            explanation = ''
+            explanation = ""
             cost_price = 0
             reference = False
             if not cost_price:
@@ -83,41 +99,45 @@ class StockInventoryLine(models.Model):
                 sup_info = line.product_id.seller_ids
                 if sup_info and sup_info[0].price:
                     cost_price = sup_info[0].price
-                    explanation = _('Supplier info')
-                    reference = 'product.supplierinfo,%s' % sup_info[0].id
+                    explanation = _("Supplier info")
+                    reference = "product.supplierinfo,%s" % sup_info[0].id
             if not cost_price and custom_data_source:
                 cost_price, explanation, reference = self._get_custom_cost(
-                    custom_data_source, product_ids)
+                    custom_data_source, product_ids
+                )
             if not cost_price and invoices:
-                cost_price = invoices[line.product_id.id].get(
-                    'price_unit')
-                explanation = _('Supplier Invoice')
-                if invoices[line.product_id.id].get('id'):
-                    reference = 'account.invoice,%s' % invoices[
-                        line.product_id.id].get('id')
+                cost_price = invoices[line.product_id.id].get("price_unit")
+                explanation = _("Supplier Invoice")
+                if invoices[line.product_id.id].get("id"):
+                    reference = "account.invoice,%s" % invoices[
+                        line.product_id.id
+                    ].get("id")
             if not cost_price:
                 # get cost price from purchase
                 po_line = po_l_obj.search(
-                    [('product_id', '=', line.product_id.id),
-                     ('order_id.state', '=', 'done')
-                     ], limit=1)
+                    [
+                        ("product_id", "=", line.product_id.id),
+                        ("order_id.state", "=", "done"),
+                    ],
+                    limit=1,
+                )
                 if po_line:
                     cost_price = po_line.price_unit
-                    explanation = _('Purchase')
-                    reference = 'purchase.order,%s' % po_line.order_id.id
+                    explanation = _("Purchase")
+                    reference = "purchase.order,%s" % po_line.order_id.id
             if not cost_price:
                 if line.product_id.standard_price_:
                     cost_price = line.product_id.standard_price_
-                    explanation = _('Product manual standard_price_')
-                    reference = 'product.product,%s' % line.product_id.id
+                    explanation = _("Product manual standard_price_")
+                    reference = "product.product,%s" % line.product_id.id
             if not cost_price:
                 if line.product_id.standard_price:
                     cost_price = line.product_id.standard_price
-                    explanation = _('Product standard_price')
-                    reference = 'product.product,%s' % line.product_id.id
+                    explanation = _("Product standard_price")
+                    reference = "product.product,%s" % line.product_id.id
             if not cost_price:
-                explanation = _('No Cost found')
-                reference = ''
+                explanation = _("No Cost found")
+                reference = ""
             line.calc_product_cost = cost_price
             line.cost_origin = explanation
             if reference:
@@ -130,7 +150,7 @@ class StockInventoryLine(models.Model):
         return (None, None, None)
 
     @api.multi
-    @api.depends('calc_product_cost', 'manual_product_cost', 'product_qty')
+    @api.depends("calc_product_cost", "manual_product_cost", "product_qty")
     def _compute_value(self):
         for line in self:
             if line.manual_product_cost:
@@ -161,22 +181,24 @@ class StockInventoryLine(models.Model):
                     AND i.type = 'in_invoice' AND i.state in ('open', 'paid')
                 ORDER BY l.create_date ASC
             """
-            self.env.cr.execute(query, (
-                tuple(product_ids), company.id, oldier[0][1]))
+            self.env.cr.execute(
+                query, (tuple(product_ids), company.id, oldier[0][1])
+            )
             res = self.env.cr.fetchall()
             invoices = defaultdict(dict)
             for elm in res:
                 invoices[elm[0]].update(
-                    {'price_unit': elm[1], 'id': elm[2], 'number': elm[3]})
+                    {"price_unit": elm[1], "id": elm[2], "number": elm[3]}
+                )
         return invoices
 
     @api.model
     def _get_models(self):
         return [
-            'account.invoice',
-            'purchase.order',
-            'product.supplierinfo',
-            'product.product',
+            "account.invoice",
+            "purchase.order",
+            "product.supplierinfo",
+            "product.product",
         ]
 
     @api.multi
@@ -184,13 +206,18 @@ class StockInventoryLine(models.Model):
         self.ensure_one()
         if self.reference:
             return {
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': self.reference._model._name,
-                'res_id': self.reference.id,
-                'target': 'new',
-                'name': _("%s: %s: '%s'" % (
-                    self.reference._model._description,
-                    self.product_id.display_name, self.value)),
+                "type": "ir.actions.act_window",
+                "view_mode": "form",
+                "res_model": self.reference._model._name,
+                "res_id": self.reference.id,
+                "target": "new",
+                "name": _(
+                    "%s: %s: '%s'"
+                    % (
+                        self.reference._model._description,
+                        self.product_id.display_name,
+                        self.value,
+                    )
+                ),
             }
         return False

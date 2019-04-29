@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    
+
 
 
     <record model="ir.ui.view" id="view_inventory_form">
@@ -8,7 +8,7 @@
         <field name="inherit_id" ref="stock.view_inventory_form"/>
         <field name="arch" type="xml">
             <field name="date" position="after">
-                <button name="button_compute_cost" type="object" 
+                <button name="button_compute_cost" type="object"
                         attrs="{'invisible': [('state', '=', 'done')]}"
                         string="Compute cost"/>
                 <span attrs="{'invisible': [('state', '=', 'done')]}">automatically computed when validated</span>
@@ -28,5 +28,5 @@
     </record>
 
 
-    
+
 </odoo>

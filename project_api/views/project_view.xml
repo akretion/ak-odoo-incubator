@@ -9,6 +9,7 @@
                 <newline/>
                 <field name="customer_project_name"/>
                 <field name="tag_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                <field name="subscribe_assigned_only"/>
             </field>
         </field>
     </record>
@@ -24,6 +25,7 @@
                 <field name="assignee_customer_id"/>
             </field>
             <field name="tag_ids" position="after">
+                <field name="functional_area"/>
                 <field name="origin_url" readonly="1" widget="url" string="Url"/>
                 <field name="origin_db" readonly="1" string="DB"/>
                 <field name="origin_name" readonly="1" string="Record name"/>

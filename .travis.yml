@@ -11,6 +11,18 @@ addons:
       - expect-dev  # provides unbuffer utility
       - python-lxml # because pip installation is slow
 
+stages:
+  - linting
+  - test
+
+jobs:
+  include:
+    - stage: linting
+      name: "Pre-Commit"
+      python: 3.6
+      install: pip install pre_commit
+      script: pre-commit run --all
+
 env:
   global:
   - VERSION="10.0" TESTS="1" LINT_CHECK="0"
@@ -19,9 +31,6 @@ env:
   - TESTS="0" LINT_CHECK="1"
   - ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
   - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
-
-virtualenv:
-  system_site_packages: true
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
@@ -33,8 +42,8 @@ install:
   - travis_configure
 
 script:
+  - mv .isort.cfg .isoft.cfg.disabled # to avoid trouble with pylint odoo
   - travis_run_tests
 
 after_success:
   - travis_after_tests_success
-

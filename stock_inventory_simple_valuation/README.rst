@@ -14,7 +14,7 @@ Stock Inventory Simple Valuation
     :target: https://github.com/akretion/ak-odoo-incubator/tree/12.0/stock_inventory_simple_valuation
     :alt: akretion/ak-odoo-incubator
 
-|badge1| |badge2| 
+|badge1| |badge2|
 
 * Get cost information from different sources in inventory line.
 * These sources are by example:
