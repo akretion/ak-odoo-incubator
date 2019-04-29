@@ -34,6 +34,11 @@
                 <separator string="Technical Description" colspan="4"/>
                 <field name="technical_description"/>
             </field>
+            <page name="description_page" position="after">
+                <page name="customer_report" string="Customer Report">
+                    <field name="customer_report"/>
+                </page>
+            </page>
         </field>
     </record>
 
