@@ -33,6 +33,9 @@
                                 <field name="description" placeholder="Add a Description..."/>
                                 <div class="oe_clear"/>
                             </page>
+                            <page string="Customer Report">
+                                <field name="customer_report"/>
+                            </page>
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
