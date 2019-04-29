@@ -27,8 +27,8 @@ class ProductProduct(models.Model):
 
     @api.depends(
         'seller_ids.delay',
-        'bom_ids.dlt',  # TODO fix it here, bom_ids.dlt no longer stored
-        'produce_delay', 'product_tmpl_id.produce_delay'
+        'bom_ids.dlt',
+        'bom_ids.mlt',
     )
     def _compute_dlt(self):
         for rec in self:
