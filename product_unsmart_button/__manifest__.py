@@ -9,7 +9,8 @@
     "website": "http://www.akretion.com",
     "license": "AGPL-3",
     "category": "Sales",
-    "description": "Remove smart buttons values to gain performance on product",
+    "description": "Remove smart buttons values to gain performance"
+    "on product",
     "depends": ["sale", "mrp", "purchase"],
     "data": ["views/product_view.xml"],
     "installable": True,

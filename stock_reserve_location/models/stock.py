@@ -34,9 +34,10 @@ class FixedPutawayStrat(models.Model):
                 "putaway_product_unique",
                 "unique(putaway_id,product_product_id,reserve)",
                 _(
-                    "Issue: Informations 'Putaway / Product / Reserve' combination "
-                    "must be unique !\n\n"
-                    "Action: Remove this location in the product storage locations."
+                    "Issue: Informations 'Putaway / Product / Reserve'"
+                    "combination must be unique !\n\n"
+                    "Action: Remove this location in the product"
+                    " storage locations."
                 ),
             )
         ]

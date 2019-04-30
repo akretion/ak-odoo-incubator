@@ -135,9 +135,10 @@ class ProductSupplierinfo(models.Model):
                 if record.mapped("intercompany_pricelist_id"):
                     raise UserError(
                         _(
-                            "This supplier info can not be edited as it's linked "
-                            "to an intercompany 'sale' pricelist.\n Please "
-                            "modify the information on the 'sale' pricelist"
+                            "This supplier info can not be edited as it's"
+                            " linked to an intercompany 'sale' pricelist.\n"
+                            "Please modify the information "
+                            "on the 'sale' pricelist"
                         )
                     )
 

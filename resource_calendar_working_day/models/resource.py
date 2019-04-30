@@ -4,7 +4,7 @@
 from datetime import datetime, timedelta
 
 from dateutil import rrule
-from odoo import api, fields, models
+from odoo import api, models
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
