@@ -41,16 +41,16 @@ class ExternalTask(models.Model):
     def _get_select_type(self):
         # solve issue during installation and test
         # If we have an uid it's a real call from webclient
-        if self._context.get('uid'):
-            return self._call_odoo('type_list', {})
+        if self._context.get("uid"):
+            return self._call_odoo("type_list", {})
         else:
             return []
 
-    name = fields.Char('Name')
-    stage_name = fields.Char('Stage')
+    name = fields.Char("Name")
+    stage_name = fields.Char("Stage")
     description = fields.Html(
-        'Description',
-        default=lambda self: _(ISSUE_DESCRIPTION))
+        "Description", default=lambda self: _(ISSUE_DESCRIPTION)
+    )
     message_ids = fields.One2many(
         comodel_name="external.message", inverse_name="res_id"
     )
@@ -68,14 +68,13 @@ class ExternalTask(models.Model):
     origin_db = fields.Char()
     origin_model = fields.Char()
     project_id = fields.Selection(
-        selection=_get_select_project,
-        string='Project')
-    color = fields.Integer(string='Color Index')
-    tag_ids = fields.Selection(
-        selection=_get_select_type,
-        string='Type')
+        selection=_get_select_project, string="Project"
+    )
+    color = fields.Integer(string="Color Index")
+    tag_ids = fields.Selection(selection=_get_select_type, string="Type")
     attachment_ids = fields.One2many(
-        comodel_name='external.attachment', inverse_name='res_id')
+        comodel_name="external.attachment", inverse_name="res_id"
+    )
     to_invoice = fields.Boolean(readonly=True)
     customer_report = fields.Html(readonly=True)
     customer_kanban_report = fields.Html(readonly=True)
@@ -321,7 +320,8 @@ class ExternalTask(models.Model):
         return vals
 
     def message_partner_info_from_emails(
-            self, cr, uid, id, emails, link_mail=False, context=None):
+        self, cr, uid, id, emails, link_mail=False, context=None
+    ):
         return []
 
 
@@ -416,43 +416,43 @@ class ExternalAttachment(models.Model):
     res_id = fields.Many2one(comodel_name="external.task")
     name = fields.Char()
     datas = fields.Binary()
-    res_model = fields.Char(default='project.task')
+    res_model = fields.Char(default="project.task")
     datas_fname = fields.Char()
     type = fields.Char()
     mimetype = fields.Char()
-    color = fields.Integer('Color Index')
+    color = fields.Integer("Color Index")
 
-    @api.onchange('datas_fname')
+    @api.onchange("datas_fname")
     def _file_change(self):
         if self.datas_fname:
             self.name = self.datas_fname
 
     @api.multi
-    def read(self, fields=None, load='_classic_read'):
-        tasks = self._call_odoo('read', {
-            'ids': self.ids,
-            'fields': fields,
-            'load': load
-            })
+    def read(self, fields=None, load="_classic_read"):
+        tasks = self._call_odoo(
+            "read", {"ids": self.ids, "fields": fields, "load": load}
+        )
         return tasks
 
     @api.model
     def _call_odoo(self, method, params):
-        url_key = self.env['external.task'].get_url_key()
-        url = '%s/project-api/attachment/%s' % (url_key['url'], method)
-        headers = {'API-KEY': url_key['api_key']}
-        user_error_message =\
-            _('There is an issue with support. Please send an email')
+        url_key = self.env["external.task"].get_url_key()
+        url = "{}/project-api/attachment/{}".format(url_key["url"], method)
+        headers = {"API-KEY": url_key["api_key"]}
+        user_error_message = _(
+            "There is an issue with support. Please send an email"
+        )
         try:
             res = requests.post(url, headers=headers, json=params)
         except Exception as e:
-            _logger.error('Error when calling odoo %s', e)
+            _logger.error("Error when calling odoo %s", e)
             raise UserError(user_error_message)
         data = res.json()
-        if isinstance(data, dict) and data.get('code', 0) >= 400:
+        if isinstance(data, dict) and data.get("code", 0) >= 400:
             _logger.error(
-                'Error Support API : %s : %s',
-                data.get('name'),
-                data.get('description'))
+                "Error Support API : %s : %s",
+                data.get("name"),
+                data.get("description"),
+            )
             raise UserError(user_error_message)
         return data
