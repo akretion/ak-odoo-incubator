@@ -5,8 +5,8 @@ from odoo import fields, models
 
 
 class ResCompany(models.Model):
-    _inherit = 'res.company'
+    _inherit = "res.company"
 
     calendar_id = fields.Many2one(
-        'resource.calendar',
-        string='Company Working time')
+        "resource.calendar", string="Company Working time"
+    )

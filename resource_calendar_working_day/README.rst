@@ -4,7 +4,7 @@ Resource Calendar Working Day
 
 This module adds calendar on the company and provide some methods:
 
-* get_next_working_date : calculates a date based on a start date and a delay (in days), but taking account the working days specified on the company. 
+* get_next_working_date : calculates a date based on a start date and a delay (in days), but taking account the working days specified on the company.
 
 * get_working_days: number of working days between two dates (included)
 

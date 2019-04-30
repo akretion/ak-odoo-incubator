@@ -3,16 +3,12 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': "Production Release",
-    'author': "Akretion",
-    'website': "http://www.akretion.com",
-    'category': 'Tools',
-    'version': '8.0.1.0.1',
-    'license': 'AGPL-3',
-    'depends': [
-    ],
-    'data': [
-        'release_view.xml',
-        'security/ir.model.access.csv',
-    ],
+    "name": "Production Release",
+    "author": "Akretion",
+    "website": "http://www.akretion.com",
+    "category": "Tools",
+    "version": "8.0.1.0.1",
+    "license": "AGPL-3",
+    "depends": [],
+    "data": ["release_view.xml", "security/ir.model.access.csv"],
 }

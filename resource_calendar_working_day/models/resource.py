@@ -2,14 +2,14 @@
 # Copyright (C) 2015 AKRETION (<http://www.akretion.com>).
 
 from datetime import datetime, timedelta
-from dateutil import rrule
 
-from odoo import fields, models, api
+from dateutil import rrule
+from odoo import api, fields, models
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
 class ResourceCalendar(models.Model):
-    _inherit = 'resource.calendar'
+    _inherit = "resource.calendar"
 
     @api.multi
     def get_next_working_date(self, start_date, delay, resource_id=False):
@@ -28,31 +28,39 @@ class ResourceCalendar(models.Model):
         self.ensure_one()
 
         dt_leave = self.get_leave_intervals(
-            resource_id, start_datetime=None, end_datetime=None)
-        worked_days = (
-            [day['dayofweek'] for day in self.attendance_ids])
+            resource_id, start_datetime=None, end_datetime=None
+        )
+        worked_days = [day["dayofweek"] for day in self.attendance_ids]
         if delay < 0:
             delta = -1
         else:
             delta = 1
-        while datetime.strftime(
-            start_date, DEFAULT_SERVER_DATE_FORMAT) in dt_leave or str(
-                start_date.weekday()) not in worked_days:
+        while (
+            datetime.strftime(start_date, DEFAULT_SERVER_DATE_FORMAT)
+            in dt_leave
+            or str(start_date.weekday()) not in worked_days
+        ):
             start_date = start_date + timedelta(days=delta)
         date = start_date
         while delay:
             date = date + timedelta(days=delta)
-            if datetime.strftime(
-                date, DEFAULT_SERVER_DATE_FORMAT) not in dt_leave and str(
-                    date.weekday()) in worked_days:
+            if (
+                datetime.strftime(date, DEFAULT_SERVER_DATE_FORMAT)
+                not in dt_leave
+                and str(date.weekday()) in worked_days
+            ):
                 delay = delay - delta
         return date
 
     @api.multi
-    def get_working_days(self, start_dt, end_dt,
-                         compute_leaves=False,
-                         resource_id=None,
-                         default_interval=None):
+    def get_working_days(
+        self,
+        start_dt,
+        end_dt,
+        compute_leaves=False,
+        resource_id=None,
+        default_interval=None,
+    ):
         """Number of working days between two dates included.
         Don't care if start/end is within workhours
         ex: Monday 8am to Wednesday 22PM -> (Mon+Tue+Wed = 3days)
@@ -61,10 +69,11 @@ class ResourceCalendar(models.Model):
         self.ensure_one()
         days = 0
         for day in rrule.rrule(
-                rrule.DAILY,
-                dtstart=start_dt,
-                until=end_dt,
-                byweekday=self.get_weekdays()):
+            rrule.DAILY,
+            dtstart=start_dt,
+            until=end_dt,
+            byweekday=self.get_weekdays(),
+        ):
             day_start_dt = day.replace(hour=0, minute=0, second=0)
             if start_dt and day.date() == start_dt.date():
                 # first day
@@ -75,10 +84,12 @@ class ResourceCalendar(models.Model):
                 day_end_dt = end_dt
 
             ret = self.get_working_hours_of_date(
-                start_dt=day_start_dt, end_dt=day_end_dt,
+                start_dt=day_start_dt,
+                end_dt=day_end_dt,
                 compute_leaves=compute_leaves,
                 resource_id=resource_id,
-                default_interval=default_interval)
+                default_interval=default_interval,
+            )
             if ret:
                 days += 1
         return days

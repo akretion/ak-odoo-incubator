@@ -31,4 +31,3 @@ pre-commit install
 ```
 
 So the git hook will be installed and every check can be perform automatically
-

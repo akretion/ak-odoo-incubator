@@ -18,7 +18,7 @@ odoo.define('web_search_debounce.debounce', function (require) {
             }
             //re-use the debounced func
             self.deb = self.deb || _.debounce(function(promise, search) {
-                //after the timeout, 
+                //after the timeout,
                 // trigger the search with the last input 'search'
                 // and propagate the result through 'promise'
                 promise.resolve(my_super(search));

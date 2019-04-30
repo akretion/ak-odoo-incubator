@@ -17,7 +17,7 @@ Product Supplier Intercompany
     :target: https://github.com/akretion/ak-odoo-incubator/tree/8.0/product_supplier_intercompany
     :alt: akretion/ak-odoo-incubator
 
-|badge1| |badge2| |badge3| 
+|badge1| |badge2| |badge3|
 
 This module allows to manage intercompany pricelist, to sell products
 between companies in a multi-company environnement.

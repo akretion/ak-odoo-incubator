@@ -8,7 +8,7 @@ Without this module :
 A search request (AJAX call) is made after each key entered in the input.
 Useless requests/responses for both the server and the user.
 
-With this module : 
+With this module :
 
 A search request is made when the user stop typing. (default 800 ms).
 Less useless requests/responses are made.
