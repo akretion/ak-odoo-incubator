@@ -117,6 +117,7 @@ class MrpBomLine(models.Model):
     )
     mlt = fields.Float(
         string="Maximum Lead Time (days)",
+        store=True,
         compute="_compute_mlt")
     has_mto_rule = fields.Boolean(
         string="MTO",
