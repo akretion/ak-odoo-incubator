@@ -16,6 +16,10 @@ When module will be enought generic and stabilized we will propose them to the O
 This project use black and pre-commit.
 Please install precommit if you want to contribute
 
+```
+pipx install pre-commit
+```
+
 - no 10.0 branch
 - branch name convention :
   - 10-my-module : permanent stable branch
