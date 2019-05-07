@@ -29,7 +29,7 @@ env:
 
   matrix:
   - TESTS="0" LINT_CHECK="1"
-  - ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
+  - ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos,project_api,project_api_client"
   - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
 
 install:
