@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 # © 2016 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -98,15 +98,15 @@ class LabelFromRecord(models.TransientModel):
         """
         message = u"La ligne '%s' ne respecte pas le format."
         if not isinstance(parts, list):
-            raise UserError(_(message % line))
+            raise UserError(_(message) % line)
         if len(parts) <= 2:
-            raise UserError(_(message % line))
+            raise UserError(_(message) % line)
         if len(parts) >= 4:
-            raise UserError(_(u"Plus de 3 segments. " + message % line))
+            raise UserError(_(u"Plus de 3 segments. " + message) % line)
         if not isinstance(parts[1], int):
-            raise UserError(_(u"La quantité n'est pas un entier '%s'" % line))
+            raise UserError(_(u"La quantité n'est pas un entier '%s'") % line)
         if parts[1] <= 0:
-            raise UserError(_(u"La quantité ne peut être <= 0. '%s'" % line))
+            raise UserError(_(u"La quantité ne peut être <= 0. '%s'") % line)
         if len(parts) > 2 and not isinstance(parts[2], int):
-            raise UserError(_(u"L'id n'est pas un entier '%s'" % line))
+            raise UserError(_(u"L'id n'est pas un entier '%s'") % line)
         return True

@@ -1,8 +1,7 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 {
     "name": "Labels wizard",
-    "description": "Wizard for printing zebra labels",
-    "version": "10.0.0.1",
+    "version": "10.0.0.0.1",
     "license": "AGPL-3",
     "author": "Akretion",
     "category": "Custom",
