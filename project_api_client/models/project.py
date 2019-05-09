@@ -61,6 +61,8 @@ class ExternalTask(models.Model):
         selection=_get_select_project, string="Project"
     )
     color = fields.Integer(string="Color Index")
+    customer_report = fields.Html(readonly=True)
+    customer_kanban_report = fields.Html(readonly=True)
 
     def get_url_key(self):
         keychain = self.env["keychain.account"]

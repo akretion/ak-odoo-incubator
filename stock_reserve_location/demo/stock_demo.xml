@@ -7,6 +7,7 @@
 
     <record id="product_putaway_strategy_product_4_reserve"
             model="stock.product.putaway.strategy">
+        <field name="name">Putaway strategy 1</field>
         <field name="product_product_id" ref="product.product_product_4"/>
         <field name="product_template_id"
                ref="product.product_product_4_product_template"/>
