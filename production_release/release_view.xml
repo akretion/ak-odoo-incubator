@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-<data>
-
+<odoo>
     <record id="production_release_form" model="ir.ui.view">
         <field name="model">production.release</field>
         <field name="arch" type="xml">
@@ -33,7 +31,4 @@
 
     <menuitem id="production_release_menu" action="production_release_action"
               parent="base.next_id_9" sequence="50"/>
-
-
-</data>
-</openerp>
+</odoo>

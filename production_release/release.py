@@ -4,8 +4,8 @@
 
 import logging
 
-from openerp import _, api, fields, models
-from openerp.exceptions import Warning as UserError
+from odoo import _, api, fields, models
+from odoo.exceptions import Warning as UserError
 
 logger = logging.getLogger(__name__)
 
@@ -28,15 +28,17 @@ class ProductionRelease(models.Model):
     @api.multi
     def unlink(self):
         self._log_prod_release("unlink")
-        super(ProductionRelease, self).unlink()
+        res = super(ProductionRelease, self).unlink()
         raise UserError(
             _("Production Release can't be deleted from this database")
         )
+        return res
 
     @api.multi
     def write(self, vals):
         self._log_prod_release("write")
-        super(ProductionRelease, self).write(vals)
+        res = super(ProductionRelease, self).write(vals)
         raise UserError(
             _("Production Release can't be updated by manual entry")
         )
+        return res

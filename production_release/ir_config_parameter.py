@@ -5,8 +5,8 @@
 
 from datetime import datetime
 
-from openerp import api, models
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import api, models
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class IrConfigParameter(models.Model):

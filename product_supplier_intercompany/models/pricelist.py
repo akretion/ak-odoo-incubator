@@ -23,7 +23,7 @@ class ProductPricelist(models.Model):
         for record in self:
             if record.is_intercompany_supplier and not record.company_id:
                 raise UserError(
-                    "The company is required for intercompany pricelist"
+                    _("The company is required for intercompany pricelist")
                 )
 
     def _inverse_intercompany_supplier(self):
@@ -77,7 +77,7 @@ class ProductPricelistItem(models.Model):
                 todo[pricelist]["templates"] |= record.product_tmpl_id
             else:
                 raise UserError(
-                    "This pricelist item type is not supported yet."
+                    _("This pricelist item type is not supported yet.")
                 )
 
     def _process_product_to_synchronize(self, todo):

@@ -15,7 +15,6 @@ class ProductPricelist(models.Model):
     _inherit = "product.pricelist"
 
     price_include_taxes = fields.Boolean(
-        string="Price include taxes",
         default=True,
         help="If checked, prices of the list are taken account tax include.\n"
         "We can only update this setting if there is no price item.",
@@ -33,8 +32,9 @@ class ProductPricelist(models.Model):
                     HELP
                     + _(
                         "\nSome of them are of another type like here '%s'\n"
-                        "of type '%s' " % (items[0], items[0].base)
+                        "of type '%s' "
                     )
+                    % (items[0], items[0].base)
                 )
 
     @api.multi
@@ -65,5 +65,5 @@ class ProductPricelistItem(models.Model):
             price_incl_tax = rec.pricelist_id.price_include_taxes
             if rec.base in ("pricelist", "standard") and price_incl_tax:
                 raise UserError(
-                    HELP + _("You encoded 'Based on' field to %s" % rec.base)
+                    HELP + _("You encoded 'Based on' field to %s") % rec.base
                 )
