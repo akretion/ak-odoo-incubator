@@ -12,7 +12,7 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     @api.depends("company_id", "company_id.warning_time", "max_date")
-    def compute_start_warning_date(self):
+    def _compute_start_warning_date(self):
         for rec in self:
             if rec.max_date:
                 company = rec.company_id
@@ -27,7 +27,7 @@ class StockPicking(models.Model):
 
     start_warning_date = fields.Date(
         string="Start Warning Date",
-        compute="compute_start_warning_date",
+        compute="_compute_start_warning_date",
         readonly=True,
         store=True,
     )
@@ -36,7 +36,9 @@ class StockPicking(models.Model):
 class StockPickingType(models.Model):
     _inherit = "stock.picking.type"
 
-    count_picking_late_soon = fields.Integer(compute="_get_picking_count_late")
+    count_picking_late_soon = fields.Integer(
+        compute="_compute_get_picking_count_late"
+    )
 
     def _get_domains(self, vals):
         time_dt = fields.Datetime.context_timestamp(
@@ -61,7 +63,7 @@ class StockPickingType(models.Model):
         }
         return vals
 
-    def _get_picking_count_late(self):
+    def _compute_get_picking_count_late(self):
         picking_obj = self.env["stock.picking"]
         domains = {}
         domains = self._get_domains(domains)
