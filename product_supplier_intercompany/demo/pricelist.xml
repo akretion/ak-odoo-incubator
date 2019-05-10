@@ -6,13 +6,8 @@
         <field name="company_id" ref="base.main_company"/>
     </record>
 
-    <record id="pricelist_intercompany_v1" model="product.pricelist.version">
-        <field name="name">Pricelist Intercompany V1</field>
-        <field name="pricelist_id" ref="pricelist_intercompany"/>
-    </record>
-
     <record id="pricelist_item_product_template_4" model="product.pricelist.item">
-        <field name="price_version_id" ref="pricelist_intercompany_v1"/>
+        <field name="pricelist_id" ref="pricelist_intercompany"/>
         <field name="product_tmpl_id" ref="product.product_product_4_product_template"/>
         <field name="base" ref="product.list_price"/>
         <field name="price_discount">-1</field>
@@ -21,7 +16,7 @@
     </record>
 
     <record id="pricelist_item_product_product_4b" model="product.pricelist.item">
-        <field name="price_version_id" ref="pricelist_intercompany_v1"/>
+        <field name="pricelist_id" ref="pricelist_intercompany"/>
         <field name="product_tmpl_id" ref="product.product_product_4_product_template"/>
         <field name="product_id" ref="product.product_product_4b"/>
         <field name="base" ref="product.list_price"/>
@@ -31,7 +26,7 @@
     </record>
 
     <record id="pricelist_item_product_template_1" model="product.pricelist.item">
-        <field name="price_version_id" ref="pricelist_intercompany_v1"/>
+        <field name="pricelist_id" ref="pricelist_intercompany"/>
         <field name="product_tmpl_id" ref="product.product_product_1_product_template"/>
         <field name="base" ref="product.list_price"/>
         <field name="price_discount">-1</field>
@@ -40,7 +35,7 @@
     </record>
 
     <record id="pricelist_item_product_product_2" model="product.pricelist.item">
-        <field name="price_version_id" ref="pricelist_intercompany_v1"/>
+        <field name="pricelist_id" ref="pricelist_intercompany"/>
         <field name="product_tmpl_id" ref="product.product_product_2_product_template"/>
         <field name="product_id" ref="product.product_product_2"/>
         <field name="base" ref="product.list_price"/>
