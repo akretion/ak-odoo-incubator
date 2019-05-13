@@ -30,7 +30,7 @@ env:
   matrix:
   - TESTS="0" LINT_CHECK="1"
   - ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos,project_api,project_api_client,stock_reserve_location"
-  - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos"
+  - UNIT_TEST="1" ODOO_REPO="OCA/OCB" EXCLUDE="product_categ_available_pos,project_api,project_api_client,stock_reserve_location"
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
