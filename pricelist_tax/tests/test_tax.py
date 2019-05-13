@@ -24,6 +24,7 @@ class TaxCase(TransactionCase):
             {
                 "partner_id": self.env.ref("base.res_partner_10").id,
                 "pricelist_id": pricelist.id,
+                "picking_policy": "direct",
             }
         )
 
