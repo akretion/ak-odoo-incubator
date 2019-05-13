@@ -1,6 +1,6 @@
+=============================
 Resource Calendar Working Day
 =============================
-
 
 This module adds calendar on the company and provide some methods:
 
