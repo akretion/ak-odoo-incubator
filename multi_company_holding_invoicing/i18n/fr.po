@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-03 14:59+0000\n"
-"PO-Revision-Date: 2017-10-03 14:59+0000\n"
+"POT-Creation-Date: 2018-10-08 15:48+0000\n"
+"PO-Revision-Date: 2018-10-08 15:48+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,28 +16,25 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: multi_company_holding_invoicing
-#: model:ir.actions.act_window,help:multi_company_holding_invoicing.act_account_invoice_2_sale_order
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"                Click to create a quotation or sales order for this customer.\n"
-"              </p><p>\n"
-"                Odoo will help you efficiently handle the complete sale flow:\n"
-"                quotation, sales order, delivery, invoicing and\n"
-"                payment.\n"
-"              </p><p>\n"
-"                The social feature helps you organize discussions on each sales\n"
-"                order, and allow your customer to keep track of the evolution\n"
-"                of the sales order.\n"
-"              </p>\n"
-"            "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"Cliquez pour créer un devis ou bon de commande pour ce client.\n"
-"</p><p>\n"
-"Odoo vous aidera à gérer efficacement le flux de vente complet:\n"
-"devis, bon de commande, livraison, facturation et paiement.\n"
-"</p><p>\n"
-"La fonctionnalité sociale vous aide à organiser des discussions sur chaque commande, et permet à votre client de garder trace de l'évolution de la commande.\n"
-"</p>\n"
-"            "
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_child_invoice_job_count
+msgid "# of Child Invoice Jobs"
+msgstr "# de Jobs factures enfants"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_child_invoice_count
+msgid "# of Invoice"
+msgstr "# de Factures"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_holding_sale_count
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_sale_count
+msgid "# of Sales Order"
+msgstr "N° de la commande"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_agreement_holding_discount
+msgid "% Holding Discount"
+msgstr "% Remise Holding"
 
 #. module: multi_company_holding_invoicing
 #: model:ir.actions.act_window,name:multi_company_holding_invoicing.act_account_invoice_2_account_invoice
@@ -45,98 +42,121 @@ msgid "Account Invoice"
 msgstr "Account Invoice"
 
 #. module: multi_company_holding_invoicing
-#: view:wizard.holding.invoicing:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
+#: model:ir.model,name:multi_company_holding_invoicing.model_agreement
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_agreement_id
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.view_sales_order_filter
+msgid "Agreement"
+msgstr "Convention"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
 msgid "Annuler"
 msgstr "Annuler"
 
 #. module: multi_company_holding_invoicing
-#: selection:crm.case.section,holding_invoice_generated_by:0
+#: selection:agreement,holding_invoice_generated_by:0
 msgid "Child"
-msgstr "Child"
+msgstr "Enfants"
 
 #. module: multi_company_holding_invoicing
-#: view:account.invoice:multi_company_holding_invoicing.invoice_form
 #: model:ir.actions.act_window,name:multi_company_holding_invoicing.action_queue_child_invoice_job
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.invoice_form
 msgid "Child Invoice Jobs"
-msgstr "Jobs factures"
+msgstr "Jobs factures enfants"
 
 #. module: multi_company_holding_invoicing
-#: view:wizard.holding.invoicing:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.invoice_form
+msgid "Child Invoices"
+msgstr "Factures enfants"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_child_invoice_ids
+msgid "Child invoice ids"
+msgstr "ids factures enfants"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_child_invoice_job_ids
+msgid "Child invoice job ids"
+msgstr "ids Jobs factures enfants"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
 msgid "Confirmer"
 msgstr "Confirmer"
 
 #. module: multi_company_holding_invoicing
-#: field:child.invoicing,create_uid:0
-#: field:holding.invoicing,create_uid:0
-#: field:wizard.holding.invoicing,create_uid:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_child_invoicing_create_uid
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_holding_invoicing_create_uid
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_create_uid
 msgid "Created by"
-msgstr "Creé par"
+msgstr "Créé par"
 
 #. module: multi_company_holding_invoicing
-#: field:child.invoicing,create_date:0
-#: field:holding.invoicing,create_date:0
-#: field:wizard.holding.invoicing,create_date:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_child_invoicing_create_date
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_holding_invoicing_create_date
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_create_date
 msgid "Created on"
-msgstr "Crée le"
+msgstr "Créé le"
 
 #. module: multi_company_holding_invoicing
-#: field:base.holding.invoicing,display_name:0
-#: field:child.invoicing,display_name:0
-#: field:holding.invoicing,display_name:0
-#: field:wizard.holding.invoicing,display_name:0
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.agreement_form
+msgid "Discount %"
+msgstr "Remise %"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_base_holding_invoicing_display_name
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_child_invoicing_display_name
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_holding_invoicing_display_name
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_display_name
 msgid "Display Name"
-msgstr "Display Name"
+msgstr "Nom Affiché"
 
 #. module: multi_company_holding_invoicing
-#: field:sale.make.invoice,error:0
-msgid "Error"
-msgstr "Erreur"
-
-#. module: multi_company_holding_invoicing
-#: view:account.invoice:multi_company_holding_invoicing.invoice_form
-msgid "Generate Child Invoice"
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.invoice_form
+msgid "Generate Child Invoices"
 msgstr "Générer les factures enfants"
 
 #. module: multi_company_holding_invoicing
-#: code:addons/multi_company_holding_invoicing/models/invoice.py:118
+#: code:addons/multi_company_holding_invoicing/models/invoice.py:107
 #, python-format
 msgid "Generate child invoices for the company: %s"
 msgstr "Génération des factures enfants pour la société: %s"
 
 #. module: multi_company_holding_invoicing
-#: selection:crm.case.section,holding_invoice_generated_by:0
+#: selection:agreement,holding_invoice_generated_by:0
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.agreement_form
 msgid "Holding"
 msgstr "Holding"
 
 #. module: multi_company_holding_invoicing
-#: field:crm.case.section,holding_company_id:0
-#: field:sale.order,holding_company_id:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_agreement_holding_company_id
+msgid "Holding Company"
+msgstr "Société Holding"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_sale_order_holding_company_id
 msgid "Holding Company for Invoicing"
-msgstr "La Holding à facturer"
+msgstr "Société Holding à facturer"
 
 #. module: multi_company_holding_invoicing
-#: field:crm.case.section,holding_discount:0
-msgid "Holding Discount (%)"
-msgstr "Holding Discount (%)"
-
-#. module: multi_company_holding_invoicing
-#: code:addons/multi_company_holding_invoicing/wizards/base_invoicing.py:65
-#: view:sale.order:multi_company_holding_invoicing.view_sales_order_filter
-#: field:sale.order,holding_invoice_id:0
+#: code:addons/multi_company_holding_invoicing/wizards/base_invoicing.py:67
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_holding_invoice_id
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_queue_job_holding_invoice_id
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_sale_order_holding_invoice_id
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.view_sales_order_filter
 #, python-format
 msgid "Holding Invoice"
 msgstr "Facture Holding"
 
 #. module: multi_company_holding_invoicing
-#: field:crm.case.section,holding_product_id:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_agreement_holding_product_id
 msgid "Holding Invoice Product"
 msgstr "Holding Invoice Product"
 
 #. module: multi_company_holding_invoicing
-#: code:addons/multi_company_holding_invoicing/wizards/sale_make_invoice.py:30
-#, python-format
-msgid "Holding Invoice must be invoiced per section"
-msgstr "La facture de la holding doit être générer par équipe commercial"
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_sale_order_holding_invoice_state
+msgid "Holding Invoice State"
+msgstr "Etat facture Holding"
 
 #. module: multi_company_holding_invoicing
 #: model:ir.actions.act_window,name:multi_company_holding_invoicing.action_wizard_holding_invoicing
@@ -145,132 +165,136 @@ msgid "Holding Invoicing"
 msgstr "Génération de facture de Holding"
 
 #. module: multi_company_holding_invoicing
-#: field:account.invoice,holding_sale_ids:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_account_invoice_holding_sale_ids
 msgid "Holding sale ids"
-msgstr "Commande lié à la facture d'holding"
+msgstr "Holding sale ids"
 
 #. module: multi_company_holding_invoicing
-#: field:base.holding.invoicing,id:0
-#: field:child.invoicing,id:0
-#: field:holding.invoicing,id:0
-#: field:wizard.holding.invoicing,id:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_base_holding_invoicing_id
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_child_invoicing_id
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_holding_invoicing_id
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_id
 msgid "ID"
 msgstr "ID"
 
 #. module: multi_company_holding_invoicing
-#: help:crm.case.section,holding_invoice_generated_by:0
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_agreement_holding_invoice_generated_by
 msgid "If the holding invoice is generated by a user of the holding company you have to select the option holding. If it's the child company you have to select the child option"
-msgstr "Si la facture de holding est générer a partir de la holding il faut choisir l'option 'holding'. Si elle est généré a partir de la société enfant il faut choisir 'enfant'."
+msgstr "Si la facture Holding est générée par un utilisateur de la société Holding, vous devez sélectionner l'option 'Holding'. Sinon, vous devez sélectionner l'option 'Enfants'"
 
 #. module: multi_company_holding_invoicing
-#: view:account.invoice:multi_company_holding_invoicing.invoice_form
 #: model:ir.model,name:multi_company_holding_invoicing.model_account_invoice
 msgid "Invoice"
 msgstr "Facture"
 
 #. module: multi_company_holding_invoicing
-#: field:wizard.holding.invoicing,date_invoice:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_invoice_date
 msgid "Invoice Date"
-msgstr "Date de Facturation"
+msgstr "Date de facturation"
 
 #. module: multi_company_holding_invoicing
-#: code:addons/multi_company_holding_invoicing/wizards/sale_make_invoice.py:81
-#: code:addons/multi_company_holding_invoicing/wizards/wizard_holding_invoicing.py:35
+#: code:addons/multi_company_holding_invoicing/wizards/wizard_holding.py:32
 #, python-format
 msgid "Invoice Generated"
-msgstr "Facturé généré"
+msgstr "Facture générée"
 
 #. module: multi_company_holding_invoicing
-#: field:crm.case.section,holding_invoice_generated_by:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_agreement_holding_invoice_generated_by
 msgid "Invoice Generated by"
-msgstr "Facture généré par"
+msgstr "Facture générée par"
 
 #. module: multi_company_holding_invoicing
-#: field:crm.case.section,holding_invoice_group_by:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_agreement_holding_invoice_group_by
 msgid "Invoice Group by"
-msgstr "Facture groupé par"
+msgstr "Grouper par factures"
 
 #. module: multi_company_holding_invoicing
 #: model:ir.model,name:multi_company_holding_invoicing.model_account_invoice_line
 msgid "Invoice Line"
-msgstr "Lignes de facture"
+msgstr "Ligne de facture"
 
 #. module: multi_company_holding_invoicing
-#: field:sale.order,invoice_state:0
-msgid "Invoice State"
-msgstr "Etat Facturation"
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.agreement_form
+msgid "Invoice Product"
+msgstr "Produit facturé"
 
 #. module: multi_company_holding_invoicing
-#: selection:sale.order,invoice_state:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_sale_order_invoice_state
+msgid "Invoice state"
+msgstr "Etat facture"
+
+#. module: multi_company_holding_invoicing
+#: selection:sale.order,holding_invoice_state:0
 msgid "Invoiceable"
-msgstr "Facturable"
+msgstr "A facturer"
 
 #. module: multi_company_holding_invoicing
-#: selection:sale.order,invoice_state:0
+#: selection:sale.order,holding_invoice_state:0
 msgid "Invoiced"
-msgstr "Facturé"
+msgstr "Entièrement facturé"
 
 #. module: multi_company_holding_invoicing
-#: field:base.holding.invoicing,__last_update:0
-#: field:child.invoicing,__last_update:0
-#: field:holding.invoicing,__last_update:0
-#: field:wizard.holding.invoicing,__last_update:0
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.agreement_form
+msgid "Invoicing"
+msgstr "Facturation"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_sale_order_holding_invoice_state
+msgid "Kept for history"
+msgstr "Kept for history"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_base_holding_invoicing___last_update
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_child_invoicing___last_update
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_holding_invoicing___last_update
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing___last_update
 msgid "Last Modified on"
-msgstr "Last Modified on"
+msgstr "Modifié le"
 
 #. module: multi_company_holding_invoicing
-#: field:child.invoicing,write_uid:0
-#: field:holding.invoicing,write_uid:0
-#: field:wizard.holding.invoicing,write_uid:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_child_invoicing_write_uid
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_holding_invoicing_write_uid
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_write_uid
 msgid "Last Updated by"
-msgstr "Dernière mise à jour par"
+msgstr "Modifié par"
 
 #. module: multi_company_holding_invoicing
-#: field:child.invoicing,write_date:0
-#: field:holding.invoicing,write_date:0
-#: field:wizard.holding.invoicing,write_date:0
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_child_invoicing_write_date
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_holding_invoicing_write_date
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_wizard_holding_invoicing_write_date
 msgid "Last Updated on"
-msgstr "Dernière mise à jour le"
+msgstr "Modifié le"
 
 #. module: multi_company_holding_invoicing
-#: selection:crm.case.section,holding_invoice_group_by:0
+#: selection:agreement,holding_invoice_group_by:0
 msgid "None"
 msgstr "Aucun"
 
 #. module: multi_company_holding_invoicing
-#: selection:sale.order,invoice_state:0
+#: selection:sale.order,holding_invoice_state:0
 msgid "Not Applicable"
 msgstr "Non Applicable"
 
 #. module: multi_company_holding_invoicing
-#: selection:sale.order,invoice_state:0
+#: selection:sale.order,holding_invoice_state:0
 msgid "Not Ready"
 msgstr "Non Facturable"
 
 #. module: multi_company_holding_invoicing
-#: selection:sale.order,invoice_state:0
+#: selection:sale.order,holding_invoice_state:0
 msgid "Pending"
 msgstr "En cours"
 
 #. module: multi_company_holding_invoicing
-#: model:ir.model,name:multi_company_holding_invoicing.model_stock_picking
-msgid "Picking List"
-msgstr "Opération de manutention"
-
-#. module: multi_company_holding_invoicing
-#: model:ir.model,name:multi_company_holding_invoicing.model_procurement_order
-msgid "Procurement"
-msgstr "Approvisionnement"
-
-#. module: multi_company_holding_invoicing
-#: model:ir.model,name:multi_company_holding_invoicing.model_procurement_group
-msgid "Procurement Requisition"
-msgstr "Demande d'approvisionnement"
+#: code:addons/multi_company_holding_invoicing/wizards/base_invoicing.py:234
+#, python-format
+msgid "Please define an accounting sale journal for the company %s."
+msgstr "Veuillez définir un journal de vente pour la société %s."
 
 #. module: multi_company_holding_invoicing
 #: model:ir.model,name:multi_company_holding_invoicing.model_queue_job
 msgid "Queue Job"
-msgstr "Queue Job"
+msgstr "Queue de jobs"
 
 #. module: multi_company_holding_invoicing
 #: model:ir.actions.act_window,name:multi_company_holding_invoicing.act_account_invoice_2_child_sale_order
@@ -279,25 +303,24 @@ msgid "Quotations and Sales"
 msgstr "Devis et ventes"
 
 #. module: multi_company_holding_invoicing
-#: field:crm.case.section,holding_royalty_product_id:0
-msgid "Royalty Holding Invoice Product"
-msgstr "Royalty Holding Invoice Product"
+#: model:ir.model.fields,field_description:multi_company_holding_invoicing.field_agreement_holding_royalty_product_id
+msgid "Royalty Holding Product"
+msgstr "Produit Royalty Holding"
 
 #. module: multi_company_holding_invoicing
-#: selection:crm.case.section,holding_invoice_group_by:0
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.agreement_form
+msgid "Royalty Product"
+msgstr "Produit Royalty"
+
+#. module: multi_company_holding_invoicing
+#: selection:agreement,holding_invoice_group_by:0
 msgid "Sale"
-msgstr "Commande"
+msgstr "Vente"
 
 #. module: multi_company_holding_invoicing
-#: field:sale.make.invoice,section_id:0
-#: field:wizard.holding.invoicing,section_id:0
-msgid "Sale Section"
-msgstr "Equipe Commercial"
-
-#. module: multi_company_holding_invoicing
-#: view:account.invoice:multi_company_holding_invoicing.invoice_form
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.invoice_form
 msgid "Sales"
-msgstr "Commandes"
+msgstr "Ventes"
 
 #. module: multi_company_holding_invoicing
 #: model:ir.model,name:multi_company_holding_invoicing.model_sale_advance_payment_inv
@@ -305,78 +328,52 @@ msgid "Sales Advance Payment Invoice"
 msgstr "Facture de paiement d'avance"
 
 #. module: multi_company_holding_invoicing
-#: model:ir.model,name:multi_company_holding_invoicing.model_sale_make_invoice
-msgid "Sales Make Invoice"
-msgstr "Vente : Facturer"
-
-#. module: multi_company_holding_invoicing
 #: model:ir.model,name:multi_company_holding_invoicing.model_sale_order
 msgid "Sales Order"
-msgstr "Commandes de Vente"
+msgstr "Bon de commande"
 
 #. module: multi_company_holding_invoicing
-#: model:ir.model,name:multi_company_holding_invoicing.model_crm_case_section
-msgid "Sales Teams"
-msgstr "Équipes commerciales"
+#: model:ir.model,name:multi_company_holding_invoicing.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de bons de commande"
 
 #. module: multi_company_holding_invoicing
-#: view:sale.order:multi_company_holding_invoicing.view_sales_order_filter
-msgid "Salesperson"
-msgstr "Vendeur"
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_agreement_holding_company_id
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_sale_order_holding_company_id
+msgid "Select the holding company used to invoice"
+msgstr "Sélectionner la société Holding à facturer"
 
 #. module: multi_company_holding_invoicing
-#: view:sale.order:multi_company_holding_invoicing.view_sales_order_filter
-msgid "Section"
-msgstr "Equipe Commercial"
-
-#. module: multi_company_holding_invoicing
-#: help:crm.case.section,holding_company_id:0
-#: help:sale.order,holding_company_id:0
-msgid "Select the holding company to invoice"
-msgstr "Sélectionnez la Holding à facturer"
-
-#. module: multi_company_holding_invoicing
-#: view:wizard.holding.invoicing:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
 msgid "Select the parameter for creating your invoice"
 msgstr "Selectionner les options de facturation"
 
 #. module: multi_company_holding_invoicing
-#: help:sale.order,invoice_state:0
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_sale_order_invoice_state
 msgid "Statut de facturation. Dans le cas du MinDef pour que la vente soit facturable il faut qu'elle soit mise à dispo depuis 15 jours ou livrée"
 msgstr "Statut de facturation. Dans le cas du MinDef pour que la vente soit facturable il faut qu'elle soit mise à dispo depuis 15 jours ou livrée"
 
 #. module: multi_company_holding_invoicing
-#: model:ir.model,name:multi_company_holding_invoicing.model_stock_move
-msgid "Stock Move"
-msgstr "Mouvement de stock"
-
-#. module: multi_company_holding_invoicing
-#: code:addons/multi_company_holding_invoicing/models/invoice.py:103
+#: code:addons/multi_company_holding_invoicing/models/invoice.py:92
 #, python-format
 msgid "The child invoices have been already generated for this invoice"
 msgstr "Les factures enfants ont déjà été générée pour cette facture"
 
 #. module: multi_company_holding_invoicing
-#: code:addons/multi_company_holding_invoicing/wizards/sale_make_invoice.py:47
+#: code:addons/multi_company_holding_invoicing/wizards/wizard_holding.py:47
 #, python-format
-msgid "The sale order %s can not be invoiced"
-msgstr "La commande de vente %s ne peut pas être facturé"
+msgid "There is no invoice to generate"
+msgstr "Il n'y a pas de factures à générer"
 
 #. module: multi_company_holding_invoicing
-#: code:addons/multi_company_holding_invoicing/wizards/sale_make_invoice.py:36
-#, python-format
-msgid "The sale order %s must be invoiced from the holding company"
-msgstr "La commande de vente %s doit être facturé depuis la holding"
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_agreement_holding_royalty_product_id
+msgid "This product will be used for the royalty line in the Holding Invoice. Accounting information will be taken on this product"
+msgstr "Ce produit sera utilisé pour la ligne de redevance dans la facture Holding. Les informations comptables seront prises sur ce produit"
 
 #. module: multi_company_holding_invoicing
-#: help:crm.case.section,holding_product_id:0
-msgid "This product will be used for the holding invoice line accounting information will be taken on this product"
-msgstr "This product will be used for the holding invoice line accounting information will be taken on this product"
-
-#. module: multi_company_holding_invoicing
-#: help:crm.case.section,holding_royalty_product_id:0
-msgid "This product will be used for the holding invoice line royalty accounting information will be taken on this product"
-msgstr "This product will be used for the holding invoice line royalty accounting information will be taken on this product"
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_agreement_holding_product_id
+msgid "This product will be used for the sales line in the Holding Invoice. Accounting information will be taken on this product"
+msgstr "Ce produit sera utilisé pour la ligne de vente dans la facture Holding. Les informations comptables seront prises sur ce produit"
 
 #. module: multi_company_holding_invoicing
 #: code:addons/multi_company_holding_invoicing/wizards/sale_make_invoice_advance.py:22
@@ -385,21 +382,32 @@ msgid "This sale order must be invoiced from holding"
 msgstr "Cette commande de vente doit être facturé depuis la holding"
 
 #. module: multi_company_holding_invoicing
-#: help:crm.case.section,holding_invoice_group_by:0
-msgid "This will define how the sale order are grouped on the invoice"
-msgstr "Ceci configure comment les commandes seront groupés sur la facture. L'option aucun créera une seul ligne de facturation pour tout les commandes"
+#: model:ir.model.fields,help:multi_company_holding_invoicing.field_agreement_holding_invoice_group_by
+msgid "This will define how the sales are grouped on the invoice"
+msgstr "Cela définira comment les commandes de ventes sont regroupées sur la facture."
 
 #. module: multi_company_holding_invoicing
-#: view:wizard.holding.invoicing:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
+#: model:ir.model,name:multi_company_holding_invoicing.model_base_holding_invoicing
+msgid "base.holding.invoicing"
+msgstr "base.holding.invoicing"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model,name:multi_company_holding_invoicing.model_child_invoicing
+msgid "child.invoicing"
+msgstr "child.invoicing"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.model,name:multi_company_holding_invoicing.model_holding_invoicing
+msgid "holding.invoicing"
+msgstr "holding.invoicing"
+
+#. module: multi_company_holding_invoicing
+#: model:ir.ui.view,arch_db:multi_company_holding_invoicing.view_wizard_holding_invoicing_form
 msgid "or"
 msgstr "ou"
 
 #. module: multi_company_holding_invoicing
-#: view:sale.make.invoice:multi_company_holding_invoicing.view_sale_order_make_invoice
-msgid "{'invisible': [('error', '!=', False)]}"
-msgstr "{'invisible': [('error', '!=', False)]}"
+#: model:ir.model,name:multi_company_holding_invoicing.model_wizard_holding_invoicing
+msgid "wizard.holding.invoicing"
+msgstr "wizard.holding.invoicing"
 
-#. module: multi_company_holding_invoicing
-#: view:sale.make.invoice:multi_company_holding_invoicing.view_sale_order_make_invoice
-msgid "{'invisible': [('section_id', '!=', False)]}"
-msgstr "{'invisible': [('section_id', '!=', False)]}"

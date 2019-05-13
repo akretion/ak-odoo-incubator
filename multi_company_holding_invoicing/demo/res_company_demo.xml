@@ -1,18 +1,223 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
 
 <record id="child_company_a" model="res.company">
-    <field name="name">My Company A</field>
+    <field name="name">Child Company A</field>
     <field name="parent_id" ref="base.main_company"/>
     <field name="currency_id" ref="base.EUR"/>
 </record>
 
 <record id="child_company_b" model="res.company">
-    <field name="name">My Company B</field>
+    <field name="name">Child Company B</field>
     <field name="parent_id" ref="base.main_company"/>
     <field name="currency_id" ref="base.EUR"/>
 </record>
 
-    </data>
-</openerp>
+<!--
+        Account Journal Sequences for each company (Holding, Child A and Child B)
+        -->
+    <record id="sequence_sale_journal_child_company_a" model="ir.sequence">
+        <field name="name">Account Sales Journal Child Company A</field>
+        <field eval="3" name="padding"/>
+        <field name="prefix">SAJ-CA/%(year)s/</field>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="sequence_sale_journal_child_company_b" model="ir.sequence">
+        <field name="name">Account Sales Journal Child Company B</field>
+        <field eval="3" name="padding"/>
+        <field name="prefix">SAJ-CB/%(year)s/</field>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="sequence_sale_journal_holding_company" model="ir.sequence">
+        <field name="name">Account Sales Journal Holding Company</field>
+        <field eval="3" name="padding"/>
+        <field name="prefix">SAJ-HC/%(year)s/</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="sequence_purchase_journal_holding_company" model="ir.sequence">
+        <field name="name">Account Expenses Journal Holding Company</field>
+        <field eval="3" name="padding"/>
+        <field name="prefix">EXJ-HC/%(year)s/</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+<!--
+        Create account account for each company (Holding, Child A and Child B)
+        -->
+    <record id="a_sale_child_company_a" model="account.account">
+        <field name="code">X2001-CA</field>
+        <field name="name">Product Sales - (Child Company A)</field>
+        <field name="internal_type">other</field>
+        <field name="user_type_id" ref="account.data_account_type_revenue"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="a_sale_child_company_b" model="account.account">
+        <field name="code">X2001-CB</field>
+        <field name="name">Product Sales - (Child Company B)</field>
+        <field name="internal_type">other</field>
+        <field name="user_type_id" ref="account.data_account_type_revenue"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="a_sale_holding_company" model="account.account">
+        <field name="code">X2001-HC</field>
+        <field name="name">Product Sales - (Holding Company)</field>
+        <field name="internal_type">other</field>
+        <field name="user_type_id" ref="account.data_account_type_revenue"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="a_expense_holding_company" model="account.account">
+        <field name="code">X2110-HC</field>
+        <field name="name">Expenses - (Holding Company)</field>
+        <field name="internal_type">other</field>
+        <field name="user_type_id" ref="account.data_account_type_expenses"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="a_recv_child_company_a" model="account.account">
+        <field name="code">X11002-CA</field>
+        <field name="name">Debtors - (Child Company A)</field>
+        <field name="internal_type">receivable</field>
+        <field name="reconcile" eval="True"/>
+        <field name="user_type_id" ref="account.data_account_type_receivable"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="a_recv_child_company_b" model="account.account">
+        <field name="code">X11002-CB</field>
+        <field name="name">Debtors - (Child Company B)</field>
+        <field name="internal_type">receivable</field>
+        <field name="reconcile" eval="True"/>
+        <field name="user_type_id" ref="account.data_account_type_receivable"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="a_recv_holding_company" model="account.account">
+        <field name="code">X11002-HC</field>
+        <field name="name">Debtors - (Holding Company)</field>
+        <field name="internal_type">receivable</field>
+        <field name="reconcile" eval="True"/>
+        <field name="user_type_id" ref="account.data_account_type_receivable"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="a_pay_child_company_a" model="account.account">
+        <field name="code">X1111-CA</field>
+        <field name="name">Creditors - (Child Company A)</field>
+        <field name="internal_type">payable</field>
+        <field name="reconcile" eval="True"/>
+        <field name="user_type_id" ref="account.data_account_type_payable"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="a_pay_child_company_b" model="account.account">
+        <field name="code">X1111-CB</field>
+        <field name="name">Creditors - (Child Company B)</field>
+        <field name="internal_type">payable</field>
+        <field name="reconcile" eval="True"/>
+        <field name="user_type_id" ref="account.data_account_type_payable"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="a_pay_holding_company" model="account.account">
+        <field name="code">X1111-HC</field>
+        <field name="name">Creditors - (Holding Company)</field>
+        <field name="internal_type">payable</field>
+        <field name="reconcile" eval="True"/>
+        <field name="user_type_id" ref="account.data_account_type_payable"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+<!--
+        Properties for each company (Holding, Child A and Child B)
+        -->
+    <record forcecreate="True" id="property_account_receivable_child_company_a" model="ir.property">
+        <field name="name">property_account_receivable_child_company_a</field>
+        <field name="fields_id" search="[('model','=','res.partner'),('name','=','property_account_receivable_id')]"/>
+        <field eval="'account.account,'+str(a_recv_child_company_a)" name="value"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+    <record forcecreate="True" id="property_account_payable_child_company_a" model="ir.property">
+        <field name="name">property_account_payable_child_company_a</field>
+        <field name="fields_id" search="[('model','=','res.partner'),('name','=','property_account_payable_id')]"/>
+        <field eval="'account.account,'+str(a_pay_child_company_a)" name="value"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+    <record forcecreate="True" id="property_account_receivable_child_company_b" model="ir.property">
+        <field name="name">property_account_receivable_child_company_b</field>
+        <field name="fields_id" search="[('model','=','res.partner'),('name','=','property_account_receivable_id')]"/>
+        <field eval="'account.account,'+str(a_recv_child_company_b)" name="value"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+    <record forcecreate="True" id="property_account_payable_child_company_b" model="ir.property">
+        <field name="name">property_account_payable_child_company_b</field>
+        <field name="fields_id" search="[('model','=','res.partner'),('name','=','property_account_payable_id')]"/>
+        <field eval="'account.account,'+str(a_pay_child_company_b)" name="value"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+    <record forcecreate="True" id="property_account_receivable_holding_company" model="ir.property">
+        <field name="name">property_account_receivable_holding_company</field>
+        <field name="fields_id" search="[('model','=','res.partner'),('name','=','property_account_receivable_id')]"/>
+        <field eval="'account.account,'+str(a_recv_holding_company)" name="value"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record forcecreate="True" id="property_account_payable_holding_company" model="ir.property">
+        <field name="name">property_account_payable_holding_company</field>
+        <field name="fields_id" search="[('model','=','res.partner'),('name','=','property_account_payable_id')]"/>
+        <field eval="'account.account,'+str(a_pay_holding_company)" name="value"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+<!--
+        Create account journal for each company (Holding, Child A and Child B)
+        -->
+    <record id="sales_journal_child_company_a" model="account.journal">
+        <field name="name">Sales Journal - (Child Company A)</field>
+        <field name="code">SAJ-CA</field>
+        <field name="type">sale</field>
+        <field name="sequence_id" ref="sequence_sale_journal_child_company_a"/>
+        <field name="default_credit_account_id" ref="a_sale_child_company_a"/>
+        <field name="default_debit_account_id" ref="a_sale_child_company_a"/>
+        <field name="update_posted" eval="True"/>
+        <field name="company_id" ref="child_company_a"/>
+    </record>
+
+    <record id="sales_journal_child_company_b" model="account.journal">
+        <field name="name">Sales Journal - (Child Company B)</field>
+        <field name="code">SAJ-CB</field>
+        <field name="type">sale</field>
+        <field name="sequence_id" ref="sequence_sale_journal_child_company_b"/>
+        <field name="default_credit_account_id" ref="a_sale_child_company_b"/>
+        <field name="default_debit_account_id" ref="a_sale_child_company_b"/>
+        <field name="update_posted" eval="True"/>
+        <field name="company_id" ref="child_company_b"/>
+    </record>
+
+    <record id="sales_journal_holding_company" model="account.journal">
+        <field name="name">Sales Journal - (Holding Company)</field>
+        <field name="code">SAJ-HC</field>
+        <field name="type">sale</field>
+        <field name="sequence_id" ref="sequence_sale_journal_holding_company"/>
+        <field name="default_credit_account_id" ref="a_sale_holding_company"/>
+        <field name="default_debit_account_id" ref="a_sale_holding_company"/>
+        <field name="update_posted" eval="True"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="purchases_journal_holding_company" model="account.journal">
+        <field name="name">Purchases Journal - (Holding Company)</field>
+        <field name="code">EXJ-HC</field>
+        <field name="type">purchase</field>
+        <field name="sequence_id" ref="sequence_purchase_journal_holding_company"/>
+        <field name="default_credit_account_id" ref="a_expense_holding_company"/>
+        <field name="default_debit_account_id" ref="a_expense_holding_company"/>
+        <field name="update_posted" eval="True"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+</odoo>

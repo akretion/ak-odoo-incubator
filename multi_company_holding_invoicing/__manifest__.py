@@ -5,35 +5,35 @@
 
 
 {'name': 'Multi Company Holding Invoicing',
- 'version': '8.0.0.0.1',
+ 'version': '10.0.0.0.1',
  'category': 'Accounting & Finance',
- 'author': 'Akretion, Odoo Community Association (OCA)',
+ 'author': 'Akretion',
  'website': 'http://www.akretion.com/',
  'license': 'AGPL-3',
  'depends': [
      'account_invoice_inter_company',
-     'sales_team',
+     'agreement_sale',
      'base_suspend_security',
-     # Note we depend of this module for having the sale_ids field
-     # on the invoice
+     'sale',
+     'queue_job',
+     'base_onchange_rule',
+     # Note we depend of this module for having the all_qty_delivered field
+     # on the sale
      'sale_automatic_workflow',
-     'connector',
  ],
  'data': [
-     'config/sale_config.yml',
-     'views/sales_team_view.xml',
+     'views/agreement_view.xml',
      'views/sale_view.xml',
      'views/account_invoice_view.xml',
-     'views/model_view.xml',
-     'wizards/wizard_holding_invoicing_view.xml',
-     'wizards/sale_make_invoice_view.xml',
+     'views/queue_view.xml',
+     'wizards/wizard_holding_view.xml',
+     'wizards/sale_make_invoice_advance_view.xml',
  ],
  'demo': [
      'demo/res_company_demo.xml',
      'demo/res_users_demo.xml',
-     'demo/sales_team_demo.xml',
+     'demo/agreement_demo.xml',
      'demo/sale_order_demo.xml',
-     'demo/account_config.yml',
  ],
  'installable': True,
  }

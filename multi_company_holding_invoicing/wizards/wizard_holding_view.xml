@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-  <data>
+<odoo>
+
 
 <record id="view_wizard_holding_invoicing_form" model="ir.ui.view">
     <field name="model">wizard.holding.invoicing</field>
@@ -10,8 +10,8 @@
             <div>Select the parameter for creating your invoice</div>
             <newline/>
             <group>
-              <field name="date_invoice"/>
-              <field name="section_id" widget="radio"
+              <field name="invoice_date"/>
+              <field name="agreement_id" widget="radio"
                      domain="[('holding_company_id', '!=', False)]"/>
             </group>
             <footer>
@@ -38,5 +38,5 @@
           sequence="10"
           action="action_wizard_holding_invoicing"/>
 
-  </data>
-</openerp>
+
+</odoo>
