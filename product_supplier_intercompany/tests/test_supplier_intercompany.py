@@ -47,7 +47,7 @@ class TestPricelist(TransactionCase):
         self.pricelist.is_intercompany_supplier = True
         self.supplier_info = self._get_supplier_info(self.product_template_1)
 
-        self.not_intercompany_price_version = ref("product.ver0")
+        self.not_intercompany_price = ref("produch.list0")
 
     def _get_supplier_info(self, record=None, sudo=True):
         domain = [
@@ -84,15 +84,15 @@ class TestPricelist(TransactionCase):
         self.assertEqual(len(supplierinfo.pricelist_ids), 1)
         self.assertEqual(supplierinfo.pricelist_ids.price, price)
 
-    def _add_item(self, record, price, price_version_id=None):
-        if not price_version_id:
-            price_version_id = self.env.ref(
-                "product_supplier_intercompany.pricelist_intercompany_v1"
+    def _add_item(self, record, price, pricelist_id=None):
+        if not pricelist_id:
+            pricelist_id = self.env.ref(
+                "product_supplier_intercompany.pricelist_intercompany"
             ).id
         self.assertIn(record._name, ["product.product", "product.template"])
         ref = self.env.ref
         vals = {
-            "price_version_id": price_version_id,
+            "pricelist_id": pricelist_id,
             "base": ref("product.list_price").id,
             "price_discount": -1,
             "price_surcharge": price,
@@ -203,9 +203,7 @@ class TestPricelist(TransactionCase):
         product = self.env.ref("product.product_product_3")
         nbr_supplier = self.env["product.supplierinfo"].sudo().search_count([])
         self._add_item(
-            product,
-            30,
-            price_version_id=self.not_intercompany_price_version.id,
+            product, 30, pricelist_id=self.not_intercompany_price.id
         )
         self.assertEqual(
             nbr_supplier,
@@ -216,20 +214,16 @@ class TestPricelist(TransactionCase):
         with self.assertRaises(UserError):
             product = self.env.ref("product.product_product_3")
             self._add_item(
-                product,
-                30,
-                price_version_id=self.not_intercompany_price_version.id,
+                product, 30, pricelist_id=self.not_intercompany_price.id
             )
             product._synchronise_supplier_info(
-                pricelists=self.not_intercompany_price_version.pricelist_id
+                pricelists=self.not_intercompany_price
             )
 
     def test_add_product_item_no_intercompany_empty_todo(self):
         product = self.env.ref("product.product_product_3")
         item = self._add_item(
-            product,
-            30,
-            price_version_id=self.not_intercompany_price_version.id,
+            product, 30, pricelist_id=self.not_intercompany_price.id
         )
         todo = {}
         item._add_product_to_synchronize(todo)

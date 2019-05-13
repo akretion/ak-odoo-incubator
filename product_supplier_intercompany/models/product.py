@@ -83,10 +83,7 @@ class ProductProduct(models.Model):
     def _has_intercompany_price(self, pricelist):
         self.ensure_one()
         if self.env["product.pricelist.item"].search(
-            [
-                ("price_version_id.pricelist_id", "=", pricelist.id),
-                ("product_id", "=", self.id),
-            ]
+            [("pricelist_id", "=", pricelist.id), ("product_id", "=", self.id)]
         ):
             return True
 
@@ -113,7 +110,7 @@ class ProductTemplate(models.Model):
         self.ensure_one()
         if self.env["product.pricelist.item"].search(
             [
-                ("price_version_id.pricelist_id", "=", pricelist.id),
+                ("pricelist_id", "=", pricelist.id),
                 ("product_tmpl_id", "=", self.id),
                 ("product_id", "=", False),
             ]
