@@ -29,5 +29,9 @@
     </field>
 </record>
 
+<record id="sale.action_view_sale_advance_payment_inv" model="ir.actions.act_window">
+    <field name="name">Holding Invoice</field>
+</record>
+
   
 </odoo>

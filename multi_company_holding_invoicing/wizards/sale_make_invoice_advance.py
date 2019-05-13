@@ -32,16 +32,20 @@ class SaleAdvancePaymentInv(models.TransientModel):
                                 _('The sale order %s must be invoiced from '
                                   'the holding company')
                                 % (', '.join(sales.mapped('name'))))}
-                else:
-                    not_invoiceable = self.env['sale.order'].browse(False)
-                    for sale in sales:
-                        if sale.invoice_state != 'invoiceable':
-                            not_invoiceable |= sale
-                    if not_invoiceable:
-                        return {
-                            'error': (
-                                _('The sale order %s can not be invoiced')
-                                % (', '.join(not_invoiceable.mapped('name'))))}
+                    else:
+                        not_invoiceable = self.env['sale.order'].browse(False)
+                        already_invoiced = self.env['sale.order'].browse(False)
+                        for sale in sales:
+                            if (sale.holding_invoice_state != 'invoiceable' or
+                                    sale.holding_invoice_id):
+                                not_invoiceable |= sale
+                        if not_invoiceable:
+                            return {
+                                'error': (
+                                    _('The sale order %s can not be invoiced or'
+                                      ' already have a holding invoice')
+                                    % (', '.join(not_invoiceable.mapped(
+                                        'name'))))}
                 return {'agreement': agreement,
                         'agreement_holding': agreement.holding_company_id}
         return {}
