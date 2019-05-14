@@ -115,8 +115,10 @@ class Purchase(models.Model):
             mos = self.env['mrp.production']
             for line in order.order_line:
                 mos |= line.mo_id
-            order.manufacture_ids = mos
-            order.mo_count = len(mos)
+            order.write({
+                'manufacture_ids': mos,
+                'mo_count': len(mos),
+            })
 
     mo_count = fields.Integer(compute='_compute_mo', string='Manufacturing Orders', default=0)
     manufacture_ids = fields.Many2many('mrp.production', compute='_compute_mo', string='Manufacturing Orders', copy=False)
