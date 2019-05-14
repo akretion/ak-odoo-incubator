@@ -3,6 +3,7 @@
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 # pylint: disable=W8106
+# pylint: disable=consider-merging-classes-inherited
 
 import json
 import logging
@@ -447,39 +448,3 @@ class ExternalTaskService(Component):
 
     def _validator_type_list(self):
         return {}
-
-
-class ExternalAttachmentService(Component):
-    _inherit = "base.rest.service"
-    _name = "external.attachment.service"
-    _collection = "project.project"
-    _usage = "attachment"
-
-    @property
-    def partner(self):
-        return self.work.partner
-
-    def read(self, ids, fields, load):
-        tasks = self.env["project.task"].search(
-            [("project_id.partner_id", "=", self.partner.id)]
-        )
-        attachments = self.env["ir.attachment"].search(
-            [
-                ("id", "in", ids),
-                ("res_id", "in", tasks.ids),
-                ("res_model", "=", "project.task"),
-            ]
-        )
-        attachments = attachments.read(fields=fields, load=load)
-        if attachments:
-            return attachments
-        return []
-
-    # Validator
-    def _validator_read(self):
-        return {
-            "ids": {"type": "list"},
-            "fields": {"type": "list"},
-            "load": {"type": "string"},
-            "context": {"type": "dict"},
-        }

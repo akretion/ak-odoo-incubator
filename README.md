@@ -5,6 +5,8 @@
 
 # Akretion Incubator
 
+## Branch management from v10 version
+
 This repository is used by Akretion for sharing R&D module.
 Most of module are used in production so you can use it, but be carreful that we can make breaking change between version
 When module will be enought generic and stabilized we will propose them to the OCA
@@ -17,6 +19,15 @@ Please install precommit if you want to contribute
 ```
 pipx install pre-commit
 ```
+
+- no 10.0 branch
+- branch name convention :
+  - 10-my-module : permanent stable branch
+  - 10-my-module-david-...-wip : working branch
+
+ - PR are done : 10-my-module-david-...-wip -> 10-my-module
+ - When PR is done, 10-my-module-david-...-wip is removed
+ - PR are done : 10-my-module...-wip -> 10.0
 
 After cloning just run
 ```

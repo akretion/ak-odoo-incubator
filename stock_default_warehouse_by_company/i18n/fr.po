@@ -1,0 +1,59 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* stock_default_warehouse_by_company
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-06 08:54+0000\n"
+"PO-Revision-Date: 2017-07-06 08:54+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_default_warehouse_by_company
+#: model:ir.model,name:stock_default_warehouse_by_company.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: stock_default_warehouse_by_company
+#: help:res.company,receipt_warehouse_id:0
+msgid "Default warehouse to use on Purchase Orders"
+msgstr "Entrepôt utilisé par défaut pour les commandes d'achats"
+
+#. module: stock_default_warehouse_by_company
+#: help:res.company,delivery_warehouse_id:0
+msgid "Default warehouse to use on Sale Orders"
+msgstr "Entrepôt utilisé par défaut pour les commandes de ventes"
+
+#. module: stock_default_warehouse_by_company
+#: view:res.company:stock_default_warehouse_by_company.view_company_inherit_form2
+#: field:res.company,delivery_warehouse_id:0
+msgid "Delivery Warehouse"
+msgstr "Entrepôt de livraison"
+
+#. module: stock_default_warehouse_by_company
+#: model:ir.model,name:stock_default_warehouse_by_company.model_purchase_order
+msgid "Purchase Order"
+msgstr "Bon de commande"
+
+#. module: stock_default_warehouse_by_company
+#: view:res.company:stock_default_warehouse_by_company.view_company_inherit_form2
+msgid "Purchases"
+msgstr "Achats"
+
+#. module: stock_default_warehouse_by_company
+#: view:res.company:stock_default_warehouse_by_company.view_company_inherit_form2
+#: field:res.company,receipt_warehouse_id:0
+msgid "Receipt Warehouse"
+msgstr "Entrepôt de réception"
+
+#. module: stock_default_warehouse_by_company
+#: model:ir.model,name:stock_default_warehouse_by_company.model_sale_order
+msgid "Sales Order"
+msgstr "Commande de ventes"
+
