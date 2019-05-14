@@ -3,6 +3,7 @@
 # Benoit Guillot <benoit.guillot@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 # pylint: disable=W8106
+# pylint: disable=consider-merging-classes-inherited
 
 import json
 import logging

@@ -2,6 +2,7 @@
 # Copyright 2019 Akretion (http://www.akretion.com).
 # @author Mourad EL HADJ MIMOUNE <mourad.el.hadj.mimoune@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# pylint: disable=consider-merging-classes-inherited
 
 from odoo.addons.component.core import Component
 
