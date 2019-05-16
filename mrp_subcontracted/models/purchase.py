@@ -109,7 +109,7 @@ class Purchase(models.Model):
     # TODO rajouter un field pour dire que le production_id (mrp)
     # est en attente de nous et pas l'inverse ?
 
-    # @api.depends('order_line.procurement_ids.production_id')
+    @api.depends('order_line.procurement_ids.production_id')
     def _compute_mo(self):
         for order in self:
             mos = self.env['mrp.production']
