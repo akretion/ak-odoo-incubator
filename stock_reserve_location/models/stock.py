@@ -12,17 +12,14 @@ RESERVE_HELP = (
 class StockLocation(models.Model):
     _inherit = "stock.location"
 
-    reserve = fields.Boolean(string="Reserve", help=RESERVE_HELP)
+    reserve = fields.Boolean(help=RESERVE_HELP)
 
 
 class FixedPutawayStrat(models.Model):
     _inherit = "stock.product.putaway.strategy"
 
     reserve = fields.Boolean(
-        string="Reserve",
-        compute="_compute_reserve_location",
-        store=True,
-        help=RESERVE_HELP,
+        compute="_compute_reserve_location", store=True, help=RESERVE_HELP
     )
 
     def _auto_init(self):
@@ -41,7 +38,7 @@ class FixedPutawayStrat(models.Model):
                 ),
             )
         ]
-        super(FixedPutawayStrat, self)._auto_init()
+        return super(FixedPutawayStrat, self)._auto_init()
 
     @api.multi
     @api.depends("fixed_location_id.reserve")

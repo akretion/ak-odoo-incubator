@@ -9,7 +9,7 @@
             model="stock.product.putaway.strategy">
         <field name="name">Putaway strategy 1</field>
         <field name="product_product_id" ref="product.product_product_4"/>
-        <field name="product_template_id"
+        <field name="product_tmpl_id"
                ref="product.product_product_4_product_template"/>
         <field name="putaway_id" ref="stock_putaway_product.product_putaway_per_product_wh"/>
         <field name="fixed_location_id" ref="stock.stock_location_14"/>
