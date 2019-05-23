@@ -37,7 +37,7 @@ class SaleOrderLine(models.Model):
             partner_id, lang, update_tax, date_order, packaging,
             fiscal_position, flag, context)
         if product:
-            res['value']['base_price_unit'] = res['value']['price_unit']
+            res['value']['base_price_unit'] = res['value'].get('price_unit', 0)
             display_option, option_lines = self._set_option_lines(
                 cr, uid, product, context=context)
             res['value']['display_option'] = display_option
