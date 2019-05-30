@@ -266,6 +266,7 @@ class ExternalTask(models.Model):
 
     @api.multi
     def message_post(self, body="", **kwargs):
+        body = body.replace('\n', '<br>')
         mid = self._call_odoo(
             "message_post",
             {"_id": self.id, "body": body, "author": self._get_author_info()},
