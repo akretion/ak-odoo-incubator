@@ -36,7 +36,7 @@ To configure this module, you need to:
 Known issues / Roadmap
 ======================
 
-* ...
+* All lines should have the same destination
 
 Bug Tracker
 ===========
@@ -58,6 +58,7 @@ Contributors
 ------------
 
 * Florian da Costa <florian.dacosta@akretion.com> (Akretion)
+* Raphaël Reverdy <raphael.reverdy@akretion.com> (Akretion)
 
 Do not contact contributors directly about support or help with technical issues.
 

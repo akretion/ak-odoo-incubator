@@ -38,6 +38,10 @@ class PurchaseOrder(models.Model):
                     mo.get_expedition_and_reception_moves()
                 )
 
+            # po.picking_type_id (Supplier/manufacture)
+            # TODO: externalise it on the po level instead of line
+            self.picking_type_id = supplier_wh.manu_type_id.id
+
             # faut-til cabler les in et les outs ?
             # ou alors le in suivant ? (facturation)
             self.add_purchase_line_id(moves_out, line)
@@ -47,52 +51,10 @@ class PurchaseOrder(models.Model):
     def button_approve(self):
         res = super(PurchaseOrder, self).button_approve()
         for purchase in self:
-#            all_moves_in = self.env['stock.move']
-#            all_moves_out = self.env['stock.move']
-#            location = self._get_location()
-#            supplier = purchase.partner_id
             for line in purchase.order_line:
                 # In seperate method as it is reused in an other module
                 purchase.manage_subcontracted_manufacture_line(line)
-#                if line._is_service_procurement():
-#                    mo = line.procurement_ids.production_id
-#                    if mo.location_dest_id != purchase.partner_id.location_id:
-#                        mo.update_locations(supplier)
-#                        moves_in = mo.update_moves_before_production(
-#                            supplier)
-#                        moves_out, moves_out_dest = (
-#                            mo.update_moves_after_production(
-#                                supplier)
-#                        )
-##                        all_moves_in |= moves_in
-##                        all_moves_out |= moves_out
-
-#                    # faut-til cabler les in et les outs ?
-#                    # ou alors le in suivant ? (facturation)
-#                    self.add_purchase_line_id(moves_out, line)
-#                    self.add_purchase_line_id(moves_out_dest, line)
-#            self.attach_picking_in(all_moves_in)
-#            self.attach_picking_out(all_moves_out)
         return res
-
-#    @api.multi
-#    def _get_location(self):
-#        self.ensure_one()
-#        return self.partner_id.supplier_location_id
-
-#    @api.multi
-#    def _get_destination_location(self):
-#        # TODO: toujours d'actu ?
-#        self.ensure_one()
-#        supplier_wh = self.env.ref(
-#            'mrp_subcontract_location.warehouse_supplier')
-#        if supplier_wh.id == self.warehouse_id.id and self.dest_address_id:
-#            if not self.dest_address_id.supplier_location_id:
-#                raise exceptions.ValidationError(
-#                    _('No location configured on the subcontractor'))
-#            return self.dest_address_id.supplier_location_id.id
-#        else:
-#            return super(PurchaseOrder, self)._get_destination_location()
 
     def add_purchase_line_id(self, moves, line):
         '''Add the reference to this PO.
