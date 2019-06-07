@@ -59,7 +59,8 @@ The availability of the MO is forced to 'waiting' until the purchase is not done
 Known issues / Roadmap
 ======================
 
-* ...
+* All purchase order lines should be service (no buy products) because of the picking type manufacture
+* A line should have only one (procurement, MO) associated
 
 Bug Tracker
 ===========
