@@ -39,7 +39,7 @@ class PurchaseOrderLine(models.Model):
 
             total = 0.0
             if line._is_service_procurement():
-                mo = line.procurement_ids.production_id
+                mo = line.mo_id
                 if mo.state == 'done':
                     for move in mo.move_finished_ids:
                         if move.product_uom != line.product_uom:

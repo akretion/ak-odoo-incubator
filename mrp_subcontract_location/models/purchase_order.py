@@ -20,7 +20,7 @@ class PurchaseOrder(models.Model):
         self.ensure_one()
         supplier = self.partner_id
         if line._is_service_procurement():
-            mo = line.procurement_ids.production_id
+            mo = line.mo_id
             supplier_wh, supplier_loc = supplier.\
                 _get_supplier_wh_and_location()
             if mo.location_dest_id != supplier_loc:
