@@ -16,12 +16,6 @@
             <field name="bom_id" ref="flour_bom" />
         </record>
 
-        <record id="mrp_flour_mo" model="mrp.production">
-            <field name="product_id" ref="product_flour_product" />
-            <field name="product_uom_id" ref="product.product_uom_unit"/>
-            <field name="bom_id" ref="flour_bom" />
-        </record>
-
     </data>
 </odoo>
 

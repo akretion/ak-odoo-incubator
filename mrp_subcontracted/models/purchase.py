@@ -16,9 +16,7 @@ class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
     mo_id = fields.Many2one(
-        'mrp.production', 'Mo',
-        compute='_calc_mo_id',
-        store=True,
+        'mrp.production', 'Manufacturing Order',
         readonly=True,
     )
     date_planned_start = fields.Datetime(
@@ -34,13 +32,6 @@ class PurchaseOrderLine(models.Model):
         track_visibility='onchange')
 
     @api.multi
-    @api.depends('procurement_ids', 'procurement_ids.production_id')
-    def _calc_mo_id(self):
-        for rec in self:
-            if rec._is_service_procurement():
-                rec.mo_id = rec.procurement_ids.production_id
-
-    @api.multi
     def _is_service_procurement(self):
         """Ensure the order line is a service procurement.
 
@@ -50,16 +41,11 @@ class PurchaseOrderLine(models.Model):
 
         Multiple procurements or MOs not implemented
         """
-        self.ensure_one()
-        is_service = False
-        has_mo = False
         if self.product_id and self.product_id.type == 'service':
             tmpl = self.product_id.product_tmpl_id
             is_service = tmpl.property_subcontracted_service
 
-        if is_service and self.procurement_ids:
-            has_mo = len(self.procurement_ids.production_id) == 1
-        return is_service and has_mo
+        return is_service and len(self.mo_id) == 1
 
     @api.multi
     def write(self, values):
@@ -102,14 +88,13 @@ class PurchaseOrderLine(models.Model):
         return result
 
 
-
 class Purchase(models.Model):
     _inherit = 'purchase.order'
 
     # TODO rajouter un field pour dire que le production_id (mrp)
     # est en attente de nous et pas l'inverse ?
 
-    @api.depends('order_line.procurement_ids.production_id')
+    @api.depends('order_line.mo_id')
     def _compute_mo(self):
         for order in self:
             mos = self.env['mrp.production']
@@ -153,6 +138,11 @@ class Purchase(models.Model):
             if rec.state == 'purchase':
                 for line in rec.order_line:
                     if line.mo_id:
+                        procurement = line.mo_id.service_procurement_id
+                        # replace the pruchase line of the procurement
+                        # by us (line)
+                        if procurement.purchase_line_id != line:
+                            procurement.purchase_line_id = line
                         line.procurement_ids.check()
         return res
 
@@ -180,4 +170,4 @@ class Purchase(models.Model):
         for rec in self:
             for line in rec.order_line:
                 if line.mo_id:
-                    line.procurement_ids.state = 'running'
+                    line.mo_id.service_procurement_id.state = 'running'
