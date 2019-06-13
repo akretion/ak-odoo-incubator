@@ -69,6 +69,20 @@ class ProjectTask(models.Model):
         compute="_compute_customer_report", store=True
     )
 
+    customer_kanban_report = fields.Html(
+        compute="_compute_customer_kanban_report", store=True
+    )
+
+    def _build_customer_kanban_report(self):
+        # TODO we should find a better way
+        # Implement your own template in your custom module
+        return ""
+
+    def _compute_customer_kanban_report(self):
+        for record in self:
+            record.customer_kanban_report =\
+                record._build_customer_kanban_report()
+
     def _build_customer_report(self):
         # TODO we should find a better way
         # Implement your own template in your custom module
