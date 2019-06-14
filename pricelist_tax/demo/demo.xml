@@ -2,7 +2,7 @@
 <odoo>
 
     <record id="ak_product" model="product.product">
-        <field name="taxes_id" eval="[(4, ref('l10n_fr.tva_normale_ttc'))]"/>
+        <field name="taxes_id" search="[('name', 'ilike', '(vente) 20,0% TTC')]"/>
         <field name="name">ak product</field>
         <field name="type">consu</field>
         <field name="list_price">10</field>
