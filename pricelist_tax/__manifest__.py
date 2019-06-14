@@ -11,6 +11,7 @@
         "account_invoice_pricelist",
         "l10n_fr",
         "onchange_helper",
+        "sale_stock",
     ],
     "website": "http://www.akretion.com/",
     "data": ["views/pricelist_view.xml"],
