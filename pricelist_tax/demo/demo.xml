@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <record id="ak_product" model="product.product">
-        <field name="taxes_id" search="[('name', 'ilike', '(vente) 20,0% TTC')]"/>
-        <field name="name">ak product</field>
+    <record id="pricelist_tax_exc" model="product.pricelist">
+        <field name="name">Professional Price Tax Exc</field>
+        <field name="price_include_taxes">0</field>
+    </record>
+
+    <record id="pricelist_tax_inc" model="product.pricelist">
+        <field name="name">Public Price Tax Inc</field>
+    </record>
+
+    <record id="product_1" model="product.product">
+        <field name="name">product</field>
         <field name="type">consu</field>
         <field name="list_price">10</field>
     </record>
 
-    <record id="ht_pricelist" model="product.pricelist">
-        <field name="name">Prix HT</field>
-        <field name="price_include_taxes">0</field>
-    </record>
-
-    <record id="ttc_pricelist" model="product.pricelist">
-        <field name="name">Prix TTC</field>
-    </record>
-
-    <record id="ht_item" model="product.pricelist.item">
+    <record id="item_tax_exc" model="product.pricelist.item">
         <field name="applied_on">0_product_variant</field>
         <field name="compute_price">fixed</field>
-        <field name="fixed_price">7</field>
-        <field name="product_id" eval="ref('ak_product')"/>
-        <field name="pricelist_id" eval="ref('ht_pricelist')"/>
+        <field name="fixed_price">10</field>
+        <field name="product_id" eval="ref('product_1')"/>
+        <field name="pricelist_id" eval="ref('pricelist_tax_exc')"/>
     </record>
-    <record id="ttc_item" model="product.pricelist.item">
+
+    <record id="item_tax_inc" model="product.pricelist.item">
         <field name="applied_on">0_product_variant</field>
         <field name="compute_price">fixed</field>
-        <field name="fixed_price">8</field>
-        <field name="product_id" eval="ref('ak_product')"/>
-        <field name="pricelist_id" eval="ref('ttc_pricelist')"/>
+        <field name="fixed_price">24</field>
+        <field name="product_id" eval="ref('product_1')"/>
+        <field name="pricelist_id" eval="ref('pricelist_tax_inc')"/>
     </record>
 
 </odoo>

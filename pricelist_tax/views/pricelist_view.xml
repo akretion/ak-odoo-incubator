@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="product.product_pricelist_view"/>
         <field name="arch" type="xml">
             <field name="company_id" position="before">
-                <field name="price_include_taxes" readonly="[('item_ids', '=', False)]"/>
+                <field name="price_include_taxes"/>
             </field>
         </field>
     </record>
