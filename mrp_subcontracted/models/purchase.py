@@ -41,6 +41,7 @@ class PurchaseOrderLine(models.Model):
 
         Multiple procurements or MOs not implemented
         """
+        is_service = False
         if self.product_id and self.product_id.type == 'service':
             tmpl = self.product_id.product_tmpl_id
             is_service = tmpl.property_subcontracted_service
