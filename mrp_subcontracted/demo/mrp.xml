@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
 
-        <record id="flour_bom" model="mrp.bom">
-            <field name="name">Flour Milling</field>
-            <field name="product_tmpl_id" ref="product_flour_template" />
-            <field name="service_id" ref="service_milling_product" />
-        </record>
+    <record id="flour_bom" model="mrp.bom">
+        <field name="name">Flour Milling</field>
+        <field name="product_tmpl_id" ref="product_flour_product_template" />
+        <field name="service_id" ref="service_milling" />
+    </record>
 
-        <record id="mrp_bom_line" model="mrp.bom.line">
-            <field name="product_id" ref="product_grain" />
-            <field name="product_qty">1</field>
-            <field name="product_uom_id" ref="product.product_uom_unit" />
-            <field name="sequence">5</field>
-            <field name="bom_id" ref="flour_bom" />
-        </record>
+    <record id="mrp_bom_line" model="mrp.bom.line">
+        <field name="product_id" ref="product_grain" />
+        <field name="product_qty">1</field>
+        <field name="product_uom_id" ref="product.product_uom_unit" />
+        <field name="sequence">5</field>
+        <field name="bom_id" ref="flour_bom" />
+    </record>
 
-    </data>
 </odoo>
 

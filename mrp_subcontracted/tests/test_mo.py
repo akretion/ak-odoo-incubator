@@ -14,7 +14,7 @@ class TestMO(TransactionCase):
         Ensure states of MO, PO and Procurements are tied.
         """
         bom = self.env.ref('mrp_subcontracted.flour_bom')
-        product_flour = self.env.ref('mrp_subcontracted.product_flour_product')
+        product_flour = self.env.ref('mrp_subcontracted.product_flour')
         vals = {
             'product_id': product_flour.id,
             'product_uom_id': self.env.ref('product.product_uom_unit').id,
@@ -47,7 +47,7 @@ class TestMO(TransactionCase):
     def testPoBlockedIfMoDone(self):
         """If MO is produced PO can't be canceled."""
         bom = self.env.ref('mrp_subcontracted.flour_bom')
-        product_flour = self.env.ref('mrp_subcontracted.product_flour_product')
+        product_flour = self.env.ref('mrp_subcontracted.product_flour')
         vals = {
             'product_id': product_flour.id,
             'product_uom_id': self.env.ref('product.product_uom_unit').id,
@@ -92,7 +92,7 @@ class TestMO(TransactionCase):
         # So the service procurement can't ping to the right PO
         # The first PO confirmed should take place on srv proc.po_id
         bom = self.env.ref('mrp_subcontracted.flour_bom')
-        product_flour = self.env.ref('mrp_subcontracted.product_flour_product')
+        product_flour = self.env.ref('mrp_subcontracted.product_flour')
         vals = {
             'product_id': product_flour.id,
             'product_uom_id': self.env.ref('product.product_uom_unit').id,
