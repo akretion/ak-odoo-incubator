@@ -9,11 +9,9 @@ MRP Subcontract Location
 This modules aims to put the right location for subcontracted Manufacturing Orders (MO).
 At Sale Order (SO) validation, we do not know yet which subcontractors will be choosen.
 We only have this information when the subcontrated PO linked to a MO is validated.
-At this moment, we put the location on the raw materials and on the destination location of the finished product.
+At this moment, we set the final location of the MO and modify the finished moves.
+The old raw materials moves are canceled and new ones are created.
 
-When MOs are chained, to avoid adding steps with internal picking between MO, we make the chained MO take the raw material (source location) directly from the previous MO dest location.
-
-When subcontracting MOs, we also need to purchase and send the raw material directly at the subcontractor manufactory.
 This module display an address field on POs to indicate at which subcontractor we send the PO, the picking is created to the subcontractor location.
 
 A cron will create the inter warehouses routes automatically and set the right roots on products. (like Supplier2: Supply from Supplier 1)
@@ -31,6 +29,8 @@ To configure this module, you need to:
 
 #. Create as many warehouses as needed (At least one per supplier whom does manufacturing). Set the partner of the warehouse to the supplier (it can be his plant facility).
 #. Set the picking type id of the BOM to warehouse_of_the_supplier.manufacturing
+#. You should manually set procurement routes for alternatives suppliers.
+#. New raw materials moves are automatically assigned
 
 
 Known issues / Roadmap
