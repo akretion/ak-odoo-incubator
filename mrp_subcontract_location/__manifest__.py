@@ -18,6 +18,9 @@
         'views/purchase.order.xml',
         'wizard/compute_inter_wh_route.xml',
     ],
+    'demo': [
+        'demo/demo.xml',
+    ],
     'installable': True,
     'application': False,
 }

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_subcontracted.product_flour_product_template" model="product.template">
+        <!-- ça marche pas ?!-->
+        <field name="default_code">T46</field>
+        <field name="route_ids" eval="[(6, 0, [ref('mrp.route_warehouse0_manufacture')])]"/>
+    </record>
+
+
+    <record id="service_baking" model="product.product">
+        <field name="name">Bread Oven renting</field>
+        <field name="type">service</field>
+        <field name="description"></field>
+        <field name="default_code">baking</field>
+        <field name="property_subcontracted_service">1</field>
+    </record>
+
+    <record id="product_bread" model="product.product">
+        <field name="name">Bread</field>
+        <field name="type">product</field>
+        <field name="description">Bread made of salt, water and flour</field>
+        <field name="default_code">bread</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="mrp_mts_mto_location_ids" eval="[(6, 0, [ref('stock.stock_location_stock')])]"/>
+        <field name="route_ids" eval="[(6, 0, [ref('mrp.route_warehouse0_manufacture')])]"/>
+    </record>
+
+    <record id="product_yeast" model="product.product">
+        <field name="name">Yeast</field>
+        <field name="type">product</field>
+        <field name="description">Baking powder</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="mrp_mts_mto_location_ids" eval="[(6, 0, [ref('stock.stock_location_stock')])]"/>
+        <field name="route_ids" eval="[(6, 0, [ref('purchase.route_warehouse0_buy')])]"/>
+    </record>
+
+    <record id="mrp_subcontracted.product_flour_product_template" model="product.template">
+        <field name="mrp_mts_mto_location_ids" eval="[(6, 0, [ref('stock.stock_location_stock')])]"/>
+        <field name="route_ids" eval="[(6, 0, [ref('purchase.route_warehouse0_buy')])]" />
+    </record>
+
+    <record id="product_sandwich" model="product.product">
+        <field name="name">Sandwich</field>
+        <field name="type">product</field>
+        <field name="description">Internalized mrp</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="route_ids" eval="[(6, 0, [ref('mrp.route_warehouse0_manufacture')])]"/>
+    </record>
+
+
+    <record id="partner_oven" model="res.partner">
+        <field name="name">Baker</field>
+        <field name="customer" eval="False"/>
+        <field name="supplier" eval="True"/>
+        <field name="email">admin@example.com</field>
+    </record>
+
+    <record id="oven_supplier" model="product.supplierinfo">
+        <field name="name" ref="partner_oven" />
+        <field name="product_tmpl_id" ref="service_baking_product_template" />
+        <field name="delay">3</field>
+        <field name="min_qty">1</field>
+        <field name="price">70</field>
+    </record>
+
+    <record id="OvenWH" model="stock.warehouse">
+        <field name="name">Oven</field>
+        <field name="code">OVWH</field>
+        <field name="partner_id" ref="partner_oven"></field>
+    </record>
+
+    <record id="MillWH" model="stock.warehouse">
+        <field name="name">Mill</field>
+        <field name="code">MIWH</field>
+        <field name="partner_id" ref="mrp_subcontracted.partner_mill"></field>
+    </record>
+
+
+    <record id="partner_mill_alternative" model="res.partner">
+        <field name="name">Another Mill</field>
+        <field name="customer" eval="False"/>
+        <field name="supplier" eval="True"/>
+        <field name="email">admin@example.com</field>
+    </record>
+
+    <record id="Mill2WH" model="stock.warehouse">
+        <field name="name">Other Mill</field>
+        <field name="code">MI2WH</field>
+        <field name="partner_id" ref="partner_mill_alternative"></field>
+    </record>
+
+    <record id="partner_oven_alternative" model="res.partner">
+        <field name="name">Another Baker</field>
+        <field name="customer" eval="False"/>
+        <field name="supplier" eval="True"/>
+        <field name="email">admin@example.com</field>
+    </record>
+
+    <record id="Oven2WH" model="stock.warehouse">
+        <field name="name">Other Baker</field>
+        <field name="code">OV2WH</field>
+        <field name="partner_id" ref="partner_oven_alternative"></field>
+    </record>
+
+
+    <record id="partner_farmer" model="res.partner">
+        <field name="name">Farmer</field>
+        <field name="customer" eval="False"/>
+        <field name="supplier" eval="True"/>
+        <field name="email">admin@example.com</field>
+    </record>
+
+    <record id="grain_supplier" model="product.supplierinfo">
+        <field name="name" ref="partner_farmer" />
+        <field name="product_tmpl_id" ref="mrp_subcontracted.product_grain_product_template" />
+        <field name="delay">3</field>
+        <field name="min_qty">1</field>
+        <field name="price">70</field>
+    </record>
+
+
+    <record id="partner_yeast_seller" model="res.partner">
+        <field name="name">Yeast Seller</field>
+        <field name="customer" eval="False"/>
+        <field name="supplier" eval="True"/>
+        <field name="email">admin@example.com</field>
+    </record>
+
+    <record id="yeast_supplier" model="product.supplierinfo">
+        <field name="name" ref="partner_yeast_seller" />
+        <field name="product_tmpl_id" ref="mrp_subcontract_location.product_yeast_product_template" />
+        <field name="delay">3</field>
+        <field name="min_qty">1</field>
+        <field name="price">70</field>
+    </record>
+
+    <record id="bread_bom" model="mrp.bom">
+        <field name="name">Bread</field>
+        <field name="product_tmpl_id" ref="product_bread_product_template" />
+        <field name="service_id" ref="service_baking" />
+    </record>
+
+    <record id="mrp_bom_line_flour" model="mrp.bom.line">
+        <field name="product_id" ref="mrp_subcontracted.product_flour" />
+        <field name="product_qty">1</field>
+        <field name="product_uom_id" ref="product.product_uom_unit" />
+        <field name="bom_id" ref="bread_bom" />
+    </record>
+
+    <record id="mrp_bom_line_yeast" model="mrp.bom.line">
+        <field name="product_id" ref="product_yeast" />
+        <field name="product_qty">1</field>
+        <field name="product_uom_id" ref="product.product_uom_unit" />
+        <field name="bom_id" ref="bread_bom" />
+    </record>
+
+
+    <record id="sandwich_bom" model="mrp.bom">
+        <field name="name">Sandwich</field>
+        <field name="product_tmpl_id" ref="product_sandwich_product_template" />
+        <field name="picking_type_id" ref="mrp.picking_type_manufacturing"/>
+    </record>
+
+    <record id="mrp_bom_line_bread" model="mrp.bom.line">
+        <field name="product_id" ref="product_bread" />
+        <field name="product_qty">1</field>
+        <field name="product_uom_id" ref="product.product_uom_unit" />
+        <field name="bom_id" ref="sandwich_bom" />
+    </record>
+
+</odoo>
