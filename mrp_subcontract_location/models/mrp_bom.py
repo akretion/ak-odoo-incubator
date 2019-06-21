@@ -40,6 +40,35 @@ class MrpBom(models.Model):
         boms = self.env['mrp.bom'].search([])
         boms.check_and_set_product_routes()
 
+    @api.model
+    def _get_supply_route(self, supplied_wh, supply_wh):
+        """Get or create supply route between warehouses"""
+        # TODO move it to stock_route file ?
+        route_obj = self.env['stock.location.route']
+        route = route_obj.search([
+            ('supplied_wh_id', '=', supplied_wh.id),
+            ('supplier_wh_id', '=', supply_wh.id)])
+        if not route:
+            # Check the box on warehouse to create the route
+            # (4, id, 0) seems to be buggy...
+            # when adding a new route on the UI, Odoo make a
+            # (6, 0, ids), let do the same.
+            resupply_whs_ids = supplied_wh.resupply_wh_ids.ids
+            resupply_whs_ids.append(supply_wh.id)
+            vals = {
+                'resupply_wh_ids': [(6, 0, resupply_whs_ids)]
+            }
+            supplied_wh.write(vals)
+            route = route_obj.search([
+                ('supplied_wh_id', '=', supplied_wh.id),
+                ('supplier_wh_id', '=', supply_wh.id)])
+            if not route:
+                _logger.warning(
+                    "resupply route problem for wh %s"
+                    % supplied_wh.id)
+                return False
+        return route
+
     def check_and_set_product_routes(self):
         """
             Recompute inter warehouse routes for all boms.
@@ -49,7 +78,6 @@ class MrpBom(models.Model):
         This function will add needing inter warehouse routes.
         """
         manuf_route_id = self.env.ref('mrp.route_warehouse0_manufacture').id
-        route_obj = self.env['stock.location.route']
         for bom in self:
             # TODO: shall we do that ?
             bom.ensure_manufacture_route()
@@ -78,28 +106,7 @@ class MrpBom(models.Model):
                 if supply_wh == supplied_wh:
                     continue
 
-                route = route_obj.search([
-                    ('supplied_wh_id', '=', supplied_wh.id),
-                    ('supplier_wh_id', '=', supply_wh.id)])
-                if not route:
-                    # Check the box on warehouse to create the route
-                    # (4, id, 0) seems to be buggy...
-                    # when adding a new route on the UI, Odoo make a
-                    # (6, 0, ids), let do the same.
-                    resupply_whs_ids = supplied_wh.resupply_wh_ids.ids
-                    resupply_whs_ids.append(supply_wh.id)
-                    vals = {
-                        'resupply_wh_ids': [(6, 0, resupply_whs_ids)]
-                    }
-                    supplied_wh.write(vals)
-                    route = route_obj.search([
-                        ('supplied_wh_id', '=', supplied_wh.id),
-                        ('supplier_wh_id', '=', supply_wh.id)])
-                    if not route:
-                        _logger.warning(
-                            "resupply route problem for wh %s"
-                            % supplied_wh.id)
-                        continue
+                route = self._get_supply_route(supplied_wh, supply_wh)
                 if route.id not in product_routes.ids:
                     # Check if there is already an interwh route bringing the
                     # product to the same wh. If this is the case, we erase
