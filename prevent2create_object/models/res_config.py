@@ -26,7 +26,7 @@ class ResCompany(models.Model):
 
 
 class BaseConfigSettings(models.TransientModel):
-    _inherit = 'base.config.settings'
+    _inherit = 'res.config.settings'
 
     forbidden_models = fields.Char(
         related='company_id.forbidden_models',
@@ -105,8 +105,12 @@ class BaseConfigSettings(models.TransientModel):
                 map(str.strip, str(forbidden_models).split(',')) or []
             for model_name in fbd_models_name:
                 try:
-                    Model = self.env[model_name]
-                    patch(Model, 'create', make_create())
+                    if model_name in self.env:
+                        Model = self.env[model_name]
+                        patch(Model, 'create', make_create())
+                    else:
+                        logger.warning(
+                                'Model "%s" not exists or is not loaded yet' % model_name)
                 except Exception as e:
                     logger.error(
                         'Model "%s" not exists. Error : %s' %
