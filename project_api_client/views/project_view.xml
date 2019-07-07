@@ -13,8 +13,9 @@
                         </h1>
                         <group col="12" attrs="{'invisible': [('id', '=', False)]}">
                             <group>
-                                <field name="project_id" readonly="1"/>
-                                <field name="tag_ids" readonly="1"/>
+                                <!-- Define settings for visibility of these 2 fields  -->
+                                <field name="project_id" readonly="1" invisible="1"/>
+                                <field name="tag_ids" readonly="1" invisible="1"/>
                                 <field
                                     name="assignee_id"
                                     readonly="1"
@@ -79,7 +80,7 @@
                                 </group>
                                 <div class="oe_clear"/>
                             </page>
-                            <page name="customer_report" string="Customer Report">
+                            <page name="customer_report" string="Report">
                                 <field name="customer_report"/>
                             </page>
                         </notebook>
@@ -90,7 +91,7 @@
                             .fa-pencil-square-o {visibility: hidden;}
                             .o_thread_message_star {visibility: hidden;}
                         </style>
-                        <field name="message_ids" widget="mail_thread"/>
+                        <!-- <field name="message_ids" widget="mail_thread"/> -->
                     </div>
                 </form>
             </field>
@@ -121,6 +122,12 @@
             <field name="arch" type="xml">
                 <tree string="External Task">
                     <field name="name"/>
+                    <field name="stage_name"/>
+                    <field name="author_id"/>
+                    <field name="priority"/>
+                    <field name="date_deadline"/>
+                    <field name="to_invoice"/>
+                    <field name="create_date"/>
                 </tree>
             </field>
         </record>
@@ -133,38 +140,30 @@
                     <separator/>
                     <filter string="My task" name="my_task"/>
                     <separator/>
-                    <filter string="Stage" context="{'group_by': 'stage_name'}" icon="terp-partner"/>
+                    <filter string="Stage" context="{'group_by': 'stage_name'}" name="stage"/>
                     <separator/>
                 </search>
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_external_task_kanban">
-            <field name="model">external.task</field>
-            <field name="arch" type="xml">
-                <kanban default_group_by="stage_name" >
-                    <field name="name"/>
-                    <field name="stage_name"/>
-                    <field name="color"/>
-                    <field name="priority"/>
-                    <field name="date_deadline"/>
-                    <field name="assignee_id"/>
-                    <field name="tag_ids"/>
-                    <field name="customer_kanban_report"/>
-                    <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
-                            <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user">
-                                <span class="oe_e">í</span>
-                                <ul class="oe_dropdown_menu">
-                                    <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit...</a></li></t>
-                                    <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t>
-                                    <br/>
-                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
-                                </ul>
-                            </div>
 
-                            <div class="oe_kanban_content">
+<record model="ir.ui.view" id="view_external_task_kanban">
+    <field name="model">external.task</field>
+    <field name="arch" type="xml">
+        <kanban default_group_by="stage_name" class="oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors">
+            <field name="name"/>
+            <field name="stage_name"/>
+            <field name="color"/>
+            <field name="priority"/>
+            <field name="date_deadline"/>
+            <field name="assignee_id"/>
+            <field name="tag_ids"/>
+            <field name="customer_kanban_report"/>
+            <templates>
+                <t t-name="kanban-box">
+                    <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon">
+                        <div class="o_project_kanban_main">
+                            <div class="o_kanban_card_content">
                                 <div>
                                     <strong><field name="id"/> - <field name="name"/></strong>
                                 </div>
@@ -183,16 +182,27 @@
                                     <field name="priority" widget="priority"/>
                                 </div>
                                 <div class="oe_kanban_bottom_right">
-                                    <img t-att-src="kanban_image('res.partner', 'image_small', record.assignee_id.raw_value)" t-att-title="record.assignee_id.value" width="24" height="24" class="oe_kanban_avatar pull-right"/>
+                                    <img t-att-src="kanban_image('res.partner', 'image_small', record.assignee_id.raw_value)" t-att-title="record.assignee_id.value" width="24" height="24" alt="partner" class="oe_kanban_avatar pull-right"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_manage_pane dropdown-menu" groups="project.group_project_manager" role="menu">
+                                <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                    <div role="menuitem">
+                                        <a type="edit">Edit</a>
+                                    </div>
+                                </div>
+                                <div role="menuitem" aria-haspopup="true" class="o_no_padding_kanban_colorpicker">
+                                    <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
                                 </div>
                             </div>
                             <div class="oe_clear"></div>
                         </div>
-                    </t>
-                    </templates>
-                </kanban>
-            </field>
-        </record>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
 
         <record model="ir.actions.act_window" id="action_helpdesk">
             <field name="name">Create a Ticket</field>
@@ -204,7 +214,8 @@
             <field name="name">External task</field>
             <field name="res_model">external.task</field>
             <field name="view_type">form</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <!-- <field name="view_mode">kanban,tree,form</field> -->
             <field name="search_view_id" ref="view_external_task_search"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
@@ -217,8 +228,8 @@
 
         <menuitem action="action_view_external_task"
             id="external_project"
-            name="Support"
-            sequence="100"
+            name="Support" sequence="100"
+            web_icon="project_api_client,static/description/icon.png"
             groups="project_api_client.group_support_user"/>
 
 </odoo>

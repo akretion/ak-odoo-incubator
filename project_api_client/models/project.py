@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
 # Copyright 2016 Akretion (http://www.akretion.com)
 # Benoit Guillot <benoit.guillot@akretion.com>
+# Sébastien Beau <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 # pylint: disable=W8106
 
@@ -17,18 +17,20 @@ _logger = logging.getLogger(__name__)
 
 
 ISSUE_DESCRIPTION = _(
-    u"""What is not working:
+    """<h4>What is not working ?</h4>
 </br>
 </br>
 </br>
 </br>
-How this should work:
+<h4>How this should work ?</h4>
+</br>
 """
 )
 
 
 class ExternalTask(models.Model):
     _name = "external.task"
+    _description = "External task"
 
     def _get_select_project(self):
         # solve issue during installation and test
@@ -58,7 +60,7 @@ class ExternalTask(models.Model):
     priority = fields.Selection(
         [("0", "Low"), ("1", "Normal"), ("2", "High")], default="1"
     )
-    date_deadline = fields.Datetime("Date deadline", readonly=True)
+    date_deadline = fields.Datetime("Délai", readonly=True)
     author_id = fields.Many2one("res.partner", string="Author", readonly=True)
     assignee_id = fields.Many2one(
         "res.partner", string="Assignee name", readonly=True
@@ -80,15 +82,19 @@ class ExternalTask(models.Model):
     customer_kanban_report = fields.Html(readonly=True)
 
     def get_url_key(self):
-        keychain = self.env["keychain.account"]
-        if self.env.user.has_group("base.group_user"):
-            retrieve = keychain.suspend_security().retrieve
-        else:
-            retrieve = keychain.retrieve
-        account = retrieve([["namespace", "=", "support"]])[0]
+        # keychain = self.env["keychain.account"]
+        # if self.env.user.has_group("base.group_user"):
+        #     retrieve = keychain.suspend_security().retrieve
+        # else:
+        #     retrieve = keychain.retrieve
+        # account = retrieve([["namespace", "=", "support"]])[0]
+        # return {
+        #     "url": account.get_data()["url"],
+        #     "api_key": account._get_password(),
+        # }
         return {
-            "url": account.get_data()["url"],
-            "api_key": account._get_password(),
+            "url": "https://erp-fr.akretion.com",
+            "api_key": False,
         }
 
     @api.model
@@ -106,12 +112,12 @@ class ExternalTask(models.Model):
             raise UserError(user_error_message)
         data = res.json()
         if isinstance(data, dict) and data.get("code", 0) >= 400:
-            _logger.error(
-                "Error Support API : %s : %s",
+            technical_info = """\n\n\n\nError Support API %s : %s : %s""" % (
+                data.get("code"),
                 data.get("name"),
-                data.get("description"),
-            )
-            raise UserError(user_error_message)
+                data.get("description")),
+            _logger.error(technical_info)
+            raise UserError(user_error_message + technical_info[0])
         return data
 
     def _get_support_partner_vals(self, support_uid):
@@ -127,15 +133,15 @@ class ExternalTask(models.Model):
     def _get_support_partner(self, data):
         """ This method will return the partner info in the client database
         If the partner is missing it will be created
-        If the partner information are obsolet their will be updated"""
+        If the partner information are obsolete their will be updated"""
         partner = self.env["res.partner"].search(
             [("support_uid", "=", str(data["uid"]))]
         )
+        vals = self._get_support_partner_vals(data["uid"])
         if not partner:
-            vals = self._get_support_partner_vals(data["uid"])
             partner = self.env["res.partner"].create(vals)
-        elif partner.support_last_update_date < data["update_date"]:
-            vals = self._get_support_partner_vals(data["uid"])
+        elif partner.support_last_update_date.strftime('%Y-%m-%d %H:%M:%S') < \
+                data["update_date"]:
             partner.write(vals)
         return partner
 
@@ -282,30 +288,29 @@ class ExternalTask(models.Model):
             toolbar=toolbar,
             submenu=submenu,
         )
+        doc = etree.XML(res["arch"])
         if view_type == "form":
-            doc = etree.XML(res["arch"])
             for node in doc.xpath("//field[@name='message_ids']"):
                 options = safe_eval(node.get("options", "{}"))
                 options.update({"display_log_button": False})
                 node.set("options", repr(options))
-            res["arch"] = etree.tostring(doc)
-        if view_type == "search":
-            doc = etree.XML(res["arch"])
+        elif view_type == "search":
             node = doc.xpath("//search")[0]
             for project_id, project_name in self._get_select_project():
                 elem = etree.Element(
                     "filter",
-                    string=project_name,
+                    string=project_name or " ",
                     name="project_%s" % project_id,
                     domain="[('project_id', '=', %s)]" % project_id,
                 )
                 node.append(elem)
-            node = doc.xpath("//filter[@name='my_task']")[0]
-            node.attrib["domain"] = (
-                "[('assignee_id.customer_uid', '=', %s)]"
-                % self.env.user.partner_id.id
-            )
-            res["arch"] = etree.tostring(doc, pretty_print=True)
+            node = doc.xpath("//filter[@name='my_task']")
+            if node:
+                node[0].attrib["domain"] = (
+                    "[('assignee_id.customer_uid', '=', %s)]"
+                    % self.env.user.partner_id.id
+                )
+        res["arch"] = etree.tostring(doc, pretty_print=True)
         return res
 
     @api.model
@@ -319,14 +324,13 @@ class ExternalTask(models.Model):
             vals["action_id"] = self._context["from_action"]
         return vals
 
-    def message_partner_info_from_emails(
-        self, cr, uid, id, emails, link_mail=False, context=None
-    ):
+    def message_partner_info_from_emails(self, emails, link_mail=False):
         return []
 
 
 class ExternalMessage(models.Model):
     _name = "external.message"
+    _description = "External message"
 
     res_id = fields.Many2one(comodel_name="external.task")
 
@@ -337,7 +341,7 @@ class MailMessage(models.Model):
     @api.multi
     def message_format(self):
         ids = self.ids
-        if ids and isinstance(ids[0], (str, unicode)) and "external" in ids[0]:
+        if ids and isinstance(ids[0], str) and "external" in ids[0]:
             external_ids = [int(mid.replace("external/", "")) for mid in ids]
             return self.env["external.task"].message_get(external_ids)
         else:
@@ -346,7 +350,7 @@ class MailMessage(models.Model):
     @api.multi
     def set_message_done(self):
         for _id in self.ids:
-            if isinstance(_id, (str, unicode)) and "external" in _id:
+            if isinstance(_id, str) and "external" in _id:
                 return True
         else:
             return super(MailMessage, self).set_message_done()
@@ -385,11 +389,12 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
-        account = (
-            self.env["keychain.account"]
-            .sudo()
-            .retrieve([("namespace", "=", "support")])
-        )
+        # account = (
+        #     self.env["keychain.account"]
+        #     .sudo()
+        #     .retrieve([("namespace", "=", "support")])
+        # )
+        account = False
         if not account:
             return
         action_support = self.env.ref(
@@ -412,6 +417,7 @@ class IrActionActWindows(models.Model):
 
 class ExternalAttachment(models.Model):
     _name = "external.attachment"
+    _description = "External attachment"
 
     res_id = fields.Many2one(comodel_name="external.task")
     name = fields.Char()

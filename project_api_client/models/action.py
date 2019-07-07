@@ -1,4 +1,3 @@
-# coding: utf-8
 # © 2015 David BEAL @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -28,10 +27,8 @@ class IrValues(models.Model):
             # If the action is already here no need to add it again
             return res
         else:
-            if (
-                action_slot == "client_action_multi"
-                and model != "external.task"
-            ):
+            if (action_slot == "client_action_multi" and
+                    model != "external.task"):
                 action = self.set_external_task_action(model, res_id=res_id)
                 if action:
                     value = (UNIQUE_ACTION_ID, "external_project", action)
@@ -44,8 +41,8 @@ class IrValues(models.Model):
         return {
             "id": action.id,
             "name": _("Create a Ticket"),
-            "res_model": u"external.task",
+            "res_model": "external.task",
             "src_model": model,
-            "type": u"ir.actions.act_window",
+            "type": "ir.actions.act_window",
             "target": "current",
         }
