@@ -213,9 +213,7 @@
         <record id="action_view_external_task" model="ir.actions.act_window">
             <field name="name">External task</field>
             <field name="res_model">external.task</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form,kanban</field>
-            <!-- <field name="view_mode">kanban,tree,form</field> -->
+            <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_external_task_search"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">

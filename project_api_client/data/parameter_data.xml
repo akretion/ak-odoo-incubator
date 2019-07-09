@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+
+    <record id="project_api_url" model="ir.config_parameter">
+        <field name="key">project_api_url</field>
+        <field name="value">only for test here: prefer to use module https://github.com/OCA/server-env/tree/12.0/server_environment_ir_config_parameter for security purpose</field>
+    </record>
+    <record id="project_api_key" model="ir.config_parameter">
+        <field name="key">project_api_key</field>
+        <field name="value">only for test here: prefer to use module https://github.com/OCA/server-env/tree/12.0/server_environment_ir_config_parameter for security purpose</field>
+    </record>
+
+</odoo>

@@ -4,7 +4,7 @@
 
 import logging
 
-from openerp import api, models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 

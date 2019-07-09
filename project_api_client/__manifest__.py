@@ -20,6 +20,7 @@
         "security/ir.model.access.csv",
         "views/project_view.xml",
         "data/partner_data.xml",
+        "data/parameter_data.xml",
     ],
     "installable": True,
     "application": True,

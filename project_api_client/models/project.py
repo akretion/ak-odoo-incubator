@@ -17,15 +17,14 @@ _logger = logging.getLogger(__name__)
 
 
 ISSUE_DESCRIPTION = _(
-    """<h4>What is not working ?</h4>
-</br>
-</br>
-</br>
-</br>
-<h4>How this should work ?</h4>
-</br>
-"""
-)
+    """<h4>What doesn't works ?</h4>
+<br/>
+<br/>
+<br/>
+<h4>Here is how it should work ?</h4>
+<br/>
+""")
+ERROR_MESSAGE = _("There is an issue with support. Please send an email")
 
 
 class ExternalTask(models.Model):
@@ -82,34 +81,27 @@ class ExternalTask(models.Model):
     customer_kanban_report = fields.Html(readonly=True)
 
     def get_url_key(self):
-        # keychain = self.env["keychain.account"]
-        # if self.env.user.has_group("base.group_user"):
-        #     retrieve = keychain.suspend_security().retrieve
-        # else:
-        #     retrieve = keychain.retrieve
-        # account = retrieve([["namespace", "=", "support"]])[0]
-        # return {
-        #     "url": account.get_data()["url"],
-        #     "api_key": account._get_password(),
-        # }
-        return {
-            "url": "https://erp-fr.akretion.com",
-            "api_key": False,
+        self = self.sudo()
+        res = {
+            "url": self.env['ir.config_parameter'].get_param(
+                'project_api_url'),
+            "api_key": self.env['ir.config_parameter'].get_param(
+                'project_api_key'),
         }
+        if not res["url"] or not res["api_key"]:
+            res = False
+        return res
 
     @api.model
     def _call_odoo(self, method, params):
         url_key = self.get_url_key()
         url = "{}/project-api/task/{}".format(url_key["url"], method)
         headers = {"API-KEY": url_key["api_key"]}
-        user_error_message = _(
-            "There is an issue with support. Please send an email"
-        )
         try:
             res = requests.post(url, headers=headers, json=params)
         except Exception as e:
             _logger.error("Error when calling odoo %s", e)
-            raise UserError(user_error_message)
+            raise UserError(ERROR_MESSAGE)
         data = res.json()
         if isinstance(data, dict) and data.get("code", 0) >= 400:
             technical_info = """\n\n\n\nError Support API %s : %s : %s""" % (
@@ -117,7 +109,7 @@ class ExternalTask(models.Model):
                 data.get("name"),
                 data.get("description")),
             _logger.error(technical_info)
-            raise UserError(user_error_message + technical_info[0])
+            raise UserError(ERROR_MESSAGE + technical_info[0])
         return data
 
     def _get_support_partner_vals(self, support_uid):
@@ -282,7 +274,7 @@ class ExternalTask(models.Model):
     def fields_view_get(
         self, view_id=None, view_type=False, toolbar=False, submenu=False
     ):
-        res = super(ExternalTask, self).fields_view_get(
+        res = super().fields_view_get(
             view_id=view_id,
             view_type=view_type,
             toolbar=toolbar,
@@ -315,7 +307,7 @@ class ExternalTask(models.Model):
 
     @api.model
     def default_get(self, fields):
-        vals = super(ExternalTask, self).default_get(fields)
+        vals = super().default_get(fields)
         if "from_model" in self._context and "from_id" in self._context:
             vals["model_reference"] = "{},{}".format(
                 self._context["from_model"], self._context["from_id"]
@@ -345,7 +337,7 @@ class MailMessage(models.Model):
             external_ids = [int(mid.replace("external/", "")) for mid in ids]
             return self.env["external.task"].message_get(external_ids)
         else:
-            return super(MailMessage, self).message_format()
+            return super().message_format()
 
     @api.multi
     def set_message_done(self):
@@ -353,7 +345,7 @@ class MailMessage(models.Model):
             if isinstance(_id, str) and "external" in _id:
                 return True
         else:
-            return super(MailMessage, self).set_message_done()
+            return super().set_message_done()
 
 
 class IrActionActWindows(models.Model):
@@ -389,12 +381,7 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
-        # account = (
-        #     self.env["keychain.account"]
-        #     .sudo()
-        #     .retrieve([("namespace", "=", "support")])
-        # )
-        account = False
+        account = self.env["external.task"].get_url_key()
         if not account:
             return
         action_support = self.env.ref(
@@ -405,13 +392,28 @@ class IrActionActWindows(models.Model):
         action_external_task = self.env.ref(
             "project_api_client.action_view_external_task", False
         )
-        if action_external_task and action["id"] == action_external_task.id:
-            self._set_default_project(action)
+        act_vals = action_external_task.read()[0]
+        # TODO improve perf
+        model = self.env['ir.model'].search(
+            [("model", "=", action.get("res_model"))])
+        if model:
+            act_vals.update({'binding_model_id': model.id})
+        return False
+        # if action_external_task and action["id"] == action_external_task.id:
+        #     self._set_default_project(action)
 
     def read(self, fields=None, load="_classic_read"):
-        res = super(IrActionActWindows, self).read(fields=fields, load=load)
-        for action in res:
-            self._update_action(action)
+        res = super().read(fields=fields, load=load)
+        print("heyyyyyyyyyyy", self._name, len(res))
+        actions2add = []
+        if not self.env.context.get('install_mode'):
+            for action in res:
+                print(action)
+                # import pdb; pdb.set_trace()
+                ext_task_action = self._update_action(action)
+                if ext_task_action:
+                    actions2add.append(ext_task_action)
+        res.extend(actions2add)
         return res
 
 
@@ -445,14 +447,11 @@ class ExternalAttachment(models.Model):
         url_key = self.env["external.task"].get_url_key()
         url = "{}/project-api/attachment/{}".format(url_key["url"], method)
         headers = {"API-KEY": url_key["api_key"]}
-        user_error_message = _(
-            "There is an issue with support. Please send an email"
-        )
         try:
             res = requests.post(url, headers=headers, json=params)
         except Exception as e:
             _logger.error("Error when calling odoo %s", e)
-            raise UserError(user_error_message)
+            raise UserError(ERROR_MESSAGE)
         data = res.json()
         if isinstance(data, dict) and data.get("code", 0) >= 400:
             _logger.error(
@@ -460,5 +459,5 @@ class ExternalAttachment(models.Model):
                 data.get("name"),
                 data.get("description"),
             )
-            raise UserError(user_error_message)
+            raise UserError(ERROR_MESSAGE)
         return data
