@@ -83,10 +83,10 @@ class ExternalTask(models.Model):
     def get_url_key(self):
         self = self.sudo()
         res = {
-            "url": self.env['ir.config_parameter'].get_param(
-                'project_api_url'),
-            "api_key": self.env['ir.config_parameter'].get_param(
-                'project_api_key'),
+            "url": self.env["ir.config_parameter"].get_param(
+                "project_api_url"),
+            "api_key": self.env["ir.config_parameter"].get_param(
+                "project_api_key"),
         }
         if not res["url"] or not res["api_key"]:
             res = False
@@ -132,7 +132,7 @@ class ExternalTask(models.Model):
         vals = self._get_support_partner_vals(data["uid"])
         if not partner:
             partner = self.env["res.partner"].create(vals)
-        elif partner.support_last_update_date.strftime('%Y-%m-%d %H:%M:%S') < \
+        elif partner.support_last_update_date.strftime("%Y-%m-%d %H:%M:%S") < \
                 data["update_date"]:
             partner.write(vals)
         return partner
@@ -380,40 +380,48 @@ class IrActionActWindows(models.Model):
             _logger.warning("Fail to add the default project")
 
     @api.model
-    def _update_action(self, action):
+    def _update_action4helpdesk(self, action):
+        act_ext_task = self.env.ref(
+            "project_api_client.action_view_external_task")
+        act_sup = self.env.ref("project_api_client.action_helpdesk")
+        if act_ext_task.id == action["id"]:
+            # No need to add a dynamic action because it's the dynamic act
+            return False
         account = self.env["external.task"].get_url_key()
         if not account:
-            return
-        action_support = self.env.ref(
-            "project_api_client.action_helpdesk", False
-        )
-        if action_support and action["id"] == action_support.id:
-            self._set_origin_in_context(action)
-        action_external_task = self.env.ref(
-            "project_api_client.action_view_external_task", False
-        )
-        act_vals = action_external_task.read()[0]
+            # We haven't got a connection to master ERP
+            return False
+        # if act_sup.id == action["id"]:
+        #     self._set_origin_in_context(action)
+        act_helpdesk_vals = act_sup.read()[0]
         # TODO improve perf
-        model = self.env['ir.model'].search(
+        model = self.env["ir.model"].search(
             [("model", "=", action.get("res_model"))])
         if model:
-            act_vals.update({'binding_model_id': model.id})
+            # act_helpdesk_vals.update(
+            #     {"binding_model_id": model.id, "help": "_"})
+            print(act_helpdesk_vals)
+            # import pdb; pdb.set_trace()
+            return False
+            # return act_helpdesk_vals
         return False
-        # if action_external_task and action["id"] == action_external_task.id:
+
+        # if act_ext_task and action["id"] == act_ext_task.id:
         #     self._set_default_project(action)
 
     def read(self, fields=None, load="_classic_read"):
         res = super().read(fields=fields, load=load)
-        print("heyyyyyyyyyyy", self._name, len(res))
         actions2add = []
-        if not self.env.context.get('install_mode'):
+        # import pdb; pdb.set_trace()
+        print(len(res))
+        if not self.env.context.get("install_mode"):
             for action in res:
-                print(action)
+                print(action['name'], action.get('res_model'))
+                ext_task_action = self._update_action4helpdesk(action)
                 # import pdb; pdb.set_trace()
-                ext_task_action = self._update_action(action)
-                if ext_task_action:
-                    actions2add.append(ext_task_action)
-        res.extend(actions2add)
+        #         if ext_task_action:
+        #             actions2add.append(ext_task_action)
+        # res.extend(actions2add)
         return res
 
 

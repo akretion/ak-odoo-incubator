@@ -204,7 +204,7 @@
     </field>
 </record>
 
-        <record model="ir.actions.act_window" id="action_helpdesk">
+        <record id="action_helpdesk" model="ir.actions.act_window">
             <field name="name">Create a Ticket</field>
             <field name="res_model">external.task</field>
             <field name="view_mode">form</field>
