@@ -399,17 +399,17 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
+        get_id = self.env['ir.model.data'].xmlid_to_res_id
         account = self.env['keychain.account'].sudo().retrieve(
             [('namespace', '=', 'support')])
         if not account:
             return
-        action_support = self.env.ref(
-            'project_api_client.action_helpdesk', False)
-        if action_support and action['id'] == action_support.id:
+        action_support_id = get_id('project_api_client.action_helpdesk')
+        if action_support_id and action['id'] == action_support_id:
             self._set_origin_in_context(action)
-        action_external_task = self.env.ref(
-            'project_api_client.action_view_external_task', False)
-        if action_external_task and action['id'] == action_external_task.id:
+        action_external_task_id = get_id(
+            'project_api_client.action_view_external_task')
+        if action_external_task_id and action['id'] == action_external_task_id:
             self._set_default_project(action)
 
     def read(self, cr, uid, ids, fields=None, context=None,
