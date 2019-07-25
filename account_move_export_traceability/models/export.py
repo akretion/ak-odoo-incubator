@@ -9,8 +9,9 @@ class AccountMoveExport(models.Model):
     _description = "Account Moves Export"
 
     name = fields.Char(required=True)
-    file = fields.Many2one(
-        comodel_name="ir.attachment", compute="_compute_attachment")
+    file_id = fields.Many2one(
+        comodel_name="ir.attachment", string="File",
+        compute="_compute_attachment", ondelete="cascade")
     company_id = fields.Many2one(
         comodel_name="res.company", string="Company")
 
@@ -19,7 +20,7 @@ class AccountMoveExport(models.Model):
             ("res_id", "in", self.ids), ("res_model", "=", self._name)])
         mapping = {x.res_id: x.id for x in attachm}
         for rec in self:
-            rec.file = mapping.get(rec.id)
+            rec.file_id = mapping.get(rec.id)
 
     def action_goto_related_account_move(self):
         self.ensure_one()
@@ -49,9 +50,19 @@ class AccountMoveExport(models.Model):
             "type": "binary",
         })
 
+    def action_download(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/web/content/%s/%s' % (
+                self.file_id.id, self.file_id.datas_fname),
+            'target': 'self',
+            'nodestroy': False,
+        }
+
 
 class AccountMove(models.Model):
     _inherit = "account.move"
 
     export_id = fields.Many2one(
-        comodel_name="account.move.export", string="Export")
+        comodel_name="account.move.export", string="Export", readonly=True)

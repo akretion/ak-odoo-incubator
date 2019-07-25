@@ -8,9 +8,11 @@
             <group>
                 <field name="name"/>
                 <field name="company_id"/>
-                <field name="file"/>
+                <field name="file_id"/>
                 <button name="action_goto_related_account_move"
                         type="object" string="Related journal entries" class="oe_highlight"/>
+                <button name="action_download" type="object" string="Download"
+                        class="oe_highlight"/>
             </group>
         </form>
     </field>
@@ -22,9 +24,11 @@
         <tree string="Accounting Move Export">
             <field name="name"/>
             <field name="company_id"/>
-            <field name="file"/>
+            <field name="file_id"/>
             <button name="action_goto_related_account_move"
                     type="object" string="Related journal entries"
+                    class="oe_highlight"/>
+            <button name="action_download" type="object" string="Download"
                     class="oe_highlight"/>
         </tree>
     </field>
@@ -44,5 +48,15 @@
     parent="account.menu_finance_reports"
     sequence="120"/>
 
+
+<record id="view_move_form" model="ir.ui.view">
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_move_form"/>
+    <field type="xml" name="arch">
+        <field name="company_id" position="before">
+            <field name="export_id"/>
+        </field>
+    </field>
+</record>
 
 </odoo>
