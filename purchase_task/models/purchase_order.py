@@ -7,22 +7,22 @@ from odoo import api, fields, models
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
-    task_id = fields.Many2one(
-        comodel_name='project.task', string='Related task',
-        store=True,
-        copy=False,
-    )
+    # task_id = fields.Many2one(
+    #     comodel_name='project.task', string='Related task',
+    #     store=True,
+    #     copy=False,
+    # )
 
-    project_id = fields.Many2one(
-        related="task_id.project_id",
-        readonly=True)
+    # project_id = fields.Many2one(
+    #     related="task_id.project_id",
+    #     readonly=True)
 
-    stage_id = fields.Many2one(
-        related="task_id.stage_id",
-        comodel_name='project.task.type',
-        store=True,
-        index=True,
-    )
+    # stage_id = fields.Many2one(
+    #     related="task_id.stage_id",
+    #     comodel_name='project.task.type',
+    #     store=True,
+    #     index=True,
+    # )
 
     stage_delivery = fields.Selection([
         ('waiting', 'Waiting'),
@@ -80,50 +80,50 @@ class PurchaseOrder(models.Model):
             else:
                 rec.stage_manufacture = 'running'
 
-    def _set_task(self):
-        purchase_project = self.env.ref('purchase_task.purchase_project')
-        for rec in self:
-            if not rec.task_id:
-                vals = {
-                    'project_id': purchase_project.id,
-                    'name': rec.name,
-                    'user_id': rec.env.uid,
-                    'partner_id': rec.partner_id.id,
-                }
-                task = self.env['project.task'].create(vals)
-                rec.task_id = task
-        return task
+    # def _set_task(self):
+    #     purchase_project = self.env.ref('purchase_task.purchase_project')
+    #     for rec in self:
+    #         if not rec.task_id:
+    #             vals = {
+    #                 'project_id': purchase_project.id,
+    #                 'name': rec.name,
+    #                 'user_id': rec.env.uid,
+    #                 'partner_id': rec.partner_id.id,
+    #             }
+    #             task = self.env['project.task'].create(vals)
+    #             rec.task_id = task
+    #     return task
 
-    @api.model
-    def create(self, values):
-        # create is called when save button is hit.
-        res = super(PurchaseOrder, self).create(values)
-        res._set_task()
-        return res
+    # @api.model
+    # def create(self, values):
+    #     # create is called when save button is hit.
+    #     res = super(PurchaseOrder, self).create(values)
+    #     res._set_task()
+    #     return res
 
-    @api.multi
-    def write(self, values):
-        # TODO: faire une nouvelle classe pour avoir des api depends
-        res = super(PurchaseOrder, self).write(values)
-        for rec in self:
-            if rec.task_id and 'partner_id' in values:
-                # update responsible of the task
-                rec.task_id.partner_id = rec.partner_id
-            if rec.task_id and 'state' in values:
-                # archive task related to cancelled PO
-                if values['state'] == 'cancel':
-                    rec.task_id.active = False
-                if values['state'] == 'draft':
-                    rec.task_id.active = True
-        return res
+    # @api.multi
+    # def write(self, values):
+    #     # TODO: faire une nouvelle classe pour avoir des api depends
+    #     res = super(PurchaseOrder, self).write(values)
+    #     for rec in self:
+    #         if rec.task_id and 'partner_id' in values:
+    #             # update responsible of the task
+    #             rec.task_id.partner_id = rec.partner_id
+    #         if rec.task_id and 'state' in values:
+    #             # archive task related to cancelled PO
+    #             if values['state'] == 'cancel':
+    #                 rec.task_id.active = False
+    #             if values['state'] == 'draft':
+    #                 rec.task_id.active = True
+    #     return res
 
-    @api.multi
-    def action_view_task(self):
-        '''Display existing purchase task'''
-        action = self.env.ref('project.act_project_project_2_project_task_all')
-        res = self.env.ref('project.view_task_form2', False)
-        result = action.read()[0]
-        result['context'] = {}
-        result['views'] = [(res and res.id or False, 'form')]
-        result['res_id'] = self.task_id.id
-        return result
+    # @api.multi
+    # def action_view_task(self):
+    #     '''Display existing purchase task'''
+    #     action = self.env.ref('project.act_project_project_2_project_task_all')
+    #     res = self.env.ref('project.view_task_form2', False)
+    #     result = action.read()[0]
+    #     result['context'] = {}
+    #     result['views'] = [(res and res.id or False, 'form')]
+    #     result['res_id'] = self.task_id.id
+    #     return result

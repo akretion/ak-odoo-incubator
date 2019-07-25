@@ -7,9 +7,7 @@ Purchase tasks
 ==============
 
 This modules is useful to keep track of purchase orders.
-It make use of tasks and compute stages.
 
-Stage : it's a task (project), the buyer can set manually
 Delivery stage : (selection), computed to relect if how the deliveries are going
 Delivery manufacture: (selection), computed to reflect if related mrp production orders are
 awaiting materials or not.
@@ -18,13 +16,11 @@ awaiting materials or not.
 Configuration
 =============
 
-There is a project "purchase". Steps (stages) can be modified. 
-
 
 Known issues / Roadmap
 ======================
 
-It should be refactored to be more generic.
+- Before it was using task but perf was not good enough.
 
 
 Credits

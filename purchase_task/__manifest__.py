@@ -1,7 +1,7 @@
 # coding: utf-8
 {
     'name': 'Purchase task',
-    'version': '10.0.0.0.1',
+    'version': '10.0.0.0.2',
     'author': 'Akretion',
     'website': 'www.akretion.com',
     'license': 'AGPL-3',
@@ -11,7 +11,6 @@
     """,
     'depends': [
         'purchase',
-        'project',
         'mrp_subcontract_location',
 #        'purchase_order_buyer', # TODO être plus generique
     ],
