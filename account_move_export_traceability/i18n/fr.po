@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-24 15:58+0000\n"
-"PO-Revision-Date: 2019-07-24 18:00+0200\n"
+"POT-Creation-Date: 2019-07-25 13:44+0000\n"
+"PO-Revision-Date: 2019-07-25 15:46+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,6 @@ msgstr ""
 "Plural-Forms: \n"
 "Language: fr\n"
 "X-Generator: Poedit 2.0.6\n"
-
-#. module: account_move_export_traceability
-#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_tree_view
-msgid "Account Moves"
-msgstr "Pièces comptables"
 
 #. module: account_move_export_traceability
 #: model:ir.model,name:account_move_export_traceability.model_account_move_export
@@ -59,6 +54,12 @@ msgid "Export"
 msgstr "Exporter"
 
 #. module: account_move_export_traceability
+#: model:ir.actions.act_window,name:account_move_export_traceability.action_account_move_export
+#: model:ir.ui.menu,name:account_move_export_traceability.menu_account_move_export
+msgid "Exported journal entries"
+msgstr "Pièces comptables exportées"
+
+#. module: account_move_export_traceability
 #: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__file
 msgid "File"
 msgstr "Fichier"
@@ -89,17 +90,12 @@ msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
 #. module: account_move_export_traceability
-#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_form_view
-msgid "Moves"
-msgstr "Mouvements"
-
-#. module: account_move_export_traceability
-#: model:ir.actions.act_window,name:account_move_export_traceability.action_account_move_export
-#: model:ir.ui.menu,name:account_move_export_traceability.menu_account_move_export
-msgid "Moves Export"
-msgstr "Export de pièces"
-
-#. module: account_move_export_traceability
 #: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__name
 msgid "Name"
 msgstr "Nom"
+
+#. module: account_move_export_traceability
+#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_form_view
+#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_tree_view
+msgid "Related journal entries"
+msgstr "Pièces comptables associées"

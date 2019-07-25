@@ -10,7 +10,7 @@
                 <field name="company_id"/>
                 <field name="file"/>
                 <button name="action_goto_related_account_move"
-                        type="object" string="Account Moves" class="oe_highlight"/>
+                        type="object" string="Related journal entries" class="oe_highlight"/>
             </group>
         </form>
     </field>
@@ -24,14 +24,14 @@
             <field name="company_id"/>
             <field name="file"/>
             <button name="action_goto_related_account_move"
-                    type="object" string="Account Moves"
+                    type="object" string="Related journal entries"
                     class="oe_highlight"/>
         </tree>
     </field>
 </record>
 
 <record id="action_account_move_export" model="ir.actions.act_window">
-    <field name="name">Moves Export</field>
+    <field name="name">Exported journal entries</field>
     <field name="res_model">account.move.export</field>
     <field name="type">ir.actions.act_window</field>
     <field name="view_mode">tree,form</field>
@@ -42,8 +42,7 @@
     action="action_account_move_export"
     id="menu_account_move_export"
     parent="account.menu_finance_reports"
-    sequence="120"
-    />
+    sequence="120"/>
 
 
 </odoo>
