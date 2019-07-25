@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<odoo>
+
+<record id="account_move_export_form_view" model="ir.ui.view">
+    <field name="model">account.move.export</field>
+    <field type="xml" name="arch">
+        <form string="Accounting Move Export">
+            <group>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="file"/>
+                <button name="action_goto_related_account_move"
+                        type="object" string="Account Moves" class="oe_highlight"/>
+            </group>
+        </form>
+    </field>
+</record>
+
+<record id="account_move_export_tree_view" model="ir.ui.view">
+    <field name="model">account.move.export</field>
+    <field type="xml" name="arch">
+        <tree string="Accounting Move Export">
+            <field name="name"/>
+            <field name="company_id"/>
+            <field name="file"/>
+            <button name="action_goto_related_account_move"
+                    type="object" string="Account Moves"
+                    class="oe_highlight"/>
+        </tree>
+    </field>
+</record>
+
+<record id="action_account_move_export" model="ir.actions.act_window">
+    <field name="name">Moves Export</field>
+    <field name="res_model">account.move.export</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_mode">tree,form</field>
+    <field name="target">current</field>
+</record>
+
+<menuitem
+    action="action_account_move_export"
+    id="menu_account_move_export"
+    parent="account.menu_finance_reports"
+    sequence="120"
+    />
+
+
+</odoo>
