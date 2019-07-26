@@ -14,6 +14,7 @@ class AccountMoveExport(models.Model):
         compute="_compute_attachment", ondelete="cascade")
     company_id = fields.Many2one(
         comodel_name="res.company", string="Company")
+    comment = field_name = fields.Text()
 
     def _compute_attachment(self):
         attachm = self.env['ir.attachment'].search([

@@ -9,10 +9,11 @@
                 <field name="name"/>
                 <field name="company_id"/>
                 <field name="file_id"/>
+                <field name="comment"/>
                 <button name="action_goto_related_account_move"
                         type="object" string="Related journal entries" class="oe_highlight"/>
-                <button name="action_download" type="object" string="Download"
-                        class="oe_highlight"/>
+                <button name="action_download" type="object" 
+                        string=" Download" class="fa fa-download"/>
             </group>
         </form>
     </field>
@@ -28,14 +29,14 @@
             <button name="action_goto_related_account_move"
                     type="object" string="Related journal entries"
                     class="oe_highlight"/>
-            <button name="action_download" type="object" string="Download"
-                    class="oe_highlight"/>
+            <button name="action_download" type="object" 
+                    string=" Download" class="fa fa-download"/>
         </tree>
     </field>
 </record>
 
 <record id="action_account_move_export" model="ir.actions.act_window">
-    <field name="name">Exported journal entries</field>
+    <field name="name">💼 Exported journal entries</field>
     <field name="res_model">account.move.export</field>
     <field name="type">ir.actions.act_window</field>
     <field name="view_mode">tree,form</field>
