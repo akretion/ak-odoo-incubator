@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2012-2018 Akretion (http://www.akretion.com).
 # @author Benoît GUILLOT <benoit.guillot@akretion.com>
 # @author Pierrick BRUN <pierrick.brun@akretion.com>

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2012-2018 Akretion (http://www.akretion.com).
 # @author Benoît GUILLOT <benoit.guillot@akretion.com>
 # @author Pierrick BRUN <pierrick.brun@akretion.com>
@@ -43,9 +42,9 @@ class AtosFileParser(FileParser):
     def __init__(self, journal, ftype="csv", **kwargs):
         extra_fields = {
             "OPERATION_DATE": format_date,
-            "PAYMENT_DATE": unicode,
-            "TRANSACTION_ID": unicode,
-            "OPERATION_NAME": unicode,
+            "PAYMENT_DATE": str,
+            "TRANSACTION_ID": str,
+            "OPERATION_NAME": str,
             "OPERATION_AMOUNT": float_or_zero,
         }
         self.refund_amount = None
@@ -66,13 +65,13 @@ class AtosFileParser(FileParser):
         return parser_name == "atos_csvparser"
 
     def _pre(self, *args, **kwargs):
-        split_file = self.filebuffer.split("\n")
+        split_file = self.filebuffer.split(b"\n")
         selected_lines = []
         for line in split_file:
-            if line.startswith("FIN"):
+            if line.startswith(b"FIN"):
                 break
             selected_lines.append(line.strip())
-        self.filebuffer = "\n".join(selected_lines)
+        self.filebuffer = b"\n".join(selected_lines)
 
     def _parse(self, *args, **kwargs):
         self.result_row_list = self._parse_csv()

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2012-2018 Akretion (http://www.akretion.com).
 # @author Benoît GUILLOT <benoit.guillot@akretion.com>
 # @author Pierrick BRUN <pierrick.brun@akretion.com>
@@ -7,7 +6,7 @@
 {
     "name": "Account Move Import Atos",
     "summary": "Allows to import journal entries from Atos .xls files",
-    "version": "10.0.1.0.0",
+    "version": "12.0.1.0.0",
     "category": "Accounting",
     "website": "www.akretion.com",
     "author": " Akretion",
