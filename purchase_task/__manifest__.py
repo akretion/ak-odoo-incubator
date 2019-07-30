@@ -15,7 +15,6 @@
 #        'purchase_order_buyer', # TODO être plus generique
     ],
     'data': [
-        'data/purchase_project.xml',
         'views/purchase_order.xml',
         'views/project_task.xml',
     ],

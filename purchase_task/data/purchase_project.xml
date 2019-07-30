@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+<!-- 
     <record model="project.project" id="purchase_project">
       <field name="name">Purchases</field>
     </record>
@@ -34,5 +34,5 @@
       <field name="name">En cours</field>
       <field name="project_ids" eval="[(4, ref('purchase_project'))]" />
     </record>
-
+ -->
 </odoo>
