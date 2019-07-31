@@ -40,6 +40,7 @@ class PurchaseOrder(models.Model):
             self.add_purchase_line_id(moves_out, line)
             self.add_purchase_line_id(moves_out_dest, line)
             return moves_out | moves_out_dest
+        return self.env['stock.move']
 
     def button_approve(self):
         res = super(PurchaseOrder, self).button_approve()
