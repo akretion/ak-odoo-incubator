@@ -39,14 +39,18 @@ class PurchaseOrder(models.Model):
             # and picking in of the destination (us or the next supplier)
             self.add_purchase_line_id(moves_out, line)
             self.add_purchase_line_id(moves_out_dest, line)
-            return
+            return moves_out | moves_out_dest
 
     def button_approve(self):
         res = super(PurchaseOrder, self).button_approve()
         for purchase in self:
+            moves = self.env['stock.move']
             for line in purchase.order_line:
                 # In seperate method as it is reused in an other module
-                purchase.manage_subcontracted_manufacture_line(line)
+                moves |= purchase.manage_subcontracted_manufacture_line(line)
+
+            # group moves together
+            moves.assign_picking()
         return res
 
     def add_purchase_line_id(self, moves, line):
