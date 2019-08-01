@@ -69,3 +69,12 @@ class ProcurementOrder(models.Model):
         if self._is_service_procurement():
             res['mo_id'] = self.production_id.id
         return res
+
+    @api.multi
+    def get_service_supplier(self):
+        """Supplier of the related po.
+
+        Inherit this if you have purchase request
+        or commercial_partner_id"""
+        self.ensure_one()
+        return self.purchase_id.partner_id

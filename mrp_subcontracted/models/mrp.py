@@ -48,8 +48,8 @@ class MrpProduction(models.Model):
         # Partner of the related PO service
         'res.partner',
         'Provider',
-        related="service_procurement_id.purchase_id.partner_id",
-        readonly=True,
+        compute="_compute_wait_for_service",
+        store=True,
     )
 
     @api.depends('service_procurement_id.state')
@@ -58,6 +58,8 @@ class MrpProduction(models.Model):
             if rec.service_procurement_id:
                 rec.wait_for_service = (
                     rec.service_procurement_id.state != 'done')
+                rec.service_provider_id = (
+                    rec.service_procurement_id.get_service_supplier())
             else:
                 rec.wait_for_service = False
 
