@@ -3,7 +3,7 @@
 # @author Raphaël Reverdy <raphael.reverdy@akretion.com>
 # @author Florian da Costa <florian.dacosta@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import models
+from odoo import models, api
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -53,6 +53,21 @@ class PurchaseOrder(models.Model):
             # group moves together
             moves.assign_picking()
         return res
+
+    @api.multi
+    def button_cancel(self):
+        """Remove link to moves.
+
+        We don't want our moves to be cancelled when the po is cancelled
+        Because moves exists before PO and their lifecycle are managed
+        from the MO.
+        (super cancel all pickings)
+        """
+        for rec in self:
+            for line in rec.order_line:
+                if line.mo_id:
+                    line.move_ids.write({'purchase_line_id': False})
+        super(PurchaseOrder, self).button_cancel()
 
     def add_purchase_line_id(self, moves, line):
         '''Add the reference to this PO.
