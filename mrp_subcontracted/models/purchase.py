@@ -4,7 +4,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # ajouter les fournisseurs sur les services
 
-from datetime import timedelta
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import logging
@@ -140,11 +139,7 @@ class Purchase(models.Model):
                 for line in rec.order_line:
                     if line.mo_id:
                         procurement = line.mo_id.service_procurement_id
-                        # replace the pruchase line of the procurement
-                        # by us (line)
-                        if procurement.purchase_line_id != line:
-                            procurement.purchase_line_id = line
-                        line.procurement_ids.check()
+                        procurement.check()
         return res
 
     @api.multi
