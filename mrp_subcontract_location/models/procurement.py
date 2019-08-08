@@ -18,12 +18,17 @@ class ProcurementOrder(models.Model):
         """ Return the right *StockMTO rule.
 
         We can have multiple Supplier: Inter Transit > StockMTO
-        We want to get the rule with the right the next supplier
+        or MTS+MTO > Interwh
+        We want to get the rule with the right the next supplier.
+
+        Take care to specify partner_address_id in all the rules
+        it used to have the good partners in the pickings (OUT and IN)
+        and to have the good delay if there is one in the rule
         """
         dest_partner = (
             self.move_dest_id[:1].procurement_id.warehouse_id.partner_id)
         res = False
-        if dest_partner and self.route_ids:
+        if dest_partner:
             new_domain = (
                 [('partner_address_id', '=', dest_partner.id)] +
                 domain
