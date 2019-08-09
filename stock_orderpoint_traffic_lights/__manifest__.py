@@ -28,6 +28,7 @@
         "stock_orderpoint_purchase_link",  # v11
     ],
     'data': [
+        'security/ir.model.access.csv',
         'data/ir_cron.xml',
         "views/stock_warehouse_orderpoint_view.xml",
         "views/procurement_order_view.xml",

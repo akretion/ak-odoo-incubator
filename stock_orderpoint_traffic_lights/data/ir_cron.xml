@@ -15,7 +15,7 @@
         <field eval="'(True,)'" name="args"/>
     </record>
 
-    <record forcecreate="True"
+<!--     <record forcecreate="True"
             id="ir_cron_ddmrp_adu_calculation_scheduler_action" model="ir.cron">
         <field name="name">DDMRP Buffer ADU calculation</field>
         <field name="user_id" ref="base.user_root"/>
@@ -29,6 +29,6 @@
         <field eval="'stock.warehouse.orderpoint'" name="model"/>
         <field eval="'cron_ddmrp_adu'" name="function"/>
         <field eval="'(True,)'" name="args"/>
-    </record>
+    </record> -->
 
 </odoo>
