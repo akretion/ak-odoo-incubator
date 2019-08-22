@@ -6,7 +6,7 @@
 {
     "name": "Base compute field after install",
     "summary": "Computed field are computed after the install process",
-    "version": "8.0.1.0.0",
+    "version": "9.0.1.0.0",
     "category": "e-commerce",
     "website": "https://akretion.com",
     "author": "Akretion",

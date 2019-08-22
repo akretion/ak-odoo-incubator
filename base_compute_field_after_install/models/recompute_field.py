@@ -72,10 +72,11 @@ ori_recompute = models.Model.recompute
 
 @api.model
 def recompute(self):
-    if self.env.context == {'active_test': False}\
-            and 'base_compute_field_after_install'\
+    # TODO we should found a solution to only do this during install
+    if 'base_compute_field_after_install'\
             in self.env.registry._init_modules:
         for field, recs in self.env.all.todo.items():
+            fs = self.env[field.model_name]._field_computed[field]
             if len(recs[0]) > DIFFER_COMPUTE_SIZE:
                 _logger.info(
                     'Differs recomputation of field %s for model %s',
@@ -86,7 +87,7 @@ def recompute(self):
                         'model': recs[0]._name,
                         'state': 'todo',
                     })
-                map(recs[0]._recompute_done, field.computed_fields)
+                map(recs[0]._recompute_done, fs)
     return ori_recompute(self)
 
 
