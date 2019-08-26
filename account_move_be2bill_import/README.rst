@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-============================
-Journal Entry Be2bill Import
-============================
+===========================
+Account Move Import Be2bill
+===========================
 
 This module extends the functionality of
 account_move_base_import, in order to handle the file format used for

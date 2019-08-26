@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-# © 2011-2017 Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from openerp.addons.account_move_base_import.parser.file_parser import (
+from odoo.addons.account_move_base_import.parser.file_parser import (
     FileParser,
     float_or_zero,
 )
@@ -28,26 +26,26 @@ class Be2BillFileParser(FileParser):
 
     def __init__(self, journal, ftype='csv', **kwargs):
         conversion_dict = {
-            'ORDERID': unicode,
+            'ORDERID': str,
             'AMOUNT': float_or_zero,
             'BILLINGFEES INCL. VAT': float_or_zero,
-            'TRANSACTIONID': unicode,
-            'EXECCODE': unicode,
+            'TRANSACTIONID': str,
+            'EXECCODE': str,
         }
-        super(Be2BillFileParser, self).__init__(
+        super().__init__(
             journal, ftype=ftype, extra_fields=conversion_dict,
             dialect=be2bill_dialect, **kwargs
         )
 
     def _pre(self, *args, **kwargs):
         super(Be2BillFileParser, self)._pre(*args, **kwargs)
-        split_file = self.filebuffer.split("\n")
+        split_file = self.filebuffer.split(b"\n")
         selected_lines = []
         for line in split_file:
             if line.startswith(codecs.BOM_UTF8):
                 line = line[3:]
             selected_lines.append(line.strip())
-        self.filebuffer = "\n".join(selected_lines)
+        self.filebuffer = b"\n".join(selected_lines)
 
     def get_move_line_vals(self, line, *args, **kwargs):
         amount = line['AMOUNT']
@@ -123,7 +121,8 @@ class Be2BillCBFileParser(Be2BillFileParser):
         super(Be2BillCBFileParser, self)._post(*args, **kwargs)
         final_rows = []
         for row in self.result_row_list:
-            if row['DATE'] > self.move_date:
+            move_date = self.move_date or ''
+            if row['DATE'] > move_date:
                 self.move_date = row.get('DATE')
             if row['EXECCODE'] in ('0', '0000'):
                 final_rows.append(row)
