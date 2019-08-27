@@ -26,6 +26,24 @@
         <field name="route_ids" eval="[(6, 0, [ref('mrp.route_warehouse0_manufacture')])]"/>
     </record>
 
+    <record id="service_slice" model="product.product">
+        <field name="name">Slicing</field>
+        <field name="type">service</field>
+        <field name="description"></field>
+        <field name="default_code">slice</field>
+        <field name="property_subcontracted_service">1</field>
+    </record>
+
+    <record id="product_sliced_bread" model="product.product">
+        <field name="name">Sliced Bread</field>
+        <field name="type">product</field>
+        <field name="description">Bread, sliced</field>
+        <field name="default_code">sliced_bread</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="mrp_mts_mto_location_ids" eval="[(6, 0, [ref('stock.stock_location_stock')])]"/>
+        <field name="route_ids" eval="[(6, 0, [ref('mrp.route_warehouse0_manufacture')])]"/>
+    </record>
+
     <record id="product_yeast" model="product.product">
         <field name="name">Yeast</field>
         <field name="type">product</field>
@@ -59,6 +77,14 @@
     <record id="oven_supplier" model="product.supplierinfo">
         <field name="name" ref="partner_oven" />
         <field name="product_tmpl_id" ref="service_baking_product_template" />
+        <field name="delay">3</field>
+        <field name="min_qty">1</field>
+        <field name="price">70</field>
+    </record>
+
+    <record id="slicing_supplier" model="product.supplierinfo">
+        <field name="name" ref="partner_oven" />
+        <field name="product_tmpl_id" ref="service_slice_product_template" />
         <field name="delay">3</field>
         <field name="min_qty">1</field>
         <field name="price">70</field>
@@ -155,6 +181,19 @@
         <field name="bom_id" ref="bread_bom" />
     </record>
 
+
+    <record id="sliced_bread_bom" model="mrp.bom">
+        <field name="name">Sliced Bread</field>
+        <field name="product_tmpl_id" ref="product_sliced_bread_product_template" />
+        <field name="service_id" ref="service_slice" />
+    </record>
+
+    <record id="mrp_bom_line_slice" model="mrp.bom.line">
+        <field name="product_id" ref="product_bread" />
+        <field name="product_qty">1</field>
+        <field name="product_uom_id" ref="product.product_uom_unit" />
+        <field name="bom_id" ref="sliced_bread_bom" />
+    </record>
 
     <record id="sandwich_bom" model="mrp.bom">
         <field name="name">Sandwich</field>

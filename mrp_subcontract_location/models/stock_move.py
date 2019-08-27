@@ -71,6 +71,11 @@ class StockMove(models.Model):
                 candidates_for_empty_picking.append(move.picking_id)
             picking = move._search_picking_for_assignation()
             if not picking:
+                if not move.picking_type_id:
+                    # probably Prod>Stock
+                    # (it make no sense: it's a MO)
+                    # don't create a picking for that
+                    continue
                 recompute = True
                 picking = Picking.create(move._get_new_picking_values())
             move.write({'picking_id': picking.id})

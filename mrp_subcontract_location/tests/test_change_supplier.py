@@ -43,6 +43,8 @@ class TestChangeSupplier(TransactionCase):
             'mrp_subcontract_location.product_sandwich')
         self.bread = self.env.ref(
             'mrp_subcontract_location.product_bread')
+        self.sliced_bread = self.env.ref(
+            'mrp_subcontract_location.product_sliced_bread')
         self.yeast = self.env.ref(
             'mrp_subcontract_location.product_yeast')
         self.flour = self.env.ref(
@@ -51,6 +53,8 @@ class TestChangeSupplier(TransactionCase):
             'mrp_subcontracted.product_grain')
         self.bread_bom = self.env.ref(
             'mrp_subcontract_location.bread_bom')
+        self.sliced_bom = self.env.ref(
+            'mrp_subcontract_location.sliced_bread_bom')
         self.sandwich_bom = self.env.ref(
             'mrp_subcontract_location.sandwich_bom')
         self.flour_bom = self.env.ref(
@@ -59,6 +63,8 @@ class TestChangeSupplier(TransactionCase):
             'mrp_subcontract_location.service_baking')
         self.service_milling = self.env.ref(
             'mrp_subcontracted.service_milling')
+        self.service_slice = self.env.ref(
+            'mrp_subcontract_location.service_slice')
         self.partner_mill = self.env.ref(
             'mrp_subcontracted.partner_mill')
         self.partner_oven = self.env.ref(
@@ -68,6 +74,7 @@ class TestChangeSupplier(TransactionCase):
         self.partner_mill_alt = self.env.ref(
             'mrp_subcontract_location.partner_mill_alternative')
         self.bread_bom.picking_type_id = self.oven_picking_type_id
+        self.sliced_bom.picking_type_id = self.oven_picking_type_id
         self.flour_bom.picking_type_id = self.mill_picking_type_id
         self.sandwich_bom.picking_type_id = self.main_picking_type_id
         # TODO: don't know why it doesnt work by xml
@@ -94,6 +101,8 @@ class TestChangeSupplier(TransactionCase):
             bom = self.flour_bom
         elif prod == self.sandwich:
             bom = self.sandwich_bom
+        elif prod == self.sliced_bread:
+            bom = self.sliced_bom
         return {
             'product_id': prod.id,
             'product_qty': qty,
@@ -420,3 +429,37 @@ class TestChangeSupplier(TransactionCase):
         ).filtered('production_id')
 
         return
+
+    def testNoOutgoingMove(self):
+        """Ensure we can have a PO for
+        creating a stock (no outgoing move)
+        """
+        self._update_product_qty(
+            self.bread, self.oven_loc, 0)
+        self._update_product_qty(
+            self.sliced_bread, self.oven_loc, 0)
+
+        self.sliced_prod = self.production_model.create(
+            self._get_production_vals(self.sliced_bread, qty=1))
+
+        po = self.sliced_prod.service_procurement_id.purchase_id
+        po.button_confirm()
+
+        # don't know why sliced prod is misplaced here
+        # so we action asign after changing location (po confirmed)
+        self.sliced_prod.action_assign()
+
+        bread_prod = self.sliced_prod.move_raw_ids.filtered(
+            lambda s: s.state != 'cancel').move_orig_ids.production_id
+
+        self.assertEquals(bread_prod.product_id, self.bread)
+
+        pol = self.env['purchase.order.line'].search(
+            [['mo_id', '=', bread_prod.id]])
+        self.assertEquals(len(pol), 1, 'Too many records for the test')
+        self.assertEquals(
+            len(pol.order_id.order_line), 1, 'Too many records for the test')
+        pol.order_id.button_confirm()
+        # never reached if picking_type_id is empty in move.assign_picking()
+        # for production moves
+        self.assertTrue(True)

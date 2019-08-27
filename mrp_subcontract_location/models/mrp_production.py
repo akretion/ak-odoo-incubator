@@ -79,7 +79,8 @@ class MrpProduction(models.Model):
         old_pickings = self.env['stock.picking']
         for finish_move in self.move_finished_ids:
             if not finish_move.move_dest_id:
-                _logger.info('impossible?')
+                # no shipping, probably created
+                # for stock
                 continue
             # TODO maybe need to handle last delivery move. (coming from SO)
             move_out = finish_move.move_dest_id
