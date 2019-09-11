@@ -48,7 +48,7 @@ class ReplaceComponent(models.TransientModel):
         self.production_id.move_raw_ids.filtered(
             lambda m: m.state == 'draft')._action_confirm()
         if messages:
-            self.production_id.message_post(' - '.join(messages))
+            self.production_id.message_post(body=' - '.join(messages))
         return {'type': 'ir.actions.act_window_close'}
 
     def _append_raw_materials(self):
