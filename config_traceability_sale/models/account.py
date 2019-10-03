@@ -49,6 +49,8 @@ class AccountTax(models.Model):
     type_tax_use = fields.Selection(track_visibility='onchange')
     amount_type = fields.Selection(track_visibility='onchange')
     amount = fields.Float(track_visibility='onchange')
+    account_id = fields.Many2one(track_visibility='onchange')
+    refund_account_id = fields.Many2one(track_visibility='onchange')
 
     @api.model_create_multi
     def create(self, vals_list):
