@@ -80,15 +80,12 @@ class ExternalTask(models.Model):
     customer_kanban_report = fields.Html(readonly=True)
 
     def get_url_key(self):
-        keychain = self.env["keychain.account"]
-        if self.env.user.has_group("base.group_user"):
-            retrieve = keychain.suspend_security().retrieve
-        else:
-            retrieve = keychain.retrieve
-        account = retrieve([["namespace", "=", "support"]])[0]
+        account = self.env["support.account"]
+        retrieve = account.suspend_security().retrieve
+        account = retrieve()[0]
         return {
-            "url": account.get_data()["url"],
-            "api_key": account._get_password(),
+            "url": account.url,
+            "api_key": account.api_key,
         }
 
     @api.model
@@ -386,9 +383,9 @@ class IrActionActWindows(models.Model):
     @api.model
     def _update_action(self, action):
         account = (
-            self.env["keychain.account"]
-            .sudo()
-            .retrieve([("namespace", "=", "support")])
+            self.env["support.account"]
+            .suspend_security()
+            .retrieve()
         )
         if not account:
             return

@@ -17,6 +17,7 @@
         "security/group.xml",
         "security/ir.model.access.csv",
         "views/project_view.xml",
+        "views/account_view.xml",
         "data/partner_data.xml",
     ],
     "demo": ["demo/keychain_demo.xml"],

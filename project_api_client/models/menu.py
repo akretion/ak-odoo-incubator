@@ -21,9 +21,9 @@ class IrUiMenu(models.Model):
         """
         res = super(IrUiMenu, self).get_user_roots()
         account = (
-            self.env["keychain.account"]
-            .sudo()
-            .retrieve([("namespace", "=", "support")])
+            self.env["support.account"]
+            .suspend_security()
+            .retrieve()
         )
         if not account:
             _logger.error("No keychain support key specify, hide the menu")

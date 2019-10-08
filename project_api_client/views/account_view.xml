@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record model="ir.ui.view" id="support_account_tree">
+            <field name="model">support.account</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="url" />
+                    <field name="api_key" />
+                    <field name="company_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="support_account_form">
+            <field name="model">support.account</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name" />
+                        <field name="url" />
+                        <field name="api_key" />
+                        <field name="company_id" />
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="support_account_list_action">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Support Accounts</field>
+            <field name="res_model">support.account</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="support_account_menu" name="Support account"
+                  parent="base.menu_custom"
+                  action="support_account_list_action"/>
+</odoo>
