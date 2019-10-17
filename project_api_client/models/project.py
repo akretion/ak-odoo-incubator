@@ -381,30 +381,38 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action4helpdesk(self, action):
-        act_ext_task = self.env.ref(
-            "project_api_client.action_view_external_task")
         act_sup = self.env.ref("project_api_client.action_helpdesk")
-        if act_ext_task.id == action["id"]:
+        # if act_ext_task.id == action["id"]:
             # No need to add a dynamic action because it's the dynamic act
-            return False
+            # return False
         account = self.env["external.task"].get_url_key()
         if not account:
             # We haven't got a connection to master ERP
             return False
+        action_support = self.env.ref(
+            "project_api_client.action_helpdesk", False
+        )
+        if action_support and action["id"] == action_support.id:
+            self._set_origin_in_context(action)
+        action_external_task = self.env.ref(
+            "project_api_client.action_view_external_task", False
+        )
+        if action_external_task and action["id"] == action_external_task.id:
+            self._set_default_project(action)
         # if act_sup.id == action["id"]:
         #     self._set_origin_in_context(action)
-        act_helpdesk_vals = act_sup.read()[0]
+        # act_helpdesk_vals = act_sup.read()[0]
         # TODO improve perf
-        model = self.env["ir.model"].search(
-            [("model", "=", action.get("res_model"))])
-        if model:
+        # model = self.env["ir.model"].search(
+            # [("model", "=", action.get("res_model"))])
+        # if model:
             # act_helpdesk_vals.update(
             #     {"binding_model_id": model.id, "help": "_"})
-            print(act_helpdesk_vals)
+            # print(act_helpdesk_vals)
             # import pdb; pdb.set_trace()
-            return False
+            # return False
             # return act_helpdesk_vals
-        return False
+        # return False
 
         # if act_ext_task and action["id"] == act_ext_task.id:
         #     self._set_default_project(action)
@@ -416,7 +424,6 @@ class IrActionActWindows(models.Model):
         print(len(res))
         if not self.env.context.get("install_mode"):
             for action in res:
-                print(action['name'], action.get('res_model'))
                 ext_task_action = self._update_action4helpdesk(action)
                 # import pdb; pdb.set_trace()
         #         if ext_task_action:
