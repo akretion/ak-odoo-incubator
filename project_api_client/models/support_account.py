@@ -13,10 +13,12 @@ class SupportAccount(models.Model):
     name = fields.Char()
     url = fields.Char()
     api_key = fields.Char()
-    company_id = fields.Many2one(comodel_name='res.company')
+    company_id = fields.Many2one(comodel_name="res.company")
 
     def retrieve(self):
-        account = self.search([('company_id', '=', self.env.user.company_id.id)])
+        account = self.search(
+            [("company_id", "=", self.env.user.company_id.id)]
+        )
         if not account:
-            account = self.search([('company_id', '=', False)])
+            account = self.search([("company_id", "=", False)])
         return account

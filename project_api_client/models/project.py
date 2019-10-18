@@ -83,10 +83,7 @@ class ExternalTask(models.Model):
         account = self.env["support.account"]
         retrieve = account.suspend_security().retrieve
         account = retrieve()[0]
-        return {
-            "url": account.url,
-            "api_key": account.api_key,
-        }
+        return {"url": account.url, "api_key": account.api_key}
 
     @api.model
     def _call_odoo(self, method, params):
@@ -382,11 +379,7 @@ class IrActionActWindows(models.Model):
 
     @api.model
     def _update_action(self, action):
-        account = (
-            self.env["support.account"]
-            .suspend_security()
-            .retrieve()
-        )
+        account = self.env["support.account"].suspend_security().retrieve()
         if not account:
             return
         action_support = self.env.ref(

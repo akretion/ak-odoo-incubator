@@ -20,11 +20,7 @@ class IrUiMenu(models.Model):
         :rtype: list(int)
         """
         res = super(IrUiMenu, self).get_user_roots()
-        account = (
-            self.env["support.account"]
-            .suspend_security()
-            .retrieve()
-        )
+        account = self.env["support.account"].suspend_security().retrieve()
         if not account:
             _logger.error("No keychain support key specify, hide the menu")
             support_imd = self.env.ref("project_api_client.external_project")
