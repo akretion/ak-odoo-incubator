@@ -15,8 +15,10 @@
     "application": False,
     "installable": True,
     "external_dependencies": {"python": [], "bin": []},
-    "depends": ["sale", "delivery"],
-    "data": [],
+    "depends": ["sale_order_line_price_subtotal_gross"],
+    "data": [
+        "data/cron.xml"
+        ],
     "demo": [],
     "qweb": [],
 }
