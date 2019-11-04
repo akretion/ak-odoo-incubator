@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+
+<record forcecreate="True" id="ir_cron_sale_persist_price_fields" model="ir.cron">
+    <field name="name">Pre-compute price field before migration</field>
+    <field eval="False" name="active"/>
+    <field name="user_id" ref="base.user_root"/>
+    <field name="interval_number">1</field>
+    <field name="interval_type">days</field>
+    <field name="numbercall">-1</field>
+    <field eval="False" name="doall"/>
+    <field eval="'sale.order'" name="model"/>
+    <field eval="'_cron_persist_price_fields'" name="function"/>
+    <field eval="'()'" name="args"/>
+</record>
+
+    </data>
+</openerp>
