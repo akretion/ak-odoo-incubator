@@ -30,5 +30,6 @@ class CrmCaseSection(models.Model):
                        ('partner_pricelist', 'Use Partner Pricelist'),
                        ('partner_pricelist_if_exists',
                         'Use Partner Pricelist if exists'),
+                       ('none', 'No constraint'),
                        ],
             help=PRICELIST_HELP)
