@@ -11,6 +11,7 @@
                     <group>
                         <group col="2">
                             <field name="price_policy" widget="radio"/>
+                            <field name="allow_changing_pricelist"/>
                         </group>
                         <group col="2">
                             <field name="pricelist_id"

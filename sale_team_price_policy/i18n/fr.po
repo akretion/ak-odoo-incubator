@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 22:21+0000\n"
-"PO-Revision-Date: 2019-11-21 22:21+0000\n"
+"POT-Creation-Date: 2019-11-28 22:56+0000\n"
+"PO-Revision-Date: 2019-11-28 22:56+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,27 +47,37 @@ msgstr "\n"
 ""
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:99
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:112
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:101
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:114
 #, python-format
 msgid " customer price "
 msgstr " prix client "
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:91
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:105
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:93
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:107
 #, python-format
 msgid " market price "
 msgstr " prix marché "
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:133
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:135
 #, python-format
 msgid " pricelist (see Sales team - Pricing tab)"
 msgstr "Liste de prix (voir Equipe commerciale - Onglet tarification)"
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:132
+#: field:crm.case.section,allow_changing_pricelist:0
+msgid "Allow changing pricelist"
+msgstr "Autoriser le changement de liste de prix"
+
+#. module: sale_team_price_policy
+#: help:crm.case.section,allow_changing_pricelist:0
+msgid "Allow to change the pricelist"
+msgstr "Autoriser le changement de liste de prix"
+
+#. module: sale_team_price_policy
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:134
 #, python-format
 msgid "Check your data below:"
 msgstr "Vérifier les données ci-dessous:"
@@ -119,11 +129,6 @@ msgid "Liste de prix"
 msgstr "Liste de prix"
 
 #. module: sale_team_price_policy
-#: selection:crm.case.section,price_policy:0
-msgid "No constraint"
-msgstr "Sans contrainte"
-
-#. module: sale_team_price_policy
 #: field:crm.case.section,price_policy:0
 msgid "Price Policy"
 msgstr "Politique de prix"
@@ -135,19 +140,19 @@ msgid "Pricelist changed: Prices must be recomputed."
 msgstr "La liste de prix a changé : les prix doivent être recalculés."
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:69
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:71
 #, python-format
 msgid "Pricelist in %s"
 msgstr "Pricelist in %s"
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:71
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:73
 #, python-format
 msgid "Pricelist in sale team"
 msgstr "Liste de prix dans l'équipe commerciale"
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:74
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:76
 #, python-format
 msgid "Pricelist on partner"
 msgstr "Liste de prix sur le client"
@@ -158,19 +163,19 @@ msgid "Pricing"
 msgstr "Tarification"
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:67
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:69
 #, python-format
 msgid "Sale Team"
 msgstr "Equipe commerciale"
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:68
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:70
 #, python-format
 msgid "Sale Team Policy"
 msgstr "Politique de l'équipe commerciale"
 
 #. module: sale_team_price_policy
-#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:131
+#: code:addons/sale_team_price_policy/models/price_policy_mixin.py:133
 #, python-format
 msgid "Sale pricelist must match to "
 msgstr "La liste de prix doit correspondre à "

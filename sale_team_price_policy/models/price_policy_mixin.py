@@ -63,6 +63,8 @@ class PricePolicyMixin(models.AbstractModel):
         We check only for customer invoice (not supplier invoice nor refunds)
         """
         self.ensure_one()
+        if self.section_id.allow_changing_pricelist:
+            return True
         description = {
             'team': (_('Sale Team'), self.section_id.name),
             'policy': (_('Sale Team Policy'), self.section_id.price_policy),

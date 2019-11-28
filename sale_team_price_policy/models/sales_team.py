@@ -30,6 +30,8 @@ class CrmCaseSection(models.Model):
                        ('partner_pricelist', 'Use Partner Pricelist'),
                        ('partner_pricelist_if_exists',
                         'Use Partner Pricelist if exists'),
-                       ('none', 'No constraint'),
                        ],
             help=PRICELIST_HELP)
+        allow_changing_pricelist = fields.Boolean(
+            default=False,
+            help="Allow to change the pricelist")
