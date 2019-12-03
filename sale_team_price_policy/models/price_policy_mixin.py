@@ -16,7 +16,7 @@ class PricePolicyMixin(models.AbstractModel):
         help="Checked after the pricelist update for recomputing later.")
 
     @api.multi
-    @api.onchange('section_id', 'partner_id', 'pricelist_id')
+    @api.onchange('section_id', 'partner_id')
     def _pp_onchange_section_id(self):
         for record in self:
             if record.section_id:
@@ -31,10 +31,17 @@ class PricePolicyMixin(models.AbstractModel):
                             getattr(record, 'invoice_line', None):
                         record.do_recalculate_price = True
 
+    @api.multi
+    @api.onchange('pricelist_id')
+    def _pp_onchange_pricelist_id(self):
+        self._pp_onchange_section_id()
+
     @api.model
     def _synchro_policy_fields(self, section=None, partner=None):
         """ Make the same behavior between onchange and crud methods """
         final = {}
+        if section.allow_changing_pricelist:
+            return {}
         if section.price_policy == 'contract_pricelist':
             final['pricelist_id'] = section.pricelist_id.id
         elif section.price_policy == \
