@@ -23,7 +23,9 @@ class AccountInvoice(orm.Model):
                 else:
                     equal = ['price_unit', 'discount']
                     for field in equal:
-                        if line[field] != id2data[line['product_id']][field]:
+                        product = self.pool['product.product'].browse(
+                            cr, uid, line['product_id'], context=context)
+                        if line[field] != id2data[line['product_id']][field] and product.type != 'service':
                             raise orm.except_orm(
                                 _('Error'),
                                 _('Same product must have the same price'),
