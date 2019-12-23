@@ -47,7 +47,7 @@ class PayplugFileParser(FileParser):
         conversion_dict = {
             'Amount': float_or_zero,
             'Date': unicode,
-            'API ID': unicode,
+            'ID API': unicode,
             'Description': unicode,
         }
         super(PayplugFileParser, self).__init__(
@@ -78,11 +78,11 @@ class PayplugFileParser(FileParser):
 
     def get_st_line_vals(self, line, *args, **kwargs):
         res = {
-            'transaction_id': line['API ID'],
-            'name': line['API ID'] or line['Description'],
+            'transaction_id': line['ID API'],
+            'name': line['ID API'] or line['Description'],
             'date': line['Date'],
             'amount': line['Amount'],
-            'ref': line['API ID'] or line['Description'],
+            'ref': line['ID API'] or line['Description'],
         }
         return res
 
