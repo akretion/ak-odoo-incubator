@@ -45,7 +45,7 @@ register_dialect("payplug_dialect", payplug_dialect)
 class PayplugFileParser(FileParser):
     def __init__(self, parse_name, ftype='csv'):
         conversion_dict = {
-            'Amount': float_or_zero,
+            'Montant': float_or_zero,
             'Date': unicode,
             'ID API': unicode,
             'Description': unicode,
@@ -81,7 +81,7 @@ class PayplugFileParser(FileParser):
             'transaction_id': line['ID API'],
             'name': line['ID API'] or line['Description'],
             'date': line['Date'],
-            'amount': line['Amount'],
+            'amount': line['Montant'],
             'ref': line['ID API'] or line['Description'],
         }
         return res
