@@ -1,4 +1,3 @@
-# coding: utf-8
 # © 2019 Akretion (http://www.akretion.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -9,9 +8,16 @@ from openerp.exceptions import Warning as UserError
 class ProductPricelist(models.Model):
     _inherit = "product.pricelist"
 
-    is_intercompany_supplier = fields.Boolean(
-        inverse="_inverse_intercompany_supplier", default=False
+    # we don't want the default "All Products" value for item_ids
+    item_ids = fields.One2many(
+        "product.pricelist.item",
+        "pricelist_id",
+        "Pricelist Items",
+        copy=True,
+        default=False,
     )
+
+    is_intercompany_supplier = fields.Boolean(default=False)
 
     generated_supplierinfo_ids = fields.One2many(
         comodel_name="product.supplierinfo",
@@ -26,44 +32,40 @@ class ProductPricelist(models.Model):
                     "The company is required for intercompany pricelist"
                 )
 
-    def _inverse_intercompany_supplier(self):
-        for record in self:
-            if record.is_intercompany_supplier:
-                record._active_intercompany()
-            else:
-                record._unactive_intercompany()
-
     def _active_intercompany(self):
-        self.ensure_one()
-        if self.is_intercompany_supplier:
-            if len(self.version_id) > 1:
-                raise UserError(
-                    _(
-                        "Only one version is supported for"
-                        "intercompany pricelist"
+        for rec in self:
+            if rec.is_intercompany_supplier:
+                if not rec.company_id:
+                    raise UserError(
+                        _("Intercompany pricelist must belong to a company")
                     )
-                )
-            if not self.company_id:
-                raise UserError(
-                    _("Intercompany pricelist must belong to a company")
-                )
-            self.version_id.items_id._init_supplier_info()
+                self.item_ids._init_supplier_info()
 
     def _unactive_intercompany(self):
-        self.ensure_one()
         self.sudo().with_context(automatic_intercompany_sync=True).mapped(
             "generated_supplierinfo_ids"
         ).unlink()
+
+    def write(self, vals):
+        res = super(ProductPricelist, self).write(vals)
+        if "is_intercompany_supplier" in vals.keys():
+            if vals["is_intercompany_supplier"]:
+                self._active_intercompany()
+            else:
+                self._unactive_intercompany()
+        return res
 
 
 class ProductPricelistItem(models.Model):
 
     _inherit = "product.pricelist.item"
 
-    @api.multi
     def _add_product_to_synchronize(self, todo):
+        """ formats the supplied arg:
+        arg[record.pricelist]["products"|"templates"]
+        """
         for record in self:
-            pricelist = record.price_version_id.pricelist_id
+            pricelist = record.pricelist_id
             if not pricelist.is_intercompany_supplier:
                 continue
             if pricelist not in todo:
@@ -96,7 +98,6 @@ class ProductPricelistItem(models.Model):
         record._init_supplier_info()
         return record
 
-    @api.multi
     def write(self, vals):
         todo = {}
         # we complete the todo before and after the write
@@ -107,7 +108,6 @@ class ProductPricelistItem(models.Model):
         self._process_product_to_synchronize(todo)
         return True
 
-    @api.multi
     def unlink(self):
         todo = {}
         self._add_product_to_synchronize(todo)
