@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<record id="wizard_generate_ldif_partner" model="generate.ldif.partner">
+    <field name="name">wizard.partner.generate.ldif.form</field>
+    <field name="model">wizard.partner.generate.ldif</field>
+    <field name="arch" type="xml">
+		<form string="Generate a .ldif file from partners" />
+            <group name="main">
+                <tree name="partner_ids"/>
+                    <field name="display_name"/>
+                    <field name="ldap_update_record"/>
+                    <field name="ldap_create_record"/>
+				</tree>
+            </group>
+            <footer>
+                <button special="cancel" string="Cancel" class="oe_link"/>
+                <button class="btn-primary" name="run" type="object" string="Generate"/>
+				<button class="btn-primary" name="run" type="object" string="Confirm Update"/>
+            </footer>
+        </form>
+    </field>
+
+<record id="generate_ldif_partner_action" model="ir.actions.act_window">
+    <field name="name">Generate Ldif Partners</field>
+    <field name="src_model">res.partner</field>
+    <field name="res_model">wizard.generate.ldif.partner</field>
+    <field name="view_mode">form</field>
+    <field name="view_type">form</field>
+    <field name="key2">client_action_multi</field>
+	<field name="groups">base.group_system</field>
+</record>
+
+</odoo>
