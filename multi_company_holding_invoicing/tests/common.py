@@ -4,8 +4,13 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp.tests.common import TransactionCase
+from openerp.tests.common import SavepointCase
 from datetime import datetime
+from openerp.addons.connector.tests.common import mock_job_delay_to_direct
+
+CHILD_JOB_PATH = (
+    'openerp.addons.multi_company_holding_invoicing'
+    '.models.invoice.generate_child_invoice_job')
 
 XML_COMPANY_A = 'multi_company_holding_invoicing.child_company_a'
 XML_COMPANY_B = 'multi_company_holding_invoicing.child_company_b'
@@ -13,26 +18,105 @@ XML_COMPANY_HOLDING = 'base.main_company'
 XML_SECTION_1 = 'multi_company_holding_invoicing.section_market_1'
 XML_SECTION_2 = 'multi_company_holding_invoicing.section_market_2'
 XML_PARTNER_ID = 'base.res_partner_2'
+XML_PRODUCT = 'multi_company_holding_invoicing.holding_product'
+XML_ROYALTY_PRODUCT = 'multi_company_holding_invoicing.holding_royalty_product'
 
 
-class CommonInvoicing(TransactionCase):
+class CommonInvoicing(SavepointCase):
 
-    def setUp(self):
-        super(CommonInvoicing, self).setUp()
+    @classmethod
+    def _get_account_id(cls, company, name):
+        return cls.env['account.account'].search([
+            ('name', 'ilike', 'Product Sales'),
+            ('company_id', '=', company.id)
+            ])[0].id
+
+    @classmethod
+    def _configure_product_and_taxe(cls):
+        env = cls.env
+        tax_obj = env['account.tax']
+        sale_tax_ids = []
+        purchase_tax_ids = []
+        holding_product = env.ref(XML_PRODUCT)
+        holding_royalty_product = env.ref(XML_ROYALTY_PRODUCT)
+        for company in [cls.company_a, cls.company_b, cls.company_holding]:
+            # configure accounts
+            account_vals = {
+                'property_account_income': cls._get_account_id(company, 'Product Sales'),
+                'property_account_expense': cls._get_account_id(company, 'Expenses'),
+                }
+            holding_product.with_context(force_company=company.id).write(account_vals)
+            holding_royalty_product.with_context(force_company=company.id).write(account_vals)
+
+            # configure taxes
+            sale_tax_a = tax_obj.create({
+                'name': 'Sale tax A',
+                'amount': 0.05,
+                'type_tax_use': 'sale',
+                'amount_type': 'percent',
+                'company_id': company.id,
+                })
+            sale_tax_ids.append(sale_tax_a.id)
+            sale_tax_b = tax_obj.create({
+                'name': 'Sale tax B',
+                'amount': 0.10,
+                'type_tax_use': 'sale',
+                'amount_type': 'percent',
+                'company_id': company.id,
+                })
+            purchase_tax_a = tax_obj.create({
+                'name': 'Purchase tax A',
+                'amount': 0.5,
+                'type_tax_use': 'purchase',
+                'amount_type': 'percent',
+                'company_id': company.id,
+                })
+            purchase_tax_ids.append(purchase_tax_a.id)
+            purchase_tax_b = tax_obj.create({
+                'name': 'Purchase tax B',
+                'amount': 0.10,
+                'type_tax_use': 'purchase',
+                'amount_type': 'percent',
+                'company_id': company.id,
+                })
+            env['account.fiscal.position'].create({
+                'name': 'holding-test',
+                'company_id': company.id,
+                'tax_ids': [
+                    (0, 0, {'tax_src_id': sale_tax_a.id, 'tax_dest_id': sale_tax_b.id}),
+                    (0, 0, {'tax_src_id': purchase_tax_a.id, 'tax_dest_id': purchase_tax_b.id}),
+                    ]
+                })
+        vals = {
+            'taxes_id': [(6, 0, sale_tax_ids)],
+            'supplier_taxes_id': [(6, 0, purchase_tax_ids)],
+            }
+        holding_product.write(vals)
+        holding_royalty_product.write(vals)
+
+    @classmethod
+    def setUpClass(cls):
+        super(CommonInvoicing, cls).setUpClass()
         # tests are called before register_hook
         # register suspend_security hook
-        self.env['ir.rule']._register_hook()
+        cls.env['ir.rule']._register_hook()
+        cls.company_a = cls.env.ref(XML_COMPANY_A)
+        cls.company_b = cls.env.ref(XML_COMPANY_B)
+        cls.company_holding = cls.env.ref(XML_COMPANY_HOLDING)
+        cls._configure_product_and_taxe()
 
-    def _get_sales(self, xml_ids):
-        sales = self.env['sale.order'].browse(False)
+    @classmethod
+    def _get_sales(cls, xml_ids):
+        sales = cls.env['sale.order'].browse(False)
         for xml_id in xml_ids:
-            sale = self.env.ref(
+            sale = cls.env.ref(
                 'multi_company_holding_invoicing.sale_order_%s' % xml_id)
             sales |= sale
         return sales
 
-    def _validate_and_deliver_sale(self, xml_ids):
-        sales = self._get_sales(xml_ids)
+    @classmethod
+    def _validate_and_deliver_sale(cls, xml_ids):
+        sales = cls._get_sales(xml_ids)
         for sale in sales:
             sale.action_button_confirm()
             for picking in sale.picking_ids:
@@ -59,23 +143,13 @@ class CommonInvoicing(TransactionCase):
         sales = self._get_sales(sale_xml_ids)
         sales.write({'section_id': section.id})
 
-    def _generate_holding_invoice(self, section_xml_id):
+    def _generate_holding_invoice_from_section(self, section_xml_id):
         date_invoice = datetime.today()
         wizard = self.env['wizard.holding.invoicing'].create({
             'section_id': self.ref(section_xml_id),
             'date_invoice': date_invoice,
             })
         res = wizard.create_invoice()
-        invoices = self.env['account.invoice'].browse(res['domain'][0][2])
-        return invoices
-
-    def _generate_holding_invoice_from_sale(self, sales):
-        date_invoice = datetime.today()
-        wizard = self.env['sale.make.invoice'].with_context(
-            active_ids=sales.ids).create({
-                'invoice_date': date_invoice,
-                })
-        res = wizard.make_invoices()
         invoices = self.env['account.invoice'].browse(res['domain'][0][2])
         return invoices
 
@@ -92,12 +166,6 @@ class CommonInvoicing(TransactionCase):
             msg="Expected sale order to be invoiced %s found %s"
                 % (', '.join(sales.mapped('name')),
                    ', '.join(invoice.holding_sale_ids.mapped('name'))))
-
-    def _check_expected_invoice_amount(self, invoice, expected_amount):
-        self.assertEqual(
-            expected_amount, invoice.amount_total,
-            msg="The amount invoiced should be %s, found %s"
-                % (expected_amount, invoice.amount_total))
 
     def _check_child_invoice(self, invoice):
         company2sale = {}
@@ -131,21 +199,18 @@ class CommonInvoicing(TransactionCase):
                 msg="The partner invoiced is not correct excepted %s get %s"
                     % (holding_partner.name, child.partner_id.name))
 
-    def _check_child_invoice_amount(self, invoice):
-        discount = invoice.section_id.holding_discount
-        expected_amount = invoice.amount_total * (1 - discount/100)
-        computed_amount = 0
-        for child in invoice.child_invoice_ids:
-            computed_amount += child.amount_total
-        self.assertAlmostEqual(
-            expected_amount,
-            computed_amount,
-            msg="The total amoutn of child invoice is %s expected %s"
-                % (computed_amount, expected_amount))
-
     def _check_sale_state(self, sales, expected_state):
         for sale in sales:
             self.assertEqual(
                 sale.invoice_state, expected_state,
                 msg="Invoice state is '%s' indeed of '%s'"
                     % (sale.invoice_state, expected_state))
+
+
+class CommonGenerateInvoice(CommonInvoicing):
+
+    @classmethod
+    def setUpClass(cls):
+        super(CommonGenerateInvoice, cls).setUpClass()
+        # Validate the sale order (sale_xml_ids) and check the state
+        cls._validate_and_deliver_sale([1, 2, 3, 4])

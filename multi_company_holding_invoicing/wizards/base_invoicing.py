@@ -36,8 +36,10 @@ class BaseHoldingInvoicing(models.AbstractModel):
         if self._context.get('section_group_by') == 'none':
             name = product.name
         else:
-            name = '%s - %s' % (
-                data_line['name'], data_line.get('client_order_ref', ''))
+            name = data_line['name']
+            ref = data_line.get('client_order_ref')
+            if ref:
+                name += u" - %s" % ref
         taxes = product.taxes_id.filtered(
             lambda s : s.company_id.id==s._context['force_company'])
         if not taxes:
@@ -251,7 +253,6 @@ class ChildInvoicing(models.TransientModel):
         vals['origin'] = holding_invoice.name
         vals['partner_id'] = holding_invoice.company_id.partner_id.id
         section = self.env['crm.case.section'].browse(data['section_id'][0])
-        vals['journal_id'] = section.journal_id.id
         partner_data = self.env['account.invoice'].onchange_partner_id(
             'out_invoice', holding_invoice.company_id.partner_id.id,
             company_id=self._context['force_company'])

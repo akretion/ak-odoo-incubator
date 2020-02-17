@@ -30,6 +30,7 @@
      'views/product_view.xml',
  ],
  'demo': [
+     'demo/product_demo.xml',
      'demo/res_company_demo.xml',
      'demo/res_users_demo.xml',
      'demo/sales_team_demo.xml',

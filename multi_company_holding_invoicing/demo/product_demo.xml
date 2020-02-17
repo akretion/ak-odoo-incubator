@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<record id="holding_product" model="product.product">
+    <field name="name">Holding Product</field>
+    <field name="categ_id" ref="product.product_category_all"/>
+    <field name="sale_ok" eval="True"/>
+</record>
+
+<record id="holding_royalty_product" model="product.product">
+    <field name="name">Holding Royalty Product</field>
+    <field name="categ_id" ref="product.product_category_all"/>
+    <field name="sale_ok" eval="True"/>
+</record>
+
+</odoo>
