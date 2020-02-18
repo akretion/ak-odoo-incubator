@@ -95,6 +95,46 @@ class TestInvoicingFromSaleTeam(CommonGenerateInvoice):
         sales = self._get_sales([4])
         self._check_sale_state(sales, 'invoiced')
 
+    def test_no_fiscal_position(self):
+        self._set_partner([1, 2, 3, 4], XML_PARTNER_ID)
+        self._set_section([1, 2, 3, 4], XML_SECTION_1)
+        self._set_company([1, 2], XML_COMPANY_A)
+        self._set_company([3], XML_COMPANY_B)
+        self._set_company([4], XML_COMPANY_HOLDING)
+
+        self._start_scenario(XML_SECTION_1, [1, 2, 3, 4], [1, 2, 3, 4])
+
+        self.assertEqual(self.invoice.amount_tax, 3600*0.05)
+        self.assertEqual(self.child_invoice_a.amount_tax, 3000*0.9*0.05)
+        self.assertEqual(self.child_invoice_b.amount_tax, 500*0.9*0.05)
+
+    def _get_fp_test_id(self, company):
+        return self.env['account.fiscal.position'].search([
+            ('company_id', '=', company.id),
+            ('name', '=', 'holding-test'),
+            ]).id
+
+    def test_with_fiscal_position(self):
+        self._set_partner([1, 2, 3, 4], XML_PARTNER_ID)
+        self._set_section([1, 2, 3, 4], XML_SECTION_1)
+        self._set_company([1, 2], XML_COMPANY_A)
+        self._set_company([3], XML_COMPANY_B)
+        self._set_company([4], XML_COMPANY_HOLDING)
+
+        partner = self.env.ref(XML_PARTNER_ID)
+        for partner in [self.company_a.partner_id, self.company_b.partner_id, partner]:
+            partner.with_context(force_company=self.company_holding.id).write({
+                'property_account_position': self._get_fp_test_id(self.company_holding),
+                })
+        for company in [self.company_a, self.company_b]:
+            self.company_holding.partner_id.with_context(force_company=company.id).write({
+                'property_account_position': self._get_fp_test_id(company)
+            })
+        self._start_scenario(XML_SECTION_1, [1, 2, 3, 4], [1, 2, 3, 4])
+        self.assertEqual(self.invoice.amount_tax, 3600*0.10)
+        self.assertEqual(self.child_invoice_a.amount_tax, 3000*0.9*0.10)
+        self.assertEqual(self.child_invoice_b.amount_tax, 500*0.9*0.10)
+
 
 class TestInvoicingFromSaleTeamGroupBySale(TestInvoicingFromSaleTeam):
 

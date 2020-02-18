@@ -55,6 +55,7 @@ class CommonInvoicing(SavepointCase):
                 'type_tax_use': 'sale',
                 'amount_type': 'percent',
                 'company_id': company.id,
+                'account_id': cls._get_account_id(company, 'Tax Received'),
                 })
             sale_tax_ids.append(sale_tax_a.id)
             sale_tax_b = tax_obj.create({
@@ -63,13 +64,15 @@ class CommonInvoicing(SavepointCase):
                 'type_tax_use': 'sale',
                 'amount_type': 'percent',
                 'company_id': company.id,
+                'account_id': cls._get_account_id(company, 'Tax Received'),
                 })
             purchase_tax_a = tax_obj.create({
                 'name': 'Purchase tax A',
-                'amount': 0.5,
+                'amount': 0.05,
                 'type_tax_use': 'purchase',
                 'amount_type': 'percent',
                 'company_id': company.id,
+                'account_id': cls._get_account_id(company, 'Tax Paid'),
                 })
             purchase_tax_ids.append(purchase_tax_a.id)
             purchase_tax_b = tax_obj.create({
@@ -78,6 +81,7 @@ class CommonInvoicing(SavepointCase):
                 'type_tax_use': 'purchase',
                 'amount_type': 'percent',
                 'company_id': company.id,
+                'account_id': cls._get_account_id(company, 'Tax Paid'),
                 })
             env['account.fiscal.position'].create({
                 'name': 'holding-test',

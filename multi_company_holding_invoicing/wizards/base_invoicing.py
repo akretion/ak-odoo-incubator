@@ -74,10 +74,18 @@ class BaseHoldingInvoicing(models.AbstractModel):
             'company_id': self._context['force_company'],
             'user_id': self._uid,
         })
-        # Remove fiscal position from vals
-        # Because fiscal position in vals is not that of the 'force_company'
-        if vals['fiscal_position']:
-            vals['fiscal_position'] = False
+        return vals
+
+    @api.model
+    def _apply_fiscal_position(self, vals, lines):
+        # Force the fiscal position based on partner fp
+        # on next version it will be better to play the onchange
+        partner = self.env['res.partner'].browse(vals['partner_id'])
+        fp = partner.property_account_position
+        vals['fiscal_position'] = fp.id
+        if fp:
+            for line in lines:
+                line.invoice_line_tax_id = fp.map_tax(line.invoice_line_tax_id)
         return vals
 
     @api.model
@@ -151,6 +159,13 @@ class HoldingInvoicing(models.TransientModel):
             ['partner_invoice_id', 'section_id', 'amount_untaxed'],
             ['partner_invoice_id', 'section_id'],
         ]
+
+    @api.model
+    def _prepare_invoice(self, data, lines):
+        # TODO replace by onchange in 12
+        vals = super(HoldingInvoicing, self)._prepare_invoice(data, lines)
+        self._apply_fiscal_position(vals, lines)
+        return vals
 
     @api.model
     def _get_company_invoice(self, data):
@@ -257,6 +272,7 @@ class ChildInvoicing(models.TransientModel):
             'out_invoice', holding_invoice.company_id.partner_id.id,
             company_id=self._context['force_company'])
         vals['account_id'] = partner_data['value'].get('account_id', False)
+        self._apply_fiscal_position(vals, lines)
         return vals
 
     @api.model
