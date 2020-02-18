@@ -9,17 +9,9 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "external_dependencies": {
-        "python": ["ldap"],
-    },
-    "depends": [
-        "base",
-    ],
-    "data": [
-        "wizard/partner_generate_ldif_wizard.xml",
-    ],
-    "demo": [
-    ],
-    "qweb": [
-    ]
+    "external_dependencies": {"python": ["ldap"],},
+    "depends": ["base",],
+    "data": ["wizard/partner_generate_ldif_wizard.xml",],
+    "demo": [],
+    "qweb": [],
 }

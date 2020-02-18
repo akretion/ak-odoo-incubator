@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-<record id="wizard_generate_ldif_partner" model="generate.ldif.partner">
+<record id="wizard_generate_ldif_partner" model="ir.ui.view">
     <field name="name">wizard.partner.generate.ldif.form</field>
     <field name="model">wizard.partner.generate.ldif</field>
+	<field name="type">form</field>
     <field name="arch" type="xml">
-		<form string="Generate a .ldif file from partners" />
+		<form string="Generate a .ldif file from partners">
             <group name="main">
-                <tree name="partner_ids"/>
-                    <field name="display_name"/>
-                    <field name="ldap_update_record"/>
-                    <field name="ldap_create_record"/>
-				</tree>
+				<field name="line_ids" nolabel="1">
+					<tree editable="top" delete="0">
+						<field name="partner_id" readonly="True"/>
+						<field name="ldap_update_record"/>
+						<field name="ldap_create_record"/>
+					</tree>
+				</field>
             </group>
             <footer>
                 <button special="cancel" string="Cancel" class="oe_link"/>
-                <button class="btn-primary" name="run" type="object" string="Generate"/>
-				<button class="btn-primary" name="run" type="object" string="Confirm Update"/>
+                <button class="btn-primary oe_right" name="run" type="object" string="Generate"/>
+				<button class="btn-primary oe_right" name="confirm_done" type="object" string="Confirm Update Done"/>
             </footer>
         </form>
     </field>
-
-<record id="generate_ldif_partner_action" model="ir.actions.act_window">
-    <field name="name">Generate Ldif Partners</field>
-    <field name="src_model">res.partner</field>
-    <field name="res_model">wizard.generate.ldif.partner</field>
-    <field name="view_mode">form</field>
-    <field name="view_type">form</field>
-    <field name="key2">client_action_multi</field>
-	<field name="groups">base.group_system</field>
 </record>
+
+<act_window id="generate_ldif_partner_action"
+    name="Generate .ldif file"
+    src_model="res.partner"
+	res_model="wizard.partner.generate.ldif"
+	key2="client_action_multi"
+    view_mode="form"
+	multi="True"
+	groups="base.group_erp_manager"
+	target="new"/>
 
 </odoo>
