@@ -153,8 +153,8 @@ class TestInvoicingFromSaleTeamGroupBySale(TestInvoicingFromSaleTeam):
             [u'SO008 - Custom REF 1', u'SO009', u'SO010 - Custom REF 3', u'SO011'],
             self.invoice.invoice_line.mapped('name'))
         self.assertEqual(
-            [u'SO008 - Custom REF 1', u'SO009', u'royalty - '],
+            [u'SO008 - Custom REF 1', u'SO009', u'Holding Royalty Product'],
             self.child_invoice_a.invoice_line.mapped('name'))
         self.assertEqual(
-            [u'SO010 - Custom REF 3', u'royalty - '],
+            [u'SO010 - Custom REF 3', u'Holding Royalty Product'],
             self.child_invoice_b.invoice_line.mapped('name'))

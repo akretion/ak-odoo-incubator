@@ -219,17 +219,12 @@ class ChildInvoicing(models.TransientModel):
         # Refactor will be done in V10
         # for now we just read the info on the product
         # you need to set the tax by yourself
-        if self._context.get('section_group_by') == 'none':
-            name = product.name
-        else:
-            name = '%s - %s' % (
-                data_line['name'], data_line.get('client_order_ref', ''))
         taxes = product.supplier_taxes_id.filtered(
             lambda s : s.company_id.id==s._context['force_company'])
         if not taxes:
             raise UserError("Taxes configuration is missing on %s", product.name)
         return {
-            'name': name,
+            'name': product.name,
             'product_id': product.id,
             'account_id': product.property_account_expense.id,
             'invoice_line_tax_id': [(6, 0, taxes.ids)],
