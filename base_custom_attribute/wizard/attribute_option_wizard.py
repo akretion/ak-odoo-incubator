@@ -12,6 +12,7 @@ from lxml import etree
 class AttributeOptionWizard(models.TransientModel):
     _name = "attribute.option.wizard"
     _rec_name = 'attribute_id'
+    _description = 'Custom Attributes Option'
 
     attribute_id = fields.Many2one(
         'attribute.attribute',
