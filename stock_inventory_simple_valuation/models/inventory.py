@@ -1,31 +1,20 @@
-# coding: utf-8
 # © 2018 Mourad El Hadj Mimoun @ Akretion
 # © 2018 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+import logging
 
-from collections import defaultdict
+from openerp import api, models, fields, _
+import openerp.addons.decimal_precision as dp
 
-import odoo.addons.decimal_precision as dp
-from odoo import _, api, fields, models
-
-# Used in report for documentation
-SELECTION_ORDER = [
-    u"les infos founisseur de la fiche produit",
-    u"les dernières factures d'achats",
-    u"les dernières commandes d'achats",
-    u"le champ cout manuel de la fiche produit",
-]
+_logger = logging.getLogger(__name__)
 
 
 class StockInventory(models.Model):
     _inherit = "stock.inventory"
 
-    to_recompute = fields.Boolean()
-
-    def button_compute_cost(self):
-        "Compute or reset"
-        for rec in self:
-            rec.write({"to_recompute": not rec.to_recompute})
+    def button_compute_line_costs(self):
+        self.ensure_one()
+        self.line_ids._compute_product_cost()
 
 
 class StockInventoryLine(models.Model):
@@ -35,189 +24,145 @@ class StockInventoryLine(models.Model):
         compute="_compute_product_cost",
         string="Computed cost",
         store=True,
-        digits=dp.get_precision("Account"),
+        digits_compute=dp.get_precision("Account"),
     )
     manual_product_cost = fields.Float(
-        string="Manual cost", digits=dp.get_precision("Account")
+        string="Manual cost", digits_compute=dp.get_precision("Account")
     )
-    value = fields.Float(
-        compute="_compute_value",
+    total_value = fields.Float(
+        compute="_compute_total_value",
         string="Value",
         store=True,
-        digits=dp.get_precision("Account"),
+        digits_compute=dp.get_precision("Account"),
     )
-    cost_origin = fields.Text(
+    explanation = fields.Text(
+        string="Source",
         compute="_compute_product_cost",
         store=True,
         help="Explain computation method for each product",
     )
-    reference = fields.Reference(
-        selection="_select_models", compute="_compute_product_cost", store=True
+    origin_record_reference = fields.Char(
+        string="Reference", compute="_compute_product_cost", store=True
+    )
+    origin_record_name = fields.Char(
+        string="Document Name", compute="_compute_product_cost", store=True
     )
 
-    def _select_models(self):
-        models = self.env["ir.model"].search(
-            [("model", "in", self._get_models())]
-        )
-        return [(x["model"], x["name"]) for x in models] + [("", "")]
+    @api.onchange('manual_product_cost')
+    def _onchange_manual_product_cost(self):
+        self._compute_product_cost()
 
-    @api.multi
-    @api.depends(
-        "product_id",
-        "product_qty",
-        "manual_product_cost",
-        "inventory_id.state",
-        "inventory_id.to_recompute",
-    )
-    def _compute_product_cost(self):
-        custom_data_source = self._get_custom_data_source()
-        po_l_obj = self.env["purchase.order.line"]
-        product_ids = [x.product_id.id for x in self]
-        # product_ids == [False] for first created line
-        if not product_ids or not product_ids[0]:
-            return
-        invoices = self._get_invoice_data(
-            product_ids, company=self.env.user.company_id
-        )
-        for line in self:
-            # DON'T FORGET TO update SELECTION_ORDER
-            # when changes are done in the order of the blocks
-            if (
-                line.inventory_id.state not in ("done")
-                and not line.inventory_id.to_recompute
-            ):
-                line.cost_origin = _("Click on 'Compute cost'")
-                continue
-            if not line.inventory_id or not line.product_id:
-                continue
-            # get cost from supplier invoice
-            explanation = ""
-            cost_price = 0
-            reference = False
-            if not cost_price:
-                # get cost price from supplier info
-                sup_info = line.product_id.seller_ids
-                if sup_info and sup_info[0].price:
-                    cost_price = sup_info[0].price
-                    explanation = _("Supplier info")
-                    reference = "product.supplierinfo,%s" % sup_info[0].id
-            if not cost_price and custom_data_source:
-                cost_price, explanation, reference = self._get_custom_cost(
-                    custom_data_source, product_ids
-                )
-            if not cost_price and invoices:
-                cost_price = invoices[line.product_id.id].get("price_unit")
-                explanation = _("Supplier Invoice")
-                if invoices[line.product_id.id].get("id"):
-                    reference = "account.invoice,%s" % invoices[
-                        line.product_id.id
-                    ].get("id")
-            if not cost_price:
-                # get cost price from purchase
-                po_line = po_l_obj.search(
-                    [
-                        ("product_id", "=", line.product_id.id),
-                        ("order_id.state", "=", "done"),
-                    ],
-                    limit=1,
-                )
-                if po_line:
-                    cost_price = po_line.price_unit
-                    explanation = _("Purchase")
-                    reference = "purchase.order,%s" % po_line.order_id.id
-            if not cost_price:
-                if line.product_id.standard_price_:
-                    cost_price = line.product_id.standard_price_
-                    explanation = _("Product manual standard_price_")
-                    reference = "product.product,%s" % line.product_id.id
-            if not cost_price:
-                if line.product_id.standard_price:
-                    cost_price = line.product_id.standard_price
-                    explanation = _("Product standard_price")
-                    reference = "product.product,%s" % line.product_id.id
-            if not cost_price:
-                explanation = _("No Cost found")
-                reference = ""
-            line.calc_product_cost = cost_price
-            line.cost_origin = explanation
-            if reference:
-                line.reference = reference
-
-    def _get_custom_data_source(self):
-        return None
-
-    def _get_custom_cost(self, custom_data_source, product_ids):
-        return (None, None, None)
-
-    @api.multi
     @api.depends("calc_product_cost", "manual_product_cost", "product_qty")
-    def _compute_value(self):
+    def _compute_total_value(self):
         for line in self:
             if line.manual_product_cost:
-                line.value = line.manual_product_cost * line.product_qty
+                line.total_value = line.manual_product_cost * line.product_qty
             else:
-                line.value = line.calc_product_cost * line.product_qty
+                line.total_value = line.calc_product_cost * line.product_qty
 
-    @api.model
-    def _get_invoice_data(self, product_ids, company):
-        invoices = defaultdict(dict)
-        query = """ SELECT l.product_id, max(l.create_date) AS date
-            FROM account_invoice_line l
-                LEFT JOIN account_invoice i ON i.id = l.invoice_id
-            WHERE l.product_id IN %s AND i.company_id = %s
-              AND i.type = 'in_invoice' AND i.state in ('open', 'paid')
-            GROUP BY 1
-            ORDER BY date ASC
-            LIMIT 1
-        """
-        self.env.cr.execute(query, (tuple(product_ids), company.id))
-        oldier = self.env.cr.fetchall()
-        if oldier:
-            query = """ SELECT l.product_id, l.price_unit, i.id, i.number
-                FROM account_invoice_line l
-                    LEFT JOIN account_invoice i ON i.id = l.invoice_id
-                WHERE l.product_id IN %s AND i.company_id = %s
-                    AND l.create_date >= %s
-                    AND i.type = 'in_invoice' AND i.state in ('open', 'paid')
-                ORDER BY l.create_date ASC
-            """
-            self.env.cr.execute(
-                query, (tuple(product_ids), company.id, oldier[0][1])
-            )
-            res = self.env.cr.fetchall()
-            invoices = defaultdict(dict)
-            for elm in res:
-                invoices[elm[0]].update(
-                    {"price_unit": elm[1], "id": elm[2], "number": elm[3]}
-                )
-        return invoices
+    @api.depends(
+        "product_id", "product_qty", "manual_product_cost",
+    )
+    def _compute_product_cost(self):
+        # sudo because it is unlikely the user has access rights to all
+        # relevant models
+        self = self.sudo()
+        lines = self.filtered(lambda r: r.inventory_id and r.product_id)
+        lines_manual = lines.filtered(lambda r: r.manual_product_cost)
+        lines_manual._compute_product_cost_manual()
+        lines_calc = lines - lines_manual
+        search_methods = self._get_search_methods()
+        for record in lines_calc:
+            for method in search_methods:
+                if getattr(record, method)():
+                    break
 
-    @api.model
-    def _get_models(self):
-        return [
-            "account.invoice",
-            "purchase.order",
-            "product.supplierinfo",
-            "product.product",
+    def _compute_product_cost_manual(self):
+        for rec in self:
+            rec.calc_product_cost = rec.manual_product_cost
+            rec.explanation = _("Manual setting")
+            rec.origin_record_reference = _("n/a")
+            rec.origin_record_name = _("n/a")
+
+    def _get_search_methods(self):
+        """Overload this to customize price search methods
+        they must: set calc_product_cost, explanation,
+        origin_record_reference, origin_record_name,
+        and return a bool indicating a result has been
+        found"""
+        res = [
+            "_search_cost_supplierinfo",
+            "_search_cost_invoice_lines",
+            "_search_cost_po_lines",
+            "_search_cost_standard_price",
+            "_search_cost_give_up",
         ]
+        return res
 
-    @api.multi
-    def button_info_origin(self):
-        self.ensure_one()
-        if self.reference:
-            return {
-                "type": "ir.actions.act_window",
-                "view_mode": "form",
-                "res_model": self.reference._model._name,
-                "res_id": self.reference.id,
-                "target": "new",
-                "name": _(
-                    "%s: %s: '%s'"
-                    % (
-                        self.reference._model._description,
-                        self.product_id.display_name,
-                        self.value,
-                    )
-                ),
-            }
+    def _search_cost_supplierinfo(self):
+        sup_info = self.product_id.seller_ids
+        if sup_info and sup_info[0].price:
+            self.calc_product_cost = sup_info[0].price
+            self.explanation = _("Supplier info")
+            self.origin_record_reference = (
+                "product.supplierinfo,%s" % sup_info[0].id
+            )
+            self.origin_record_name = sup_info[0].name.name
+            return True
         return False
+
+    def _search_cost_invoice_lines(self):
+        most_recent_invoice_line = self.env["account.invoice.line"].search(
+            [
+                ("product_id", "=", self.product_id.id),
+                ("invoice_id.state", "in", ("open", "paid")),
+                ("invoice_id.type", "=", "in_invoice"),
+            ],
+            order="create_date desc",
+            limit=1,
+        )
+        if most_recent_invoice_line:
+            self.calc_product_cost = most_recent_invoice_line.price_unit
+            self.explanation = _("Invoice")
+            self.origin_record_reference = (
+                "account.invoice,%s" % most_recent_invoice_line.invoice_id.id
+            )
+            self.origin_record_name = most_recent_invoice_line.invoice_id.name
+            return True
+        return False
+
+    def _search_cost_po_lines(self):
+        po_line = self.env["purchase.order.line"].search(
+            [
+                ("product_id", "=", self.product_id.id),
+                ("order_id.state", "=", "done"),
+            ],
+            limit=1,
+        )
+        if po_line:
+            self.calc_product_cost = po_line.price_unit
+            self.explanation = _("Purchase Order")
+            self.origin_record_reference = (
+                "purchase.order,%s" % po_line.order_id.id
+            )
+            self.origin_record_name = po_line.order_id.name
+            return True
+        return False
+
+    def _search_cost_standard_price(self):
+        if self.product_id.standard_price:
+            self.calc_product_cost = self.product_id.standard_price
+            self.explanation = _("Standard price")
+            self.origin_record_reference = (
+                "product.product,%s" % self.product_id.id
+            )
+            self.origin_record_name = self.product_id.name
+            return True
+        return False
+
+    def _search_cost_give_up(self):
+        self.explanation = _("No Cost found")
+        self.calc_product_cost = 0.0
+        self.origin_record_reference = "n/a"
+        self.origin_record_name = _("None")
+        return True

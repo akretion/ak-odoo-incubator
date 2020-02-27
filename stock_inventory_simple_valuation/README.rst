@@ -14,20 +14,21 @@ Stock Inventory Simple Valuation
     :target: https://github.com/akretion/ak-odoo-incubator/tree/12.0/stock_inventory_simple_valuation
     :alt: akretion/ak-odoo-incubator
 
-|badge1| |badge2|
+|badge1| |badge2| 
 
-* Get cost information from different sources in inventory line.
-* These sources are by example:
-    * supplier infos from product
-    * last purchase invoice product price
-    * last purchases product price
-    * standard price
-* Provide a spreadsheet inventory report with cost and its origin.
+This module adds a way to get an approximate evaluation of the value of your inventory lines. This is useful in cases where client product data is incomplete.
+
+When there is no standard way to get a product's price, this module looks firstly in the new "manual cost" field of inventory lines, then in different places to guess the price: supplier prices, invoices, purchase orders, etc, in an easily extensible way.
 
 **Table of contents**
 
 .. contents::
    :local:
+
+Usage
+=====
+
+Create an inventory, click the compute price button, observe the new columns displaying the guessed price and source for that guessed price.
 
 Bug Tracker
 ===========
@@ -53,13 +54,28 @@ Contributors
 * David Beal <david.beal@akretion.com>
 * Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
 * Pierrick Brun <pierrick.brun@akretion.com>
+* Kevin Khao <kevin.khao@akretion.com>
 
 Maintainers
 ~~~~~~~~~~~
 
+.. |maintainer-bealdav| image:: https://github.com/bealdav.png?size=40px
+    :target: https://github.com/bealdav
+    :alt: bealdav
+.. |maintainer-PierrickBrun| image:: https://github.com/PierrickBrun.png?size=40px
+    :target: https://github.com/PierrickBrun
+    :alt: PierrickBrun
+.. |maintainer-mourad-ehm| image:: https://github.com/mourad-ehm.png?size=40px
+    :target: https://github.com/mourad-ehm
+    :alt: mourad-ehm
+.. |maintainer-kevinkhao| image:: https://github.com/kevinkhao.png?size=40px
+    :target: https://github.com/kevinkhao
+    :alt: kevinkhao
 
+Current maintainers:
+
+|maintainer-bealdav| |maintainer-PierrickBrun| |maintainer-mourad-ehm| |maintainer-kevinkhao| 
 
 This module is part of the `akretion/ak-odoo-incubator <https://github.com/akretion/ak-odoo-incubator/tree/12.0/stock_inventory_simple_valuation>`_ project on GitHub.
-
 
 You are welcome to contribute.

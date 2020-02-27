@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odoo>
+<openerp>
+    <data>
 
+        <record model="ir.actions.act_window" id="act_open_stock_inventory_line_view">
+            <field name="name">Stock Inventory Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.inventory.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="stock_inventory_line_view_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
 
+        <record model="ir.actions.act_window.view" id="act_open_stock_inventory_line_view_tree">
+            <field name="act_window_id" ref="act_open_stock_inventory_line_view"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="stock_inventory_line_view_tree"/>
+        </record>
 
-    <record model="ir.ui.view" id="view_inventory_form">
-        <field name="model">stock.inventory</field>
-        <field name="inherit_id" ref="stock.view_inventory_form"/>
-        <field name="arch" type="xml">
-            <field name="date" position="after">
-                <button name="button_compute_cost" type="object"
-                        attrs="{'invisible': [('state', '=', 'done')]}"
-                        string="Compute cost"/>
-                <span attrs="{'invisible': [('state', '=', 'done')]}">automatically computed when validated</span>
+        <record model="ir.ui.view" id="view_inventory_form">
+            <field name="model">stock.inventory</field>
+            <field name="inherit_id" ref="stock.view_inventory_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="button_compute_line_costs"
+                            type="object"
+                            string="Recompute valuation"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
+                    position="after">
+                    <field name="calc_product_cost"/>
+                    <field name="manual_product_cost"/>
+                    <field name="total_value"/>
+                    <field name="explanation"/>
+                    <field name="origin_record_name"/>
+                </xpath>
             </field>
-            <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
-                position="after">
-                <field name="calc_product_cost"/>
-                <field name="manual_product_cost"/>
-                <field name="value"/>
-                <button name="button_info_origin" type="object" icon="STOCK_INFO" string="🛈"
-                        help="Information Origin"
-                        attrs="{'invisible': [('reference', '=', False)]}"/>
-                <field name="cost_origin"/>
-                <field name="reference"/>
-            </xpath>
-        </field>
-    </record>
+        </record>
 
-
-
-</odoo>
+    </data>
+</openerp>
