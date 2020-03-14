@@ -17,26 +17,30 @@ odoo.define('proxy_action.proxy_view', function (require) {
             var self = this;
             self.do_notify(_t('Proxy action executing'), _t('Your action is being executed'));
             var action_success = true;
-            action.action_list.forEach(function (task) {
+
+            $.when(_.map(action.action_list, function (task, idx) {
                 $.ajax({
                     url: task['url'],
                     type: 'POST',
                     data: JSON.stringify(task['params']),
                     contentType: 'application/json',
-                    async: false,
                 }).done(function (result) {
-                    console.log("Proxy action has been successfully sent: ", result);
+                    console.log('Proxy action sent with success: ', result);
+                    return true;
                 }).fail(function (result) {
                     console.log('Proxy action has failed: ', result);
-                    action_success = false;
+                    self.do_warn(_t("Failure"), _t("Proxy action failure. Please check logs."));
+                    return false;
                 })
-            })
-            if (action_success == true){
-                self.do_notify(_t('Success'), _t('Proxy action successfully sent'));
-            }
-            else{
-                self.do_warn(_t("Failure"), _t("Proxy action failure. Please check logs."));
-            }
+            })).then(function(requests){
+                var notif = requests.reduce(function(success, request){
+                    if (request != true){
+                        success = false;
+                    }
+                    return success;
+                }, true);
+                console.log(notif);
+            });
             action = { type: 'ir.actions.act_window_close' };
             return self.doAction(action, []);
         },
