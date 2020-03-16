@@ -10,7 +10,7 @@
     "website": "http://www.akretion.com",
     "category": "Stock",
     "version": "12.0.1.0.0",
-    "depends": ["stock", "account", "purchase"],
-    "data": ["views/inventory_view.xml"],
+    "depends": ["stock", "account", "purchase", "report_xlsx"],
+    "data": ["views/inventory_view.xml", "report/report_view.xml"],
     "maintainers": ["bealdav", "PierrickBrun", "mourad-ehm", "kevinkhao"],
 }

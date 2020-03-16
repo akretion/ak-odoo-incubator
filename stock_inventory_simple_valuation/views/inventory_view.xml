@@ -2,24 +2,6 @@
 <openerp>
     <data>
 
-        <record model="ir.actions.act_window" id="act_open_stock_inventory_line_view">
-            <field name="name">Stock Inventory Line</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">stock.inventory.line</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree</field>
-            <field name="search_view_id" ref="stock_inventory_line_view_search"/>
-            <field name="domain">[]</field>
-            <field name="context">{}</field>
-        </record>
-
-        <record model="ir.actions.act_window.view" id="act_open_stock_inventory_line_view_tree">
-            <field name="act_window_id" ref="act_open_stock_inventory_line_view"/>
-            <field name="sequence" eval="10"/>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="stock_inventory_line_view_tree"/>
-        </record>
-
         <record model="ir.ui.view" id="view_inventory_form">
             <field name="model">stock.inventory</field>
             <field name="inherit_id" ref="stock.view_inventory_form"/>
@@ -30,7 +12,7 @@
                             string="Recompute valuation"/>
                 </xpath>
                 <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
-                    position="after">
+                       position="after">
                     <field name="calc_product_cost"/>
                     <field name="manual_product_cost"/>
                     <field name="total_value"/>

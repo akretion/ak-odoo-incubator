@@ -3,8 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import logging
 
-from openerp import api, models, fields, _
-import openerp.addons.decimal_precision as dp
+from odoo import api, models, fields, _
+import odoo.addons.decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class StockInventoryLine(models.Model):
         string="Document Name", compute="_compute_product_cost", store=True
     )
 
-    @api.onchange('manual_product_cost')
+    @api.onchange("manual_product_cost")
     def _onchange_manual_product_cost(self):
         self._compute_product_cost()
 
@@ -96,6 +96,17 @@ class StockInventoryLine(models.Model):
             "_search_cost_po_lines",
             "_search_cost_standard_price",
             "_search_cost_give_up",
+        ]
+        return res
+
+    def get_search_method_strings(self):
+        """Overload this to customize what appears on
+        the excel report"""
+        res = [
+            _("les informations fournisseur de la fiche produit"),
+            _("les dernières factures d'achat"),
+            _("les dernières commandes d'achats"),
+            _("le coût manuel de la fiche produit"),
         ]
         return res
 
