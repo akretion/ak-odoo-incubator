@@ -1,0 +1,49 @@
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+from odoo import api, fields, models
+
+
+class BaseMulticompanyMixin(models.AbstractModel):
+    _name = "base.multicompany.mixin"
+    _description = "Base mixin for multicompany submittal"
+
+    state_multicompany_submit = fields.Selection(
+        [
+            ("not_submitted", "Not submitted"),
+            ("pending_approval", "Pending approval"),
+            ("approved", "Approved"),
+            ("refused", "Refused"),
+        ],
+        default="not_submitted",
+        string="Multicompany submittal state",
+        track_visibility="onchange",
+    )
+
+    multicompany_origin_company_id = fields.Many2one(
+        "res.company", string="Origin company", ondelete="set null"
+    )
+
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        res.multicompany_origin_company_id = res.company_id
+
+    def action_make_multicompany(self):
+        pass
+
+    def button_multicompany_submit(self):
+        self.ensure_one()
+        self.state_multicompany_submit = "pending_approval"
+
+    def button_multicompany_approve(self):
+        self.ensure_one()
+        self.state_multicompany_submit = "approved"
+        self.action_make_multicompany()
+
+    def button_multicompany_refuse(self):
+        self.ensure_one()
+        self.state_multicompany_submit = "refused"
+
+    def button_multicompany_cancel(self):
+        self.ensure_one()
+        self.state_multicompany_submit = "not_submitted"
