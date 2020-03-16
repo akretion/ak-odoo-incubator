@@ -1,0 +1,1 @@
+Simply add rules to the new m2m "rules_gtl_ids" field on your model to have it convert your global rule to a local one with the same end effect. Delete these automatically generated rules at your own extreme peril.
