@@ -67,7 +67,6 @@ class SimpleInventoryValuation(models.AbstractModel):
             y = len(INV_FIELDS) + 4
             x = 0
             for key in LINE_FIELDS:
-                print(key)
                 string = inv.line_ids._fields[key].string
                 if key in LINE_PARAMS:
                     if LINE_PARAMS[key].get("size"):
