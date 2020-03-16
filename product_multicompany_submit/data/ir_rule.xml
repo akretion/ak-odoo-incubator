@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!--Make the multicompany rule for products local for everyone so that we can relax permissions-->
+        <!--with additional local rules-->
+        <record id="product.product_comp_rule" model="ir.rule">
+            <field
+                    name="groups"
+                    eval="[(6, 0, [ref('base.group_user')])]"
+            />
+        </record>
+        <record id="rule_product_approval" model="ir.rule">
+            <field
+                    name="domain_force"
+            >[('state_multicompany_submit', '=', 'pending_approval')]
+            </field>
+            <field name="model_id" ref="model_product_template"/>
+            <field
+                    name="groups"
+                    eval="[(6, 0, [ref('product_multicompany_submit.group_multicompany_product_approve')])]"
+            />
+            <field name="name">Allow products for multicompany approval</field>
+        </record>
+        <record id="rule_product_submittal" model="ir.rule">
+            <field
+                    name="domain_force"
+            >[('multicompany_origin_company_id', 'child_of', user.company_id.id)]
+            </field>
+            <field name="model_id" ref="model_product_template"/>
+            <field
+                    name="groups"
+                    eval="[(6, 0, [ref('product_multicompany_submit.group_multicompany_product_submit')])]"
+            />
+            <field name="name">Allow products for multicompany submittal</field>
+        </record>
+    </data>
+</odoo>

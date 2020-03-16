@@ -27,6 +27,7 @@ class BaseMulticompanyMixin(models.AbstractModel):
     def create(self, vals):
         res = super().create(vals)
         res.multicompany_origin_company_id = res.company_id
+        return res
 
     def action_make_multicompany(self):
         pass
@@ -37,8 +38,8 @@ class BaseMulticompanyMixin(models.AbstractModel):
 
     def button_multicompany_approve(self):
         self.ensure_one()
-        self.state_multicompany_submit = "approved"
         self.action_make_multicompany()
+        self.state_multicompany_submit = "approved"
 
     def button_multicompany_refuse(self):
         self.ensure_one()
