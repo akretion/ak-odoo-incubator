@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+<!--    Note: using "attachment" field to save the report as an attachment-->
+<!--    is currently not implemented in OCA xlsx_report module-->
     <report
             id="action_simple_inventory_valuation"
             model="stock.inventory"
@@ -9,6 +11,5 @@
             file="simple_valuation"
             attachment_use="True"
             attachment="object.name + '%s.xlsx' % object.company_id.name or ''"
-            print_report_name=""
     />
 </odoo>
