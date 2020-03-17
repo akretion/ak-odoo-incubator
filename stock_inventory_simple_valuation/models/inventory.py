@@ -10,8 +10,8 @@ _logger = logging.getLogger(__name__)
 
 
 class StockInventory(models.Model):
-    _inherit = ["stock.inventory", 'mail.thread']
-    _name = 'stock.inventory'
+    _inherit = ["stock.inventory", "mail.thread"]
+    _name = "stock.inventory"
 
     def button_compute_line_costs(self):
         self.ensure_one()
@@ -147,7 +147,7 @@ class StockInventoryLine(models.Model):
         po_line = self.env["purchase.order.line"].search(
             [
                 ("product_id", "=", self.product_id.id),
-                ("order_id.state", "in", ('purchase', "done")),
+                ("order_id.state", "in", ("purchase", "done")),
             ],
             limit=1,
         )

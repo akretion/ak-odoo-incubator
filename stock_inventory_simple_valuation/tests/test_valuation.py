@@ -25,7 +25,9 @@ class TestStockInventoryValuation(TransactionCase):
         ).order_line.filtered(
             lambda r: r.product_id.id == self.large_cabinet.id
         )
-        self.large_cabinet_invoice = ref('l10n_generic_coa.demo_invoice_equipment_purchase')
+        self.large_cabinet_invoice = ref(
+            "l10n_generic_coa.demo_invoice_equipment_purchase"
+        )
 
     def _clearUp(self, toClear):
         # discard existing demo data
@@ -38,7 +40,7 @@ class TestStockInventoryValuation(TransactionCase):
             self.large_cabinet_po.button_cancel()
             self.large_cabinet_po.unlink()
         if "invoice" in toClear:
-            self.large_cabinet_invoice.state = 'draft'
+            self.large_cabinet_invoice.state = "draft"
 
     def test_manual_cost(self):
         new_manual_cost = 1.11
@@ -88,7 +90,7 @@ class TestStockInventoryValuation(TransactionCase):
         )
 
     def test_search_po_lines(self):
-        self._clearUp(["supplierinfo", 'invoice'])
+        self._clearUp(["supplierinfo", "invoice"])
         self.large_cabinet_po_line.price_unit = 2.222
         self.large_cabinet_po.button_confirm()
         # purchase/models/purchase.py l 324: confirming a PO
@@ -101,7 +103,7 @@ class TestStockInventoryValuation(TransactionCase):
         )
 
     def test_search_standard_price(self):
-        self._clearUp(["supplierinfo", "po", 'invoice'])
+        self._clearUp(["supplierinfo", "po", "invoice"])
         self.large_cabinet.standard_price = 8.88
         self.inventory.button_compute_line_costs()
         self.assertEqual(
@@ -110,7 +112,7 @@ class TestStockInventoryValuation(TransactionCase):
         )
 
     def test_give_up(self):
-        self._clearUp(["supplierinfo", "po", "standard price", 'invoice'])
+        self._clearUp(["supplierinfo", "po", "standard price", "invoice"])
         self.inventory.button_compute_line_costs()
         self.assertEqual(
             0.0, self.large_cabinet_inventory_line.calc_product_cost
