@@ -4,12 +4,11 @@
 {
     "name": "Stock Inventory Simple Valuation",
     "summary": "Valuation of inventories according to custom rules",
-    "description": """
-        Display cost information from different sources in inventory line""",
-    "author": "Akretion",
+    "author": "Akretion, Odoo Community Association (OCA)",
     "website": "http://www.akretion.com",
     "category": "Stock",
     "version": "12.0.1.0.0",
+    "license": "AGPL-3",
     "depends": ["stock", "account", "purchase", "report_xlsx"],
     "data": ["views/inventory_view.xml", "report/report_view.xml"],
     "maintainers": ["bealdav", "PierrickBrun", "mourad-ehm", "kevinkhao"],

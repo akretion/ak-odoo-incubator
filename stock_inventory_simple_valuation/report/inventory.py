@@ -3,14 +3,6 @@
 
 from odoo import models
 
-import logging
-
-_logger = logging.getLogger(__name__)
-try:
-    import xlsxwriter
-except ImportError:
-    _logger.debug("Can not import xlsxwriter`.")
-
 
 INV_FIELDS = ["date", "company_id", "location_id"]
 
