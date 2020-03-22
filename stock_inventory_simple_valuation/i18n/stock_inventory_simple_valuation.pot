@@ -1,216 +1,215 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* stock_inventory_simple_valuation
+#	* stock_inventory_simple_valuation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-22 10:03+0000\n"
-"PO-Revision-Date: 2020-03-22 11:08+0100\n"
+"PO-Revision-Date: 2020-03-22 10:03+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: fr\n"
-"X-Generator: Poedit 2.3\n"
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__calc_product_cost
 msgid "Computed cost"
-msgstr "Coût calculé"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_report_stock_inventory_simple_valuation_valuation_xlsx__display_name
 msgid "Display Name"
-msgstr "Nom affiché"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__origin_record_name
 msgid "Document Name"
-msgstr "Nom du document"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory_line__explanation
 msgid "Explain computation method for each product"
-msgstr "Explique la méthode de calcul pour chaque produit"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:26
 #, python-format
 msgid "Explanation"
-msgstr "Explication"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_report_stock_inventory_simple_valuation_valuation_xlsx__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:48
 #, python-format
 msgid "INVENTORY VALUATION"
-msgstr "INVENTAIRE VALORISE"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model,name:stock_inventory_simple_valuation.model_stock_inventory
 msgid "Inventory"
-msgstr "Inventaire"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model,name:stock_inventory_simple_valuation.model_stock_inventory_line
 msgid "Inventory Line"
-msgstr "Ligne d'inventaire"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:138
 #, python-format
 msgid "Invoice"
-msgstr "Facture"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_report_stock_inventory_simple_valuation_valuation_xlsx____last_update
 msgid "Last Modified on"
-msgstr "Dernière modification le"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:22
 #, python-format
 msgid "Location"
-msgstr "Emplacement"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__manual_product_cost
 msgid "Manual cost"
-msgstr "Coût manuel"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:84
 #, python-format
 msgid "Manual setting"
-msgstr "Paramétré manuellement"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:24
 #, python-format
 msgid "Manual value"
-msgstr "Valeur manuelle"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:176
 #, python-format
 msgid "No Cost found"
-msgstr "Pas de coût trouvé"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:179
 #, python-format
 msgid "None"
-msgstr "Aucun"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.actions.report,name:stock_inventory_simple_valuation.action_simple_inventory_valuation
 msgid "Print Simple Valuation to Excel"
-msgstr "Imprimer inventaire valorisé"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:20
 #, python-format
 msgid "Product"
-msgstr "Article"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:156
 #, python-format
 msgid "Purchase Order"
-msgstr "Achat"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:23
 #, python-format
 msgid "Quantity"
-msgstr "Quantité"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model_terms:ir.ui.view,arch_db:stock_inventory_simple_valuation.view_inventory_form
 msgid "Recompute valuation"
-msgstr "Recalculer la valorisation"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__origin_record_reference
 msgid "Reference"
-msgstr "Référence"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__explanation
 msgid "Source"
-msgstr "Source"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:167
 #, python-format
 msgid "Standard price"
-msgstr "Prix standard"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:118
 #, python-format
 msgid "Supplier info"
-msgstr "Info fournisseur"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:94
 #, python-format
 msgid "The following searching order is used in the ERP:"
-msgstr "Voici l'ordre de recherche des coûts dans l'ERP:"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:21
 #, python-format
 msgid "Units"
-msgstr "Unités"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/report/inventory.py:25
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__total_value
 #, python-format
 msgid "Value"
-msgstr "Valeur"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:108
 #, python-format
 msgid "most recent invoices"
-msgstr "les dernières factures"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:109
 #, python-format
 msgid "most recent purchases"
-msgstr "les derniers achats"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:85
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:86
 #, python-format
 msgid "n/a"
-msgstr "n/a"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:110
 #, python-format
 msgid "product manual cost"
-msgstr "le coût manuel de l'article"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:107
 #, python-format
 msgid "product supplier information"
-msgstr "les informations fournisseur de la fiche produit"
+msgstr ""
 
 #. module: stock_inventory_simple_valuation
 #: model:ir.model,name:stock_inventory_simple_valuation.model_report_stock_inventory_simple_valuation_valuation_xlsx
 msgid "report.stock_inventory_simple_valuation.valuation_xlsx"
 msgstr ""
+

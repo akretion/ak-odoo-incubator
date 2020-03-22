@@ -1,7 +1,7 @@
 # © 2018 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
+from odoo import models, _
 
 
 INV_FIELDS = ["date", "company_id", "location_id"]
@@ -17,13 +17,13 @@ LINE_FIELDS = [
     "explanation",
 ]
 LINE_PARAMS = {
-    "product_id": {"size": 40, "string": "Produit"},
-    "product_uom_id": {"size": 7, "string": u"Unités"},
-    "location_id": {"size": 20, "string": "Emplacement"},
-    "product_qty": {"size": 5, "string": u"Qté"},
-    "manual_product_cost": {"size": 7, "string": u"Val.\nmanuelle"},
-    "value": {"size": 7, "string": "Valeur"},
-    "cost_origin": {"size": 20, "string": u"Explication"},
+    "product_id": {"size": 40, "string": _("Product")},
+    "product_uom_id": {"size": 7, "string": _('Units')},
+    "location_id": {"size": 20, "string": _('Location')},
+    "product_qty": {"size": 5, "string": _('Quantity')},
+    "manual_product_cost": {"size": 7, "string": _('Manual value')},
+    "value": {"size": 7, "string": _('Value')},
+    "explanation": {"size": 20, "string": _('Explanation')},
 }
 
 
@@ -45,7 +45,7 @@ class SimpleInventoryValuation(models.AbstractModel):
             bold = workbook.add_format({"bold": True})
             # inventory header
             y = 0
-            sheet.write(0, 2, "INVENTAIRE VALORISE", bold)
+            sheet.write(0, 2, _("INVENTORY VALUATION"), bold)
             for key in INV_FIELDS:
                 y += 1
                 myfield = inv[key]
@@ -91,7 +91,7 @@ class SimpleInventoryValuation(models.AbstractModel):
         selection_order = self.env[
             "stock.inventory.line"
         ].get_search_method_strings()
-        sheet.write(0, 0, u"Voici l'ordre de recherche des coûts dans l'ERP :")
+        sheet.write(0, 0, _("The following searching order is used in the ERP:"))
         sheet.write(1, 1, " - " + "\n - ".join(selection_order), cell_format)
 
     def _set_format_definition(self, workbook):

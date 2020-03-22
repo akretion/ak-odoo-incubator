@@ -104,10 +104,10 @@ class StockInventoryLine(models.Model):
         """Overload this to customize what appears on
         the excel report"""
         res = [
-            _("les informations fournisseur de la fiche produit"),
-            _("les dernières factures d'achat"),
-            _("les dernières commandes d'achats"),
-            _("le coût manuel de la fiche produit"),
+            _("product supplier information"),
+            _("most recent invoices"),
+            _("most recent purchases"),
+            _("product manual cost"),
         ]
         return res
 
