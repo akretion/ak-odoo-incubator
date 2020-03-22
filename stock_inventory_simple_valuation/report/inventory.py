@@ -18,12 +18,12 @@ LINE_FIELDS = [
 ]
 LINE_PARAMS = {
     "product_id": {"size": 40, "string": _("Product")},
-    "product_uom_id": {"size": 7, "string": _('Units')},
-    "location_id": {"size": 20, "string": _('Location')},
-    "product_qty": {"size": 5, "string": _('Quantity')},
-    "manual_product_cost": {"size": 7, "string": _('Manual value')},
-    "value": {"size": 7, "string": _('Value')},
-    "explanation": {"size": 20, "string": _('Explanation')},
+    "product_uom_id": {"size": 7, "string": _("Units")},
+    "location_id": {"size": 20, "string": _("Location")},
+    "product_qty": {"size": 5, "string": _("Quantity")},
+    "manual_product_cost": {"size": 7, "string": _("Manual value")},
+    "value": {"size": 7, "string": _("Value")},
+    "explanation": {"size": 20, "string": _("Explanation")},
 }
 
 
@@ -91,7 +91,9 @@ class SimpleInventoryValuation(models.AbstractModel):
         selection_order = self.env[
             "stock.inventory.line"
         ].get_search_method_strings()
-        sheet.write(0, 0, _("The following searching order is used in the ERP:"))
+        sheet.write(
+            0, 0, _("The following searching order is used in the ERP:")
+        )
         sheet.write(1, 1, " - " + "\n - ".join(selection_order), cell_format)
 
     def _set_format_definition(self, workbook):
