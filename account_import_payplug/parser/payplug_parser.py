@@ -49,6 +49,7 @@ class PayplugFileParser(FileParser):
             'Date': unicode,
             'ID API': unicode,
             'Description': unicode,
+            'E-mail': unicode,
         }
         super(PayplugFileParser, self).__init__(
             parse_name, ftype=ftype, conversion_dict=conversion_dict,
@@ -77,12 +78,18 @@ class PayplugFileParser(FileParser):
         self.filebuffer = self.filebuffer.decode('utf-16').encode('utf-8')
 
     def get_st_line_vals(self, line, *args, **kwargs):
+        if line['ID API'].startswith('re'):
+            transaction_ref = ''
+            ref = line['ID API'] + ' %s' % line.get('E-mail')
+        else:
+            ref = line['ID API'] or line['Description']
+            transaction_ref = line['ID API']
         res = {
-            'transaction_id': line['ID API'],
-            'name': line['ID API'] or line['Description'],
+            'transaction_id': transaction_ref,
+            'name': ref,
             'date': line['Date'],
             'amount': line['Montant'],
-            'ref': line['ID API'] or line['Description'],
+            'ref': ref,
         }
         return res
 
