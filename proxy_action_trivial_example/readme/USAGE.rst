@@ -1,0 +1,1 @@
+Go to a sale order and click on "success" or "fail"
