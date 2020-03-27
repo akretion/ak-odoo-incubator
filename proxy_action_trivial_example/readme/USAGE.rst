@@ -1,1 +1,1 @@
-Go to a sale order and click on "success" or "fail"
+Go to a user and click on "success" or "fail"
