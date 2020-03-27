@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_res_users_form_inherit" model="ir.ui.view">
+        <field name="name">view.res.users.inherit</field>
+        <field name="model">res.users</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="button_send_proxy_action_fail" string="Fail" type="object"/>
+                <button name="button_send_proxy_action_success" string="Success" type="object"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
