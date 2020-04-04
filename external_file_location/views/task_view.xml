@@ -57,11 +57,15 @@
         <record id="view_task_tree" model="ir.ui.view">
             <field name="model">external.file.task</field>
             <field name="arch" type="xml">
-                <tree string="Tasks" >
-                    <field name="name" select="1"/>
+                <tree string="Tasks" colors="grey:(not active)">
+                    <field name="name"/>
                     <field name="method_type"/>
                     <field name="filename"/>
                     <field name="filepath"/>
+                    <field name="after_import"/>
+                    <field name="move_path"/>
+                    <field name="active" invisible="1"/>
+                    <button name="button_duplicate_record" type="object" string="copy" icon="gtk-copy"/>
                 </tree>
             </field>
         </record>

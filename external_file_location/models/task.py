@@ -210,3 +210,16 @@ class Task(models.Model):
             [('task_id', '=', self.id), ('state', '!=', 'done')])
         for attachment in attachments:
             attachment.run()
+
+    @api.multi
+    def button_duplicate_record(self):
+        self.ensure_one()
+        record = self.copy({"active": False})
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": record.location_id._name,
+            "target": "current",
+            "view_mode": "form",
+            "context": {"active_test": False},
+            "res_id": record.location_id.id,
+        }
