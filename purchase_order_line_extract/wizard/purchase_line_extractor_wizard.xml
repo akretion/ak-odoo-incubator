@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="purchase_line_extractor_wizard_form" model="ir.ui.view">
+            <field name="name">purchase.line.extractor.wizard.form</field>
+            <field name="model">purchase.line.extractor.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Line Extracor">
+                    <!-- Display the button up and down because the po line list can be very large
+                         And it is more practical to have the button at the top and the bottom -->
+                    <header>
+                        <button
+                            name="extract_po_line" string="Create New Order"
+                            type="object" icon="gtk-apply"/>
+                        or
+                        <button
+                            special="cancel" string="Cancel" type="object"
+                            icon="gtk-cancel"/>
+                    </header>
+                    <group col="4">
+                        <field name="order_reference" colspan="4"/>
+                        <field name="origin" colspan="4"/>
+                        <field name="date_order" required="1" colspan="4"/>
+                        <field name="expected_date" required="1" colspan="4"/>
+                        <field name="picking_type_id" required="1" colspan="4"/>
+                    </group>
+                    <field name="line_ids"/>
+                    <footer>
+                        <button
+                            name="extract_po_line" string="Create New Order"
+                            type="object" icon="gtk-apply"/>
+                        or
+                        <button
+                            special="cancel" string="Cancel" type="object"
+                            icon="gtk-cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="purchase_line_extractor_action" model="ir.actions.act_window">
+            <field name="name">Extract Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.line.extractor.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+<!--            <field name="search_view_id" ref="purchase.purchase_order_line_search"/>-->
+        </record>
+
+    </data>
+</openerp>
