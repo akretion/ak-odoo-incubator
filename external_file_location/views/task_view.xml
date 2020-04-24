@@ -44,7 +44,7 @@
                                 attrs="{'invisible':
                                 [('method_type','!=','import')]}"
                                 />                   
-                            <field name="active" colspan="2"/>    
+                            <field name="enabled" colspan="2"/>    
                         </group>
                         <group string="Data importation setting">
                             <field name="file_type" attrs="{'invisible':[('method_type','!=','import')]}"/>
@@ -57,15 +57,16 @@
         <record id="view_task_tree" model="ir.ui.view">
             <field name="model">external.file.task</field>
             <field name="arch" type="xml">
-                <tree string="Tasks" colors="grey:(not active)">
+                <tree string="Tasks" colors="grey:(not enabled)">
                     <field name="name"/>
                     <field name="method_type"/>
                     <field name="filename"/>
                     <field name="filepath"/>
                     <field name="after_import"/>
                     <field name="move_path"/>
-                    <field name="active" invisible="1"/>
+                    <field name="enabled" invisible="1"/>
                     <button name="button_duplicate_record" type="object" string="copy" icon="gtk-copy"/>
+                    <button name="button_toogle_enabled" type="object" string="State" icon="gtk-convert"/>
                 </tree>
             </field>
         </record>
