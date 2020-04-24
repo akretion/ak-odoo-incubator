@@ -93,7 +93,7 @@ class Task(models.Model):
         help="The file type determines an import method to be used "
              "to parse and transform data before their import in ERP")
 
-    active = fields.Boolean(default=True)
+    enabled = fields.Boolean(oldname="active", default=True)
 
     def _get_action(self):
         return [('rename', 'Rename'),
@@ -138,6 +138,7 @@ class Task(models.Model):
     def run_task_scheduler(self, domain=None):
         if domain is None:
             domain = []
+        domain.append(('enabled', '=', True), )
         tasks = self.env['external.file.task'].search(domain)
         for task in tasks:
             if task.method_type == 'import':
@@ -214,12 +215,16 @@ class Task(models.Model):
     @api.multi
     def button_duplicate_record(self):
         self.ensure_one()
-        record = self.copy({"active": False})
+        record = self.copy({"enabled": False})
         return {
             "type": "ir.actions.act_window",
             "res_model": record.location_id._name,
             "target": "current",
             "view_mode": "form",
-            "context": {"active_test": False},
             "res_id": record.location_id.id,
         }
+
+    @api.multi
+    def button_toogle_enabled(self):
+        for rec in self:
+            rec.enabled = not rec.enabled
