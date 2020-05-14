@@ -74,9 +74,6 @@ class PayplugFileParser(FileParser):
             selected_lines.append(line.strip())
         self.filebuffer = "\n".join(selected_lines)
 
-    def _custom_format(self, *args, **kwargs):
-        self.filebuffer = self.filebuffer.decode('utf-16').encode('utf-8')
-
     def get_st_line_vals(self, line, *args, **kwargs):
         if line['ID API'].startswith('re'):
             transaction_ref = ''
