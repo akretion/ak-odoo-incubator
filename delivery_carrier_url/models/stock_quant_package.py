@@ -22,12 +22,11 @@ class StockQuantPackage(models.Model):
             picking = self.env['stock.picking'].browse(
                 self._context['picking_id'])
         else:
-            picking_type = self.env.ref('stock.picking_type_out')
             operations = operation_obj.search(
                 ['|',
                  ('package_id', '=', self.id),
                  ('result_package_id', '=', self.id),
-                 ('picking_id.picking_type_id', '=', picking_type.id)]
+                 ('picking_id.picking_type_id.code', '=', 'outgoing')]
             )
             pickings = self.env['stock.picking'].browse()
             for operation in operations:
