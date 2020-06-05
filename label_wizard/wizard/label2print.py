@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016 David BEAL @ Akretion <david.beal@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -21,12 +20,8 @@ class LabelFromRecord(models.TransientModel):
     def __get_label_content(self):
         return self._get_label_content()
 
-    content = fields.Text(
-        string=u"Label's content", default=__get_label_content
-    )
-    with_price = fields.Boolean(
-        string=u"Print price", help=u"Print price on labels"
-    )
+    content = fields.Text(string=u"Label's content", default=__get_label_content)
+    with_price = fields.Boolean(string=u"Print price", help=u"Print price on labels")
 
     @api.model
     def _get_label_content(self):
@@ -52,13 +47,12 @@ class LabelFromRecord(models.TransientModel):
             # PRODUCT
             products = self.env[model].browse(self._context["active_ids"])
             infos = [
-                "{} ; {} ; {}".format(x.default_code or "_", 1, x.id)
-                for x in products
+                "{} ; {} ; {}".format(x.default_code or "_", 1, x.id) for x in products
             ]
         elif model in ("stock.quant", "stock.move.line"):
             # quant
             def find_qty(x):
-                if model == 'stock.move.line':
+                if model == "stock.move.line":
                     return int(x.qty_done)
                 else:
                     return 1
@@ -100,9 +94,7 @@ class LabelFromRecord(models.TransientModel):
                         data4print.append((product, quantity))
                 if data4print:
                     model = data4print[0][0].browse(False)
-                    return model.get_labels_zebra(
-                        data4print, with_price=rec.with_price
-                    )
+                    return model.get_labels_zebra(data4print, with_price=rec.with_price)
         return {"type": "ir.actions.act_window_close"}
 
     @api.model
