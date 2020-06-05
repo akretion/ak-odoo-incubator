@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     "name": "Labels wizard",
     "version": "12.0.0.0.1",
