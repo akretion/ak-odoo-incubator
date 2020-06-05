@@ -8,7 +8,7 @@
             <form>
                 <group name="main">
                     <div>Le format attendu est:
-                        <br/><b>code_article ; quantité [; id ]</b>
+                        <br/><b>code_article ; quantité [; id ] [; id_quant ]</b>
                     </div>
                     <field name="content" colspan="4" nolabel="1"/>
                     <div>
