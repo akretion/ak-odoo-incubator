@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Labels wizard",
-    "version": "10.0.0.0.1",
+    "version": "12.0.0.0.1",
     "license": "AGPL-3",
     "author": "Akretion",
     "category": "Custom",

@@ -5,6 +5,14 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
 
+# Attention: gros refactoring a prévoir
+# on veux imprimer des étiquettes produits avec
+# la bonne quantité (picking, stock move line)
+# ou les N° de lots (stock move line, quants)
+# Il faut prévoir un refactoring: ne plus utiliser
+# le format textuel, mais une tree view
+# ça économisera les parsing
+
 
 class LabelFromRecord(models.TransientModel):
     _name = "label.from.record"
@@ -22,7 +30,7 @@ class LabelFromRecord(models.TransientModel):
 
     @api.model
     def _get_label_content(self):
-        product_infos = []
+        infos = []
         model = self._context["active_model"]
         if model == "stock.picking":
             # PICKING
@@ -30,7 +38,7 @@ class LabelFromRecord(models.TransientModel):
                 moves = self.env["stock.move"].search(
                     [("picking_id", "=", self._context["active_id"])]
                 )
-                product_infos = [
+                infos = [
                     "%s ; %s ; %s"
                     % (
                         x.product_id.default_code or "_",
@@ -40,18 +48,37 @@ class LabelFromRecord(models.TransientModel):
                     for x in moves
                     if x.product_id
                 ]
-        else:
+        elif model in ("product.product", "product.template"):
             # PRODUCT
             products = self.env[model].browse(self._context["active_ids"])
-            product_infos = [
+            infos = [
                 "{} ; {} ; {}".format(x.default_code or "_", 1, x.id)
                 for x in products
             ]
-        return "\n".join(product_infos)
+        elif model in ("stock.quant", "stock.move.line"):
+            # quant
+            def find_qty(x):
+                if model == 'stock.move.line':
+                    return int(x.qty_done)
+                else:
+                    return 1
+
+            records = self.env[model].browse(self._context["active_ids"])
+            infos = [
+                "%s ; %s ; %s ; %s"
+                % (
+                    x.product_id.default_code or "_",
+                    find_qty(x),
+                    x.product_id.id,
+                    x.id,
+                )
+                for x in records
+                if x.product_id
+            ]
+        return "\n".join(infos)
 
     @api.multi
     def generate_label(self):
-        Product_m = self.env["product.product"]
         for rec in self:
             if rec.content:
                 products2print, data4print = [], []
@@ -72,24 +99,33 @@ class LabelFromRecord(models.TransientModel):
                     if product:
                         data4print.append((product, quantity))
                 if data4print:
-                    return Product_m.get_labels_zebra(
+                    model = data4print[0][0].browse(False)
+                    return model.get_labels_zebra(
                         data4print, with_price=rec.with_price
                     )
         return {"type": "ir.actions.act_window_close"}
 
     @api.model
     def _search_product(self, info):
-        """ info[0]: code, info[1]: quantity, info[2]: id
-            return product, quantity
+        """ info[0]: code,
+            info[1]: quantity,
+            info[2]: id product,
+            info[3]: id move_line or quant
+            return record, quantity
         """
-        Product_m = self.env["product.product"]
+        qty = info[1]
+        if len(info) == 4:
+            model = self._context["active_model"]
+        else:
+            model = self.env["product.product"]
         if len(info) > 2:
-            product = Product_m.search([("id", "=", info[2])])
-            if product:
-                return (Product_m.browse(info[2]), info[1])
-        products = Product_m.search([("default_code", "=", info[0])])
+            # the last part is always the id
+            rec = self.env[model].browse(info[-1])
+            if rec:
+                return (rec, qty)
+        products = model.search([("default_code", "=", info[0])])
         if products:
-            return (product[0], info[1])
+            return (products[0], qty)
         return (False, False)
 
     @api.model
@@ -101,8 +137,8 @@ class LabelFromRecord(models.TransientModel):
             raise UserError(_(message) % line)
         if len(parts) <= 2:
             raise UserError(_(message) % line)
-        if len(parts) >= 4:
-            raise UserError(_(u"Plus de 3 segments. " + message) % line)
+        if len(parts) >= 5:
+            raise UserError(_(u"Plus de 4 segments. " + message) % line)
         if not isinstance(parts[1], int):
             raise UserError(_(u"La quantité n'est pas un entier '%s'") % line)
         if parts[1] <= 0:
