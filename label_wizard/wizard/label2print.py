@@ -15,6 +15,7 @@ from odoo.exceptions import Warning as UserError
 
 class LabelFromRecord(models.TransientModel):
     _name = "label.from.record"
+    _description = "Print products label"
 
     @api.model
     def __get_label_content(self):
