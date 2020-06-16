@@ -22,7 +22,7 @@ def float_or_zero(val):
 
 
 def format_date(val):
-    return datetime.datetime.strptime(val, "%Y%m%d")
+    return datetime.datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
 
 
 class AtosDialect(Dialect):
@@ -42,11 +42,9 @@ register_dialect("atos_dialect", AtosDialect)
 class AtosFileParser(FileParser):
     def __init__(self, journal, ftype="csv", **kwargs):
         extra_fields = {
-            "OPERATION_DATE": format_date,
-            "PAYMENT_DATE": unicode,
-            "TRANSACTION_ID": unicode,
-            "OPERATION_NAME": unicode,
-            "OPERATION_AMOUNT": float_or_zero,
+            "operationDateTime": format_date,
+            "transactionReference": unicode,
+            "operationAmount": float_or_zero,
         }
         self.refund_amount = None
         super(AtosFileParser, self).__init__(
@@ -67,9 +65,10 @@ class AtosFileParser(FileParser):
 
     def _pre(self, *args, **kwargs):
         split_file = self.filebuffer.split("\n")
+        split_file.pop(0)  # first line is the title
         selected_lines = []
         for line in split_file:
-            if line.startswith("FIN"):
+            if line.startswith("END"):
                 break
             selected_lines.append(line.strip())
         self.filebuffer = "\n".join(selected_lines)
@@ -95,25 +94,25 @@ class AtosFileParser(FileParser):
                     'debit':value
                 }
         """
-        amount = line["OPERATION_AMOUNT"]
+        amount = line["operationAmount"]
         operation_names = ["CREDIT_CAPTURE", "DEBIT_CAPTURE", "CREDIT"]
-        if line["OPERATION_NAME"] not in operation_names:
+        if line["operationName"] not in operation_names:
             raise Exception(
                 _(
                     "The bank statement imported has invalid line(s),"
                     " the operation type %s is not supported"
-                    % line["OPERATION_NAME"]
+                    % line["operationName"]
                 )
             )
 
         # inversed because the file is written from the bank's point of view,
         # a credit in the file is then a debit from odoo's side
-        is_credit = bool(line["OPERATION_NAME"] == "DEBIT_CAPTURE")
+        is_credit = bool(line["operationName"] == "DEBIT_CAPTURE")
         res = {
-            "name": line["OPERATION_NAME"] + "_" + line["TRANSACTION_ID"],
-            "date_maturity": line["OPERATION_DATE"],
+            "name": line["operationName"] + "_" + line["transactionReference"],
+            "date_maturity": line["operationDateTime"],
             "credit": amount if is_credit else 0.0,
             "debit": amount if not is_credit else 0.0,
-            "transaction_ref": line["TRANSACTION_ID"],
+            "transaction_ref": line["transactionReference"],
         }
         return res
