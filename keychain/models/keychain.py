@@ -61,6 +61,9 @@ class KeychainAccount(models.Model):
         return True
 
     def get_password(self):
+        return self._get_password()
+
+    def _get_password(self):
         """Password in clear text."""
         try:
             return self._decode_password(self.password)
