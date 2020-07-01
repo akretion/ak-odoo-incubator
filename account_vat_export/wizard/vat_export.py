@@ -56,7 +56,7 @@ class AccountVATExport(orm.TransientModel):
                 address.street and address.street.encode('utf-8') or '',
                 address.zip and address.zip.encode('utf-8') or '',
                 address.city and address.city.encode('utf-8') or '',
-                address.country_id.name,
+                address.country_id.name.encode('utf-8'),
                 invoice.number,
                 invoice.date_invoice,
                 invoice.date_invoice,
