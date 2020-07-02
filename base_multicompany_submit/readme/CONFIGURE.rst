@@ -1,4 +1,3 @@
-Choose the model that you want to create the multicompany submittal workflow for, and go through the following steps for that model:
-
-1. Python-side: extend your model with the multicompany submittal mixin
-2. XML-side: create the appropriate groups, menuitems, rules for your process
+1. Choose the model that you want to create the multicompany submittal workflow for
+2. Python-side, extend your model with the multicompany submittal mixin
+3. XML-side, create the appropriate groups, menuitems, rules for your process
