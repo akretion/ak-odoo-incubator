@@ -39,13 +39,13 @@ class AccountMoveExport(models.Model):
         moves = self.env['account.move'].browse(move_ids)
         moves.write({"export_id": self.id})
 
-    def _create_attachment(self, data, name=None):
+    def _create_attachment(self, data, model, name=None):
         self.ensure_one()
         self.env["ir.attachment"].create({
             "datas": data.read(),
             "name": name or self.name,
             "res_id": self.id,
-            "res_model": "account.move.export",
+            "res_model": model,
             "datas_fname": "%s.csv" % self.name,
             "mimetype": "text/csv",
             "type": "binary",

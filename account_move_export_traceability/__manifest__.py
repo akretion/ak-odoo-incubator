@@ -13,6 +13,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/move_export_view.xml",
+        "wizards/account_csv_export_view.xml",
     ],
     "installable": True,
     "license": "AGPL-3",
