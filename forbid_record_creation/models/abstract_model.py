@@ -1,9 +1,8 @@
 # © 2019 Akretion Mourad EL HADJ MIMOUNE, David BEAL, Raphaël REVERDY
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, api, _
+from odoo import _, api, models
 from odoo.exceptions import UserError
-
 
 # TODO use _register_hook() instead of this hack to code an independant module
 

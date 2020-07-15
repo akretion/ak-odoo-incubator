@@ -13,7 +13,7 @@
         </record>
 
         <!--Users-->
-        <record id="demo_user_approver" model="res.users">
+        <record id="demo_user_approver" model="res.users" context="{'no_reset_password': True}">
             <field name="name">Marc Approver</field>
             <field name="login">multicompany.approver</field>
             <field name="company_ids" eval="[(6, 0, [ref('demo_company_approver')])]"/>
@@ -21,7 +21,7 @@
             <field name="groups_id"
                    eval="[(6, 0, [ref('group_multicompany_product_approve'), ref('base.group_user')])]"/>
         </record>
-        <record id="demo_user_submitter" model="res.users">
+        <record id="demo_user_submitter" model="res.users" context="{'no_reset_password': True}">
             <field name="name">Jean Submitter</field>
             <field name="login">multicompany.submitter</field>
             <field name="company_ids" eval="[(6, 0, [ref('demo_company_submitter')])]"/>
@@ -29,7 +29,7 @@
             <field name="groups_id"
                    eval="[(6, 0, [ref('group_multicompany_product_submit'), ref('base.group_user')])]"/>
         </record>
-        <record id="demo_user_other" model="res.users">
+        <record id="demo_user_other" model="res.users" context="{'no_reset_password': True}">
             <field name="name">Thomas Other</field>
             <field name="login">multicompany.other</field>
             <field name="company_ids" eval="[(6, 0, [ref('demo_company_other')])]"/>
