@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_template_multicompany,product.template multicompany,model_product_template,base_multicompany_submit.group_multicompany_submittals_state_viewer,1,1,1,1

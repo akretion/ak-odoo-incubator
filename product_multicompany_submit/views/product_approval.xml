@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record
+                id="view_product_multicompany_submittal_form"
+                model="ir.ui.view"
+        >
+            <field name="name">product.template.form</field>
+            <field name="model">product.template</field>
+            <field
+                    name="inherit_id"
+                    ref="product.product_template_only_form_view"
+            />
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button
+                            name="button_multicompany_submit"
+                            attrs="{'invisible': [('state_multicompany_submit', 'in', ('pending_approval', 'approved'))]}"
+                            groups="product_multicompany_submit.group_multicompany_product_submit"
+                            string="Submit for multicompany usage"
+                            type="object"
+                    />
+                    <button
+                            name="button_multicompany_cancel"
+                            attrs="{'invisible': [('state_multicompany_submit', 'in', ('not_submitted', 'refused'))]}"
+                            groups="product_multicompany_submit.group_multicompany_product_submit"
+                            string="Cancel multicompany submittal"
+                            type="object"
+                    />
+                    <button
+                            name="button_multicompany_approve"
+                            attrs="{'invisible': [('state_multicompany_submit', 'in', ('not_submitted', 'approved'))]}"
+                            groups="product_multicompany_submit.group_multicompany_product_approve"
+                            string="Approve for multicompany usage"
+                            type="object"
+                    />
+                    <button
+                            name="button_multicompany_refuse"
+                            attrs="{'invisible': [('state_multicompany_submit', 'in', ('not_submitted', 'refused'))]}"
+                            groups="product_multicompany_submit.group_multicompany_product_approve"
+                            string="Refuse for multicompany usage"
+                            type="object"
+                    />
+                    <field
+                            name="state_multicompany_submit"
+                            widget="statusbar"
+                            groups="base_multicompany_submit.group_multicompany_submittals_state_viewer"
+                            statusbar_visible="not_submitted,pending_approval,approved,refused"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+        <record
+                id="view_product_multicompany_submittal_tree"
+                model="ir.ui.view"
+        >
+            <field name="name">product.template.form</field>
+            <field name="model">product.template</field>
+            <field
+                    name="inherit_id"
+                    ref="product.product_template_tree_view"
+            />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field
+                            name="state_multicompany_submit"
+                            groups="base_multicompany_submit.group_multicompany_submittals_state_viewer"
+                    />
+                </xpath>
+            </field>
+        </record>
+
+        <act_window
+                id="act_product_open_multicompany_approve"
+                name="Multicompany product approvals"
+                res_model="product.template"
+                domain="[('state_multicompany_submit', '!=', 'not_submitted')]"
+        />
+
+        <menuitem
+                id="multicompany_product_approve_menu"
+                parent="sale.product_menu_catalog"
+                name="Approve multicompany products"
+                action="act_product_open_multicompany_approve"
+                groups="product_multicompany_submit.group_multicompany_product_approve"
+        />
+
+        <act_window
+                id="act_product_open_multicompany_submit"
+                name="Multicompany product submittals"
+                res_model="product.template"
+                domain="[('state_multicompany_submit', '=', 'not_submitted')]"
+        />
+
+        <menuitem
+                id="multicompany_product_submit_menu"
+                parent="sale.product_menu_catalog"
+                name="Submit multicompany products"
+                action="act_product_open_multicompany_submit"
+                groups="product_multicompany_submit.group_multicompany_product_submit"
+        />
+
+    </data>
+</odoo>
