@@ -21,26 +21,26 @@ class TestMulticompanySubmit(MulticompanySubmitCase):
         accessible to submitter,
         inaccessible to approver, other user """
         self.product.state_multicompany_submit = "not_submitted"
-        self._helper_check_permissions(("submitter"), ("approver", "other"))
+        self._helper_check_permissions(["submitter"], ["approver", "other"])
 
     def test_permissions_pending(self):
         """ PENDING product:
         accessible to approver, submitter
         inaccessible to other user """
-        self._helper_check_permissions(("approver", "submitter"), ("other"))
+        self._helper_check_permissions(["approver", "submitter"], ["other"])
 
     def test_permissions_approved(self):
         """ APPROVED product:
         accessible to everyone """
         self.product.action_make_multicompany()
-        self._helper_check_permissions(("approver", "submitter", "other"), ())
+        self._helper_check_permissions(["approver", "submitter", "other"], [])
 
     def test_permissions_refused(self):
         """ REFUSED product:
         accessible to approver, submitter
         inaccessible to other user """
         self.product.button_multicompany_refuse()
-        self._helper_check_permissions(("approver", "submitter"), ("other"))
+        self._helper_check_permissions(["approver", "submitter"], ["other"])
 
     def test_workflow_accept(self):
         self.product.button_multicompany_approve()
