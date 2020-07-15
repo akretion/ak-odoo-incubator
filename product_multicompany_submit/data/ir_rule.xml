@@ -12,7 +12,7 @@
         <record id="rule_product_approval" model="ir.rule">
             <field
                     name="domain_force"
-            >[('state_multicompany_submit', '=', 'pending_approval')]
+            >[ '|', ('state_multicompany_submit', '=', 'pending_approval'), ('state_multicompany_submit', '=', 'refused')]
             </field>
             <field name="model_id" ref="model_product_template"/>
             <field

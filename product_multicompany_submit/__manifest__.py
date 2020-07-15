@@ -16,6 +16,7 @@
         "views/product_approval.xml",
         "security/ir.model.access.csv",
     ],
+    "demo": ["demo/demo.xml"],
     "maintainers": ["kevinkhao", "sebastienbeau"],
     "website": "http://www.akretion.com/",
     "installable": True,

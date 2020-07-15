@@ -6,7 +6,6 @@
                 model="res.groups"
         >
             <field name="name">Multicompany submittals state viewer</field>
-            <field name="category_id" ref="base.module_category_hidden"/>
             <field
                     name="comment"
             >The user can view multicompany submittal states

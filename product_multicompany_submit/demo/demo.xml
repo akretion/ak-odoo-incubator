@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <!--Companies-->
+        <record id="demo_company_approver" model="res.company">
+            <field name="name">Company of approver</field>
+        </record>
+        <record id="demo_company_submitter" model="res.company">
+            <field name="name">Company of submitter</field>
+        </record>
+        <record id="demo_company_other" model="res.company">
+            <field name="name">Company, The Other</field>
+        </record>
+
+        <!--Users-->
+        <record id="demo_user_approver" model="res.users">
+            <field name="name">Marc Approver</field>
+            <field name="login">multicompany.approver</field>
+            <field name="company_ids" eval="[(6, 0, [ref('demo_company_approver')])]"/>
+            <field name="company_id" ref="demo_company_approver"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('group_multicompany_product_approve'), ref('base.group_user')])]"/>
+        </record>
+        <record id="demo_user_submitter" model="res.users">
+            <field name="name">Jean Submitter</field>
+            <field name="login">multicompany.submitter</field>
+            <field name="company_ids" eval="[(6, 0, [ref('demo_company_submitter')])]"/>
+            <field name="company_id" ref="demo_company_submitter"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('group_multicompany_product_submit'), ref('base.group_user')])]"/>
+        </record>
+        <record id="demo_user_other" model="res.users">
+            <field name="name">Thomas Other</field>
+            <field name="login">multicompany.other</field>
+            <field name="company_ids" eval="[(6, 0, [ref('demo_company_other')])]"/>
+            <field name="company_id" ref="demo_company_other"/>
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>
+        </record>
+
+        <!--Product-->
+        <record id="demo_product_submit" model="product.template">
+            <field name="name">A Product to submit to multicompany</field>
+            <field name="company_id" ref="demo_company_submitter"/>
+        </record>
+    </data>
+</odoo>

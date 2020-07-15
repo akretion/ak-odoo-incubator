@@ -4,8 +4,8 @@
 from odoo import api, fields, models
 
 
-class BaseMulticompanyMixin(models.AbstractModel):
-    _name = "base.multicompany.mixin"
+class MulticompanySubmitMixin(models.AbstractModel):
+    _name = "multicompany.submit.mixin"
     _description = "Base mixin for multicompany submittal"
 
     state_multicompany_submit = fields.Selection(
