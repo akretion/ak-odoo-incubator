@@ -19,10 +19,8 @@
 #
 ###############################################################################
 
-from openerp.addons.account_statement_base_import.parser.file_parser import (
-    FileParser
-)
-from openerp.addons.account_statement_base_import.parser.generic_file_parser import (
+from odoo.addons.account_move_base_import.parser.file_parser import FileParser
+from odoo.addons.account_move_base_import.parser.file_parser import (
     float_or_zero,
 )
     
@@ -46,12 +44,12 @@ class PayplugFileParser(FileParser):
     def __init__(self, parse_name, ftype='csv'):
         conversion_dict = {
             'Montant': float_or_zero,
-            'Date': unicode,
-            'ID API': unicode,
-            'Description': unicode,
-            'E-mail': unicode,
+            'Date': str,
+            'ID API': str,
+            'Description': str,
+            'E-mail': str,
         }
-        super(PayplugFileParser, self).__init__(
+        super().__init__(
             parse_name, ftype=ftype, conversion_dict=conversion_dict,
             dialect=payplug_dialect
         )
@@ -74,7 +72,7 @@ class PayplugFileParser(FileParser):
             selected_lines.append(line.strip())
         self.filebuffer = "\n".join(selected_lines)
 
-    def get_st_line_vals(self, line, *args, **kwargs):
+    def get_move_line_vals(self, line, *args, **kwargs):
         if line['ID API'].startswith('re'):
             transaction_ref = ''
             ref = line['ID API'] + ' %s' % line.get('E-mail')
@@ -82,16 +80,16 @@ class PayplugFileParser(FileParser):
             ref = line['ID API'] or line['Description']
             transaction_ref = line['ID API']
         res = {
-            'transaction_id': transaction_ref,
+            'transaction_ref': transaction_ref,
             'name': ref,
-            'date': line['Date'],
-            'amount': line['Montant'],
-            'ref': ref,
+            'date_maturity': line['Date'],
+            'credit': line['Montant'] > 0.0 and line['Montant'] or 0.0,
+            'debit': line['Montant'] < 0.0 and abs(line['Montant']) or 0.0,
         }
         return res
 
     def _post(self, *args, **kwargs):
         super(PayplugFileParser, self)._post(*args, **kwargs)
         for row in self.result_row_list:
-            if row['Date'] > self.statement_date:
-                self.statement_date = row['Date']
+            if row['Date'] > self.move_date:
+                self.move_date = row['Date']
