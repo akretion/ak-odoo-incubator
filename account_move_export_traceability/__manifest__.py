@@ -8,11 +8,16 @@
     "category": "account",
     "depends": [
         "account_export_csv",
+        "attachment_synchronize",
     ],
-    "website": "http://www.akretion.com",
+    "website": "https://www.akretion.com",
     "data": [
         "security/ir.model.access.csv",
+        "security/security.xml",
         "views/move_export_view.xml",
+        "views/settings_view.xml",
+        "data/task.xml",
+        "data/cron.xml",
         "wizards/account_csv_export_view.xml",
     ],
     "installable": True,

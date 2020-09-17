@@ -9,7 +9,6 @@
                 <field name="name"/>
                 <field name="company_id"/>
                 <field name="file_id"/>
-                <field name="comment"/>
                 <button name="action_goto_related_account_move"
                         type="object" string="Related journal entries" class="oe_highlight"/>
                 <button name="action_download" type="object" 
