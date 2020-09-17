@@ -41,6 +41,8 @@ class ResCompany(models.Model):
         self.env.cr.execute(query)
         dates = {x["company_id"]: x["date"] for x in self.env.cr.dictfetchall()}
         companies = self.search([("account_move_export_period", "=", "daily")])
+        if not companies:
+            logger.info("No company with export configured")
         for rec in companies:
             if not dates.get(rec.id) or date.today() > dates.get(rec.id):
                 journals = (

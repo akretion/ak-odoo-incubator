@@ -16,6 +16,7 @@ class AccountMoveExport(models.Model):
         compute="_compute_attachment",
         ondelete="cascade",
     )
+    synchro_state = fields.Selection(related="file_id.state")
     company_id = fields.Many2one(comodel_name="res.company", string="Company")
 
     def _compute_attachment(self):
@@ -79,5 +80,5 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     export_id = fields.Many2one(
-        comodel_name="account.move.export", string="Export", readonly=True
+        comodel_name="account.move.export", string="Exported", readonly=True
     )
