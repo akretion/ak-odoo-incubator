@@ -13,7 +13,7 @@
                     <field name="filename" invisible="1"/>
                 </group>
                 <footer>
-                    <button name="button_import_excel" string="Import" type="object"/>
+                    <button name="button_import_excel" string="Import" type="object" class="btn-primary"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>
