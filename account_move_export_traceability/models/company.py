@@ -4,7 +4,7 @@
 from datetime import date
 import logging
 
-from odoo import _, api, models, fields
+from odoo import api, models, fields
 from odoo.exceptions import UserError
 
 logger = logging.getLogger(__name__)
@@ -32,6 +32,20 @@ class ResCompany(models.Model):
         )
 
     @api.model
+    def _get_journal_domain_4_account_move_scheduler(self, company):
+        return [
+            ("company_id", "=", company.id),
+            ("type", "!=", "general"),
+        ]
+
+    @api.model
+    def _prepare_vals_account_move_scheduler(self):
+        return {
+            "date_start": "2000-01-01",
+            "date_end": date.today(),
+        }
+
+    @api.model
     def extract_account_move_scheduler(self):
         """ Triggered by a cron """
         query = """
@@ -45,29 +59,20 @@ class ResCompany(models.Model):
             logger.info("No company with export configured")
         for rec in companies:
             if not dates.get(rec.id) or date.today() > dates.get(rec.id):
+                vals = self._prepare_vals_account_move_scheduler()
                 journals = (
                     self.env["account.journal"]
                     .sudo()
-                    .search(
-                        [
-                            ("company_id", "=", rec.id),
-                            ("type", "!=", "general"),
-                        ]
-                    )
+                    .search(self._get_journal_domain_4_account_move_scheduler(rec))
                 )
-                wizard = (
-                    self.env["account.csv.export"]
-                    .sudo()
-                    .create(
-                        {
-                            "date_start": "2000-01-01",
-                            "date_end": date.today(),
-                            "company_id": rec.id,
-                            "journal_ids": [(6, 0, journals.ids)],
-                            "mark_exported_record": True,
-                        }
-                    )
+                vals.update(
+                    {
+                        "journal_ids": [(6, 0, journals.ids)],
+                        "mark_exported_record": True,
+                        "company_id": rec.id,
+                    }
                 )
+                wizard = self.env["account.csv.export"].sudo().create(vals)
                 method = getattr(wizard, self._get_my_export_method())
                 export = method()
                 if export:
