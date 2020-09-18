@@ -21,7 +21,7 @@ class AccountCsvExport(models.TransientModel):
                 "company_id": self.company_id.id,
             }
         )
-        export._create_attachment(b64_data, "account.move.export", name=export.name)
+        export._create_attachment(b64_data, self.company_id, name=export.name)
         return export
 
     def _get_export_filename(self):

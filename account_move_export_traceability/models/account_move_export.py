@@ -43,13 +43,15 @@ class AccountMoveExport(models.Model):
         moves = self.env["account.move"].browse(move_ids)
         moves.write({"export_id": self.id})
 
-    def _prepare_attachment(self, data, model, name=None):
+    def _prepare_attachment(self, data, company, name=None):
         self.ensure_one()
         return {
             "datas": data.read(),
             "name": name or self.name,
             "res_id": self.id,
-            "res_model": model,
+            "res_model": self._name,
+            "file_type": "export",
+            "company_id": company.id,
             "datas_fname": "%s.csv" % self.name,
             "mimetype": "text/csv",
             "type": "binary",
@@ -59,10 +61,10 @@ class AccountMoveExport(models.Model):
             ).id,
         }
 
-    def _create_attachment(self, data, model, name=None):
+    def _create_attachment(self, data, company, name=None):
         self.ensure_one()
         self.env["attachment.queue"].create(
-            self._prepare_attachment(data, model, name=name)
+            self._prepare_attachment(data, company, name=name)
         )
 
     def action_download(self):
