@@ -29,16 +29,16 @@ class WizardOrderpointInventoryExport(models.TransientModel):
         )
         lead_days = float(
             self.env["ir.config_parameter"].get_param(
-                "orderpoint_initialize_from_inventory_lead_days", default=1.0
+                "orderpoint_initialize_from_inventory_lead_days", default=7.0
             )
         )
         current_qty = line.product_qty
         return [
+            1,
+            lead_days,
             current_qty,
             current_qty * ratio_min,
             current_qty * ratio_max,
-            lead_days,
-            1,
         ]
 
     def button_export_refresh_result(self):

@@ -76,11 +76,15 @@ class WizardOrderpointMatrixExport(models.TransientModel):
         return result
 
     def _write_headers(self, sheet):
-        sheet.cell(column=1, row=2).value = _("Article")
+        sheet.cell(column=1, row=2).value = _("Code Article")
+        sheet.cell(column=2, row=2).value = _("Article")
         for idx_col_wh, warehouse in enumerate(
             self.warehouse_ids.sorted(lambda r: r.id), start=0
         ):
-            block_start = CONSTANTS.COLUMN_START_WH_BLOCKS + idx_col_wh * CONSTANTS.LEN_COLUMNS_PER_WH
+            block_start = (
+                CONSTANTS.COLUMN_START_WH_BLOCKS
+                + idx_col_wh * CONSTANTS.LEN_COLUMNS_PER_WH
+            )
             sheet.cell(column=block_start, row=1).value = (
                 CONSTANTS.PREFIX_HEADER_WH + warehouse.name
             )

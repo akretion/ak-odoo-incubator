@@ -42,7 +42,8 @@ class WizardOrderpointMatrixImport(models.TransientModel):
 
     def _validate_by_warehouse_names(self, sheet, number_of_wh):
         positions = [
-            2 + itr * CONSTANTS.LEN_COLUMNS_PER_WH for itr in range(number_of_wh)
+            CONSTANTS.COLUMN_START_WH_BLOCKS + itr * CONSTANTS.LEN_COLUMNS_PER_WH
+            for itr in range(number_of_wh)
         ]
         wh_names = []
         for position in positions:
@@ -60,7 +61,9 @@ class WizardOrderpointMatrixImport(models.TransientModel):
         return warehouses
 
     def _validate_by_column_parity(self, last_column):
-        if (last_column - 1) % CONSTANTS.LEN_COLUMNS_PER_WH != 0:
+        if (
+            last_column - (CONSTANTS.COLUMN_START_WH_BLOCKS - 1)
+        ) % CONSTANTS.LEN_COLUMNS_PER_WH != 0:
             raise ValidationError(
                 _("Bad parity for columns, some were removed or added")
             )
@@ -107,11 +110,12 @@ class WizardOrderpointMatrixImport(models.TransientModel):
         """
         result = []
         no_of_blocks = len(warehouses.ids)
-        for row, product in enumerate(products, start=3):
+        for row, product in enumerate(products, start=CONSTANTS.ROW_START_PRODUCTS):
             row_vals = []
             for idx_block in range(no_of_blocks):
                 col_block_start = (
-                    idx_block * CONSTANTS.LEN_COLUMNS_PER_WH + CONSTANTS.COLUMN_START_WH_BLOCKS
+                    idx_block * CONSTANTS.LEN_COLUMNS_PER_WH
+                    + CONSTANTS.COLUMN_START_WH_BLOCKS
                 )
                 block_vals = [
                     sheet.cell(row=row, column=col_block_start + col_itr).value
@@ -141,7 +145,8 @@ class WizardOrderpointMatrixImport(models.TransientModel):
         return orderpoint
 
     def _update_or_delete_orderpoint(self, orderpoint, vals):
-        if not any(vals):
+        empty_line = all([val == None or val == "" for val in vals])
+        if empty_line:
             orderpoint.unlink()
         else:
             orderpoint.product_min_qty = vals[1]
