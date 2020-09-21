@@ -10,7 +10,7 @@
             <form>
                 <field name="dummy_export_done" invisible="1"/>
                 <group attrs="{'invisible': [('dummy_export_done', '=', True)]}">
-                    <field name="warehouse_ids">
+                    <field name="warehouse_ids" widget="many2many_checkboxes">
                         <tree>
                             <field name="name"/>
                         </tree>
@@ -26,7 +26,7 @@
                     <field name="filename" invisible="1"/>
                 </group>
                 <footer attrs="{'invisible': [('dummy_export_done', '=', True)]}">
-                    <button string="Export" type="object" name="button_export_refresh_result"/>
+                    <button string="Export" type="object" name="button_export_refresh_result" class="btn-primary"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>

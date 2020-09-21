@@ -117,7 +117,10 @@ class WizardOrderpointMatrixImport(models.TransientModel):
                     sheet.cell(row=row, column=col_block_start + col_itr).value
                     for col_itr in range(CONSTANTS.LEN_COLUMNS_PER_WH)
                 ]
-                if any(block_vals) and not all(block_vals):
+                have_values = []
+                for el in block_vals[1:]:
+                    have_values.append(el == None or el == "")
+                if any(have_values) and not all(have_values):
                     raise ValidationError(
                         _(
                             "For each warehouse, either fill all values or empty all values"
