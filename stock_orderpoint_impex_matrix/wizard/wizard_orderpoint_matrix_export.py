@@ -161,7 +161,8 @@ class WizardOrderpointMatrixExport(models.TransientModel):
             "views": [
                 (
                     self.env.ref(
-                        "stock_orderpoint_impex_matrix.wizard_orderpoint_matrix_export_view_form"
+                        "stock_orderpoint_impex_matrix."
+                        "wizard_orderpoint_matrix_export_view_form"
                     ).id,
                     "form",
                 )

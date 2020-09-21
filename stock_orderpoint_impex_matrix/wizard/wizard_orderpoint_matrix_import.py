@@ -128,7 +128,8 @@ class WizardOrderpointMatrixImport(models.TransientModel):
                 if any(have_values) and not all(have_values):
                     raise ValidationError(
                         _(
-                            "For each warehouse, either fill all values or empty all values"
+                            "For each warehouse, either fill "
+                            "all values or empty all values"
                         )
                     )
                 row_vals.append(block_vals)
