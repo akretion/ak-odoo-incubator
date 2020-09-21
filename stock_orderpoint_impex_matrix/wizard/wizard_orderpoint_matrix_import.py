@@ -73,20 +73,20 @@ class WizardOrderpointMatrixImport(models.TransientModel):
 
     def _validate_products(self, sheet):
         last_row = self._find_real_last_row(sheet, 1)
-        product_names = [
+        product_codes = [
             sheet.cell(column=1, row=row).value
             for row in range(CONSTANTS.ROW_START_PRODUCTS, last_row + 1)
         ]
         products = self.env["product.product"]
         for (
-            product_name
-        ) in product_names:  # note by doing it 1 by 1 we preserve list order
+            product_code
+        ) in product_codes:  # note by doing it 1 by 1 we preserve list order
             candidate = self.env["product.product"].search(
-                [("name", "=", product_name)], limit=1
-            )  # TODO IMPORTANT voir avec Seb
+                [("default_code", "=", product_code)], limit=1
+            )
             if len(candidate.ids) != 1:
                 raise ValidationError(
-                    _("Product names should match to exactly one product")
+                    _("Product codes should match to exactly one product")
                 )
             products += candidate
         return products
@@ -106,13 +106,12 @@ class WizardOrderpointMatrixImport(models.TransientModel):
         Where each block is a list of vals from corresponding to MAPPINGS_COLUMNS_PER_WH
         """
         result = []
-        initial_offset = 2
         no_of_blocks = len(warehouses.ids)
         for row, product in enumerate(products, start=3):
             row_vals = []
             for idx_block in range(no_of_blocks):
                 col_block_start = (
-                    idx_block * CONSTANTS.LEN_COLUMNS_PER_WH + initial_offset
+                    idx_block * CONSTANTS.LEN_COLUMNS_PER_WH + CONSTANTS.COLUMN_START_WH_BLOCKS
                 )
                 block_vals = [
                     sheet.cell(row=row, column=col_block_start + col_itr).value

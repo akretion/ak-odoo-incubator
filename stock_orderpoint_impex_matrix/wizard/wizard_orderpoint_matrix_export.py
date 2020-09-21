@@ -41,13 +41,13 @@ class WizardOrderpointMatrixExport(models.TransientModel):
         result = False
         if orderpoint:
             result = [
+                orderpoint.qty_multiple,
+                orderpoint.lead_days,
                 orderpoint.product_id.with_context(
                     {"warehouse": warehouse.id}
                 ).qty_available,
                 orderpoint.product_min_qty,
                 orderpoint.product_max_qty,
-                orderpoint.lead_days,
-                orderpoint.qty_multiple,
             ]
         return result
 
@@ -63,7 +63,7 @@ class WizardOrderpointMatrixExport(models.TransientModel):
         """
         result = []
         for product in products:
-            row = [product.name]
+            row = [product.default_code, product.name]
             for warehouse in warehouse_ids:
                 row += self.with_context(
                     {"warehouse": warehouse.id}
@@ -77,11 +77,10 @@ class WizardOrderpointMatrixExport(models.TransientModel):
 
     def _write_headers(self, sheet):
         sheet.cell(column=1, row=2).value = _("Article")
-        OFFSET = 2
         for idx_col_wh, warehouse in enumerate(
             self.warehouse_ids.sorted(lambda r: r.id), start=0
         ):
-            block_start = OFFSET + idx_col_wh * CONSTANTS.LEN_COLUMNS_PER_WH
+            block_start = CONSTANTS.COLUMN_START_WH_BLOCKS + idx_col_wh * CONSTANTS.LEN_COLUMNS_PER_WH
             sheet.cell(column=block_start, row=1).value = (
                 CONSTANTS.PREFIX_HEADER_WH + warehouse.name
             )

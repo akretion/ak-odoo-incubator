@@ -44,7 +44,7 @@ class TestStockOrderpointInventory(OrderpointExportCase):
     def test_demo_inventory(self):
         sheet = self._get_resulting_sheet(self.warehouse, self.inventory)
         vals = [
-            ["Large Cabinet", 500, 250, 500, 7, 1],
-            ["Storage Box", 18, 9, 18, 7, 1],
+            ["Large Cabinet", 1, 7, 500, 250, 500],
+            ["Storage Box", 1, 7, 18, 9, 18],
         ]
         self._helper_check_expected_values(sheet, vals, start_row=3)
