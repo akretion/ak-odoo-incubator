@@ -3,11 +3,11 @@
 
 {
     "name": "Stock Orderpoint Import Export Per Warehouse",
-    "description": """
+    "summary": """
         Import and export orderpoints according to chosen warehouses""",
     "version": "12.0.1.0.0",
     "license": "AGPL-3",
-    "author": "Akretion",
+    "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://www.akretion.com",
     "depends": ["stock"],
     "data": [

@@ -7,9 +7,9 @@ from io import BytesIO
 import openpyxl
 
 from odoo.addons.stock_orderpoint_impex_matrix.tests.common import (
-    OrderpointExportCase,
     DEBUGMODE_SAVE_EXPORT,
     PATH_DEBUGMODE,
+    OrderpointExportCase,
 )
 
 

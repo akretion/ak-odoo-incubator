@@ -10,4 +10,3 @@ The excel file is created according to the following logic:
   which will take the current inventory and multiply it to obtain respectively the min and max for the Reordering Rules
 
 - The Reordering Rule / Inventory Line is matched according to the product ID, and the warehouse (through the Inventory's Stock Location)
-

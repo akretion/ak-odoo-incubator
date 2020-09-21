@@ -6,8 +6,9 @@ from io import BytesIO
 
 import openpyxl
 
-from odoo import fields, models, _
+from odoo import _, fields, models
 from odoo.exceptions import ValidationError
+
 from . import common as CONSTANTS
 
 
@@ -110,7 +111,7 @@ class WizardOrderpointMatrixImport(models.TransientModel):
         """
         result = []
         no_of_blocks = len(warehouses.ids)
-        for row, product in enumerate(products, start=CONSTANTS.ROW_START_PRODUCTS):
+        for row, _product in enumerate(products, start=CONSTANTS.ROW_START_PRODUCTS):
             row_vals = []
             for idx_block in range(no_of_blocks):
                 col_block_start = (

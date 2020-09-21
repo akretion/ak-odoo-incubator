@@ -32,4 +32,3 @@
               parent="stock.menu_stock_inventory_control"
               action="stock_orderpoint_impex_matrix.action_import_orderpoint_matrix"/>
 </odoo>
-

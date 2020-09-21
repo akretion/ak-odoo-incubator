@@ -14,4 +14,3 @@ Go to Reordering Rules screen and do a simple Odoo standard import with that mod
 
 
 .. figure:: ../static/img/step_three.png
-

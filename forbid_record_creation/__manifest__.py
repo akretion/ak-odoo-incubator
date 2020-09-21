@@ -9,7 +9,7 @@
     "author": "Akretion",
     "maintainer": "Akretion",
     "category": "base",
-    "depends": ["base",],
+    "depends": ["base"],
     "website": "http://www.akretion.com/",
     "installable": True,
 }

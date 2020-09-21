@@ -5,10 +5,7 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     def button_send_proxy_action_fail(self):
-        act1 = {
-            "url": "https://httpbin.org/post",
-            "params": "something",
-        }
+        act1 = {"url": "https://httpbin.org/post", "params": "something"}
         act2 = {"url": "az", "params": "something"}
         acts = [act1, act2]
         return self.env["proxy.action.helper"].send_proxy(acts)

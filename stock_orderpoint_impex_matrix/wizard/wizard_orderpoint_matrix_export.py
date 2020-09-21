@@ -5,8 +5,10 @@ import base64
 from io import BytesIO
 
 import openpyxl
-from openpyxl.styles import PatternFill, Alignment
-from odoo import fields, models, _
+from openpyxl.styles import Alignment, PatternFill
+
+from odoo import _, fields, models
+
 from . import common as CONSTANTS
 
 
@@ -109,7 +111,7 @@ class WizardOrderpointMatrixExport(models.TransientModel):
         sheet.column_dimensions["A"].width = 20
         sheet.column_dimensions["B"].width = 20
         alternate_grey = False
-        for idx_block, warehouse in enumerate(self.warehouse_ids):
+        for idx_block, _warehouse in enumerate(self.warehouse_ids):
             start_of_block = (
                 CONSTANTS.COLUMN_START_WH_BLOCKS
                 + idx_block * CONSTANTS.LEN_COLUMNS_PER_WH

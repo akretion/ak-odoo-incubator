@@ -18,9 +18,7 @@ DEBUGMODE_SAVE_EXPORT = False
 
 class OrderpointExportCase(SavepointCase):
     def _get_resulting_sheet(self, warehouses):
-        vals = {
-            "warehouse_ids": [(6, 0, warehouses.ids)],
-        }
+        vals = {"warehouse_ids": [(6, 0, warehouses.ids)]}
         wizard = self.env["wizard.orderpoint.matrix.export"].create(vals)
         wizard.button_export_refresh_result()
         excel_file = BytesIO(base64.b64decode(wizard.file.decode("utf-8")))
