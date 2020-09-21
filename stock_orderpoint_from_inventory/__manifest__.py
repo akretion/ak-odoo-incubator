@@ -4,7 +4,7 @@
 {
     "name": "Stock Orderpoint Initialize From Inventory",
     "summary": """
-        Initialize orderpoints fast from an inventory, 
+        Initialize orderpoints fast from an inventory,
         through an excel export/import""",
     "version": "12.0.1.0.0",
     "license": "AGPL-3",
@@ -13,4 +13,5 @@
     "depends": ["stock_orderpoint_impex_matrix"],
     "data": ["views/stock_inventory.xml"],
     "demo": [],
+    "external_dependencies": {"python": ["openpyxl"]},
 }

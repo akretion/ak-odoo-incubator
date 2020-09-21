@@ -15,4 +15,5 @@
         "wizard/wizard_orderpoint_matrix_import.xml",
     ],
     "demo": ["demo/demo.xml"],
+    "external_dependencies": {"python": ["openpyxl"]},
 }
