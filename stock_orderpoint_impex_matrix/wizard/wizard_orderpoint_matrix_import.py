@@ -123,7 +123,7 @@ class WizardOrderpointMatrixImport(models.TransientModel):
                 ]
                 have_values = []
                 for el in block_vals[1:]:
-                    have_values.append(el == None or el == "")
+                    have_values.append(el is None or el == "")
                 if any(have_values) and not all(have_values):
                     raise ValidationError(
                         _(
@@ -145,7 +145,7 @@ class WizardOrderpointMatrixImport(models.TransientModel):
         return orderpoint
 
     def _update_or_delete_orderpoint(self, orderpoint, vals):
-        empty_line = all([val == None or val == "" for val in vals])
+        empty_line = all([val is None or val == "" for val in vals])
         if empty_line:
             orderpoint.unlink()
         else:

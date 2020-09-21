@@ -10,6 +10,6 @@
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://www.akretion.com",
     "depends": ["stock_orderpoint_impex_matrix"],
-    "data": ["views/stock_inventory.xml",],
+    "data": ["views/stock_inventory.xml"],
     "demo": [],
 }

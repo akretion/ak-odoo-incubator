@@ -9,13 +9,13 @@ from odoo.exceptions import UserError
 
 
 class ForbiddenModel(models.AbstractModel):
-    _name = 'forbidden.model'
-    _description = 'Prevent order creation'
+    _name = "forbidden.model"
+    _description = "Prevent order creation"
 
     @api.model
     def _my_integrator(self):
         """ Override with your own brand"""
-        return 'Akretion'
+        return "Akretion"
 
     @api.model
     def _prevent_orders(self):
@@ -30,7 +30,9 @@ class ForbiddenModel(models.AbstractModel):
     def create(self, vals):
         if self._prevent_orders():
             raise UserError(
-                _("You're not allowed to create '%s' on this database.\n\n"
-                  "Your integrator, %s"
-                  % (self._description, self._my_integrator())))
+                _(
+                    "You're not allowed to create '%s' on this database.\n\n"
+                    "Your integrator, %s" % (self._description, self._my_integrator())
+                )
+            )
         return super().create(vals)
