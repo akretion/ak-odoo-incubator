@@ -5,7 +5,7 @@ import base64
 from io import BytesIO
 
 import openpyxl
-
+from openpyxl.styles import PatternFill, Alignment
 from odoo import fields, models, _
 from . import common as CONSTANTS
 
@@ -103,13 +103,40 @@ class WizardOrderpointMatrixExport(models.TransientModel):
                 sheet.cell(column=idx_cell, row=idx_row).value = cell_data
 
     def _apply_formatting_misc(self, sheet):
+        # Freeze panes
         sheet.freeze_panes = "A2"
+        # Set first columns widths
         sheet.column_dimensions["A"].width = 20
+        sheet.column_dimensions["B"].width = 20
+        alternate_grey = False
         for idx_block, warehouse in enumerate(self.warehouse_ids):
-            start_of_block = 2 + idx_block * CONSTANTS.LEN_COLUMNS_PER_WH
+            start_of_block = (
+                CONSTANTS.COLUMN_START_WH_BLOCKS
+                + idx_block * CONSTANTS.LEN_COLUMNS_PER_WH
+            )
+            end_of_block = start_of_block + CONSTANTS.LEN_COLUMNS_PER_WH
+            # Set column width
             for itr in range(CONSTANTS.LEN_COLUMNS_PER_WH):
                 letter = openpyxl.utils.cell.get_column_letter(start_of_block + itr)
                 sheet.column_dimensions[letter].width = 20
+            # Merge warehouse cells
+            sheet.merge_cells(
+                start_row=1,
+                end_row=1,
+                start_column=start_of_block,
+                end_column=end_of_block - 1,
+            )
+            # Center warehouse cells
+            sheet.cell(row=1, column=start_of_block).alignment = Alignment(
+                horizontal="center"
+            )
+            # Alternate colors between warehouse blocks
+            alternate_grey = not alternate_grey
+            grey_fill = PatternFill(fill_type="lightGray")
+            if alternate_grey:
+                for idx_col in range(start_of_block, end_of_block):
+                    for idx_row in range(1, CONSTANTS.ROW_MAX_STYLING):
+                        sheet.cell(row=idx_row, column=idx_col).fill = grey_fill
 
     def _refresh_xlsx_file(self):
         wb = openpyxl.Workbook()

@@ -13,7 +13,7 @@ CELL_VALUE_EMPTY = None
 PATH = path.dirname(__file__) + "/fixtures/"
 
 PATH_DEBUGMODE = path.dirname(__file__)
-DEBUGMODE_SAVE_EXPORT = True
+DEBUGMODE_SAVE_EXPORT = False
 
 
 class OrderpointExportCase(SavepointCase):
