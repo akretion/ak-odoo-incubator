@@ -32,13 +32,6 @@ class ResCompany(models.Model):
         )
 
     @api.model
-    def _get_journal_domain_4_account_move_scheduler(self, company):
-        return [
-            ("company_id", "=", company.id),
-            ("type", "!=", "general"),
-        ]
-
-    @api.model
     def _prepare_vals_account_move_scheduler(self):
         return {
             "date_start": "2000-01-01",
@@ -60,19 +53,17 @@ class ResCompany(models.Model):
         for rec in companies:
             if not dates.get(rec.id) or date.today() > dates.get(rec.id):
                 vals = self._prepare_vals_account_move_scheduler()
-                journals = (
-                    self.env["account.journal"]
-                    .sudo()
-                    .search(self._get_journal_domain_4_account_move_scheduler(rec))
-                )
                 vals.update(
                     {
-                        "journal_ids": [(6, 0, journals.ids)],
                         "mark_exported_record": True,
-                        "company_id": rec.id,
                     }
                 )
-                wizard = self.env["account.csv.export"].sudo().create(vals)
+                wizard = (
+                    self.env["account.csv.export"]
+                    .with_context(force_company=rec.id)
+                    .sudo()
+                    .create(vals)
+                )
                 method = getattr(wizard, self._get_my_export_method())
                 export = method()
                 if export:

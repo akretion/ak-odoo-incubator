@@ -1,7 +1,7 @@
 # © 2019 David BEAL @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models, fields
+from odoo import _, api, models, fields
 
 
 class AccountCsvExport(models.TransientModel):
@@ -31,3 +31,10 @@ class AccountCsvExport(models.TransientModel):
             fields.Datetime.now(),
             self.company_id.name,
         )
+
+    @api.model
+    def _get_company_default(self):
+        res = super()._get_company_default()
+        if "force_company" in self.env.context:
+            return self.env["res.company"].browse(self.env.context["force_company"])
+        return res
