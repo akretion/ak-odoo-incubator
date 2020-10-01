@@ -31,20 +31,23 @@ class TestStockOrderpointInventory(OrderpointExportCase):
         super().setUp()
         self.inventory = self.env.ref("stock.stock_inventory_0")
         self.warehouse = self.env.ref("stock.warehouse0")
-        self.location = self.env.ref("stock.stock_location_stock")
-        self.inventory_line = self.env.ref("stock.stock_inventory_line_3")
-        self.inventory_line_2 = self.env.ref("stock.stock_inventory_line_2")
-        self.inventory_line_product = self.env.ref("product.product_product_6")
-        self.inventory_line_2_product = self.env.ref("product.product_product_7")
-        lines_to_delete = self.inventory.line_ids.filtered(
-            lambda r: r.id not in [self.inventory_line.id, self.inventory_line_2.id]
-        )
-        lines_to_delete.unlink()
 
     def test_demo_inventory(self):
         sheet = self._get_resulting_sheet(self.warehouse, self.inventory)
         vals = [
-            ["E-COM07", "Large Cabinet", 1, 7, 500, 250, 500],
-            ["E-COM08", "Storage Box", 1, 7, 18, 9, 18],
+            ["E-COM07", "Large Cabinet", 500, 250, 500, 7, 1],
+            ["E-COM08", "Storage Box", 18, 9, 18, 7, 1],
+        ]
+        self._helper_check_expected_values(sheet, vals, start_row=3)
+
+    def test_demo_inventory_multiple_lines_for_one_product(self):
+        stock_location_shelf2 = self.env.ref("stock.stock_location_14")
+        self.env.ref("stock.stock_inventory_line_3").copy(
+            {"location_id": stock_location_shelf2.id}
+        )
+        sheet = self._get_resulting_sheet(self.warehouse, self.inventory)
+        vals = [
+            ["E-COM07", "Large Cabinet", 1000, 500, 1000, 7, 1],
+            ["E-COM08", "Storage Box", 18, 9, 18, 7, 1],
         ]
         self._helper_check_expected_values(sheet, vals, start_row=3)

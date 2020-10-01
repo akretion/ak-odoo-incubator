@@ -43,13 +43,13 @@ class WizardOrderpointMatrixExport(models.TransientModel):
         result = False
         if orderpoint:
             result = [
-                orderpoint.qty_multiple,
-                orderpoint.lead_days,
                 orderpoint.product_id.with_context(
                     {"warehouse": warehouse.id}
                 ).qty_available,
                 orderpoint.product_min_qty,
                 orderpoint.product_max_qty,
+                orderpoint.lead_days,
+                orderpoint.qty_multiple,
             ]
         return result
 
@@ -149,6 +149,11 @@ class WizardOrderpointMatrixExport(models.TransientModel):
         tmpfile = BytesIO()
         wb.save(tmpfile)
         self.file = base64.b64encode(tmpfile.getvalue())
+        self.filename = (
+            "Export - règles de réapprovisionnement - "
+            + str(fields.Date.today())
+            + ".xlsx"
+        )
         return True
 
     def button_export_refresh_result(self):

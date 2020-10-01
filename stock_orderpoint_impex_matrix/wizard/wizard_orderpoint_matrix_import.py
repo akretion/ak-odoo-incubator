@@ -146,15 +146,25 @@ class WizardOrderpointMatrixImport(models.TransientModel):
         )
         return orderpoint
 
-    def _update_or_delete_orderpoint(self, orderpoint, vals):
-        empty_line = all([val is None or val == "" for val in vals])
-        if empty_line:
-            orderpoint.unlink()
-        else:
-            orderpoint.product_min_qty = vals[1]
-            orderpoint.product_max_qty = vals[2]
-            orderpoint.lead_days = vals[3]
-            orderpoint.qty_multiple = vals[4]
+    def _create_orderpoint(self, product, warehouse, block_vals):
+        self.env["stock.warehouse.orderpoint"].create(
+            {
+                "name": product.name + " (" + warehouse.name + ")",
+                "product_id": product.id,
+                "warehouse_id": warehouse.id,
+                "location_id": warehouse.lot_stock_id.id,
+                "product_min_qty": block_vals[1],
+                "product_max_qty": block_vals[2],
+                "lead_days": block_vals[3],
+                "qty_multiple": block_vals[4],
+            }
+        )
+
+    def _update_orderpoint(self, orderpoint, block_vals):
+        orderpoint.product_min_qty = block_vals[1]
+        orderpoint.product_max_qty = block_vals[2]
+        orderpoint.lead_days = block_vals[3]
+        orderpoint.qty_multiple = block_vals[4]
 
     def _process_sheet(self, sheet, warehouses, products):
         all_rows_vals = self._build_orderpoint_matrix(sheet, warehouses, products)
@@ -162,22 +172,17 @@ class WizardOrderpointMatrixImport(models.TransientModel):
             for idx_block, block_vals in enumerate(row_vals):
                 product = products[idx_row]
                 warehouse = warehouses[idx_block]
+                has_values = not (
+                    all([val is None or val == "" for val in block_vals[1:]])
+                )
                 orderpoint = self._match_orderpoint(product, warehouse)
-                if orderpoint:
-                    self._update_or_delete_orderpoint(orderpoint, block_vals)
-                else:
-                    self.env["stock.warehouse.orderpoint"].create(
-                        {
-                            "name": product.name + " (" + warehouse.name + ")",
-                            "product_id": product.id,
-                            "warehouse_id": warehouse.id,
-                            "location_id": warehouse.lot_stock_id.id,
-                            "product_min_qty": block_vals[1],
-                            "product_max_qty": block_vals[2],
-                            "lead_days": block_vals[3],
-                            "qty_multiple": block_vals[4],
-                        }
-                    )
+                if has_values and orderpoint:
+                    self._update_orderpoint(orderpoint, block_vals)
+                elif has_values and not orderpoint:
+                    self._create_orderpoint(product, warehouse, block_vals)
+                elif not has_values and orderpoint:
+                    orderpoint.unlink()
+                # no values, no orderpoint => leave as is
 
     def button_import_excel(self):
         wb = openpyxl.load_workbook(

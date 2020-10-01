@@ -16,7 +16,7 @@ class WizardOrderpointInventoryExport(models.TransientModel):
         self.product_ids = self.inventory_id.line_ids.mapped("product_id")
 
     def _generate_orderpoint_vals(self, product, warehouse):
-        line = self.inventory_id.line_ids.filtered(lambda r: r.product_id == product)
+        lines = self.inventory_id.line_ids.filtered(lambda r: r.product_id == product)
         ratio_min = float(
             self.env["ir.config_parameter"].get_param(
                 "orderpoint_initialize_from_inventory_ratio_min", default=0.5
@@ -32,13 +32,13 @@ class WizardOrderpointInventoryExport(models.TransientModel):
                 "orderpoint_initialize_from_inventory_lead_days", default=7.0
             )
         )
-        current_qty = line.product_qty
+        current_qty = sum(lines.mapped("product_qty"))
         return [
-            1,
-            lead_days,
             current_qty,
             current_qty * ratio_min,
             current_qty * ratio_max,
+            lead_days,
+            1,
         ]
 
     def button_export_refresh_result(self):

@@ -5,11 +5,11 @@ from collections import OrderedDict
 
 MAPPING_COLUMNS_PER_WH = OrderedDict(
     [
-        ("qty_multiple", "Multiple de quantité"),
-        ("lead_days", "Délai fournisseur"),
         ("qty_available", "Quantité actuelle"),
         ("product_min_qty", "Quantité minimale"),
         ("product_max_qty", "Quantité maximale"),
+        ("lead_days", "Délai fournisseur"),
+        ("qty_multiple", "Quantité multiple de"),
     ]
 )
 LEN_COLUMNS_PER_WH = len(MAPPING_COLUMNS_PER_WH)
