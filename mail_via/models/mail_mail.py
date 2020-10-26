@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
 # Copyright 2019 Akretion (http://www.akretion.com).
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models
+from odoo import models, api
 
 
 class MailMail(models.Model):
     _inherit = "mail.mail"
 
+    @api.multi
     def send(self, auto_commit=False, raise_exception=False):
         incomming_mails = self.filtered("fetchmail_server_id")
         super(MailMail, incomming_mails.with_context(sender_is_via=True)).send(
