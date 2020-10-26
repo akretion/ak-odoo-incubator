@@ -10,8 +10,8 @@ class MailMail(models.Model):
 
     @api.multi
     def send(self, auto_commit=False, raise_exception=False):
-        incomming_mails = self.filtered("fetchmail_server_id")
-        super(MailMail, incomming_mails.with_context(sender_is_via=True)).send(
+        incoming_mails = self.filtered("fetchmail_server_id")
+        super(MailMail, incoming_mails.with_context(sender_is_via=True)).send(
             auto_commit=auto_commit, raise_exception=raise_exception
         )
         normal_mails = self.filtered(lambda s: not s.fetchmail_server_id)
