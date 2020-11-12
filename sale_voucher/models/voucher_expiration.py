@@ -126,7 +126,7 @@ class ExpiredVoucher(orm.Model):
             WHERE account_id = %s AND reconcile_id IS NULL
             AND company_id = %s
             GROUP BY company_id, partner_id
-            HAVING sum(credit-debit) > 0
+            HAVING sum(credit-debit) >= 1
         """, (voucher_account_id, company.id))
         lines = cr.dictfetchall()
         validity_time = company.voucher_validity_time
