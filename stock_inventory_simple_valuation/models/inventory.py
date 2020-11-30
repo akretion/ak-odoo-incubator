@@ -25,16 +25,16 @@ class StockInventoryLine(models.Model):
         compute="_compute_product_cost",
         string="Computed cost",
         store=True,
-        digits_compute=dp.get_precision("Account"),
+        digits=dp.get_precision("Account"),
     )
     manual_product_cost = fields.Float(
-        string="Manual cost", digits_compute=dp.get_precision("Account")
+        string="Manual cost", digits=dp.get_precision("Account")
     )
     total_value = fields.Float(
         compute="_compute_total_value",
         string="Value",
         store=True,
-        digits_compute=dp.get_precision("Account"),
+        digits=dp.get_precision("Account"),
     )
     explanation = fields.Text(
         string="Source",
