@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!--    Note: using "attachment" field to save the report as an attachment-->
+<!--    is currently not implemented in OCA xlsx_report module-->
+    <report
+            id="action_simple_inventory_valuation"
+            model="stock.inventory"
+            string="Print Simple Valuation to Excel"
+            report_type="xlsx"
+            name="stock_inventory_simple_valuation.valuation_xlsx"
+            file="simple_valuation"
+            attachment_use="True"
+            attachment="object.name + '%s.xlsx' % object.company_id.name or ''"
+    />
+</odoo>
