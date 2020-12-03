@@ -2,9 +2,9 @@
   :alt: License: AGPL-3
 
 Sale Lot Config
-==================
+===============
 
-Add configuration on lot, from sale order line configuration
+Add the technical configuration concept on sale order line and production lot.
 
 Credits
 =======
@@ -13,3 +13,4 @@ Contributors
 ------------
 
 * Valentin Chemiere <valentin.chemiere@akretion.com>
+* Florian da Coste <florian.dacosta@akretion.com>
