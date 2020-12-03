@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath
+                    expr="//field[@name='order_line']/form/field[@name='name']"
+                    position="after"
+                >
+                    <group name="config" string="Configuration">
+                        <field
+                            name="commercial_config_text"
+                            string="Commercial Configuration"
+                        />
+                        <field name="config_text" string="Technical Configuration" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
