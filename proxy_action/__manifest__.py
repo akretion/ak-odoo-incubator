@@ -6,7 +6,7 @@
     "name": "Proxy Action",
     "version": "12.0.1.0.0",
     "author": "Akretion, Odoo Community Association (OCA)",
-    "website": "www.akretion.com",
+    "website": "https://github.com/OCA/ak-odoo-incubator",
     "license": "AGPL-3",
     "category": "Generic Modules",
     "depends": ["base", "web"],

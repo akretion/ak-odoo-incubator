@@ -50,7 +50,7 @@ class ProxyActionHelper(models.AbstractModel):
         return self.get_print_data_action(data, **kwargs)
 
     def send_proxy(self, todo):
-        """ @param todo: list of requests
-                         (printings, webservices)
+        """@param todo: list of requests
+        (printings, webservices)
         """
         return {"type": "ir.actions.act_proxy", "action_list": todo}
