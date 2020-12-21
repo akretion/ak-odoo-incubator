@@ -5,7 +5,7 @@
     'name': 'Forbid Record Creation',
     'summary': 'Avoid to create test data in sale, purchase',
     'license': 'AGPL-3',
-    'version': '12.0.0.0.0',
+    'version': '14.0.0.0.0',
     'author': 'Akretion',
     'maintainer': 'Akretion',
     'category': 'base',
