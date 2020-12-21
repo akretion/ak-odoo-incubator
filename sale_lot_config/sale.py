@@ -4,32 +4,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, api, fields
-import simplejson
 
 
 class SaleOrderLine(models.Model):
-
-    _inherit = 'sale.order.line'
-
-    @api.multi
-    def _get_configuration(self):
-        for line in self:
-            line.config_text = simplejson.dumps(line.config)
-
-    @api.multi
-    def _set_configuration(self):
-        for line in self:
-            if line.config_text:
-                line.config = simplejson.loads(self.config_text)
-
-    config = fields.Serialized(
-        'Configuration',
-        readonly=True,
-        help="Allow to set custom configuration")
-    config_text = fields.Text(
-        compute='_get_configuration',
-        inverse='_set_configuration',
-        string='Configuration')
+    _name = 'sale.order.line'
+    _inherit = ['product.configuration.mixin', 'sale.order.line']
 
 
 class SaleOrder(models.Model):
