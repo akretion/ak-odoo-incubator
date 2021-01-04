@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ###############################################################################
 #   account_statement_be2bill for OpenERP
 #   Copyright (C) 2014-TODAY Akretion <http://www.akretion.com>.
@@ -19,21 +18,22 @@
 #
 ###############################################################################
 
-from odoo.addons.account_move_base_import.parser.file_parser import FileParser
+from csv import Dialect
+
+from _csv import QUOTE_MINIMAL, register_dialect
+
 from odoo.addons.account_move_base_import.parser.file_parser import (
+    FileParser,
     float_or_zero,
 )
-    
-from csv import Dialect
-from _csv import QUOTE_MINIMAL, register_dialect
 
 
 class payplug_dialect(Dialect):
-    delimiter = ','
+    delimiter = ","
     quotechar = '"'
     doublequote = True
     skipinitialspace = False
-    lineterminator = '\n'
+    lineterminator = "\n"
     quoting = QUOTE_MINIMAL
 
 
@@ -41,17 +41,19 @@ register_dialect("payplug_dialect", payplug_dialect)
 
 
 class PayplugFileParser(FileParser):
-    def __init__(self, parse_name, ftype='csv'):
+    def __init__(self, parse_name, ftype="csv"):
         conversion_dict = {
-            'Montant': float_or_zero,
-            'Date': str,
-            'ID API': str,
-            'Description': str,
-            'E-mail': str,
+            "Montant": float_or_zero,
+            "Date": str,
+            "ID API": str,
+            "Description": str,
+            "E-mail": str,
         }
         super().__init__(
-            parse_name, ftype=ftype, conversion_dict=conversion_dict,
-            dialect=payplug_dialect
+            parse_name,
+            ftype=ftype,
+            conversion_dict=conversion_dict,
+            dialect=payplug_dialect,
         )
 
     @classmethod
@@ -60,36 +62,36 @@ class PayplugFileParser(FileParser):
         Used by the new_bank_statement_parser class factory. Return true if
         the providen name is be2bill_csvparser
         """
-        return parser_name == 'payplug_csvparser'
+        return parser_name == "payplug_csvparser"
 
     def _pre(self, *args, **kwargs):
         super(PayplugFileParser, self)._pre(*args, **kwargs)
         split_file = self.filebuffer.split("\n")
         selected_lines = []
         for line in split_file:
-            if line.startswith('sep'):
+            if line.startswith("sep"):
                 continue
             selected_lines.append(line.strip())
         self.filebuffer = "\n".join(selected_lines)
 
     def get_move_line_vals(self, line, *args, **kwargs):
-        if line['ID API'].startswith('re'):
-            transaction_ref = ''
-            ref = line['ID API'] + ' %s' % line.get('E-mail')
+        if line["ID API"].startswith("re"):
+            transaction_ref = ""
+            ref = line["ID API"] + " %s" % line.get("E-mail")
         else:
-            ref = line['ID API'] or line['Description']
-            transaction_ref = line['ID API']
+            ref = line["ID API"] or line["Description"]
+            transaction_ref = line["ID API"]
         res = {
-            'transaction_ref': transaction_ref,
-            'name': ref,
-            'date_maturity': line['Date'],
-            'credit': line['Montant'] > 0.0 and line['Montant'] or 0.0,
-            'debit': line['Montant'] < 0.0 and abs(line['Montant']) or 0.0,
+            "transaction_ref": transaction_ref,
+            "name": ref,
+            "date_maturity": line["Date"],
+            "credit": line["Montant"] > 0.0 and line["Montant"] or 0.0,
+            "debit": line["Montant"] < 0.0 and abs(line["Montant"]) or 0.0,
         }
         return res
 
     def _post(self, *args, **kwargs):
         super(PayplugFileParser, self)._post(*args, **kwargs)
         for row in self.result_row_list:
-            if row['Date'] > self.move_date:
-                self.move_date = row['Date']
+            if row["Date"] > self.move_date:
+                self.move_date = row["Date"]
