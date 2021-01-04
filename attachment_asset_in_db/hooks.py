@@ -22,4 +22,4 @@ def post_init_hook(cr, registry):
     ids = [x[0] for x in cr.fetchall()]
     env = api.Environment(cr, SUPERUSER_ID, {})
     for attachment in env["ir.attachment"].browse(ids):
-        attachment.write({"datas": attachment.datas})
+        attachment.write({"datas": attachment.datas, "mimetype": attachment.mimetype})
