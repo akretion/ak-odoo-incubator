@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: ["error", {"args": "none"}]*/
 odoo.define("proxy_action.proxy_view", function (require) {
     "use strict";
     var ActionManager = require("web.ActionManager");
@@ -6,7 +7,7 @@ odoo.define("proxy_action.proxy_view", function (require) {
 
     ActionManager.include({
         _handleAction: function (action, options) {
-            if (action.type == "ir.actions.act_proxy") {
+            if (action.type === "ir.actions.act_proxy") {
                 return this._executeProxyAction(action, options);
             }
             return this._super.apply(this, arguments);
@@ -18,8 +19,6 @@ odoo.define("proxy_action.proxy_view", function (require) {
                 _t("Proxy action executing"),
                 _t("Your action is being executed")
             );
-            var action_success = true;
-
             action.action_list.map(function (act, idx) {
                 $.ajax({
                     url: act.url,
