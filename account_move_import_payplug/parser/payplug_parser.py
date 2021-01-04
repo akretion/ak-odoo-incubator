@@ -41,19 +41,21 @@ register_dialect("payplug_dialect", payplug_dialect)
 
 
 class PayplugFileParser(FileParser):
-    def __init__(self, parse_name, ftype="csv"):
+    def __init__(self, journal, ftype="csv", **kwargs):
         conversion_dict = {
             "Montant": float_or_zero,
             "Date": str,
             "ID API": str,
             "Description": str,
             "E-mail": str,
+            "Type": str,
         }
         super().__init__(
-            parse_name,
+            journal,
             ftype=ftype,
-            conversion_dict=conversion_dict,
+            extra_fields=conversion_dict,
             dialect=payplug_dialect,
+            **kwargs
         )
 
     @classmethod
@@ -66,13 +68,13 @@ class PayplugFileParser(FileParser):
 
     def _pre(self, *args, **kwargs):
         super(PayplugFileParser, self)._pre(*args, **kwargs)
-        split_file = self.filebuffer.split("\n")
+        split_file = self.filebuffer.decode().split("\n")
         selected_lines = []
         for line in split_file:
             if line.startswith("sep"):
                 continue
             selected_lines.append(line.strip())
-        self.filebuffer = "\n".join(selected_lines)
+        self.filebuffer = "\n".join(selected_lines).encode()
 
     def get_move_line_vals(self, line, *args, **kwargs):
         if line["ID API"].startswith("re"):
@@ -82,16 +84,22 @@ class PayplugFileParser(FileParser):
             ref = line["ID API"] or line["Description"]
             transaction_ref = line["ID API"]
         res = {
-            "transaction_ref": transaction_ref,
+            "ref": transaction_ref,
             "name": ref,
             "date_maturity": line["Date"],
             "credit": line["Montant"] > 0.0 and line["Montant"] or 0.0,
             "debit": line["Montant"] < 0.0 and abs(line["Montant"]) or 0.0,
         }
+        # Put transfer in the waiting account to be reconciled with bank
+        # statement. This way it is not mixed with counterparts
+        if line.get("Type", "") == "Virement":
+            res['account_id'] = self.journal.suspense_account_id.id
+            res['partner_id'] = self.journal.partner_id.id or False
+
         return res
 
     def _post(self, *args, **kwargs):
         super(PayplugFileParser, self)._post(*args, **kwargs)
         for row in self.result_row_list:
-            if row["Date"] > self.move_date:
+            if not self.move_date or row["Date"] > self.move_date:
                 self.move_date = row["Date"]
