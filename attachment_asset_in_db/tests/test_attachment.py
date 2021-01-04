@@ -24,11 +24,11 @@ class TestAttachment(SavepointCase):
 
     def test_asset_web_icon_data(self):
         attachment = self._create_attachment("web_icon_data")
-        self.assertEqual(attachment.db_datas, self.data)
+        self.assertEqual(attachment.db_datas, b"foo")
 
     def test_asset_css(self):
         attachment = self._create_attachment("foo", mimetype="text/css")
-        self.assertEqual(attachment.db_datas, self.data)
+        self.assertEqual(attachment.db_datas, b"foo")
 
     def test_not_asset(self):
         attachment = self._create_attachment("foo")
