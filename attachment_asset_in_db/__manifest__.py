@@ -6,9 +6,9 @@
 {
     "name": "attachment_asset_in_db",
     "summary": "Always store odoo asset in database",
-    "version": "12.0.1.0.0",
+    "version": "14.0.1.0.0",
     "category": "Uncategorized",
-    "website": "www.akretion.com",
+    "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": " Akretion",
     "license": "AGPL-3",
     "application": False,
@@ -20,11 +20,8 @@
     "depends": [
         "base",
     ],
-    "data": [
-    ],
-    'post_init_hook': 'post_init_hook',
-    "demo": [
-    ],
-    "qweb": [
-    ]
+    "data": [],
+    "post_init_hook": "post_init_hook",
+    "demo": [],
+    "qweb": [],
 }
