@@ -13,11 +13,12 @@ class TestAttachment(SavepointCase):
         super().setUpClass()
         cls.data = base64.b64encode(b"foo")
 
-    def _create_attachment(self, name):
+    def _create_attachment(self, name, mimetype=None):
         return self.env["ir.attachment"].create(
             {
                 "name": name,
                 "datas": self.data,
+                "mimetype": mimetype,
             }
         )
 
@@ -25,9 +26,13 @@ class TestAttachment(SavepointCase):
         attachment = self._create_attachment("web_icon_data")
         self.assertEqual(attachment.db_datas, self.data)
 
+    def test_asset_css(self):
+        attachment = self._create_attachment("foo", mimetype="text/css")
+        self.assertEqual(attachment.db_datas, self.data)
+
     def test_not_asset(self):
         attachment = self._create_attachment("foo")
-        self.assertIsNone(attachment.db_datas)
+        self.assertFalse(attachment.db_datas)
 
     def test_multi_write(self):
         attachments = self._create_attachment("foo")
