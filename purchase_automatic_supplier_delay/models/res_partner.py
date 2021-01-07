@@ -4,9 +4,10 @@ from odoo import fields, models
 
 
 class ResPartner(models.Model):
-    _inherit = 'res.partner'
+    _inherit = "res.partner"
 
     delivery_delay = fields.Integer(
         string="Delivery Delay",
         help="This delay will be used to calculate the planned date on "
-             "incoming shipment if there is not historic for a product")
+        "incoming shipment if there is not historic for a product",
+    )
