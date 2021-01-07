@@ -5,7 +5,7 @@
     "name": "Purchase Automatic Supplier Delay",
     "summary": "Automatically compute supplier delays and po planned date",
     "license": "AGPL-3",
-    "version": "12.0.0.0.0",
+    "version": "14.0.1.0.0",
     "author": "Akretion",
     "maintainer": "Akretion",
     "category": "purchase",

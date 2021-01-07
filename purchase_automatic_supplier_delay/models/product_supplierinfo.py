@@ -1,27 +1,21 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime
 
 from odoo import models
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class ProductSupplierinfo(models.Model):
     _inherit = "product.supplierinfo"
 
     def _update_delay(self):
-        forced_company = False
-        if self.env.context.get("force_company"):
-            forced_company = self.env["res.company"].browse(
-                self.env.context.get("force_company")
-            )
         for suppinfo in self:
             products = (
                 suppinfo.product_id or suppinfo.product_tmpl_id.product_variant_ids
             )
 
-            company = suppinfo.company_id or forced_company or self.env.user.company_id
-            limit = company.incoming_shippment_number_delay or 3
+            company = suppinfo.company_id or self.env.company
+            limit = company.incoming_shipment_number_delay or 3
+            self.flush()
             self.env.cr.execute(
                 """
                 SELECT po.date_approve, pi.date_done
@@ -45,12 +39,8 @@ class ProductSupplierinfo(models.Model):
             for delay_info in dates:
                 if not delay_info[0] or not delay_info[1]:
                     continue
-                date_approve = datetime.strptime(
-                    delay_info[0], DEFAULT_SERVER_DATETIME_FORMAT
-                ).date()
-                date_done = datetime.strptime(
-                    delay_info[1], DEFAULT_SERVER_DATETIME_FORMAT
-                ).date()
+                date_approve = delay_info[0].date()
+                date_done = delay_info[1].date()
                 delays.append((date_done - date_approve).days)
             if not delays:
                 continue

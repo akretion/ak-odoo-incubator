@@ -4,3 +4,4 @@ from . import purchase_order_line
 from . import product_supplierinfo
 from . import res_partner
 from . import stock_move
+from . import stock_picking
