@@ -4,8 +4,8 @@
 
 import logging
 
-from openerp import _, api, models
-from openerp.exceptions import Warning as UserError
+from odoo import _, api, models
+from odoo.exceptions import Warning as UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -13,7 +13,6 @@ _logger = logging.getLogger(__name__)
 class SaleAdvancePaymentInv(models.TransientModel):
     _inherit = "sale.advance.payment.inv"
 
-    @api.multi
     def create_invoices(self):
         sales = self.env["sale.order"].search(
             [

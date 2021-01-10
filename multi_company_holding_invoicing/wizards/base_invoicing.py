@@ -6,10 +6,10 @@
 
 import logging
 
-from openerp import _, api, models
+from odoo import _, api, models
 
 _logger = logging.getLogger(__name__)
-from openerp.exceptions import Warning as UserError
+from odoo.exceptions import Warning as UserError
 
 
 class BaseHoldingInvoicing(models.AbstractModel):
@@ -124,7 +124,7 @@ class BaseHoldingInvoicing(models.AbstractModel):
 
     @api.model
     def _generate_invoice(self, domain, date_invoice=None):
-        self = self.suspend_security()
+        self = self.sudo()
         invoices = self.env["account.invoice"].browse(False)
         _logger.debug("Retrieve data for generating the invoice")
         for data in self._get_invoice_data(domain):

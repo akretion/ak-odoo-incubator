@@ -5,11 +5,11 @@
 
 import logging
 
-from openerp import api, fields, models
-from openerp.addons.connector.queue.job import job
-from openerp.addons.connector.session import ConnectorSession
-from openerp.exceptions import Warning as UserError
-from openerp.tools.translate import _
+from odoo import api, fields, models
+from odoo.addons.connector.queue.job import job
+from odoo.addons.connector.session import ConnectorSession
+from odoo.exceptions import Warning as UserError
+from odoo.tools.translate import _
 
 _logger = logging.getLogger(__name__)
 
@@ -52,22 +52,18 @@ class AccountInvoice(models.Model):
         compute_sudo=True,
     )
 
-    @api.multi
     def _compute_holding_sale_count(self):
         for inv in self:
             inv.holding_sale_count = len(inv.holding_sale_ids)
 
-    @api.multi
     def _compute_sale_count(self):
         for inv in self:
             inv.sale_count = len(inv.sale_ids)
 
-    @api.multi
     def _compute_child_invoice_count(self):
         for inv in self:
             inv.child_invoice_count = len(inv.sudo().child_invoice_ids)
 
-    @api.multi
     def _compute_child_invoice_job_count(self):
         for inv in self:
             child_invoice_jobs = (
@@ -82,32 +78,29 @@ class AccountInvoice(models.Model):
             )
             inv.child_invoice_job_count = len(child_invoice_jobs)
 
-    @api.multi
     def invoice_validate(self):
         for invoice in self:
             if invoice.holding_sale_ids and invoice.user_id.id == self._uid:
-                invoice = invoice.suspend_security()
+                invoice = invoice.sudo()
             invoice.holding_sale_ids._set_invoice_state("invoiced")
             super(AccountInvoice, self).invoice_validate()
         return True
 
-    @api.multi
     def unlink(self):
         # Give some extra right to the user who have generated
         # the holding invoice
         for invoice in self:
             if invoice.holding_sale_ids and invoice.user_id.id == self._uid:
-                invoice = invoice.suspend_security()
+                invoice = invoice.sudo()
             sale_obj = self.env["sale.order"]
             sales = sale_obj.search([("holding_invoice_id", "=", invoice.id)])
             super(AccountInvoice, invoice).unlink()
             sales._set_invoice_state("invoiceable")
         return True
 
-    @api.multi
     def generate_child_invoice(self):
         # TODO add a group and check it
-        self = self.suspend_security()
+        self = self.sudo()
         session = ConnectorSession(self.env.cr, self.env.uid, self.env.context)
         for invoice in self:
             if invoice.child_invoice_ids:
@@ -162,7 +155,6 @@ class AccountInvoiceLine(models.Model):
         column2="order_line_id",
     )
 
-    @api.multi
     def product_id_change(
         self,
         product,

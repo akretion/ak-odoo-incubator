@@ -4,7 +4,7 @@
 
 from datetime import datetime
 
-from openerp.exceptions import Warning as UserError
+from odoo.exceptions import Warning as UserError
 
 from .common import (
     XML_COMPANY_A,

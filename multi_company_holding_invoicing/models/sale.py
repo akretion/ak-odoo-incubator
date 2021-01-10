@@ -6,7 +6,7 @@
 
 import logging
 
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -41,7 +41,6 @@ class SaleOrder(models.Model):
         store=True,
     )
 
-    @api.multi
     @api.depends("shipped", "section_id.holding_company_id")
     def _compute_invoice_state(self):
         # Note for perf issue the 'holding_invoice_id.state' is not set here
@@ -60,7 +59,6 @@ class SaleOrder(models.Model):
             else:
                 sale.invoice_state = "not_ready"
 
-    @api.multi
     def _set_invoice_state(self, state):
         if self:
             self._cr.execute(

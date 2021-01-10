@@ -3,8 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp import _, api, fields, models
-from openerp.exceptions import Warning as UserError
+from odoo import _, api, fields, models
+from odoo.exceptions import Warning as UserError
 
 
 class InvoiceWizard(models.TransientModel):
@@ -17,7 +17,6 @@ class InvoiceWizard(models.TransientModel):
         "crm.case.section", string="Sale Section", required=True
     )
 
-    @api.multi
     def _get_invoice_domain(self):
         self.ensure_one()
         return [
@@ -37,7 +36,6 @@ class InvoiceWizard(models.TransientModel):
         )
         return action
 
-    @api.multi
     def create_invoice(self):
         self.ensure_one()
         domain = self._get_invoice_domain()

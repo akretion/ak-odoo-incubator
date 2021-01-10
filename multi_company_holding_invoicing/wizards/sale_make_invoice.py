@@ -4,8 +4,8 @@
 
 import logging
 
-from openerp import _, api, fields, models
-from openerp.exceptions import Warning as UserError
+from odoo import _, api, fields, models
+from odoo.exceptions import Warning as UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -73,7 +73,6 @@ class SaleMakeInvoice(models.TransientModel):
         readonly=True,
     )
 
-    @api.multi
     def make_invoices(self):
         self.ensure_one()
         if self.error:
@@ -82,7 +81,7 @@ class SaleMakeInvoice(models.TransientModel):
             domain = [("id", "in", self._context["active_ids"])]
             invoices = (
                 self.env["holding.invoicing"]
-                .suspend_security()
+                .sudo()
                 ._generate_invoice(domain, date_invoice=self.invoice_date)
             )
             if invoices:

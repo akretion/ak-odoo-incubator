@@ -5,7 +5,7 @@
 
 {
     "name": "Multi Company Holding Invoicing",
-    "version": "8.0.0.0.1",
+    "version": "14.0.1.0.0",
     "category": "Accounting & Finance",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/akretion/ak-odoo-incubator",
@@ -13,8 +13,7 @@
     "depends": [
         "account_invoice_inter_company",
         "sales_team",
-        "base_suspend_security",
-        # Note we depend of this module for having the sale_ids field
+                # Note we depend of this module for having the sale_ids field
         # on the invoice
         "sale_automatic_workflow",
         "connector",

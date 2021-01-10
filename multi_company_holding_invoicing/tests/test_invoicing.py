@@ -2,7 +2,7 @@
 # Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp.addons.connector.tests.common import mock_job_delay_to_direct
+from odoo.addons.connector.tests.common import mock_job_delay_to_direct
 
 from .common import (
     CHILD_JOB_PATH,
