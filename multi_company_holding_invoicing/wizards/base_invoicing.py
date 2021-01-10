@@ -56,7 +56,7 @@ class BaseHoldingInvoicing(models.AbstractModel):
 
     @api.model
     def _prepare_invoice_line(self, data_line):
-        section = self.env["crm.case.section"].browse(data_line["section_id"][0])
+        section = self.env["crm.case.section"].browse(data_line["team_id"][0])
         vals = self._get_accounting_value_from_product(
             data_line, section.holding_product_id
         )
@@ -130,13 +130,13 @@ class BaseHoldingInvoicing(models.AbstractModel):
         for data in self._get_invoice_data(domain):
             company = self._get_company_invoice(data)
 
-            section = self.env["crm.case.section"].browse(data["section_id"][0])
+            section = self.env["crm.case.section"].browse(data["team_id"][0])
 
             # add company and section info in the context
             loc_self = self.with_context(
                 force_company=company.id,
                 invoice_date=date_invoice,
-                section_id=section.id,
+                team_id=section.id,
                 section_group_by=section.holding_invoice_group_by,
             )
 
@@ -164,8 +164,8 @@ class HoldingInvoicing(models.TransientModel):
     @api.model
     def _get_group_fields(self):
         return [
-            ["partner_invoice_id", "section_id", "amount_untaxed"],
-            ["partner_invoice_id", "section_id"],
+            ["partner_invoice_id", "team_id", "amount_untaxed"],
+            ["partner_invoice_id", "team_id"],
         ]
 
     @api.model
@@ -177,7 +177,7 @@ class HoldingInvoicing(models.TransientModel):
 
     @api.model
     def _get_company_invoice(self, data):
-        section = self.env["crm.case.section"].browse(data["section_id"][0])
+        section = self.env["crm.case.section"].browse(data["team_id"][0])
         return section.holding_company_id
 
     @api.model
@@ -211,7 +211,7 @@ class ChildInvoicing(models.TransientModel):
 
     @api.model
     def _get_invoice_line_data(self, data):
-        section = self.env["crm.case.section"].browse(data["section_id"][0])
+        section = self.env["crm.case.section"].browse(data["team_id"][0])
         data_lines = super(ChildInvoicing, self)._get_invoice_line_data(data)
         data_lines.append(
             {
@@ -219,7 +219,7 @@ class ChildInvoicing(models.TransientModel):
                 "amount_untaxed": data["amount_untaxed"],
                 "quantity": -section.holding_discount / 100.0,
                 "sale_line_ids": [],
-                "section_id": [section.id],
+                "team_id": [section.id],
             }
         )
         return data_lines
@@ -249,7 +249,7 @@ class ChildInvoicing(models.TransientModel):
         # we should simplify the _get_invoice_line_data
         # and _prepare_invoice_line to avoid this kind of hack
         if data_line.get("name") == "royalty":
-            section = self.env["crm.case.section"].browse(data_line["section_id"][0])
+            section = self.env["crm.case.section"].browse(data_line["team_id"][0])
             val_line = self._get_accounting_value_from_royalty_product(
                 data_line, section.holding_royalty_product_id
             )
@@ -276,7 +276,7 @@ class ChildInvoicing(models.TransientModel):
         holding_invoice = sale.holding_invoice_id
         vals["origin"] = holding_invoice.name
         vals["partner_id"] = holding_invoice.company_id.partner_id.id
-        section = self.env["crm.case.section"].browse(data["section_id"][0])
+        section = self.env["crm.case.section"].browse(data["team_id"][0])
         partner_data = self.env["account.invoice"].onchange_partner_id(
             "out_invoice",
             holding_invoice.company_id.partner_id.id,
@@ -289,6 +289,6 @@ class ChildInvoicing(models.TransientModel):
     @api.model
     def _get_group_fields(self):
         return [
-            ["partner_invoice_id", "section_id", "company_id", "amount_untaxed"],
-            ["partner_invoice_id", "section_id", "company_id"],
+            ["partner_invoice_id", "team_id", "company_id", "amount_untaxed"],
+            ["partner_invoice_id", "team_id", "company_id"],
         ]

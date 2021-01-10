@@ -9,7 +9,7 @@
             <field name="partner_shipping_id" ref="base.res_partner_2" />
             <field name="user_id" ref="base.user_demo" />
             <field name="pricelist_id" ref="product.list0" />
-            <field name="section_id" ref="section_market_1" />
+            <field name="team_id" ref="section_market_1" />
             <field name="company_id" ref="child_company_a" />
             <field
                 name="date_order"
@@ -54,7 +54,7 @@
             <field name="user_id" ref="base.user_root" />
             <field name="pricelist_id" ref="product.list0" />
             <field name="order_policy">manual</field>
-            <field name="section_id" ref="section_market_1" />
+            <field name="team_id" ref="section_market_1" />
             <field name="company_id" ref="child_company_a" />
             <field
                 name="date_order"
@@ -90,7 +90,7 @@
             <field name="user_id" ref="base.user_root" />
             <field name="pricelist_id" ref="product.list0" />
             <field name="order_policy">manual</field>
-            <field name="section_id" ref="section_market_1" />
+            <field name="team_id" ref="section_market_1" />
             <field name="company_id" ref="child_company_b" />
         </record>
 
@@ -120,7 +120,7 @@
             <field name="partner_shipping_id" ref="base.res_partner_address_25" />
             <field name="user_id" ref="base.user_root" />
             <field name="pricelist_id" ref="product.list0" />
-            <field name="section_id" ref="section_market_1" />
+            <field name="team_id" ref="section_market_1" />
             <field name="company_id" ref="child_company_b" />
         </record>
 
@@ -170,7 +170,7 @@
             <field name="partner_shipping_id" ref="base.res_partner_2" />
             <field name="user_id" ref="base.user_demo" />
             <field name="pricelist_id" ref="product.list0" />
-            <field name="section_id" ref="section_market_2" />
+            <field name="team_id" ref="section_market_2" />
             <field name="company_id" ref="child_company_a" />
             <field
                 name="date_order"

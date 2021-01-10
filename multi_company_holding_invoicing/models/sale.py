@@ -16,18 +16,16 @@ class SaleOrder(models.Model):
 
     holding_company_id = fields.Many2one(
         "res.company",
-        related="section_id.holding_company_id",
+        related="team_id.holding_company_id",
         string="Holding Company for Invoicing",
-        readonly=True,
-        copy=False,
-        store=True,
     )
-
     holding_invoice_id = fields.Many2one(
-        "account.invoice", string="Holding Invoice", copy=False, readonly=True
+        "account.invoice",
+        string="Holding Invoice",
+        copy=False,
+        readonly=True,
     )
-
-    invoice_state = fields.Selection(
+    holding_invoice_state = fields.Selection(
         [
             ("none", "Not Applicable"),
             ("not_ready", "Not Ready"),
@@ -35,19 +33,21 @@ class SaleOrder(models.Model):
             ("pending", "Pending"),
             ("invoiced", "Invoiced"),
         ],
-        string="Invoice State",
-        copy=False,
+        string="Holding Invoice State",
         compute="_compute_invoice_state",
         store=True,
     )
 
-    @api.depends("shipped", "section_id.holding_company_id")
+    # TODO
+    # @api.depends("shipped", "team_id.holding_company_id")
     def _compute_invoice_state(self):
+        # TODO
+        return
         # Note for perf issue the 'holding_invoice_id.state' is not set here
         # as a dependency. Indeed the dependency is manually triggered when
         # the holding_invoice is generated or the state is changed
         for sale in self:
-            if not sale.section_id.holding_company_id:
+            if not sale.team_id.holding_company_id:
                 sale.invoice_state = "none"
             elif sale.holding_invoice_id:
                 if sale.holding_invoice_id.state in ("open", "paid"):
@@ -69,7 +69,7 @@ class SaleOrder(models.Model):
             )
             self.invalidate_cache()
 
-    @api.onchange("section_id")
-    def onchange_section_id(self):
-        if self.section_id and self.section_id.holding_company_id:
+    @api.onchange("team_id")
+    def onchange_team_id(self):
+        if self.team_id and self.team_id.holding_company_id:
             self.order_policy = "manual"

@@ -13,14 +13,12 @@ class InvoiceWizard(models.TransientModel):
     date_invoice = fields.Date(
         "Invoice Date", required=True, default=fields.Datetime.now
     )
-    section_id = fields.Many2one(
-        "crm.case.section", string="Sale Section", required=True
-    )
+    team_id = fields.Many2one("crm.case.section", string="Sale Section", required=True)
 
     def _get_invoice_domain(self):
         self.ensure_one()
         return [
-            ("section_id", "=", self.section_id.id),
+            ("team_id", "=", self.team_id.id),
             ("invoice_state", "=", "invoiceable"),
             ("holding_invoice_id", "=", False),
         ]

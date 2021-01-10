@@ -6,6 +6,7 @@
 
 from . import sales_team
 from . import sale
-from . import invoice
-from . import model
 from . import product
+
+# TODO migrate
+# from . import invoice

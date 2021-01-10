@@ -7,8 +7,8 @@
 from odoo import fields, models
 
 
-class CrmCaseSection(models.Model):
-    _inherit = "crm.case.section"
+class CrmTeam(models.Model):
+    _inherit = "crm.team"
 
     holding_company_id = fields.Many2one(
         "res.company",

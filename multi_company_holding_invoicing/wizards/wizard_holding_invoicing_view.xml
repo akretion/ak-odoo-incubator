@@ -11,10 +11,10 @@
             <group>
               <field name="date_invoice" />
               <field
-                            name="section_id"
-                            widget="radio"
-                            domain="[('holding_company_id', '!=', False)]"
-                        />
+                        name="team_id"
+                        widget="radio"
+                        domain="[('holding_company_id', '!=', False)]"
+                    />
             </group>
             <footer>
                 <button name="create_invoice" string="Confirmer" type="object" />
@@ -34,10 +34,10 @@
 </record>
 
 <menuitem
-            id="menu_wizard_holding_invoicing"
-            parent="account.menu_finance_receivables"
-            sequence="10"
-            action="action_wizard_holding_invoicing"
-        />
+        id="menu_wizard_holding_invoicing"
+        parent="account.menu_finance_receivables"
+        sequence="10"
+        action="action_wizard_holding_invoicing"
+    />
 
 </odoo>

@@ -19,10 +19,10 @@ class SaleMakeInvoice(models.TransientModel):
         sales = self.env["sale.order"].browse(self._context["active_ids"])
         sections = {}
         for sale in sales:
-            if sections.get(sale.section_id):
-                sections[sale.section_id] |= sale
+            if sections.get(sale.team_id):
+                sections[sale.team_id] |= sale
             else:
-                sections[sale.section_id] = sale
+                sections[sale.team_id] = sale
         for section, sales in sections.items():
             if section.holding_company_id:
                 if len(sections) != 1:
@@ -66,7 +66,7 @@ class SaleMakeInvoice(models.TransientModel):
             return self.env["crm.case.section"].browse(False)
 
     error = fields.Text(default=_compute_error, readonly=True)
-    section_id = fields.Many2one(
+    team_id = fields.Many2one(
         "crm.case.section",
         string="Sale Section",
         default=_compute_section,
@@ -77,7 +77,7 @@ class SaleMakeInvoice(models.TransientModel):
         self.ensure_one()
         if self.error:
             raise UserError(self.error)
-        if self.section_id:
+        if self.team_id:
             domain = [("id", "in", self._context["active_ids"])]
             invoices = (
                 self.env["holding.invoicing"]
