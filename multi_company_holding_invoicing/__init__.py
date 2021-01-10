@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2015 Akretion (http://www.akretion.com)
 # Sébastien BEAU <sebastien.beau@akretion.com>
 # Chafique Delli <chafique.delli@akretion.com>

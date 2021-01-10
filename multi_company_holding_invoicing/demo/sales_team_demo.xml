@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <openerp>
     <data>
 
 <record id="section_market_1" model="crm.case.section">
     <field name="name">Holding Market 1</field>
-    <field name="holding_company_id" ref="base.main_company"/>
+    <field name="holding_company_id" ref="base.main_company" />
     <field name="holding_discount">10</field>
-    <field name="holding_product_id" ref="holding_product"/>
-    <field name="holding_royalty_product_id" ref="holding_royalty_product"/>
+    <field name="holding_product_id" ref="holding_product" />
+    <field name="holding_royalty_product_id" ref="holding_royalty_product" />
 </record>
 
 <record id="section_market_2" model="crm.case.section">
     <field name="name">Holding Market 2</field>
-    <field name="holding_company_id" ref="base.main_company"/>
+    <field name="holding_company_id" ref="base.main_company" />
     <field name="holding_discount">15</field>
-    <field name="holding_product_id" ref="holding_product"/>
-    <field name="holding_royalty_product_id" ref="holding_royalty_product"/>
+    <field name="holding_product_id" ref="holding_product" />
+    <field name="holding_royalty_product_id" ref="holding_royalty_product" />
 </record>
 
     </data>

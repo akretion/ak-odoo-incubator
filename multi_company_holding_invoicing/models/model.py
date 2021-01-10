@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2015 Akretion (http://www.akretion.com)
 # Sébastien BEAU <sebastien.beau@akretion.com>
 # Chafique Delli <chafique.delli@akretion.com>
@@ -9,8 +8,8 @@ from openerp import fields, models
 
 
 class QueueJob(models.Model):
-    _inherit = 'queue.job'
+    _inherit = "queue.job"
 
-    holding_invoice_id = fields.Many2one('account.invoice',
-                                         string='Holding Invoice',
-                                         copy=False, readonly=True)
+    holding_invoice_id = fields.Many2one(
+        "account.invoice", string="Holding Invoice", copy=False, readonly=True
+    )

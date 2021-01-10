@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <openerp>
   <data>
 
@@ -6,20 +6,21 @@
     <field name="model">wizard.holding.invoicing</field>
     <field name="arch" type="xml">
         <form>
-            <newline/>
+            <newline />
             <div>Select the parameter for creating your invoice</div>
-            <newline/>
+            <newline />
             <group>
-              <field name="date_invoice"/>
-              <field name="section_id" widget="radio"
-                     domain="[('holding_company_id', '!=', False)]"/>
+              <field name="date_invoice" />
+              <field
+                            name="section_id"
+                            widget="radio"
+                            domain="[('holding_company_id', '!=', False)]"
+                        />
             </group>
             <footer>
-                <button name="create_invoice"
-                        string="Confirmer"
-                        type="object"/>
+                <button name="create_invoice" string="Confirmer" type="object" />
                 or
-                <button string="Annuler" class="oe_link" special="cancel"/>
+                <button string="Annuler" class="oe_link" special="cancel" />
             </footer>
         </form>
     </field>
@@ -33,10 +34,12 @@
   <field name="target">new</field>
 </record>
 
-<menuitem id="menu_wizard_holding_invoicing"
-          parent="account.menu_finance_receivables"
-          sequence="10"
-          action="action_wizard_holding_invoicing"/>
+<menuitem
+            id="menu_wizard_holding_invoicing"
+            parent="account.menu_finance_receivables"
+            sequence="10"
+            action="action_wizard_holding_invoicing"
+        />
 
   </data>
 </openerp>
