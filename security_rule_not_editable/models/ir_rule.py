@@ -10,7 +10,7 @@ class IrRule(models.Model):
     _inherit = "ir.rule"
 
     def _ensure_install_mode(self):
-        if not self._context.get("install_mode"):
+        if not self.env.context.get("install_mode"):
             raise UserError(_("Rule are not editable, put your rule in your code"))
 
     @api.model_create_multi
