@@ -9,8 +9,9 @@ odoo_version: '14.0'
 prettify_xml: true
 python_line_length: 88
 rebel_module_groups: []
-repo_description: The modules present in this repo should go to OCA on the long run,
-  they are still not used a lot and still need to prove themselves
+repo_description:
+  The modules present in this repo should go to OCA on the long run, they are still not
+  used a lot and still need to prove themselves
 repo_name: Generic Odoo module in incubation
 repo_slug: ak-odoo-incubator
 travis_apt_packages: []
