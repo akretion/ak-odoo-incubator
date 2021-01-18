@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <record id="label_from_record_wizard_view" model="ir.ui.view">
         <field name="model">label.from.record</field>
@@ -6,14 +6,15 @@
             <form>
                 <group name="main">
                     <div>Le format attendu est:
-                        <br/><b>code_article ; quantité [; id ] [; id_quant ]</b>
+                        <br /><b>code_article ; quantité [; id ] [; id_quant ]</b>
                     </div>
-                    <field name="content" colspan="4" nolabel="1"/>
+                    <field name="content" colspan="4" nolabel="1" />
                     <div>
                       <ul>
                         <li>Une ligne par produit</li>
                         <li>id est facultatif si le code est unique</li>
-                        <li>si id est présent alors le code ne sera pas utilisé: mettez un caractère quelconque</li>
+                        <li
+                            >si id est présent alors le code ne sera pas utilisé: mettez un caractère quelconque</li>
                       </ul>
                     </div>
                 </group>
@@ -21,9 +22,13 @@
                     <field name="with_price" />
                 </group>
                 <footer>
-                    <button name="generate_label" string="Apply"
-                        type="object" class="oe_highlight"/>
-                    <button special="cancel" string="Cancel" class="oe_link"/>
+                    <button
+                        name="generate_label"
+                        string="Apply"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    <button special="cancel" string="Cancel" class="oe_link" />
                 </footer>
             </form>
         </field>
