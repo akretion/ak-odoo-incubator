@@ -72,7 +72,6 @@ class LabelFromRecord(models.TransientModel):
             ]
         return "\n".join(infos)
 
-    @api.multi
     def generate_label(self):
         for rec in self:
             if rec.content:
@@ -110,7 +109,7 @@ class LabelFromRecord(models.TransientModel):
         if len(info) == 4:
             model = self._context["active_model"]
         else:
-            model = self.env["product.product"]
+            model = "product.product"
         if len(info) > 2:
             # the last part is always the id
             rec = self.env[model].browse(info[-1])
