@@ -100,11 +100,11 @@ class LabelFromRecord(models.TransientModel):
 
     @api.model
     def _search_product(self, info):
-        """ info[0]: code,
-            info[1]: quantity,
-            info[2]: id product,
-            info[3]: id move_line or quant
-            return record, quantity
+        """info[0]: code,
+        info[1]: quantity,
+        info[2]: id product,
+        info[3]: id move_line or quant
+        return record, quantity
         """
         qty = info[1]
         if len(info) == 4:
@@ -123,8 +123,7 @@ class LabelFromRecord(models.TransientModel):
 
     @api.model
     def _sanitize_and_check_parts(self, parts, line):
-        """ @return la 1ère règle non respecté
-        """
+        """@return la 1ère règle non respecté"""
         message = u"La ligne '%s' ne respecte pas le format."
         if not isinstance(parts, list):
             raise UserError(_(message) % line)
