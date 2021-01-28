@@ -1,5 +1,5 @@
-from openerp import fields
-from openerp.addons.base_sparse_field.models.fields import monkey_patch
+from odoo import fields
+from odoo.addons.base_sparse_field.models.fields import monkey_patch
 
 
 @monkey_patch(fields.Field)
