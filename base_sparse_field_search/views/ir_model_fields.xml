@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <openerp>
 
         <record id="sparse_view_model_fields_form" model="ir.ui.view">
@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="base.view_model_fields_form" />
             <field name="arch" type="xml">
                 <field name="serialization_field_id" position="after">
-                    <field name="sparse_search"/>
+                    <field name="sparse_search" />
                 </field>
             </field>
         </record>
