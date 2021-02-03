@@ -15,7 +15,8 @@ class StockMove(models.Model):
             old_lot.name, index)
         return {
             'name': lot_number,
-            'product_id': self.product_id.id
+            'product_id': self.product_id.id,
+            'phantom_lot_id': old_lot.id,
         }
 
     @api.model
@@ -25,7 +26,6 @@ class StockMove(models.Model):
             _action_explode(move)
         if not self.env.context.get('subcall', False) and len(move_ids) > 1 and \
                 original_lot:
-            lot_obj = self.env['stock.production.lot']
             index = 1
             for new_move in self.browse(move_ids):
                 vals = new_move._get_lot_vals(original_lot, index)

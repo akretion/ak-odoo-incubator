@@ -113,6 +113,10 @@ class StockProductionLot(models.Model):
         'mrp.production',
         'lot_id',
         string='Production Order')
+    # technical fields
+    phantom_lot_id = fields.Many2one('stock.production.lot', index=True, copy=False,
+        help="Lot that have generated this one because of bom phantom")
+    component_lot_ids = fields.One2many('stock.production.lot', 'phantom_lot_id')
 
     @api.multi
     def unlink(self):
