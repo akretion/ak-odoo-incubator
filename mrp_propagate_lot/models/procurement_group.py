@@ -7,8 +7,16 @@ class ProcurementGroup(models.Model):
     _inherit = "procurement.group"
 
     @api.model
-    def _get_custom_lot_vals(self, vals, product, idx):
-        return {"name": "%s-%d" % (vals["name"], idx), "product_id": product.id}
+    def _get_custom_lot_vals(self, origin_lot, product, idx):
+        vals = origin_lot.copy_data()[0]
+        vals.update(
+            {
+                "name": "%s-%d" % (vals["name"], idx),
+                "product_id": product.id,
+                "phantom_lot_id": origin_lot.id,
+            }
+        )
+        return vals
 
     @api.model
     def _get_kit_component_procurements(self, procurements):
@@ -26,8 +34,7 @@ class ProcurementGroup(models.Model):
             if lot and lot.product_id != product:
                 if product.auto_generate_prodlot:
                     index += 1
-                    vals = lot.copy_data()[0]
-                    vals.update(self._get_custom_lot_vals(vals, product, index))
+                    vals = self._get_custom_lot_vals(lot, product, index)
                     new_lot_id = lot_obj.create(vals).id
                 else:
                     new_lot_id = False
