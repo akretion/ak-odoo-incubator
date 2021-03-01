@@ -36,6 +36,10 @@ class PurchaseLineExtractorWizard(models.TransientModel):
         }
         if self.order_reference:
             vals['name'] = self.order_reference
+        origin_po = self.line_ids[0].purchase_line_id.order_id
+        # update location as picking type may have changed compared to open PO
+        if not origin_po.dest_address_id and self.picking_type_id.default_location_dest_id:
+            vals['location_id'] = self.picking_type_id.default_location_dest_id.id
         return vals
 
     @api.multi
