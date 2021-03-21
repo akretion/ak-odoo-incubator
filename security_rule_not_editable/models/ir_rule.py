@@ -18,6 +18,15 @@ class IrRule(models.Model):
         self._ensure_install_mode()
         return super().create(vals_list)
 
+    def _is_useless_write_on_active(self, vals):
+        """Return True if we try to only write the field 'active' and the
+        records already have the same value"""
+        return set(vals.keys()) == {"active"} and set(self.mapped("active")) == {
+            vals["active"]
+        }
+
     def write(self, vals):
+        if self._is_useless_write_on_active(vals):
+            return True
         self._ensure_install_mode()
         return super().write(vals)
