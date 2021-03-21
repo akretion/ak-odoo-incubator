@@ -64,11 +64,11 @@ class StockMove(models.Model):
 
         # mig v12: remove this function since search_picking_for_assignation
         # is in core
-        candidates_for_empty_picking = []
+        candidates_for_empty_picking = Picking.browse()
         for move in self:
             recompute = False
             if move.picking_id:
-                candidates_for_empty_picking.append(move.picking_id)
+                candidates_for_empty_picking += move.picking_id
             picking = move._search_picking_for_assignation()
             if not picking:
                 if not move.picking_type_id:
@@ -81,7 +81,8 @@ class StockMove(models.Model):
             move.write({'picking_id': picking.id})
             if recompute:
                 move.recompute()
-        for picking in candidates_for_empty_picking:
-            if not picking.move_lines:
-                picking.unlink()
+        empty_pickings = candidates_for_empty_picking.filtered(
+            lambda r: not r.move_lines)
+        if empty_pickings:
+            empty_pickings.unlink()
         return True
