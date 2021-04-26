@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="edi_purchase_configuration_menu"
+        name="Edi Configuration"
+        parent="purchase.menu_purchase_config"
+        sequence="40"
+    />
+
+    <record id="purchase_export_config_action" model="ir.actions.act_window">
+        <field name="name">Purchase Export Profiles</field>
+        <field name="res_model">ir.exports.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('resource', '=', 'purchase.order.line')]</field>
+    </record>
+
+    <menuitem
+        id="purchase_exports_config_menu"
+        name="Purchase Export Profiles"
+        parent="edi_purchase_configuration_menu"
+        action="purchase_export_config_action"
+        sequence="4"
+    />
+
+</odoo>
