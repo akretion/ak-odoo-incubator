@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ir_exports_config,"ir_exports_config group_system","model_ir_exports_config","base.group_allow_export",1,1,1,1
+access_additional_export_line_manager,"additional_export_line export rights Manager","model_additional_export_line","base.group_allow_export",1,1,1,1
+access_additional_export_line_user,"additional_export_line export rights User","model_additional_export_line","base.group_user",1,0,0,0
