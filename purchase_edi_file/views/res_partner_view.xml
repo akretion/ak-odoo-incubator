@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="res_partner_form_view" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <group name="purchase" position="after">
+                <group name="edi" string="Purchase EDI Infos">
+                    <field
+                        name="default_purchase_profile_id"
+                        attrs="{'invisible': [('edi_transfer_method', 'not in', ('external_location', 'mail'))]}"
+                    />
+                    <field name="edi_transfer_method" />
+                    <field
+                        name="edi_storage_backend_id"
+                        attrs="{'invisible': [('edi_transfer_method', '!=', 'external_location')], 'required': [('edi_transfer_method', '=', 'external_location')]}"
+                    />
+                    <field
+                        name="edi_mail_template_id"
+                        attrs="{'invisible': [('edi_transfer_method', '!=', 'mail')], 'required': [('edi_transfer_method', '=', 'mail')]}"
+                    />
+                    <field
+                        name="edi_empty_file"
+                        attrs="{'invisible': [('edi_transfer_method', 'not in', ('mail', 'external_location'))]}"
+                    />
+               </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>
