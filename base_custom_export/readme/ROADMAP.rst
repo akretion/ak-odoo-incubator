@@ -1,0 +1,2 @@
+I believe this module could be refactored a bit along with pattern_import_export, to become a dependency of pattern_import_export. (https://github.com/akretion/pattern-import-export/)
+Including the missing feature (customizable field name and file name) and possibility to add more info in export (static value...) could be done directly in pattern_import_export, but it is a big module with a lot of features to install for this small need.

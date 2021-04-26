@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Only define some basic views for submodules use. Sub module should define
+         Menus and actions specific to their use. -->
+    <record id="ir_exports_config_form" model="ir.ui.view">
+        <field name="model">ir.exports.config</field>
+        <field name="arch" type="xml">
+            <form string="Export Configuration" version="7.0">
+                <group name="base" col="2">
+                    <field name="export_id" string="Export" />
+                    <field name="file_format" />
+                    <field name="filename" />
+                </group>
+                <separator string="Exports Fields" />
+                <field name="export_fields" nolabel="1">
+                    <tree editable="top">
+                        <field name="name" readonly="1" />
+                        <field name="display_name" />
+                        <field name="sequence" />
+                    </tree>
+                </field>
+                <separator string="Additional Values" />
+                <field name="additional_export_line_ids" nolabel="1">
+                    <tree editable="top">
+                        <field name="sequence" />
+                        <field name="display_name" />
+                        <field name="value" />
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="ir_exports_config_view_tree" model="ir.ui.view">
+        <field name="model">ir.exports.config</field>
+        <field name="arch" type="xml">
+            <tree string="Exports Config">
+                <field name="export_id" string="Export" />
+                <field name="file_format" />
+            </tree>
+        </field>
+    </record>
+
+</odoo>
