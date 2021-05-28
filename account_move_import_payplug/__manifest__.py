@@ -11,7 +11,7 @@
     "author": "Akretion",
     "website": "https://github.com/OCA/ak-odoo-incubator",
     "depends": [
-        "account_move_transactionid_import",
+        "account_move_base_import",
     ],
     "data": [],
     "demo": [],
