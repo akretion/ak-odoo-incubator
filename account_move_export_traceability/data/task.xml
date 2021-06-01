@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+
+<record id="account_move_export_task_synchronize" model="attachment.synchronize.task">
+    <field name="name">Export Journal Entries</field>
+    <field name="method_type">export</field>
+    <field name="active" eval="0"/>
+</record>
+
+</odoo>

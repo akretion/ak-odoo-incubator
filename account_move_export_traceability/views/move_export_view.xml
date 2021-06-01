@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<odoo>
+
+<record id="account_move_export_form_view" model="ir.ui.view">
+    <field name="model">account.move.export</field>
+    <field type="xml" name="arch">
+        <form string="Accounting Move Export">
+            <group>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="file_id"/>
+                <field name="synchro_state"/>
+                <button name="action_goto_related_account_move"
+                        type="object" string="Related journal entries" class="oe_highlight"/>
+                <button name="action_download" type="object" 
+                        string=" Download" class="fa fa-download"/>
+            </group>
+        </form>
+    </field>
+</record>
+
+<record id="account_move_export_tree_view" model="ir.ui.view">
+    <field name="model">account.move.export</field>
+    <field type="xml" name="arch">
+        <tree string="Accounting Move Export">
+            <field name="name"/>
+            <field name="company_id"/>
+            <field name="file_id"/>
+            <field name="synchro_state"/>
+            <button name="action_goto_related_account_move"
+                    type="object" string="Related journal entries"
+                    class="oe_highlight"/>
+            <button name="action_download" type="object" 
+                    string=" Download" class="fa fa-download"/>
+        </tree>
+    </field>
+</record>
+
+<record id="action_account_move_export" model="ir.actions.act_window">
+    <field name="name">💼 Exported journal entries</field>
+    <field name="res_model">account.move.export</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_mode">tree,form</field>
+    <field name="target">current</field>
+</record>
+
+<menuitem
+    action="action_account_move_export"
+    id="menu_account_move_export"
+    parent="account.menu_finance_reports"
+    sequence="120"/>
+
+
+<record id="view_move_form" model="ir.ui.view">
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_move_form"/>
+    <field type="xml" name="arch">
+        <field name="company_id" position="before">
+            <field name="export_id"/>
+        </field>
+    </field>
+</record>
+
+</odoo>

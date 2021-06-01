@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+<record id="account_csv_export_view" model="ir.ui.view">
+    <field name="model">account.csv.export</field>
+    <field name="inherit_id" ref="account_export_csv.account_csv_export_view"/>
+    <field type="xml" name="arch">
+        <xpath expr="//group[2]/group[2]" position="inside">
+            <field name="mark_exported_record"/>
+        </xpath>
+
+    </field>
+</record>
+
+</odoo>

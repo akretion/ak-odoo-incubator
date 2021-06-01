@@ -1,0 +1,101 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_move_export_traceability
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-25 13:44+0000\n"
+"PO-Revision-Date: 2019-07-25 15:46+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: fr\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. module: account_move_export_traceability
+#: model:ir.model,name:account_move_export_traceability.model_account_move_export
+msgid "Account Moves Export"
+msgstr "Export de pièces comptables"
+
+#. module: account_move_export_traceability
+#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_form_view
+#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_tree_view
+msgid "Accounting Move Export"
+msgstr ""
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__company_id
+msgid "Company"
+msgstr "Société"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move__export_id
+msgid "Export"
+msgstr "Exporter"
+
+#. module: account_move_export_traceability
+#: model:ir.actions.act_window,name:account_move_export_traceability.action_account_move_export
+#: model:ir.ui.menu,name:account_move_export_traceability.menu_account_move_export
+msgid "Exported journal entries"
+msgstr "Pièces comptables exportées"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__file
+msgid "File"
+msgstr "Fichier"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__id
+msgid "ID"
+msgstr ""
+
+#. module: account_move_export_traceability
+#: model:ir.model,name:account_move_export_traceability.model_account_move
+msgid "Journal Entries"
+msgstr "Pièces comptables"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: account_move_export_traceability
+#: model:ir.model.fields,field_description:account_move_export_traceability.field_account_move_export__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: account_move_export_traceability
+#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_form_view
+#: model_terms:ir.ui.view,arch_db:account_move_export_traceability.account_move_export_tree_view
+msgid "Related journal entries"
+msgstr "Pièces comptables associées"

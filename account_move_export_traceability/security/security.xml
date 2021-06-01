@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+
+    <record id="account_move_export_rule" model="ir.rule">
+        <field name="name" >Account Move Export</field>
+        <field name="model_id" ref="model_account_move_export"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('company_id','=',user.company_id.id),('company_id','=',False)]</field>
+    </record>
+
+</odoo>
