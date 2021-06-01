@@ -3,7 +3,7 @@
 
 {
     "name": "Accounting Move Export Traceability",
-    "version": "12.0.0.1.0.1",
+    "version": "12.0.1.0.1",
     "author": "Akretion",
     "category": "account",
     "depends": [

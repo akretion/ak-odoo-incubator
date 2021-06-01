@@ -4,7 +4,7 @@
 from datetime import date
 import logging
 
-from odoo import api, models, fields
+from odoo import _, api, models, fields
 from odoo.exceptions import UserError
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class ResCompany(models.Model):
     def _get_my_export_method(self):
         """ To override in your custom module without call super """
         raise UserError(
-            "You should specify a method to extract entries in your companies"
+            _("You should specify a method to extract entries in your companies")
         )
 
     @api.model

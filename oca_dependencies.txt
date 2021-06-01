@@ -1,2 +1,2 @@
-account_financials-tools
+account-financial-reporting
 server-tools
