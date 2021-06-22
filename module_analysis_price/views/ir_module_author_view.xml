@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+<record id="view_ir_module_author_tree" model="ir.ui.view">
+    <field name="model">ir.module.author</field>
+    <field name="inherit_id" ref="module_analysis.view_ir_module_author_tree" />
+    <field name="arch" type="xml">
+        <field name="installed_module_qty" position="after">
+            <field name="community_installed_module_qty" />
+            <field name="community_installed_module_rate" widget="progressbar" />
+            <field name="community_installed_code_qty" />
+            <field name="community_installed_code_rate" widget="progressbar" />
+        </field>
+    </field>
+</record>
+
+</odoo>
