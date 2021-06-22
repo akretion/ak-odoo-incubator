@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+<record id="view_ir_module_type_form" model="ir.ui.view">
+    <field name="model">ir.module.type</field>
+    <field name="inherit_id" ref="module_analysis.view_ir_module_type_form" />
+    <field name="arch" type="xml">
+        <group position="inside">
+            <field name="code_qty" />
+            <field name="community" />
+            <field name="migration_price_unit" />
+            <field name="maintenance_price_unit" />
+            <field name="migration_monthly_price" />
+            <field name="migration_year_price" />
+            <field name="maintenance_monthly_price" />
+            <field name="maintenance_year_price" />
+        </group>
+    </field>
+</record>
+
+<record id="view_ir_module_type_tree" model="ir.ui.view">
+    <field name="model">ir.module.type</field>
+    <field name="inherit_id" ref="module_analysis.view_ir_module_type_tree" />
+    <field name="arch" type="xml">
+        <field name="installed_module_qty" position="after">
+            <field name="code_qty" sum="Total Code Qty" />
+            <field name="page_qty" sum="Total Page Qty" />
+            <field name="maintenance_price_unit" />
+            <field
+                    name="maintenance_monthly_price"
+                    sum="Total Maintenance Monthly Price"
+                />
+            <field name="maintenance_year_price" sum="Total Maintenance Year Price" />
+            <field name="migration_price_unit" />
+            <field name="migration_monthly_price" sum="Total Migration Monthly Price" />
+            <field name="migration_year_price" sum="Total Migration Year Price" />
+            <field name="community" />
+        </field>
+        <field name="installed_module_qty" position="attributes">
+            <attribute name="sum">Total Module Qty</attribute>
+        </field>
+        <tree position="attributes">
+            <attribute name="editable">bottom</attribute>
+        </tree>
+        <field name="name" position="before">
+            <field name="sequence" widget="handle" />
+        </field>
+    </field>
+</record>
+
+</odoo>
