@@ -15,14 +15,11 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "external_dependencies": {
-        "python": [],
-        "bin": [],
-    },
     "depends": [
-        "base",
+        "contacts",
     ],
     "data": [
+        "views/res_partner_view.xml",
         "views/res_users_view.xml",
         "security/ir_rule.xml",
     ],
