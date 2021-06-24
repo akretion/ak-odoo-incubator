@@ -21,7 +21,6 @@
     },
     "depends": [
         "base",
-        "security_rule_not_editable",  # optional for updating rule automatically
     ],
     "data": [
         "views/res_users_view.xml",
