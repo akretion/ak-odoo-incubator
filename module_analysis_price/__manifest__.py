@@ -21,6 +21,9 @@
     "data": [
         "views/ir_module_type_view.xml",
         "views/ir_module_author_view.xml",
+        "views/ir_module_type_rule_view.xml",
+        "data/module_type_data.xml",
+        "data/module_type_rule_data.xml",
     ],
     "demo": [],
 }

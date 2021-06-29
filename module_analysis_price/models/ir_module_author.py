@@ -44,4 +44,7 @@ class IrModuleAuthor(models.Model):
                 )
         else:
             for record in self:
-                record.community_rate = 0
+                record.community_installed_code_qty = 0
+                record.community_installed_code_rate = 0
+                record.community_installed_module_qty = 0
+                record.community_installed_module_rate = 0
