@@ -20,3 +20,8 @@ class IrModuleModule(models.Model):
             record.code_qty = (
                 record.python_code_qty + record.xml_code_qty + record.js_code_qty
             )
+
+    def _recompute_module_type(self):
+        rules = self.env["ir.module.type.rule"].search([])
+        for module in self.search([("state", "=", "installed")]):
+            module.module_type_id = rules._get_module_type_id_from_module(module)
