@@ -27,8 +27,8 @@ class IrModuleAuthor(models.Model):
     )
     def _compute_community_rate(self):
         type_community = self.env["ir.module.type"].search([("community", "=", True)])
-        if type_community:
-            total_code_qty = sum(type_community.mapped("code_qty"))
+        total_code_qty = sum(type_community.mapped("code_qty"))
+        if total_code_qty:
             total_module_qty = len(type_community.installed_module_ids)
             for record in self:
                 modules = record.installed_module_ids.filtered(
