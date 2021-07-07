@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.actions.server" id="action_recompute_sale_order_price">
+        <field name="name">Mettre à jours les types des modules</field>
+        <field name="model_id" ref="base.model_ir_module_module" />
+        <field
+            name="binding_model_id"
+            ref="module_analysis.model_ir_module_type_rule"
+        />
+        <field name="state">code</field>
+        <field name="code">env["ir.module.module"]._recompute_module_type()</field>
+    </record>
+
+</odoo>
