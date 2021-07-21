@@ -9,8 +9,8 @@
     <field name="priority">10</field>
     <field name="active">True</field>
     <field name="state">code</field>
-    <field name="model_id" ref="base.model_base" />
-    <field name="code">pass</field>
+    <field name="model" eval="'ir.cron'" />
+    <field name="function" eval="'do_nothing'" />
 </record>
 
 </odoo>
