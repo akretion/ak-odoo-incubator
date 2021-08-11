@@ -28,7 +28,7 @@
  """,
     "license": "AGPL-3",
     "category": "Generic Modules/Others",
-    "depends": ["stock", "purchase"],
+    "depends": ["purchase_stock"],
     "data": [
         "views/stock_orderpoint_view.xml",
         "views/purchase_order_view.xml",
