@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+
+    <record id="stock_orderpoint_destination_location_form_view" model="ir.ui.view">
+        <field name="model">stock.warehouse.orderpoint</field>
+        <field name="inherit_id" ref="stock.view_warehouse_orderpoint_form" />
+        <field name="arch" type="xml">
+            <field name="location_id" position="after">
+                <field
+                    name="location_destination_id"
+                    domain="[('id', 'child_of', location_id)]"
+                />
+            </field>
+        </field>
+    </record>
+
+</odoo>
