@@ -1,7 +1,7 @@
 {
     "name": "Open odoo record in new tab",
     "author": "Ngasturi",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "category": "Web",
     "website": "https://ngasturi.id",
     "summary": "",
