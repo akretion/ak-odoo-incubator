@@ -2,6 +2,7 @@ odoo.define('open_in_new_tab.tree_view', function (require) {
 "use strict";
 
     var ListRenderer = require('web.ListRenderer');
+    var _t = require("web.core")._t;
 
     ListRenderer.include({
         events: _.extend({}, ListRenderer.prototype.events, {
