@@ -1,0 +1,1 @@
+odoo14-addon-module_analysis @ git+https://github.com/OCA/server-tools@refs/pull/2085/head#subdirectory=setup/module_analysis
