@@ -1,35 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+
     <record id="module_type_odoo_framework" model="ir.module.type">
+        <field name="name">Odoo framework</field>
         <field name="sequence">1</field>
-        <field name="name">Odoo Framework</field>
     </record>
 
-    <record id="module_type_odoo_module" model="ir.module.type">
-        <field name="sequence">2</field>
-        <field name="name">Odoo Natif Module</field>
-    </record>
-
-    <record id="module_type_oca" model="ir.module.type">
-        <field name="sequence">3</field>
-        <field name="name">Odoo Community Association (OCA)</field>
-        <field name="community">True</field>
+    <record id="module_analysis.module_type_odoo" model="ir.module.type">
+        <field name="name">Odoo modules</field>
     </record>
 
     <record id="module_type_shopinvader" model="ir.module.type">
-        <field name="sequence">4</field>
+        <field name="sequence">30</field>
         <field name="name">Shopinvader</field>
         <field name="community">True</field>
     </record>
 
     <record id="module_type_incubator" model="ir.module.type">
-        <field name="sequence">5</field>
+        <field name="sequence">40</field>
         <field name="name">Incubateur Akretion</field>
         <field name="community">True</field>
     </record>
 
     <record id="module_type_custom" model="ir.module.type">
-        <field name="sequence">6</field>
+        <field name="sequence">99</field>
         <field name="name">Custom</field>
     </record>
 
