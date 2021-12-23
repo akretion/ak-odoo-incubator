@@ -1,6 +1,8 @@
 # Copyright 2021 Akretion France (http://www.akretion.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import itertools
+
 from odoo import _, api, fields, models
 
 
@@ -58,19 +60,7 @@ class PricelistItem(models.Model):
         for item in self:
             item._compute_allowed_attribute_value_ids()
 
-    @api.depends(
-        "applied_on",
-        "categ_id",
-        "product_tmpl_id",
-        "product_id",
-        "compute_price",
-        "fixed_price",
-        "pricelist_id",
-        "percent_price",
-        "price_discount",
-        "price_surcharge",
-        "product_attribute_value_ids",
-    )
+    @api.depends("product_attribute_value_ids.name")
     def _get_pricelist_item_name_price(self):
         res = super()._get_pricelist_item_name_price()
         for item in self:
@@ -81,30 +71,23 @@ class PricelistItem(models.Model):
                 item.name = item.name + " (" + _(", ".join(list_value_name)) + ")"
         return res
 
-    def _match(self, product, qty_in_product_uom, is_product_template):
-        res = super()._match(product, qty_in_product_uom, is_product_template)
-        attribute_id = False
-        item_attribute_values = {}
-        for attribute_value in self.product_attribute_value_ids.sorted(
-            key=lambda v: v.attribute_id
-        ):
-            if attribute_id != attribute_value.attribute_id.id:
-                attribute_id = attribute_value.attribute_id.id
-                item_attribute_values[
-                    attribute_id
-                ] = self.product_attribute_value_ids.filtered(
-                    lambda v: v.attribute_id.id == attribute_id
-                ).ids
-
-        if item_attribute_values:
-            item_attributes = list(item_attribute_values.keys())
-            for ptav in product.product_template_attribute_value_ids:
-                if ptav.attribute_id.id not in item_attributes:
+    def _is_applicable_for(self, product, qty_in_product_uom):
+        res = super()._is_applicable_for(product, qty_in_product_uom)
+        if self.product_attribute_value_ids:
+            ptav = product.product_template_attribute_value_ids
+            attr2vals = {
+                attribute: set(values)
+                for attribute, values in itertools.groupby(
+                    self.product_attribute_value_ids, lambda pav: pav.attribute_id
+                )
+            }
+            for attribute in attr2vals:
+                if attribute not in ptav.attribute_id:
                     return False
                 else:
-                    if (
-                        ptav.product_attribute_value_id.id
-                        not in item_attribute_values.get(ptav.attribute_id.id)
-                    ):
+                    common_values = attr2vals[attribute] & set(
+                        ptav.product_attribute_value_id
+                    )
+                    if not common_values:
                         return False
         return res
