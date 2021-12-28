@@ -42,9 +42,3 @@ msgstr "Annuler"
 #: view:mass.edit.move.line.account:account_move_line_mass_edit_account.mass_edit_accout_view_form
 msgid "Confirm"
 msgstr "Confirmer"
-
-
-#. module: account_move_line_mass_edit_account
-#: view:mass.edit.move.line.account:account_move_line_mass_edit_account.mass_edit_accout_view_form
-msgid "or"
-msgstr "ou"
