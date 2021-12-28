@@ -21,6 +21,7 @@
     ],
     "data": [
         "wizards/mass_edit_move_line_account_view.xml",
+        "security/ir.model.access.csv",
     ],
     "demo": [],
     "qweb": [],

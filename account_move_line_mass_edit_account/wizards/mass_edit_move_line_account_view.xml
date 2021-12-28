@@ -14,10 +14,11 @@
             </form>
         </field>
     </record>
-    <record id="act_mass_edit_account" model="ir.actions.act_window">
+    <record id="action_mass_edit_account" model="ir.actions.act_window">
         <field name="name">Mass Edit Account</field>
         <field name="res_model">mass.edit.move.line.account</field>
         <field name="view_mode">form</field>
+        <field name="binding_model_id" ref="account.model_account_move_line" />
         <field name="target">new</field>
     </record>
 </odoo>
