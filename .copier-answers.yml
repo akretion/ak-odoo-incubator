@@ -1,5 +1,5 @@
 # Do NOT update manually; changes here will be overwritten by Copier
-_commit: v1.1.1
+_commit: v1.1.2
 _src_path: https://github.com/akretion/akretion-addons-repo-template.git
 black_version: 20.8b1
 dependency_installation_mode: PIP
