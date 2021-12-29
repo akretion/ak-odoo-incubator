@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mass_edit_accout_view_form" model="ir.ui.view">
+        <field name="model">mass.edit.move.line.account</field>
+        <field name="arch" type="xml">
+            <form string="Mass Edit Account">
+                <group string="Please select the new account to set">
+                    <field name="account_id" />
+                </group>
+                <footer>
+                    <button name="change_account" string="Confirm" type="object" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_mass_edit_account" model="ir.actions.act_window">
+        <field name="name">Mass Edit Account</field>
+        <field name="res_model">mass.edit.move.line.account</field>
+        <field name="view_mode">form</field>
+        <field name="binding_model_id" ref="account.model_account_move_line" />
+        <field name="target">new</field>
+    </record>
+</odoo>
