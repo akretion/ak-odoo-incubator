@@ -84,10 +84,6 @@ class PricelistItem(models.Model):
             for attribute in attr2vals:
                 if attribute not in ptav.attribute_id:
                     return False
-                else:
-                    common_values = attr2vals[attribute] & set(
-                        ptav.product_attribute_value_id
-                    )
-                    if not common_values:
-                        return False
+                elif not attr2vals[attribute] & ptav.product_attribute_value_id:
+                    return False
         return res
