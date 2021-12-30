@@ -54,15 +54,7 @@ class TestPriceListPerAttributeValue(SavepointCase):
                 "fixed_price": 45.0,
                 "applied_on": "1_product",
                 "product_tmpl_id": self.template.id,
-                "product_attribute_value_ids": [
-                    (
-                        6,
-                        0,
-                        [
-                            self.pav_2.id,
-                        ],
-                    )
-                ],
+                "product_attribute_value_ids": [(6, 0, [self.pav_2.id])],
             }
         )
         res1 = self.pricelist.get_product_price_rule(
@@ -161,3 +153,32 @@ class TestPriceListPerAttributeValue(SavepointCase):
         )
         self.assertEqual(res1[0], 35.0)
         self.assertEqual(res2[0], 35.0)
+
+    def test_global_and_leg_aluminum(self):
+        self.env["product.pricelist.item"].create(
+            {
+                "pricelist_id": self.pricelist.id,
+                "compute_price": "fixed",
+                "fixed_price": 45.0,
+                "applied_on": "1_product",
+                "product_tmpl_id": self.template.id,
+                "product_attribute_value_ids": [(6, 0, [self.pav_2.id])],
+            }
+        )
+        self.env["product.pricelist.item"].create(
+            {
+                "pricelist_id": self.pricelist.id,
+                "compute_price": "fixed",
+                "fixed_price": 40.0,
+                "applied_on": "1_product",
+                "product_tmpl_id": self.template.id,
+            }
+        )
+        res1 = self.pricelist.get_product_price_rule(
+            self.variant_1, 1, self.partner, date=False, uom_id=self.variant_1.uom_id.id
+        )
+        res2 = self.pricelist.get_product_price_rule(
+            self.variant_2, 1, self.partner, date=False, uom_id=self.variant_2.uom_id.id
+        )
+        self.assertEqual(res1[0], 45.0)
+        self.assertEqual(res2[0], 45.0)

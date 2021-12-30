@@ -10,12 +10,10 @@
                     name="pricelist_rule_target_attribute_value"
                     attrs="{'invisible':[('applied_on', '=', '0_product_variant')]}"
                 >
-                    <field name="allowed_attribute_value_ids" invisible="1" />
                     <field
                         name="product_attribute_value_ids"
                         widget="many2many_tags"
                         options="{'no_create':1}"
-                        domain="[('id', 'in', allowed_attribute_value_ids)]"
                     />
                 </group>
             </xpath>
