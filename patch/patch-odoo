@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euxo pipefail
+
+echo "apply odoo patch"
+current_path=$(pwd)
+cd /opt/odoo
+patch -p1 < "${current_path}/patch/odoo_pricelist.diff"
