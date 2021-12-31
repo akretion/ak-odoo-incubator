@@ -1,0 +1,1 @@
+from . import test_pricelist_per_attribute_value
