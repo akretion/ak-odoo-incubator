@@ -9,5 +9,7 @@ class MailComposeMessage(models.TransientModel):
     _inherit = "mail.compose.message"
 
     def send_mail(self, auto_commit=False):
-        self = self.with_context(custom_layout="mail_unique_layout.test_layout")
+        self = self.with_context(
+            custom_layout=self.env["mail.thread"]._get_unique_layout_ref()
+        )
         return super().send_mail(auto_commit=auto_commit)
