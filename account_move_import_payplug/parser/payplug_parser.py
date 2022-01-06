@@ -95,7 +95,13 @@ class PayplugFileParser(FileParser):
         if line.get("Type", "") == "Virement":
             res['account_id'] = self.journal.suspense_account_id.id
             res['partner_id'] = self.journal.partner_id.id or False
-
+            res['already_completed'] = True
+        if line.get("Type", "") == "Facture":
+            partner = self.journal.partner_id
+            res['account_id'] = partner.property_account_payable_id.id
+            res['partner_id'] = partner.id
+            if partner:
+                res['already_completed'] = True
         return res
 
     def _post(self, *args, **kwargs):
