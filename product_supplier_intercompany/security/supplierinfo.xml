@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<openerp>
+<odoo>
 <data noupdate="1">
     <record model="ir.rule" id="product_supplierinfo_intercomp_rule">
         <field name="name">product supplierinfo intercompany rule</field>
@@ -13,4 +13,4 @@
             >['|', ('intercompany_pricelist_id', '=', False), '&amp;', ('intercompany_pricelist_id', '!=', False), ('intercompany_pricelist_id.company_id', '!=', company_id)]</field>
     </record>
 </data>
-</openerp>
+</odoo>
