@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="purchase.purchase_order_form" />
             <field name="arch" type="xml">
                 <field name="shipped" position="after">
-                    <field name="open_order"/>
+                    <field name="open_order" groups="purchase.group_purchase_manager"/>
                 </field>
             </field>
         </record>
