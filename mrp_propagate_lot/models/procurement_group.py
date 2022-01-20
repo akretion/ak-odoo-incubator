@@ -7,7 +7,7 @@ class ProcurementGroup(models.Model):
     _inherit = "procurement.group"
 
     @api.model
-    def _get_custom_lot_vals(self, origin_lot, product, idx):
+    def _get_custom_lot_vals(self, origin_lot, product, idx, procurement=None):
         vals = origin_lot.copy_data()[0]
         vals.update(
             {
@@ -25,16 +25,20 @@ class ProcurementGroup(models.Model):
         # changed but not the lot. if components are tracked by lot, we whould
         # duplicate the original phantom lot to change the product
         lot_obj = self.env["stock.production.lot"]
-        index = 0
         new_procurements = []
+        index_per_lot = {}
         for procurement in procurements:
             restrict_lot_id = procurement.values.get("restrict_lot_id", False)
             lot = lot_obj.browse(restrict_lot_id)
             product = procurement.product_id
             if lot and lot.product_id != product:
                 if product.auto_generate_prodlot:
-                    index += 1
-                    vals = self._get_custom_lot_vals(lot, product, index)
+                    if lot.id not in index_per_lot:
+                        index_per_lot[lot.id] = 0
+                    index_per_lot[lot.id] += 1
+                    vals = self._get_custom_lot_vals(
+                        lot, product, index_per_lot[lot.id], procurement=procurement
+                    )
                     new_lot_id = lot_obj.create(vals).id
                 else:
                     new_lot_id = False
