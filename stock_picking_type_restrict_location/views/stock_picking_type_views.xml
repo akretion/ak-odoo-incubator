@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<record id="view_picking_type_form" model="ir.ui.view">
+    <field name="model">stock.picking.type</field>
+    <field name="inherit_id"
+            ref="stock.view_picking_type_form" />
+    <field name="arch" type="xml">
+        <field name="default_location_dest_id" position="after">
+            <separator string="Location Incompatibilities"/>
+            <field name="incompatibility_location_ids" nolabel="1">
+                <tree editable="top">
+                    <field name="location1_id"/>
+                    <field name="location2_id"/>
+                </tree>
+            </field>
+        </field>
+    </field>
+</record>
+
+</data>
+</openerp>

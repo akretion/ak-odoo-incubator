@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_full_picking_type_location_incompatibility,access.full.picking.type.location.incompatibility,model_stock_location_transfer_incompatibility,stock.group_stock_manager,1,1,1,1
+access_read_picking_type_location_incompatibility,access.read.picking.type.location.incompatibility,model_stock_location_transfer_incompatibility,base.group_user,1,0,0,0
