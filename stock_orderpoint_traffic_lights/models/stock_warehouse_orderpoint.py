@@ -301,7 +301,7 @@ class StockWarehouseOrderpoint(models.Model):
                 day = demand_by_days[demand_sorted[i]]
                 prev = demand_by_days[demand_sorted[max(i - 1, 0)]]
                 day['sum'] = day['inc'] + day['out'] + prev['sum']
-                day['ideal'] = day['inc'] + day['out'] + prev['ideal']
+                day['ideal'] = day['inc'] + day['out'] + prev['ideal'] + prev['sum']
 
                 qualified_demand += day['out'] * -1
                 if not min_date:
