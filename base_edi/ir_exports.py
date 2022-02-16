@@ -26,11 +26,6 @@ class IrExports(models.Model):
     _inherit = "ir.exports"
 
     export_database_ext_id = fields.Boolean()
-    filename = fields.Char(
-        help='Exported File will be renamed to this name '
-             'Name can use mako template where obj depend on the export '
-             'it could be a purchase order, a sale order...'
-             ' Example : ${obj.name}-${obj.create_date}.csv')
 
 
 class IrExportsLine(models.Model):

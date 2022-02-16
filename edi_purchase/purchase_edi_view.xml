@@ -13,18 +13,14 @@
         <field name="arch" type="xml">
             <form string="Edi Profile" version="7.0">
                 <group name="base" col="2">
-                    <field name="export_id" string="Export"/>
+                    <field name="name"/>
+                    <group attrs="{'invisible': [('file_format', 'not in', ('csv', 'xls'))]}" colspan="2">
+                    <p colspan="4"> Field Names and order of the fields should be modified directly on the export configuration </p>
+                    <field name="export_id" string="Export" attrs="{'required': [('file_format', 'in', ('csv', 'xls'))]}"/>
+                    </group>
                     <field name="file_format"/>
                     <field name="filename"/>
                 </group>
-                <separator string="Exports Fields"/>
-                <field name="export_fields" nolabel="1">
-                    <tree editable="top">
-                        <field name="name" readonly="1"/>
-                        <field name="display_name"/>
-                        <field name="sequence"/>
-                    </tree>
-                </field>
             </form>
         </field>
     </record>

@@ -61,6 +61,24 @@ except ImportError:
     _logger.warning("jinja2 not available, templating features will not work!")
 
 
+class EdiProfile(models.AbstractModel):
+    _name = "edi.profile"
+
+    name = fields.Char(required=True)
+    export_id = fields.Many2one(
+        'ir.exports',
+        'Export',)
+    file_format = fields.Selection(
+            selection=[('csv', 'CSV'), ('xls', 'Excel')],
+            required=True,
+            string='File Format')
+    filename = fields.Char(
+        help='Exported File will be renamed to this name '
+             'Name can use mako template where obj depend on the export '
+             'it could be a purchase order, a sale order...'
+             ' Example : ${obj.name}-${obj.create_date}.csv')
+
+
 class EdiMixin(models.Model):
     _name = 'edi.mixin'
 
@@ -119,19 +137,24 @@ class EdiMixin(models.Model):
         return rows, fields_names
 
     @api.multi
-    def get_edi_datas(self, fields, fields_names,
-                      file_format):
+    def _get_values_from_ir_exports(self, export):
+        fields, fields_names = self.get_fields_from_export(
+            export.id)
         rows = self.export_data(fields).get('datas',[])
         rows, fields_names = self._get_additional_rows(rows, fields_names)
-        if file_format == 'csv':
-            datas = CSVExport().from_data(fields_names, rows)
-        elif file_format == 'xls':
-            datas = ExcelExport().from_data(fields_names, rows)
-        else:
-            raise exceptions.UserError(
-                _("The file format is not defined."))
-        return datas
+        return rows, fields_names
 
+    @api.multi
+    def get_edi_datas(self, edi_profile):
+        file_format = edi_profile.file_format
+        data = False
+        if file_format in ("csv", "xls"):
+            rows, fields_names = self._get_values_from_ir_exports(edi_profile.export_id)
+            if file_format == 'csv':
+                data = CSVExport().from_data(fields_names, rows)
+            elif file_format == 'xls':
+                data = ExcelExport().from_data(fields_names, rows)
+        return data
 
     @api.model
     def get_fields_from_export(self, export_id):

@@ -24,19 +24,10 @@ from openerp import models, fields
 
 class PurchaseEdiProfile(models.Model):
     _name = "purchase.edi.profile"
-    _inherits = {'ir.exports': 'export_id'}
+    _inherit = "edi.profile"
 
     suppplier_info_ids = fields.One2many(
         'product.supplierinfo',
         'purchase_edi_id',
         'Suppliers Info')
-    export_id = fields.Many2one(
-        'ir.exports',
-        'Export',
-        required=True,
-        ondelete='restrict',
-        domain=[('resource', '=', 'purchase.order.line')])
-    file_format = fields.Selection(
-            selection=[('csv', 'CSV'), ('xls', 'Excel')],
-            required=True,
-            string='File Format')
+    export_id = fields.Many2one(domain=[('resource', '=', 'purchase.order.line')])

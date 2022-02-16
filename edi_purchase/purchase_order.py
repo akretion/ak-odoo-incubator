@@ -36,11 +36,8 @@ class PurchaseOrder(models.Model):
         purchase_line_obj = self.env['purchase.order.line']
         if not line_ids and not partner.edi_empty_file:
             return False
-        fields, fields_name = purchase_line_obj.get_fields_from_export(
-            edi_profile.export_id.id)
         purchase_lines = purchase_line_obj.browse(line_ids)
-        datas = purchase_lines.get_edi_datas(
-            fields, fields_name, edi_profile.file_format)
+        datas = purchase_lines.get_edi_datas(edi_profile)
         attachment = purchase_line_obj.create_edi_file(
             datas, partner.edi_transfer_method, 
             edi_transfer, edi_profile, purchase)
