@@ -13,11 +13,10 @@ class TestExportConfig(TransactionCase):
         super().setUp()
 
     def test_export(self):
-        export = self.env["ir.exports.config"].create(
+        export = self.env["ir.exports"].create(
             {
                 "name": "Test Export Partner",
                 "model_id": self.env.ref("base.model_res_partner").id,
-                "file_format": "csv",
                 "export_fields": [
                     (
                         0,
@@ -35,13 +34,20 @@ class TestExportConfig(TransactionCase):
                         },
                     ),
                 ],
+            }
+        )
+        export_config = self.env["ir.exports.config"].create(
+            {
+                "name": export.name,
+                "export_id": export.id,
+                "file_format": "csv",
                 "additional_export_line_ids": [
                     (0, 0, {"display_name": "Static ID", "value": "ID", "sequence": 5}),
                 ],
             }
         )
         azure_partner = self.env.ref("base.res_partner_12")
-        attachment = export.get_attachment(
+        attachment = export_config.get_attachment(
             azure_partner, res_id=azure_partner.id, res_model="res.partner"
         )
         self.assertEqual(len(attachment), 1)

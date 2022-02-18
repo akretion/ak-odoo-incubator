@@ -2,17 +2,17 @@
 
 import base64
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 from odoo.addons.web.controllers.main import CSVExport, ExcelExport
 
 
 class IrExportsConfig(models.Model):
     _name = "ir.exports.config"
-    _inherits = {"ir.exports": "export_id"}
     _description = "Make export more configurable"
 
-    export_id = fields.Many2one("ir.exports", required=True, ondelete="cascade")
+    name = fields.Char(required=True)
+    export_id = fields.Many2one("ir.exports")
     filename = fields.Char(
         help="Exported File will be renamed to this name "
         "If left empty, by default, the name of the file will be : "
@@ -30,6 +30,22 @@ class IrExportsConfig(models.Model):
         required=True,
         string="File Format",
     )
+    resource = fields.Char(related="export_id.resource", store=True, readonly=True)
+    visible_configurable_data_fields = fields.Boolean(
+        compute="_compute_visible_configurable_data_fields",
+        help="Hide the fields export_id and additional_export_line_ids depending "
+        "one the file format",
+    )
+
+    def _is_visible_configurable_data(self):
+        if self.file_format in ("csv", "xlsx"):
+            return True
+        return False
+
+    @api.depends("file_format")
+    def _compute_visible_configurable_data_fields(self):
+        for rec in self:
+            rec.visible_configurable_data_fields = rec._is_visible_configurable_data()
 
     def get_file_name(self, records, res_id=False, res_model=False):
         # override to put a specific name, that could depend on records or res_id
@@ -61,22 +77,23 @@ class IrExportsConfig(models.Model):
         return attachment
 
     def get_file(self, records):
-        header, rows = self.get_data(records)
         function = "_get_file_{format}".format(format=self.file_format or "")
         if not hasattr(self, function):
             raise NotImplementedError(
                 "Format {format} is not implementer".format(format=self.file_format)
             )
-        data = getattr(self, function)(header, rows)
+        data = getattr(self, function)(records)
         return data
 
-    def _get_file_csv(self, header, rows):
+    def _get_file_csv(self, records):
+        header, rows = self.get_data_from_export_model(records)
         return CSVExport().from_data(header, rows)
 
-    def _get_file_xlsx(self, header, rows):
+    def _get_file_xlsx(self, records):
+        header, rows = self.get_data_from_export_model(records)
         return ExcelExport().from_data(header, rows)
 
-    def get_data(self, records):
+    def get_data_from_export_model(self, records):
         tech_names, display_names = self.get_field_names()
         rows = records.export_data(tech_names).get("datas", [])
         # we have to loop on each row to add the additional_data
@@ -88,7 +105,7 @@ class IrExportsConfig(models.Model):
     def get_field_names(self):
         field_technames = []
         field_names = []
-        for line in self.export_fields:
+        for line in self.export_id.export_fields:
             field_technames.append(line.name)
             field_names.append(line.display_name or line.name)
         # in case we want to add more data in rows not directly coming from record
