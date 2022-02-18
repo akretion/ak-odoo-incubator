@@ -1,2 +1,4 @@
 I believe this module could be refactored a bit along with pattern_import_export, to become a dependency of pattern_import_export. (https://github.com/akretion/pattern-import-export/)
 Including the missing feature (customizable field name and file name) and possibility to add more info in export (static value...) could be done directly in pattern_import_export, but it is a big module with a lot of features to install for this small need.
+Actually all the helpers to get configurable data from export may or not be usefull for other formats. If you want to implement a very specific xml for instance (to be used with purchase_edi) you may want to by pass all that. That is why export field and additional data fields are invisible in case file_format is not csv and xls.
+In case of a new format implementation, one should manage if this is export tools is usefull or not.

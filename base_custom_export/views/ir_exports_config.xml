@@ -7,20 +7,37 @@
         <field name="model">ir.exports.config</field>
         <field name="arch" type="xml">
             <form string="Export Configuration" version="7.0">
+                <field name="visible_configurable_data_fields" invisible="1" />
+                <field name="resource" invisible="1" />
                 <group name="base" col="2">
-                    <field name="export_id" string="Export" />
+                    <group>
+                    <field name="name" />
+                    </group>
+                    <group
+                        attrs="{'invisible': [('visible_configurable_data_fields', '=', False)]}"
+                        colspan="2"
+                    >
+                        <p
+                            colspan="4"
+                        > Field Names and order of the fields should be modified directly on the export configuration </p>
+                        <field
+                            name="export_id"
+                            string="Export"
+                            attrs="{'required': [('visible_configurable_data_fields', '=', False)]}"
+                            colspan="4"
+                        />
+                    </group>
+                    <group>
                     <field name="file_format" />
                     <field name="filename" />
+                    </group>
                 </group>
-                <separator string="Exports Fields" />
-                <field name="export_fields" nolabel="1">
-                    <tree editable="top">
-                        <field name="name" readonly="1" />
-                        <field name="display_name" />
-                        <field name="sequence" />
-                    </tree>
-                </field>
-                <separator string="Additional Values" />
+                <group
+                    name="additional_data"
+                    attrs="{'invisible': [('visible_configurable_data_fields', '=', False)]}"
+                    colspan="2"
+                >
+                <separator string="Additional Values" colspan="4" />
                 <field name="additional_export_line_ids" nolabel="1">
                     <tree editable="top">
                         <field name="sequence" />
@@ -28,6 +45,7 @@
                         <field name="value" />
                     </tree>
                 </field>
+                </group>
             </form>
         </field>
     </record>
@@ -36,6 +54,7 @@
         <field name="model">ir.exports.config</field>
         <field name="arch" type="xml">
             <tree string="Exports Config">
+                <field name="name" />
                 <field name="export_id" string="Export" />
                 <field name="file_format" />
             </tree>

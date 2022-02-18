@@ -8,6 +8,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/ir_exports_config.xml",
+        "views/ir_exports_line.xml",
     ],
     "maintainer": "florian-dacosta",
     "license": "AGPL-3",
