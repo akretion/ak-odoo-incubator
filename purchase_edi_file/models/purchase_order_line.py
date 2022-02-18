@@ -13,7 +13,9 @@ class PurchaseOrderLine(models.Model):
         }
         for line in self:
             product = line.product_id
-            seller = product._select_seller(partner_id=partner)
+            seller = product._select_seller(
+                partner_id=partner, quantity=line.product_uom_qty
+            )
             purchase_edi = seller.purchase_edi_id
             # Services should not appear in EDI file unless an EDI profile
             # is specifically on the supplier info. This way, we avoid
