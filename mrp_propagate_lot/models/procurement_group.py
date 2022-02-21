@@ -39,7 +39,16 @@ class ProcurementGroup(models.Model):
                     vals = self._get_custom_lot_vals(
                         lot, product, index_per_lot[lot.id], procurement=procurement
                     )
-                    new_lot_id = lot_obj.create(vals).id
+                    new_lot = self.env["stock.production.lot"].search(
+                        [
+                            ("product_id", "=", vals["product_id"]),
+                            ("name", "=", vals["name"]),
+                        ]
+                    )
+                    if new_lot:
+                        new_lot_id = new_lot.id
+                    else:
+                        new_lot_id = lot_obj.create(vals).id
                 else:
                     new_lot_id = False
                 new_values = procurement.values.copy()
