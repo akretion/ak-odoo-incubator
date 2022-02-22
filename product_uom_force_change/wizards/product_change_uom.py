@@ -44,6 +44,7 @@ class ProductChangeUom(models.TransientModel):
         return [x for x in self._cr.fetchall() if x[0] not in SKIP_TABLE]
 
     def run(self):
+        self = self.sudo().with_context(active_test=False)
         tmpls = self.env["product.template"].browse(self._context.get("active_ids"))
         table2model = {model._table: model for model in self.env.values()}
         for tmpl in tmpls:
