@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <!-- This template is for a table at the top of module views that shows some KPIs. -->
+    <t t-name="module_analysis_price.ModuleDashboard">
+        <div class="o_module_dashboard container">
+        <div class="row">
+            <div class="col-sm-10">
+            <table class="table table-sm">
+                <!-- thead needed to avoid list view rendering error for some reason -->
+                <thead>
+                    <tr>
+                        <!-- can't use th tag due to list rendering error when no values in list... -->
+                        <td class="o_text">Standard Modules installed</td>
+                        <td><span><t
+                                            t-esc="values['standard']['installed_modules']"
+                                        /></span></td>
+                        <td class="o_text">Community Modules installed</td>
+                        <td><span><t
+                                            t-esc="values['community']['installed_modules']"
+                                        /></span></td>
+                        <td class="o_text">Custom Modules installed</td>
+                        <td><span><t
+                                            t-esc="values['custom']['installed_modules']"
+                                        /></span></td>
+                        <td class="o_text">Total Modules installed</td>
+                        <td><span><t
+                                            t-esc="values['total']['installed_modules']"
+                                        /></span></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="o_text">Standard Maintenance Price</td>
+                        <td><span><t
+                                            t-esc="values['standard']['maintenance_price']"
+                                        /></span></td>
+                        <td class="o_text">Community Maintenance Price</td>
+                        <td><span><t
+                                            t-esc="values['community']['maintenance_price']"
+                                        /></span></td>
+                        <td class="o_text">Custom Maintenance Price</td>
+                        <td><span><t
+                                            t-esc="values['custom']['maintenance_price']"
+                                        /></span></td>
+                        <td class="o_text">Total Maintenance Price</td>
+                        <td><span><t
+                                            t-esc="values['total']['maintenance_price']"
+                                        /></span></td>
+                    </tr>
+                    <tr>
+                        <td class="o_text">Standard Migration Price</td>
+                        <td><span><t
+                                            t-esc="values['standard']['maintenance_price']"
+                                        /></span></td>
+                        <td class="o_text">Community Migration Price</td>
+                        <td><span><t
+                                            t-esc="values['community']['maintenance_price']"
+                                        /></span></td>
+                        <td class="o_text">Custom Migration Price</td>
+                        <td><span><t
+                                            t-esc="values['custom']['maintenance_price']"
+                                        /></span></td>
+                        <td class="o_text">Total Migration Price</td>
+                        <td><span><t
+                                            t-esc="values['total']['maintenance_price']"
+                                        /></span></td>
+                    </tr>
+                    <tr>
+                        <td class="o_text">Standard Monthly Price</td>
+                        <td><span><t
+                                            t-esc="values['standard']['total_price']"
+                                        /></span></td>
+                        <td class="o_text">Community Monthly Price</td>
+                        <td><span><t
+                                            t-esc="values['community']['total_price']"
+                                        /></span></td>
+                        <td class="o_text">Custom Monthly Price</td>
+                        <td><span><t
+                                            t-esc="values['custom']['total_price']"
+                                        /></span></td>
+                        <td class="o_text">Total Monthly Price</td>
+                        <td><span><t
+                                            t-esc="values['total']['total_price']"
+                                        /></span></td>
+                    </tr>
+                </tbody>
+            </table></div>
+        </div></div>
+    </t>
+</templates>

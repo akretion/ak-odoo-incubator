@@ -7,12 +7,12 @@
     <field name="arch" type="xml">
         <group position="inside">
             <field name="code_qty" />
-            <field name="community" />
+            <field name="source" />
             <field name="migration_price_unit" />
             <field name="maintenance_price_unit" />
-            <field name="migration_monthly_price" />
+            <field name="migration_monthly_price" widget="monetary" />
             <field name="migration_year_price" />
-            <field name="maintenance_monthly_price" />
+            <field name="maintenance_monthly_price" widget="monetary" />
             <field name="maintenance_year_price" />
         </group>
     </field>
@@ -34,7 +34,7 @@
             <field name="migration_price_unit" />
             <field name="migration_monthly_price" sum="Total Migration Monthly Price" />
             <field name="migration_year_price" sum="Total Migration Year Price" />
-            <field name="community" />
+            <field name="source" />
         </field>
         <field name="installed_module_qty" position="attributes">
             <attribute name="sum">Total Module Qty</attribute>

@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<odoo>
+    <template id="assets_backend" name="module assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link
+                rel="stylesheet"
+                type="text/scss"
+                href="/module_analysis_price/static/src/scss/module_dashboard.scss"
+            />
+            <script
+                type="text/javascript"
+                src="/module_analysis_price/static/src/js/module_dashboard.js"
+            />
+        </xpath>
+    </template>
+</odoo>

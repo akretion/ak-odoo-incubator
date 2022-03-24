@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    
+
     <record id="module_type_rule_odoo_framework" model="ir.module.type.rule">
         <field name="sequence">1</field>
         <field name="module_type_id" ref="module_type_odoo_framework" />

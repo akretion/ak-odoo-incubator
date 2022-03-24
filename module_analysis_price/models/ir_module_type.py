@@ -19,7 +19,13 @@ class IrModuleType(models.Model):
     page_qty = fields.Integer(
         string="Page Qty", compute="_compute_code_qty", store=True
     )
-    community = fields.Boolean()
+    source = fields.Selection(
+        [
+            ("standard", "Standard"),
+            ("community", "Community"),
+            ("custom", "Custom"),
+        ]
+    )
     migration_price_unit = fields.Float()
     maintenance_price_unit = fields.Float()
     migration_monthly_price = fields.Float(compute="_compute_migration_price")
