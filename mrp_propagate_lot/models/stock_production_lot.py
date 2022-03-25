@@ -14,3 +14,4 @@ class StockProductionLot(models.Model):
         help="Lot that have generated this one because of bom phantom",
     )
     component_lot_ids = fields.One2many("stock.production.lot", "phantom_lot_id")
+    manufacturing_order_ids = fields.One2many("mrp.production", "lot_producing_id")

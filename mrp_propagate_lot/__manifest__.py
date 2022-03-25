@@ -5,7 +5,7 @@
     "version": "14.0.1.0.0",
     "category": "Manufacturing",
     "author": "Akretion,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/ak-odoo-incubator",
+    "website": "https://github.com/akretion/ak-odoo-incubator",
     "license": "AGPL-3",
     "depends": [
         "mrp",
