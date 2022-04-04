@@ -5,7 +5,7 @@
 {
     "name": "Project Estimate Step",
     "summary": "Add step estimation for project",
-    "version": "14.0.1.0.0",
+    "version": "12.0.1.0.0",
     "development_status": "Alpha",
     "category": "Project",
     "website": "www.akretion.com",
@@ -17,6 +17,7 @@
     },
     "depends": [
         "project",
+        "hr_timesheet",
     ],
     "data": [
         "views/project_project_view.xml",
