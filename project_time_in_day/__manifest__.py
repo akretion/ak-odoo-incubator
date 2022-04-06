@@ -3,11 +3,11 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Project Estimate Step",
-    "summary": "Add step estimation for project",
+    "name": "Project time in days",
+    "summary": "Compute time in days",
     "version": "12.0.1.0.0",
     "development_status": "Alpha",
-    "category": "Project",
+    "category": "Uncategorized",
     "website": "www.akretion.com",
     "author": " Akretion",
     "license": "AGPL-3",
@@ -16,14 +16,11 @@
         "bin": [],
     },
     "depends": [
-        "project_time_in_day",
+        "hr_timesheet",
     ],
     "data": [
-        "views/project_project_view.xml",
         "views/project_task_view.xml",
-        "views/project_task_type_view.xml",
-        "views/project_estimate_step_view.xml",
-        "security/ir.model.access.csv",
+        "views/project_project_view.xml",
     ],
     "demo": [
     ],
