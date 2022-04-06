@@ -28,16 +28,4 @@
         </field>
     </record>
 
-    <record id="view_task_tree2_inherited" model="ir.ui.view">
-        <field name="model">project.task</field>
-        <field name="inherit_id" ref="hr_timesheet.view_task_tree2_inherited" />
-        <field name="arch" type="xml">
-            <field name="planned_hours" position="before">
-                <field name="planned_days" sum="Initially Planned Days" />
-                <field name="remaining_days" sum="Remaining Days" />
-                <field name="effective_days" sum="Spent Days" />
-            </field>
-        </field>
-    </record>
-
 </odoo>
