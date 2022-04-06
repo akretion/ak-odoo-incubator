@@ -16,8 +16,7 @@
         "bin": [],
     },
     "depends": [
-        "project",
-        "hr_timesheet",
+        "project_time_in_day",
     ],
     "data": [
         "views/project_project_view.xml",
