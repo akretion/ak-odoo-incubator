@@ -20,20 +20,6 @@ class ProjectTask(models.Model):
         index=True,
         group_expand="_read_group_estimate_step_id")
 
-    # TODO move in an other module project_time_in_days ?
-    planned_days = fields.Float(
-        "Planned Days",
-        compute="_compute_planned_days",
-        store=True)
-    remaining_days = fields.Float(
-        "Remaining Days",
-        compute="_compute_remaining_days",
-        store=True)
-    effective_days = fields.Float(
-        "Effective Days",
-        compute="_compute_effective_days",
-        store=True)
-
     @api.model
     def _read_group_estimate_step_id(self, steps, domain, order):
         if 'default_project_id' in self._context:
@@ -41,34 +27,9 @@ class ProjectTask(models.Model):
             steps |= project.estimate_step_ids
         return steps.sorted("days")
 
-    def _convert_to_days(self, value):
-        uom_day = self.env.ref("uom.product_uom_day")
-        uom_hour = self.env.ref("uom.product_uom_hour")
-        return uom_hour._compute_quantity(value, uom_day)
-
-    def _convert_to_hours(self, value):
-        uom_day = self.env.ref("uom.product_uom_day")
-        uom_hour = self.env.ref("uom.product_uom_hour")
-        return uom_day._compute_quantity(value, uom_hour)
-
-    @api.depends("planned_hours")
-    def _compute_planned_days(self):
-        for record in self:
-            record.planned_days = self._convert_to_days(record.planned_hours)
-
-    @api.depends("remaining_hours")
-    def _compute_remaining_days(self):
-        for record in self:
-            record.remaining_days = self._convert_to_days(record.remaining_hours)
-
-    @api.depends("effective_hours")
-    def _compute_effective_days(self):
-        for record in self:
-            record.effective_days = self._convert_to_days(record.effective_hours)
-
     def _sync_estimate(self):
         for record in self:
-            record.planned_hours = self._convert_to_hours(record.estimate_step_id.days)
+            record.planned_hours = record.project_id.convert_days_to_hours(record.estimate_step_id.days)
 
     def write(self, vals):
         super().write(vals)
