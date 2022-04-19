@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
     <record id="project_estimate_step_view_tree" model="ir.ui.view">
         <field name="model">project.estimate.step</field>
         <field name="arch" type="xml">
             <tree string="Estimate Step">
-                <field name="name"/>
-                <field name="days"/>
+                <field name="name" />
+                <field name="days" />
             </tree>
         </field>
     </record>
@@ -16,8 +16,8 @@
         <field name="arch" type="xml">
             <form string="Estimate Step">
                 <group>
-                    <field name="name"/>
-                    <field name="days"/>
+                    <field name="name" />
+                    <field name="days" />
                 </group>
             </form>
         </field>
@@ -27,8 +27,8 @@
         <field name="model">project.estimate.step</field>
         <field name="arch" type="xml">
             <search string="Estimate Step">
-                <field name="name"/>
-                <field name="days"/>
+                <field name="name" />
+                <field name="days" />
             </search>
         </field>
     </record>
@@ -37,17 +37,17 @@
         <field name="name">Estimate Step</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">project.estimate.step</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="project_estimate_step_view_search"/>
+        <field name="search_view_id" ref="project_estimate_step_view_search" />
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
 
-    <menuitem id="project_estimate_step_menu"
+    <menuitem
+        id="project_estimate_step_menu"
         parent="project.menu_project_config"
         sequence="20"
-        action="project_estimate_step_action"/>
+        action="project_estimate_step_action"
+    />
 
 </odoo>
-

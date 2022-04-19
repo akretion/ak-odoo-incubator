@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
     <record id="edit_project" model="ir.ui.view">
         <field name="model">project.project</field>
         <field name="inherit_id" ref="project.edit_project" />
         <field name="arch" type="xml">
-            <field name="resource_calendar_id" position="after">
-                <field name="estimate_step_ids" widget="many2many_tags"/>
-            </field>
+            <xpath expr="//group[@name='extra_settings']" position="inside">
+                <field name="estimate_step_ids" widget="many2many_tags" />
+            </xpath>
         </field>
     </record>
 
