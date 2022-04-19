@@ -5,10 +5,10 @@
 {
     "name": "Project Estimate Step",
     "summary": "Add step estimation for project",
-    "version": "12.0.1.0.0",
+    "version": "14.0.1.0.0",
     "development_status": "Alpha",
     "category": "Project",
-    "website": "www.akretion.com",
+    "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": " Akretion",
     "license": "AGPL-3",
     "external_dependencies": {
@@ -25,6 +25,5 @@
         "views/project_estimate_step_view.xml",
         "security/ir.model.access.csv",
     ],
-    "demo": [
-    ],
+    "demo": [],
 }

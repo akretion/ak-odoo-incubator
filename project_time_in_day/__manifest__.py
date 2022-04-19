@@ -5,10 +5,10 @@
 {
     "name": "Project time in days",
     "summary": "Compute time in days",
-    "version": "12.0.1.0.0",
+    "version": "14.0.1.0.0",
     "development_status": "Alpha",
     "category": "Uncategorized",
-    "website": "www.akretion.com",
+    "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": " Akretion",
     "license": "AGPL-3",
     "external_dependencies": {
@@ -22,6 +22,5 @@
         "views/project_task_view.xml",
         "views/project_project_view.xml",
     ],
-    "demo": [
-    ],
+    "demo": [],
 }
