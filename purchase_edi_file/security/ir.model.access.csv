@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edi_transport_config,Full access on edi.transport.config to Purchase Manager,model_edi_transport_config,purchase.group_purchase_manager,1,1,1,1
+access_partner_edi_config,Full access on partner.export.edi to Purchase Manager,model_partner_export_edi,purchase.group_purchase_manager,1,1,1,1

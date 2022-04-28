@@ -38,23 +38,8 @@ class ResPartner(models.Model):
         help="If no profile is configured on product, this default "
         "profile will be used.",
     )
-    edi_transfer_method = fields.Selection(
-        selection=[
-            ("mail", "E-mail"),
-            ("external_location", "Remote server"),
-            ("manual", "Manual"),
-        ],
-        string="Edi Transfer Method",
-        help="The remote server transfer depends on which module are "
-        "available/installed. It could be sftp, ftp, aws, etc...",
-    )
-    edi_storage_backend_id = fields.Many2one(
-        "storage.backend", string="FTP/SFTP Location"
-    )
-    edi_mail_template_id = fields.Many2one(
-        "mail.template",
-        domain=[("model_id.model", "in", ("purchase.order", "res.partner"))],
-        string="Edi Mail Template",
+    edi_transport_config_id = fields.Many2one(
+        "edi.transport.config", string="EDI Transport Configuration"
     )
     edi_empty_file = fields.Boolean(
         "Send EDI empty file",
@@ -62,9 +47,9 @@ class ResPartner(models.Model):
         "profile",
     )
 
-    def send_attachments_edi_by_mail(self, attachments, purchase=False):
+    def send_attachments_edi_by_mail(self, attachments, config, purchase=False):
         self.ensure_one()
-        template = self.edi_mail_template_id
+        template = config.edi_mail_template_id
         if template.model_id.model == "res.partner":
             record = self.id
         elif template.model_id.model == "purchase.order":
@@ -76,8 +61,8 @@ class ResPartner(models.Model):
         mail_vals = {"attachment_ids": [(4, attach.id) for attach in attachments]}
         template.send_mail(record.id, email_values=mail_vals)
 
-    def send_attachment_remote_server(self, attachments):
-        storage_backend = self.edi_storage_backend_id
+    def send_attachment_remote_server(self, attachments, config):
+        storage_backend = config.edi_storage_backend_id
         exporting_tasks = storage_backend.synchronize_task_ids.filtered(
             lambda t: t.method_type == "export"
         )
@@ -92,11 +77,13 @@ class ResPartner(models.Model):
                 }
             )
 
-    def send_supplier_edi_attachments(self, attachments, purchase=False):
+    def send_supplier_edi_attachments(self, attachments, config=False, purchase=False):
         self.ensure_one()
-        if not attachments:
+        if not config:
+            config = self.edi_transport_config_id
+        if not attachments or not config:
             return
-        if self.edi_transfer_method == "mail":
-            self.send_attachments_edi_by_mail(attachments, purchase=purchase)
-        elif self.self.edi_transfer_method == "external_location":
-            self.send_attachment_remote_server(attachments)
+        if config.edi_transfer_method == "mail":
+            self.send_attachments_edi_by_mail(attachments, config, purchase=purchase)
+        elif config.edi_transfer_method == "external_location":
+            self.send_attachment_remote_server(attachments, config)

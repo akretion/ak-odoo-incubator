@@ -3,10 +3,9 @@
 
     <record id="base.res_partner_12" model="res.partner">
          <field name="default_purchase_profile_id" ref="export_po_product" />
-         <field name="edi_transfer_method">external_location</field>
          <field
-            name="edi_storage_backend_id"
-            ref="storage_backend.default_storage_backend"
+            name="edi_transport_config_id"
+            ref="purchase_edi_file.supplier_12_config"
         />
     </record>
 
