@@ -34,6 +34,7 @@
       'purchase_edi_view.xml',
       'purchase_view.xml',
       'partner_view.xml',
+      "edi_transport_config.xml",
       'security/ir.model.access.csv',
  ],
  'installable': True,

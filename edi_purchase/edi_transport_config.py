@@ -19,12 +19,14 @@
 #
 ##############################################################################
 
-from openerp import fields, models
+from openerp import models, fields
 
 
-class ResPartner(models.Model):
-    _inherit = "res.partner"
+class EdiTransportConfig(models.Model):
+    _name = "edi.transport.config"
+    _description = "edi.transport.config"
 
+    name = fields.Char(required=True)
     edi_transfer_method = fields.Selection(
         selection=[('mail', 'E-mail'),
                    ('external_location', 'SFTP/FTP'),
@@ -36,5 +38,3 @@ class ResPartner(models.Model):
     edi_mail_template_id = fields.Many2one(
             'mail.template',
             string='Edi Mail Template')
-    edi_empty_file = fields.Boolean('Send EDI empty file')
-

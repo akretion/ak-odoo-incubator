@@ -49,4 +49,5 @@ class ResPartner(models.Model):
         string="Default Purchase Profile",
         help="If no profile is configured on product, this default "
              "profile will be used.")
+    edi_transport_config_id = fields.Many2one("edi.transport.config", string="EDI Transport Configuration")
 

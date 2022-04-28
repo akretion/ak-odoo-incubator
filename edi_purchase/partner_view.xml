@@ -5,12 +5,15 @@
 
     <record id="purchase_edi_partner_view_form" model="ir.ui.view">
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base_edi.base_edi_partner_view_form"/>
+        <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <field name="edi_transfer_method" position="after">
-                <field name="default_purchase_profile_id"
-                       attrs="{'invisible': [('edi_transfer_method', 'not in', ('external_location', 'mail'))]}"/>
-            </field>
+            <page name="sales_purchases" position="inside">
+                <group name="edi" string="EDI Infos">
+                    <field name="edi_transport_config_id"/>
+                    <field name="default_purchase_profile_id"
+                           attrs="{'invisible': [('edi_transport_config_id', '=', False)]}"/>
+                 </group>
+             </page>
         </field>
     </record>
 

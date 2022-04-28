@@ -107,27 +107,12 @@ class EdiMixin(models.Model):
         }
 
     @api.model
-    def _get_edi_metadata_attachment_vals(self, datas, location,
-                                          attach_id):
-        tasks = [t for t in location.task_ids if t.method_type == 'export']
-        task = tasks[0]
-        return {
-            'file_type': 'export_external_location',
-            'task_id': task.id,
-            'attachment_id': attach_id,
-        }        
-
-    @api.model
-    def create_edi_file(self, datas, transfer_method,
-                           edi_transfer, edi_profile, res_record):
+    def create_edi_file(self, datas,
+                           edi_profile, res_record):
         attach_vals = self._get_edi_attachment_vals(
                 datas, edi_profile, res_record)
         attach = self.env['ir.attachment'].create(
                 attach_vals)
-        if transfer_method == 'external_location':
-            vals = self._get_edi_metadata_attachment_vals(
-                datas, edi_transfer, attach.id)
-            self.env['ir.attachment.metadata'].create(vals)
         return attach
 
     @api.multi

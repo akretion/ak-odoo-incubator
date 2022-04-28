@@ -22,6 +22,15 @@
 from openerp import models, fields
 
 
+class PartnerProfileEdi(models.Model):
+    _name = "partner.profile.edi"
+    _description = "Transport Edi Config per partner/profile"
+
+    partner_id = fields.Many2one("res.partner", string="Supplier", required=True, domain="[('edi_transport_config_id', '!='', False)]")
+    edi_transport_config_id = fields.Many2one("edi.transport.config", required=True, string="EDI Transport Configuration")
+    edi_profile_id = fields.Many2one("purchase.edi.profile", required=True)
+
+
 class PurchaseEdiProfile(models.Model):
     _name = "purchase.edi.profile"
     _inherit = "edi.profile"
@@ -31,3 +40,8 @@ class PurchaseEdiProfile(models.Model):
         'purchase_edi_id',
         'Suppliers Info')
     export_id = fields.Many2one(domain=[('resource', '=', 'purchase.order.line')])
+    partner_edi_transport_config_ids = fields.One2many("partner.profile.edi", "edi_profile_id",
+        string="Partner Transport Configuration",
+        help="Choose a method to send EDI files if different from the one on the supplier")
+
+

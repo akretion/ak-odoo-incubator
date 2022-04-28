@@ -31,7 +31,6 @@
              ],
  'data': [
       'ir_exports_view.xml',
-      'partner_view.xml',
  ],
  'installable': True,
  }

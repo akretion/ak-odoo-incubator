@@ -20,6 +20,14 @@
                     </group>
                     <field name="file_format"/>
                     <field name="filename"/>
+                    <group string="Edi Transport Configuration">
+                        <field name="partner_edi_transport_config_ids" nolabel="1" colspan="4">
+                            <tree editable="top">
+                                <field name="partner_id"/>
+                                <field name="edi_transport_config_id"/>
+                            </tree>
+                         </field>
+                    </group>
                 </group>
             </form>
         </field>
