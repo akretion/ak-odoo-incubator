@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-    <menuitem
+    <!-- Only define some basic views for submodules use. Sub module should define
+         Menus and actions specific to their use. -->
+    <record id="ir_exports_config_form" model="ir.ui.view">
+        <field name="model">ir.exports.config</field>
+        <field name="inherit_id" ref="base_custom_export.ir_exports_config_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='additional_data']" position="after">
+                <group string="Edi Transport Configuration">
+                    <field
+                        name="partner_edi_transport_config_ids"
+                        nolabel="1"
+                        colspan="4"
+                    >
+                        <tree editable="top">
+                            <field name="partner_id" />
+                            <field name="edi_transport_config_id" />
+                        </tree>
+                     </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+   <menuitem
         id="edi_purchase_configuration_menu"
         name="Edi Configuration"
         parent="purchase.menu_purchase_config"
@@ -9,10 +32,13 @@
     />
 
     <record id="purchase_export_config_action" model="ir.actions.act_window">
+
         <field name="name">Purchase Export Profiles</field>
         <field name="res_model">ir.exports.config</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('resource', '=', 'purchase.order.line')]</field>
+        <field
+            name="domain"
+        >['|', ('resource', '=', 'purchase.order.line'), ('resource', '=', False)]</field>
     </record>
 
     <menuitem
