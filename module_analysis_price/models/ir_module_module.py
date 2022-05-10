@@ -124,4 +124,12 @@ class IrModuleModule(models.Model):
                 + module_type.migration_monthly_price
             )
 
+        return self._format_dashboard_values(result)
+
+    def _format_dashboard_values(self, result):
+        currency = self.env.company.currency_id
+        for mkey, mtype in result.items():
+            for vkey, value in mtype.items():
+                if "price" in vkey:
+                    result[mkey][vkey] = self.env["ir.qweb.field.monetary"].value_to_html(value, {"display_currency": currency})
         return result
