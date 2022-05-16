@@ -22,7 +22,7 @@ class ProxyActionHelper(models.AbstractModel):
         copies=1,
         host="https://localhost",
     ):
-        """ Prepare a PyWebdriver.print action """
+        """Prepare a PyWebdriver.print action"""
         if to_encode64:
             data = base64.b64encode(data)
         kwargs = {"options": {}}
@@ -37,7 +37,7 @@ class ProxyActionHelper(models.AbstractModel):
 
     @api.model
     def get_print_xml_receipt_action(self, receipt, host="https://localhost"):
-        """ Prepare a PyWebdriver.print action """
+        """Prepare a PyWebdriver.print action"""
 
         return {
             "url": "%s/hw_proxy/print_xml_receipt" % host,
