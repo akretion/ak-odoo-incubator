@@ -21,8 +21,8 @@ class LabelFromRecord(models.TransientModel):
     def __get_label_content(self):
         return self._get_label_content()
 
-    content = fields.Text(string=u"Label's content", default=__get_label_content)
-    with_price = fields.Boolean(string=u"Print price", help=u"Print price on labels")
+    content = fields.Text(string="Label's content", default=__get_label_content)
+    with_price = fields.Boolean(string="Print price", help="Print price on labels")
 
     @api.model
     def _get_label_content(self):
@@ -123,17 +123,17 @@ class LabelFromRecord(models.TransientModel):
     @api.model
     def _sanitize_and_check_parts(self, parts, line):
         """@return la 1ère règle non respecté"""
-        message = u"La ligne '%s' ne respecte pas le format."
+        message = "La ligne '%s' ne respecte pas le format."
         if not isinstance(parts, list):
             raise UserError(_(message) % line)
         if len(parts) <= 2:
             raise UserError(_(message) % line)
         if len(parts) >= 5:
-            raise UserError(_(u"Plus de 4 segments. " + message) % line)
+            raise UserError(_("Plus de 4 segments. " + message) % line)
         if not isinstance(parts[1], int):
-            raise UserError(_(u"La quantité n'est pas un entier '%s'") % line)
+            raise UserError(_("La quantité n'est pas un entier '%s'") % line)
         if parts[1] <= 0:
-            raise UserError(_(u"La quantité ne peut être <= 0. '%s'") % line)
+            raise UserError(_("La quantité ne peut être <= 0. '%s'") % line)
         if len(parts) > 2 and not isinstance(parts[2], int):
-            raise UserError(_(u"L'id n'est pas un entier '%s'") % line)
+            raise UserError(_("L'id n'est pas un entier '%s'") % line)
         return True
