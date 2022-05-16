@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Only define some basic views for submodules use. Sub module should define
+         Menus and actions specific to their use. -->
+    <record id="ir_exports_config_form" model="ir.ui.view">
+        <field name="model">ir.exports.config</field>
+        <field name="arch" type="xml">
+            <form string="Export Configuration" version="7.0">
+                <field name="visible_configurable_data_fields" invisible="1" />
+                <field name="resource" invisible="1" />
+                <group name="base" col="2">
+                    <group>
+                    <field name="name" />
+                    </group>
+                    <group
+                        attrs="{'invisible': [('visible_configurable_data_fields', '=', False)]}"
+                        colspan="2"
+                    >
+                        <p
+                            colspan="4"
+                        > Field Names and order of the fields should be modified directly on the export configuration </p>
+                        <field
+                            name="export_id"
+                            string="Export"
+                            attrs="{'required': [('visible_configurable_data_fields', '=', False)]}"
+                            colspan="4"
+                        />
+                    </group>
+                    <group>
+                    <field name="file_format" />
+                    <field name="filename" />
+                    </group>
+                </group>
+                <group
+                    name="additional_data"
+                    attrs="{'invisible': [('visible_configurable_data_fields', '=', False)]}"
+                    colspan="2"
+                >
+                <separator string="Additional Values" colspan="4" />
+                <field name="additional_export_line_ids" nolabel="1">
+                    <tree editable="top">
+                        <field name="sequence" />
+                        <field name="display_name" />
+                        <field name="value" />
+                    </tree>
+                </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="ir_exports_config_view_tree" model="ir.ui.view">
+        <field name="model">ir.exports.config</field>
+        <field name="arch" type="xml">
+            <tree string="Exports Config">
+                <field name="name" />
+                <field name="export_id" string="Export" />
+                <field name="file_format" />
+            </tree>
+        </field>
+    </record>
+
+</odoo>
