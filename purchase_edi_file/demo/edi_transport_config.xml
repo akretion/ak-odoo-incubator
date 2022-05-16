@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="supplier_12_config" model="edi.transport.config">
+        <field name="name">Demo config</field>
+        <field name="edi_transfer_method">external_location</field>
+        <field
+            name="edi_storage_backend_id"
+            ref="storage_backend.default_storage_backend"
+        />
+    </record>
+
+</odoo>
