@@ -65,7 +65,7 @@ class StockMove(models.Model):
         # mig v12: remove this function since search_picking_for_assignation
         # is in core
         candidates_for_empty_picking = Picking.browse()
-        for move in self:
+        for move in self.filtered(lambda m: m.state not in ['cancel', 'done']):
             recompute = False
             if move.picking_id:
                 candidates_for_empty_picking += move.picking_id
