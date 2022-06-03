@@ -40,7 +40,6 @@ For instance with a script that runs:
 
     UPDATE ir_cron SET active='f' WHERE cron_name = 'Database Age Cron';
 
-
 Bug Tracker
 ===========
 
