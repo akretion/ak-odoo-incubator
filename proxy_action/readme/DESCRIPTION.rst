@@ -1,4 +1,4 @@
-Communicate with PyWebDriver from Odoo.
+Communicate from Odoo (js client-side) to a localhost http server.
 
 Common use cases:
 
