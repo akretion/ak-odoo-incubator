@@ -41,7 +41,7 @@ class StockInventory(models.Model):
         putaway_locations = {}
         for line in self.line_ids:
             if line.product_id.product_putaway_ids:
-                continue
+                line.product_id.product_putaway_ids.unlink()
             if (line.product_id.id not in putaway_locations
                     or line.product_qty >
                     putaway_locations[line.product_id.id]['qty']):
