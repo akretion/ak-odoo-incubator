@@ -34,7 +34,7 @@ class ResPartner(models.Model):
     default_purchase_profile_id = fields.Many2one(
         "ir.exports.config",
         string="Default Purchase Profile",
-        domain=[("model_id.model", "=", "purchase.order.line")],
+        domain=[("resource", "=", "purchase.order.line")],
         help="If no profile is configured on product, this default "
         "profile will be used.",
     )
