@@ -9,5 +9,9 @@ class ProductSupplierinfo(models.Model):
     purchase_edi_id = fields.Many2one(
         "ir.exports.config",
         "Edi Profile",
-        domain=[("resource", "=", "purchase.order.line")],
+        domain=[
+            "|",
+            ("resource", "=", "purchase.order.line"),
+            ("resource", "=", False),
+        ],
     )
