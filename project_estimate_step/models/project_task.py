@@ -2,34 +2,40 @@
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
-HOURS_PER_DAYS = 8. # TODO Make it configurable
+HOURS_PER_DAYS = 8.0  # TODO Make it configurable
 
 
 class ProjectTask(models.Model):
-    _inherit = 'project.task'
+    _inherit = "project.task"
 
     allowed_estimate_step_ids = fields.Many2many(
-        comodel_name='project.estimate.step',
+        comodel_name="project.estimate.step",
         related="project_id.estimate_step_ids",
-        string='Allowed Estimate Step')
+        string="Allowed Estimate Step",
+    )
     estimate_step_id = fields.Many2one(
         "project.estimate.step",
         "Estimate Step",
         index=True,
-        group_expand="_read_group_estimate_step_id")
+        group_expand="_read_group_estimate_step_id",
+    )
 
     @api.model
     def _read_group_estimate_step_id(self, steps, domain, order):
-        if 'default_project_id' in self._context:
-            project = self.env["project.project"].browse(self._context["default_project_id"])
+        if "default_project_id" in self._context:
+            project = self.env["project.project"].browse(
+                self._context["default_project_id"]
+            )
             steps |= project.estimate_step_ids
         return steps.sorted("days")
 
     def _sync_estimate(self):
         for record in self:
-            record.planned_hours = record.project_id.convert_days_to_hours(record.estimate_step_id.days)
+            record.planned_hours = record.project_id.convert_days_to_hours(
+                record.estimate_step_id.days
+            )
 
     def write(self, vals):
         super().write(vals)
