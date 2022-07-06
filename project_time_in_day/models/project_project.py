@@ -3,16 +3,15 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 
-from odoo import _, api, fields, models
+from odoo import fields, models
 
 
 class ProjectProject(models.Model):
-    _inherit = 'project.project'
+    _inherit = "project.project"
 
     hour_uom_id = fields.Many2one(
-        'uom.uom',
-        'Hour Uom',
-        help="Used for conversion between day and hours")
+        "uom.uom", "Hour Uom", help="Used for conversion between day and hours"
+    )
 
     def _get_hour_uom(self):
         # By default in Odoo the uom of reference is the day
