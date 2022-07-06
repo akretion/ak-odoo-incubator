@@ -6,7 +6,7 @@
     "name": "Project time in days",
     "summary": "Compute time in days",
     "version": "14.0.1.0.0",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": " Akretion",
