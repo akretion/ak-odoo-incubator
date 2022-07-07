@@ -90,17 +90,18 @@ class MrpProduction(models.Model):
 
             old_pickings |= move_out.picking_id
             # TODO update procurements?
-            move_out.picking_id = False
-            move_out.location_id = supplier_loc.id
-            move_out.warehouse_id = supplier_wh.id
-            move_out.picking_type_id = supplier_wh.out_type_id.id
-            move_out.assign_picking()
+            if finish_move.move_dest_id.state not in ['cancel', 'done']:
+                move_out.picking_id = False
+                move_out.location_id = supplier_loc.id
+                move_out.warehouse_id = supplier_wh.id
+                move_out.picking_type_id = supplier_wh.out_type_id.id
+                move_out.assign_picking()
 
-            if move_out_dest:
-                old_pickings |= move_out_dest.picking_id
-                move_out_dest.picking_id = False
-                move_out_dest.partner_id = supplier.id
-                move_out_dest.assign_picking()
+                if move_out_dest:
+                    old_pickings |= move_out_dest.picking_id
+                    move_out_dest.picking_id = False
+                    move_out_dest.partner_id = supplier.id
+                    move_out_dest.assign_picking()
         for picking in old_pickings:
             if not picking.move_lines:
                 picking.unlink()
