@@ -1,1 +1,1 @@
-This module allows to
+This module allows to share dashboards across users.
