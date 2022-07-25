@@ -4,7 +4,7 @@
 
 {
     "name": "Dash Shared",
-    "summary": "SUMMARY",
+    "summary": "Sharing dashboards across users",
     "version": "14.0.1.0.0",
     "category": "CAT",
     "website": "https://github.com/akretion/ak-odoo-incubator",
