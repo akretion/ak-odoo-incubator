@@ -24,7 +24,7 @@ class StockPicking(models.Model):
         else:
             retrieve = keychain.retrieve
 
-        shop = self.sale_id.shop_id
+        shop = self.sale_id.shop_id or self.env["sale.shop"].search([], order="id asc", limit=1)
         method = self.carrier_id
 
         sale_shop_methods = self.env['sale.shop.method'].search(
