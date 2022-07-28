@@ -31,6 +31,7 @@ class StockPicking(models.Model):
             [
                 ['shop', '=', shop.id],
                 ['delivery_methods', 'in', (method.id)],
+                ['warehouse_ids', "in", self.picking_type_id.warehouse_id.id],
             ])
 
         if len(sale_shop_methods) < 1:

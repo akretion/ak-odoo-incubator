@@ -54,5 +54,6 @@ class ShopMethod(models.Model):
     keychain = fields.Many2one(
         comodel_name='keychain.account',
         inverse_name='shop_methods')
+    warehouse_ids = fields.Many2many("stock.warehouse", string="Warehouses")
 
 

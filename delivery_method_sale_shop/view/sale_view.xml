@@ -12,11 +12,13 @@
                 <xpath expr="//group[@name='logo']" position="after">
                     <field name="shop_methods">
                         <tree>
+                            <field name="warehouse_ids"/>
                             <field name="delivery_methods"/>
                             <field name="keychain"/>
                         </tree>
                         <form>
                             <field name="delivery_methods"/>
+                            <field name="warehouse_ids" widget="many2many_tags"/>
                             <field name="keychain"/>
                         </form>
                     </field>
