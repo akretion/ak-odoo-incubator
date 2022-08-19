@@ -22,12 +22,14 @@ addon | version | maintainers | summary
 [account_move_line_mass_edit_account](account_move_line_mass_edit_account/) | 14.0.1.0.0 |  | Give the possibility to edit in mass the account on move line
 [attachment_asset_in_db](attachment_asset_in_db/) | 14.0.1.0.0 |  | Always store odoo asset in database
 [base_custom_export](base_custom_export/) | 14.0.1.0.0 |  | Base Customer Export
+[dash_shared](dash_shared/) | 14.0.1.0.0 | [![Kev-Roche](https://github.com/Kev-Roche.png?size=30px)](https://github.com/Kev-Roche) | SUMMARY
 [database_age_cron](database_age_cron/) | 14.0.1.0.0 |  | Run a cron that determines database age
+[forbid_record_creation](forbid_record_creation/) | 14.0.1.0.0 |  | Avoid to create test data in sale, purchase, etc.
 [intercompany_shared_contact](intercompany_shared_contact/) | 14.0.1.0.0 |  | User of each company are contact of a company partner. All child address of a company are automatically shared
 [label_wizard](label_wizard/) | 14.0.1.0.0 |  | Wizard for choosing how many labels to print
 [module_analysis_price](module_analysis_price/) | 14.0.1.0.0 |  | Module Analysis Price
 [product_pricelist_per_attribute_value](product_pricelist_per_attribute_value/) | 14.0.1.0.0 |  | Allows to have pricelist rule by product attribute value.
-[proxy_action](proxy_action/) | 14.0.1.0.0 |  | Proxy Action
+[proxy_action](proxy_action/) | 14.0.1.0.1 |  | Proxy Action
 [purchase_edi_file](purchase_edi_file/) | 14.0.1.0.0 |  | Purchase EDI file
 [purchase_lot](purchase_lot/) | 14.0.1.0.0 |  | Purchase Lot
 [security_rule_not_editable](security_rule_not_editable/) | 14.0.1.0.0 |  | Forbid editing rule form UI force using code
