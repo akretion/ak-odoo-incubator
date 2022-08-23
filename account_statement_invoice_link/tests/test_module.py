@@ -1,5 +1,8 @@
-from odoo.tests.common import SavepointCase
+# © 2022 David BEAL @ Akretion
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
 from odoo import fields
+from odoo.tests.common import SavepointCase
 
 
 class Test(SavepointCase):
@@ -24,7 +27,7 @@ class Test(SavepointCase):
     def test_statement(self):
         self._create_invoice(self.partner, "INV/007")
         line = self._create_statement_line(ref="INV/007")
-        assert line.invoice_link[:6]== "=HYPER"
+        assert line.invoice_link[:6] == "=HYPER"
         self._create_invoice(self.partner, "INV/7")
         self._create_invoice(self.partner, "INV/42")
         line = self._create_statement_line(ref="any bla INV/7 or other INV/42 blo bli")

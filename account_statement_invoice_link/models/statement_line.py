@@ -2,8 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import re
+
 from odoo import api, fields, models
-from odoo.exceptions import UserError
 
 
 class AccountBankStatementLine(models.Model):
@@ -40,7 +40,9 @@ class AccountBankStatementLine(models.Model):
                         inv_str = self._get_invoice_link(base_url, moves[0], rec)
                     else:
                         # Only descriptive string here
-                        inv_str = "\n".join(["%s %s" % (x.date, x.name) for x in moves])
+                        inv_str = "\n".join(
+                            ["{} {}".format(x.date, x.name) for x in moves]
+                        )
                 else:
                     inv_str = ""
                 rec.invoice_link = inv_str
@@ -49,10 +51,10 @@ class AccountBankStatementLine(models.Model):
     def _get_invoice_link(base_url, move, record):
         if base_url:
             return (
-                '=HYPERLINK("http://%(url)s/web#id=%(id)s&model=account.move&'
+                '=HYPERLINK("%(url)s/web#id=%(id)s&model=account.move&'
                 'view_type=form&cids=%(company_id)s"'
                 % {"url": base_url, "id": move.id, "company_id": record.company_id.id}
-                + ', "%s %s")' % (move.date, move.name)
+                + ', "{} {}")'.format(move.date, move.name)
             )
 
         else:
