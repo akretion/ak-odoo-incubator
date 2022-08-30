@@ -38,13 +38,15 @@ class AccountBankStatementLine(models.Model):
             move = line_id.move_id
             curr_id = line_id.company_id.currency_id
             name = move.name + " (" + move.ref + ")" if move.ref else move.name
+            partner_name = move.partner_id.name[:20]
             msg.append(
-                "%(amount)s: %(name)s %(date)s id_%(id)s"
+                "%(date)s %(amount)s %(name)s %(partner_name)s (id_%(id)s)"
                 % {
                     "amount": formatLang(self.env, amount, currency_obj=curr_id),
                     "name": name,
                     "date": format_date(self.env, line_id.date),
                     "id": move.id,
+                    "partner_name": partner_name,
                 }
             )
 
