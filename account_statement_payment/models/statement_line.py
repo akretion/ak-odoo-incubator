@@ -3,7 +3,6 @@
 
 from odoo import api, fields, models
 
-ACTION = False
 SALE = False
 PURCHASE = False
 
@@ -14,18 +13,15 @@ class AccountBankStatementLine(models.Model):
     origin_statement = fields.Char(compute="_compute_origin_statement")
 
     def _compute_origin_statement(self):
-        global ACTION, SALE, PURCHASE
-        if not ACTION:
-            ACTION = self.sudo().env.ref(
-                "account.action_account_payments_payable", raise_if_not_found=False
-            )
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        global SALE, PURCHASE
         # Sale or purchase modules may be not both installed,
         # we have to check outside of the loop and defined in a global scope
         if "sale.order" in self.env.registry.models.keys():
             SALE = "sale"
         if "purchase.order" in self.env.registry.models.keys():
             PURCHASE = "purchase"
+        action = self.sudo().env.ref("account.action_account_payments_payable")
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         for rec in self:
             rec_lines = rec.move_id.line_ids.filtered(lambda s: s.full_reconcile_id)
             line_rec = {
@@ -45,7 +41,7 @@ class AccountBankStatementLine(models.Model):
                 x.full_reconcile_id: x.mapped("payment_id")
                 for x in reconc.filtered(lambda s: s.payment_id)
             }
-            line_docs = {
+            docs = {
                 line: "%s, %s %s %s %s"
                 % (
                     pay[re].amount,
@@ -58,14 +54,14 @@ class AccountBankStatementLine(models.Model):
                 for line, re in line_rec.items()
                 if re in pay
             }
-            if line_docs:
+            if docs:
                 strings = []
-                for line, val in line_docs.items():
+                for __, val in docs.items():
                     strings.append(val)
                 if len(strings) == 1:
                     rec.origin_statement = self._get_payment_link(
                         base_url,
-                        ACTION,
+                        action,
                         val,
                     )
                 else:
@@ -75,7 +71,8 @@ class AccountBankStatementLine(models.Model):
 
     @api.model
     def _get_commercial_record_name(self, payment, record_type):
-        """Redirect towards the right fields according to installed modules: sale or purchase"""
+        """Redirect towards the right fields according to
+        installed modules: sale or purchase"""
         if record_type == SALE:
             return payment.sale_id and payment.sale_id.name or ""
         if record_type == PURCHASE:
