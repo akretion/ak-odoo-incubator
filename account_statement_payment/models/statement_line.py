@@ -4,15 +4,12 @@
 from odoo import api, fields, models
 from odoo.tools.misc import formatLang, format_date
 
-SALE = False
-PURCHASE = False
-
 
 class AccountBankStatementLine(models.Model):
     _inherit = "account.bank.statement.line"
 
     origin_statement = fields.Char(compute="_compute_origin_statement")
-    origin_old = fields.Char(compute="_compute_origin_old")
+    payment_origin = fields.Char(string="Payment", compute="_compute_payment_origin")
 
     def _compute_origin_statement(self):
         move_action = self.sudo().env.ref("account.action_move_journal_line")
@@ -68,8 +65,12 @@ class AccountBankStatementLine(models.Model):
     def _get_spreadsheet_link(self, base_url, action, string):
         if base_url:
             model = action.res_model
-            id_ = string[string.index("id_") + 3 :]
-            id_ = self.sudo().env[model].browse(int(id_))
+            if not isinstance(string, str):
+                id_ = string
+                string = "paiem"
+            else:
+                id_ = string[string.index("id_") + 3 :]
+                id_ = self.sudo().env[model].browse(int(id_))
             if hasattr(id_, "id"):
                 return (
                     '=HYPERLINK("%(url)s/web#id=%(id)s&action=%(action)s&'
@@ -89,24 +90,7 @@ class AccountBankStatementLine(models.Model):
                 )
         return string
 
-    @api.model
-    def _get_commercial_record_name(self, payment, record_type):
-        """Redirect towards the right fields according to
-        installed modules: sale or purchase"""
-        if record_type == SALE:
-            return payment.sale_id and payment.sale_id.name or ""
-        if record_type == PURCHASE:
-            return payment.purchase_id and payment.purchase_id.name or ""
-        return ""
-
-    def _compute_origin_old(self):
-        global SALE, PURCHASE
-        # Sale or purchase modules may be not both installed,
-        # we have to check outside of the loop and defined in a global scope
-        if "sale.order" in self.env.registry.models.keys():
-            SALE = "sale"
-        if "purchase.order" in self.env.registry.models.keys():
-            PURCHASE = "purchase"
+    def _compute_payment_origin(self):
         action = self.sudo().env.ref("account.action_account_payments_payable")
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         for rec in self:
@@ -128,30 +112,14 @@ class AccountBankStatementLine(models.Model):
                 x.full_reconcile_id: x.mapped("payment_id")
                 for x in reconc.filtered(lambda s: s.payment_id)
             }
-            docs = {
-                line: "%s, %s %s %s %s"
-                % (
-                    pay[re].amount,
-                    pay[re].ref or pay[re].name,
-                    pay[re].partner_id and pay[re].partner_id.name,
-                    self._get_commercial_record_name(pay[re], "sale")
-                    or self._get_commercial_record_name(pay[re], "purchase"),
-                    "id_%s" % pay[re].id,
-                )
-                for line, re in line_rec.items()
-                if re in pay
-            }
+            docs = {line: pay[re] for line, re in line_rec.items() if re in pay}
             if docs:
-                strings = []
-                for __, val in docs.items():
-                    strings.append(val)
-                if len(strings) == 1:
-                    rec.origin_old = self._get_spreadsheet_link(
+                for __, payment in docs.items():
+                    rec.payment_origin = self._get_spreadsheet_link(
                         base_url,
                         action,
-                        val,
+                        payment
                     )
-                else:
-                    rec.origin_old = "\n".join(strings)
+                    break
             else:
-                rec.origin_old = ""
+                rec.payment_origin = ""
