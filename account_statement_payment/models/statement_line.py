@@ -8,7 +8,9 @@ from odoo.tools.misc import formatLang, format_date
 class AccountBankStatementLine(models.Model):
     _inherit = "account.bank.statement.line"
 
-    reconciled_info = fields.Char(compute="_compute_reconciled_info")
+    reconcile_info = fields.Char(
+        "Reconciliation Info", compute="_compute_reconcile_info"
+    )
 
     def _get_spreadsheet_link(self, base_url, action, rec, string):
         model = action.res_model
@@ -29,9 +31,9 @@ class AccountBankStatementLine(models.Model):
             }
         )
 
-    def _get_reconciled_info(self, base_url, action, reconciled):
+    def _get_reconcile_info(self, base_url, action, reconciled):
         msg = []
-        reconciled_info = ""
+        reconcile_info = ""
         for amount, line_id in reconciled:
             move = line_id.move_id
             curr_id = line_id.company_id.currency_id
@@ -52,12 +54,12 @@ class AccountBankStatementLine(models.Model):
             if rec.payment_id:
                 rec = rec.payment_id
                 action = self.sudo().env.ref("account.action_account_payments_payable")
-            reconciled_info = self._get_spreadsheet_link(base_url, action, rec, msg[0])
+            reconcile_info = self._get_spreadsheet_link(base_url, action, rec, msg[0])
         else:
-            reconciled_info = ";\n".join(msg)
-        return reconciled_info
+            reconcile_info = ";\n".join(msg)
+        return reconcile_info
 
-    def _compute_reconciled_info(self):
+    def _compute_reconcile_info(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         action = self.sudo().env.ref("account.action_move_journal_line")
         for rec in self:
@@ -72,6 +74,4 @@ class AccountBankStatementLine(models.Model):
                         (matched_credit_id.amount, matched_credit_id.credit_move_id)
                     )
 
-            rec.reconciled_info = self._get_reconciled_info(
-                base_url, action, reconciled
-            )
+            rec.reconcile_info = self._get_reconcile_info(base_url, action, reconciled)
