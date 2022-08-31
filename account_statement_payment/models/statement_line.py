@@ -38,7 +38,12 @@ class AccountBankStatementLine(models.Model):
             move = line_id.move_id
             curr_id = line_id.company_id.currency_id
             name = move.name + " (" + move.ref + ")" if move.ref else move.name
-            partner_name = move.partner_id and move.partner_id.name[:20] or ""
+            partner_name = (
+                move.partner_id
+                and move.partner_id.name
+                and move.partner_id.name[:20]
+                or ""
+            )
             msg.append(
                 "%(date)s %(amount)s %(name)s %(partner_name)s (id_%(id)s)"
                 % {
