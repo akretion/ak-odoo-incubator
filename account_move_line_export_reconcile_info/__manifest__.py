@@ -12,5 +12,5 @@
     "depends": [
         "account",
     ],
-    "data": [],
+    "data": ["views/account_payment_view.xml"],
 }

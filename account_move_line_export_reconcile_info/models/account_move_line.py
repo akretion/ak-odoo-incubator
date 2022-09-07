@@ -1,12 +1,12 @@
 # © 2022 David BEAL @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.tools.misc import format_date, formatLang
 
 
-class AccountBankStatementLine(models.Model):
-    _inherit = "account.bank.statement.line"
+class AccountMove(models.Model):
+    _inherit = "account.move"
 
     reconcile_info = fields.Char(
         "Reconciliation Info", compute="_compute_reconcile_info"
