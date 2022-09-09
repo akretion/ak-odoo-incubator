@@ -8,6 +8,12 @@ from odoo.tools.misc import format_date, formatLang
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    reconcile_debit_info = fields.Char(
+        "Reconciliation Debit Info", compute="_compute_reconcile_info"
+    )
+    reconcile_credit_info = fields.Char(
+        "Reconciliation Credit Info", compute="_compute_reconcile_info"
+    )
     reconcile_info = fields.Char(
         "Reconciliation Info", compute="_compute_reconcile_info"
     )
@@ -70,15 +76,24 @@ class AccountMove(models.Model):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         action = self.sudo().env.ref("account.action_move_journal_line")
         for rec in self:
-            reconciled = []
+            reconciled_debit = []
+            reconciled_credit = []
             for line in rec.line_ids:
                 for matched_debit_id in line.matched_debit_ids:
-                    reconciled.append(
+                    reconciled_debit.append(
                         (matched_debit_id.amount, matched_debit_id.debit_move_id)
                     )
                 for matched_credit_id in line.matched_credit_ids:
-                    reconciled.append(
+                    reconciled_credit.append(
                         (matched_credit_id.amount, matched_credit_id.credit_move_id)
                     )
 
-            rec.reconcile_info = self._get_reconcile_info(base_url, action, reconciled)
+            rec.reconcile_debit_info = self._get_reconcile_info(
+                base_url, action, reconciled_debit
+            )
+            rec.reconcile_credit_info = self._get_reconcile_info(
+                base_url, action, reconciled_credit
+            )
+            rec.reconcile_info = "{};\n{}".format(
+                rec.reconcile_debit_info, rec.reconcile_credit_info
+            )
