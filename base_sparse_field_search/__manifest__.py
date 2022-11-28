@@ -1,7 +1,7 @@
 {
     "name": "Sparse Fields Search",
     "summary": "Search feature for sparse field",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Technical Settings",
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": " Akretion",
