@@ -3,15 +3,15 @@
 from odoo import fields, models
 
 
-class StockProductionLot(models.Model):
-    _inherit = "stock.production.lot"
+class StockLot(models.Model):
+    _inherit = "stock.lot"
 
     # technical fields
     phantom_lot_id = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         index=True,
         copy=False,
         help="Lot that have generated this one because of bom phantom",
     )
-    component_lot_ids = fields.One2many("stock.production.lot", "phantom_lot_id")
+    component_lot_ids = fields.One2many("stock.lot", "phantom_lot_id")
     manufacturing_order_ids = fields.One2many("mrp.production", "lot_producing_id")

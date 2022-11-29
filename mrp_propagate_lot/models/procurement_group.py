@@ -24,7 +24,7 @@ class ProcurementGroup(models.Model):
         # in case we had a restrict lot, the procurements were splitted and product
         # changed but not the lot. if components are tracked by lot, we whould
         # duplicate the original phantom lot to change the product
-        lot_obj = self.env["stock.production.lot"]
+        lot_obj = self.env["stock.lot"]
         new_procurements = []
         index_per_lot = {}
         for procurement in procurements:
@@ -39,7 +39,7 @@ class ProcurementGroup(models.Model):
                     vals = self._get_custom_lot_vals(
                         lot, product, index_per_lot[lot.id], procurement=procurement
                     )
-                    new_lot = self.env["stock.production.lot"].search(
+                    new_lot = self.env["stock.lot"].search(
                         [
                             ("product_id", "=", vals["product_id"]),
                             ("name", "=", vals["name"]),
