@@ -1,13 +1,15 @@
-[![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat//14.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-ak-odoo-incubator-)
-[![Build Status](https://travis-ci.com/OCA/ak-odoo-incubator.svg?branch=14.0)](https://travis-ci.com/OCA/ak-odoo-incubator)
-[![codecov](https://codecov.io/gh/OCA/ak-odoo-incubator/branch/14.0/graph/badge.svg)](https://codecov.io/gh/OCA/ak-odoo-incubator)
-[![Translation Status](https://translation.odoo-community.org/widgets/ak-odoo-incubator-14-0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/ak-odoo-incubator-14-0/?utm_source=widget)
+
+<!-- /!\ Non OCA Context : Set here the badge of your runbot / runboat instance. -->
+[![Pre-commit Status](https://github.com/akretion/ak-odoo-incubator/actions/workflows/pre-commit.yml/badge.svg?branch=16.0)](https://github.com/akretion/ak-odoo-incubator/actions/workflows/pre-commit.yml?query=branch%3A16.0)
+[![Build Status](https://github.com/akretion/ak-odoo-incubator/actions/workflows/test.yml/badge.svg?branch=16.0)](https://github.com/akretion/ak-odoo-incubator/actions/workflows/test.yml?query=branch%3A16.0)
+[![codecov](https://codecov.io/gh/akretion/ak-odoo-incubator/branch/16.0/graph/badge.svg)](https://codecov.io/gh/akretion/ak-odoo-incubator)
+<!-- /!\ Non OCA Context : Set here the badge of your translation instance. -->
 
 <!-- /!\ do not modify above this line -->
 
-# Generic Odoo module in incubation
+# Misc Odoo modules maturing before going to a specific repo
 
-The modules present in this repo should go to OCA on the long run, they are still not used a lot and still need to prove themselves
+Misc Odoo modules maturing before going to a specific repo
 
 <!-- /!\ do not modify below this line -->
 
@@ -25,12 +27,9 @@ This part will be replaced when running the oca-gen-addons-table script from OCA
 
 This repository is licensed under [AGPL-3.0](LICENSE).
 
-However, each module can have a totally different license, as long as they adhere to OCA
+However, each module can have a totally different license, as long as they adhere to Akretion
 policy. Consult each module's `__manifest__.py` file, which contains a `license` key
 that explains its license.
 
 ----
-
-OCA, or the [Odoo Community Association](http://odoo-community.org/), is a nonprofit
-organization whose mission is to support the collaborative development of Odoo features
-and promote its widespread use.
+<!-- /!\ Non OCA Context : Set here the full description of your organization. -->
