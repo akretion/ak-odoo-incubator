@@ -19,6 +19,8 @@ class ProductConfigurationMixin(models.AbstractModel):
         for line in self:
             if line.config_text:
                 line.config = simplejson.loads(self.config_text)
+            else:
+                line.config = False
 
     config = fields.Serialized(
         "Json Configuration", readonly=False, help="Allow to set custom configuration"
@@ -45,3 +47,5 @@ class ProductConfigurationMixin(models.AbstractModel):
         for record in self:
             if record.commercial_config_text:
                 record.commercial_config = json.loads(record.commercial_config_text)
+            else:
+                record.commercial_config = False

@@ -3,8 +3,8 @@
 from odoo import fields, models
 
 
-class StockProductionLot(models.Model):
-    _inherit = "stock.production.lot"
+class StockLot(models.Model):
+    _inherit = "stock.lot"
 
     config = fields.Serialized(
         "Configuration", readonly=True, help="Allow to set custom configuration"

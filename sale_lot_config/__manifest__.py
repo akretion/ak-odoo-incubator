@@ -2,7 +2,7 @@
 
 {
     "name": "Sale Lot Config",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Sale",
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://github.com/akretion/ak-odoo-incubator",
