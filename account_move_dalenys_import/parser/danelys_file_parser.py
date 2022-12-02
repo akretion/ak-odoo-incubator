@@ -41,7 +41,7 @@ class DanelysFileParser(FileParser):
         )
 
     def _pre(self, *args, **kwargs):
-        super()._pre(*args, **kwargs)
+        res = super()._pre(*args, **kwargs)
         split_file = self.filebuffer.split(b"\n")
         selected_lines = []
         for line in split_file:
@@ -49,6 +49,7 @@ class DanelysFileParser(FileParser):
                 line = line[3:]
             selected_lines.append(line.strip())
         self.filebuffer = b"\n".join(selected_lines)
+        return res
 
     def get_move_line_vals(self, line, *args, **kwargs):
         amount = line["AMOUNT"]
@@ -78,7 +79,7 @@ class DanelysPaypalAmexeParser(DanelysFileParser):
         return parser_name == "danelys_amex_paypal_csvparser"
 
     def _pre(self, *args, **kwargs):
-        super()._pre(*args, **kwargs)
+        res = super()._pre(*args, **kwargs)
         res = self._parse_csv()
         self._moves = []
         for row in res:
@@ -86,6 +87,7 @@ class DanelysPaypalAmexeParser(DanelysFileParser):
                 self._moves.append(row)
         if self._moves:
             self.move_date = self._moves[0]["DATE"]
+        return res
 
     def _parse(self, *args, **kwargs):
         """
@@ -114,7 +116,7 @@ class DanelysCBFileParser(DanelysFileParser):
         return parser_name == "danelys_cb_csvparser"
 
     def _post(self, *args, **kwargs):
-        super()._post(*args, **kwargs)
+        res = super()._post(*args, **kwargs)
         final_rows = []
         for row in self.result_row_list:
             if not self.move_date or row["DATE"] > self.move_date:
@@ -122,3 +124,4 @@ class DanelysCBFileParser(DanelysFileParser):
             if row["EXECCODE"] in ("0", "0000"):
                 final_rows.append(row)
         self.result_row_list = final_rows
+        return res
