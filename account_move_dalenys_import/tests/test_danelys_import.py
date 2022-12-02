@@ -3,19 +3,19 @@
 import base64
 
 from odoo.modules.module import get_resource_path
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class TestPurchaseLot(SavepointCase):
+class TestPurchaseLot(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.receivable_account_id = cls.env["account.account"].search(
             [
                 (
-                    "user_type_id",
+                    "account_type",
                     "=",
-                    cls.env.ref("account.data_account_type_receivable").id,
+                    "asset_receivable",
                 ),
             ],
             limit=1,
@@ -23,9 +23,9 @@ class TestPurchaseLot(SavepointCase):
         cls.expense_account_id = cls.env["account.account"].search(
             [
                 (
-                    "user_type_id",
+                    "account_type",
                     "=",
-                    cls.env.ref("account.data_account_type_expenses").id,
+                    "expense",
                 ),
             ],
             limit=1,
@@ -34,7 +34,7 @@ class TestPurchaseLot(SavepointCase):
             {
                 "name": "Danelys bank account",
                 "code": "512007",
-                "user_type_id": cls.env.ref("account.data_account_type_liquidity").id,
+                "account_type": "asset_cash",
             }
         )
         cls.danelys_journal = cls.env["account.journal"].create(
@@ -75,7 +75,7 @@ class TestPurchaseLot(SavepointCase):
         self.assertEqual(len(move), 1)
         self.assertEqual(len(move.line_ids), 4)
         payment_aml1 = move.line_ids.filtered(lambda line: line.name == "SO1233")
-        self.assertEqual(payment_aml1.credit, 195.67)
+        self.assertAlmostEqual(payment_aml1.credit, 195.67)
         commission_aml = move.line_ids.filtered(
             lambda line: line.account_id == self.expense_account_id
         )
@@ -98,4 +98,4 @@ class TestPurchaseLot(SavepointCase):
         payment_aml_1 = moves.mapped("line_ids").filtered(
             lambda line: line.name == "SO431"
         )
-        self.assertEqual(payment_aml_1.credit, 117.57)
+        self.assertAlmostEqual(payment_aml_1.credit, 117.57)

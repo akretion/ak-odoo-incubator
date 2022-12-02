@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 {
     "name": "Journal Entry Danelys import",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "author": "Akretion,Odoo Community Association (OCA)",
     "maintainer": "Odoo Community Association (OCA)",
     "category": "Finance",
