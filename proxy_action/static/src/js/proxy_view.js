@@ -1,25 +1,10 @@
-/* eslint no-unused-vars: ["error", {"args": "none"}]*/
-odoo.define("proxy_action.proxy_view", function (require) {
-    "use strict";
-    var ActionManager = require("web.ActionManager");
-    var core = require("web.core");
-    var _t = core._t;
+/** @odoo-module **/
 
-    ActionManager.include({
-        _handleAction: function (action, options) {
-            if (action.type === "ir.actions.act_proxy") {
-                return this._executeProxyAction(action, options);
-            }
-            return this._super.apply(this, arguments);
-        },
+import {registry} from "@web/core/registry";
 
-        _executeProxyAction: function (action, options) {
-            var self = this;
-            self.do_notify(
-                _t("Proxy action executing"),
-                _t("Your action is being executed")
-            );
+async function executeProxyAction({env, action}) {
             action.action_list.map(function (act, idx) {
+                env.services.notification.add(env._t("Your action is being executed"), {type: "info"});
                 $.ajax({
                     url: act.url,
                     type: "POST",
@@ -27,17 +12,14 @@ odoo.define("proxy_action.proxy_view", function (require) {
                     contentType: "application/json",
                 }).fail(function (result) {
                     console.log("Proxy action has failed: ", result);
-                    self.do_warn(
-                        _t("Failure"),
-                        _t("Proxy action failure. Please check logs.")
-                    );
+                    env.services.notification.add(env._t("Proxy action failure. Please check logs."), {type: "danger"});
                     return result;
                 });
             });
             var act_close = {
                 type: "ir.actions.act_window_close",
             };
-            return self.doAction(act_close, []);
-        },
-    });
-});
+            return env.services.action.doAction(act_close, []);
+}
+
+registry.category("action_handlers").add("ir.actions.act_proxy", executeProxyAction);
