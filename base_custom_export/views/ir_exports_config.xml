@@ -24,7 +24,7 @@
                             name="export_id"
                             string="Export"
                             attrs="{'required': [('visible_configurable_data_fields', '=', False)]}"
-                            colspan="4"
+                            colspan="2"
                         />
                     </group>
                     <group>
@@ -37,11 +37,11 @@
                     attrs="{'invisible': [('visible_configurable_data_fields', '=', False)]}"
                     colspan="2"
                 >
-                <separator string="Additional Values" colspan="4" />
-                <field name="additional_export_line_ids" nolabel="1">
+                <separator string="Additional Values" colspan="2" />
+                <field name="additional_export_line_ids" nolabel="1" colspan="2">
                     <tree editable="top">
                         <field name="sequence" />
-                        <field name="display_name" />
+                        <field name="field_description" />
                         <field name="value" />
                     </tree>
                 </field>

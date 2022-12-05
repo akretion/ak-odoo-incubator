@@ -4,7 +4,7 @@ import base64
 
 from odoo import api, fields, models
 
-from odoo.addons.web.controllers.main import CSVExport, ExcelExport
+from odoo.addons.web.controllers.export import CSVExport, ExcelExport
 
 
 class IrExportsConfig(models.Model):
@@ -28,7 +28,6 @@ class IrExportsConfig(models.Model):
         selection=[("csv", "CSV"), ("xlsx", "Excel")],
         default="csv",
         required=True,
-        string="File Format",
     )
     resource = fields.Char(related="export_id.resource", store=True, readonly=True)
     visible_configurable_data_fields = fields.Boolean(
@@ -107,7 +106,7 @@ class IrExportsConfig(models.Model):
         field_names = []
         for line in self.export_id.export_fields:
             field_technames.append(line.name)
-            field_names.append(line.display_name or line.name)
+            field_names.append(line.field_description or line.name)
         # in case we want to add more data in rows not directly coming from record
         # fields, we do this trick : we add a dummy record field at then end of
         # the fields list. It will allow us to know, for each rows, if it is a main
@@ -123,7 +122,7 @@ class IrExportsConfig(models.Model):
     def get_additional_display_names(self):
         display_names = []
         for line in self.additional_export_line_ids:
-            display_names.append(line.display_name)
+            display_names.append(line.field_description)
         return display_names
 
     def merge_additional_data(self, display_names, rows, records):
@@ -163,5 +162,5 @@ class AdditionalExportLine(models.Model):
 
     export_config_id = fields.Many2one("ir.exports.config", "Export", required=True)
     sequence = fields.Integer()
-    display_name = fields.Char()
+    field_description = fields.Char()
     value = fields.Char()

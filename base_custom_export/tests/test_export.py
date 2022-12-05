@@ -21,7 +21,11 @@ class TestExportConfig(TransactionCase):
                     (
                         0,
                         0,
-                        {"name": "name", "display_name": "Partner Name", "sequence": 5},
+                        {
+                            "name": "name",
+                            "field_description": "Partner Name",
+                            "sequence": 5,
+                        },
                     ),
                     (0, 0, {"name": "email", "sequence": 3}),
                     (
@@ -29,20 +33,33 @@ class TestExportConfig(TransactionCase):
                         0,
                         {
                             "name": "country_id/code",
-                            "display_name": "Country Code",
+                            "field_description": "Country Code",
                             "sequence": 4,
                         },
                     ),
                 ],
             }
         )
+        # We invalidate cache here because at creation, Odoo cache the lines in the
+        # wrong order. So export.export_fields will return the recordset order by id
+        # instead of sequence...It is a test issue only because in production, the
+        # export template is always created before running an actual export.
+        export.invalidate_recordset()
         export_config = self.env["ir.exports.config"].create(
             {
                 "name": export.name,
                 "export_id": export.id,
                 "file_format": "csv",
                 "additional_export_line_ids": [
-                    (0, 0, {"display_name": "Static ID", "value": "ID", "sequence": 5}),
+                    (
+                        0,
+                        0,
+                        {
+                            "field_description": "Static ID",
+                            "value": "ID",
+                            "sequence": 5,
+                        },
+                    ),
                 ],
             }
         )
