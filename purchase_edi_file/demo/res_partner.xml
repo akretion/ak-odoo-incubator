@@ -2,7 +2,7 @@
 <odoo noupdate="1">
 
     <record id="base.res_partner_12" model="res.partner">
-         <field name="default_purchase_profile_id" ref="export_po_product" />
+         <field name="default_purchase_profile_id" ref="export_po_product_config" />
          <field
             name="edi_transport_config_id"
             ref="purchase_edi_file.supplier_12_config"

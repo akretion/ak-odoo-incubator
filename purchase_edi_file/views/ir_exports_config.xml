@@ -12,7 +12,7 @@
                     <field
                         name="partner_edi_transport_config_ids"
                         nolabel="1"
-                        colspan="4"
+                        colspan="2"
                     >
                         <tree editable="top">
                             <field name="partner_id" />
