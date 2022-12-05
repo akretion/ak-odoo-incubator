@@ -1,6 +1,6 @@
 {
     "name": "Purchase EDI file",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "category": "Purchase",
@@ -11,6 +11,8 @@
         "views/res_partner_view.xml",
         "views/ir_exports_config.xml",
         "views/edi_transport_config.xml",
+        "views/purchase_order_line.xml",
+        "views/purchase_order.xml",
     ],
     "demo": [
         "demo/ir_exports_config.xml",

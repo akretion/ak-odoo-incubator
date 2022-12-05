@@ -2,11 +2,11 @@
 <odoo noupdate="1">
 
     <record id="product.product_supplierinfo_22" model="product.supplierinfo">
-         <field name="purchase_edi_id" ref="export_po_quantity" />
+         <field name="purchase_edi_id" ref="export_po_quantity_config" />
     </record>
 
     <record id="product.product_supplierinfo_21" model="product.supplierinfo">
-         <field name="purchase_edi_id" ref="export_po_quantity_and_product" />
+         <field name="purchase_edi_id" ref="export_po_quantity_and_product_config" />
     </record>
 
 </odoo>

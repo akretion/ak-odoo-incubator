@@ -8,7 +8,7 @@
 
     <record id="export_po_product_line1" model="ir.exports.line">
          <field name="name">product_id/name</field>
-         <field name="display_name">Product</field>
+         <field name="field_description">Product</field>
          <field name="export_id" ref="purchase_edi_file.export_po_product" />
     </record>
 
@@ -25,7 +25,7 @@
 
     <record id="export_po_quantity_line1" model="ir.exports.line">
          <field name="name">product_qty</field>
-         <field name="display_name">Quantity</field>
+         <field name="field_description">Quantity</field>
          <field name="export_id" ref="purchase_edi_file.export_po_quantity" />
     </record>
 
@@ -42,13 +42,13 @@
 
     <record id="export_po_quantity_and_product_line1" model="ir.exports.line">
         <field name="name">product_id/name</field>
-         <field name="display_name">Product</field>
+         <field name="field_description">Product</field>
          <field name="export_id" ref="export_po_quantity_and_product" />
     </record>
 
     <record id="export_po_quantity_and_product_line2" model="ir.exports.line">
          <field name="name">product_qty</field>
-         <field name="display_name">Quantity</field>
+         <field name="field_description">Quantity</field>
          <field name="export_id" ref="export_po_quantity_and_product" />
     </record>
 

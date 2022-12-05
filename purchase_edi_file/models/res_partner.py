@@ -8,12 +8,14 @@ class ResPartner(models.Model):
 
     def _compute_edi_purchase_profile_ids(self):
         for partner in self:
-            self.env["product.supplierinfo"].flush(["name", "purchase_edi_id"])
+            self.env["product.supplierinfo"].flush_model(
+                ["partner_id", "purchase_edi_id"]
+            )
             self.env.cr.execute(
                 """
                 SELECT DISTINCT purchase_edi_id
                 FROM product_supplierinfo
-                WHERE name = %s
+                WHERE partner_id = %s
             """,
                 (partner.id,),
             )

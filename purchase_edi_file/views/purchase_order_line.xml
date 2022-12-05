@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="purchase_line_export_action" model="ir.actions.act_window">
+        <field name="name">Purchase Line Export</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="purchase_line_export_menu" name="Purchase Line Export"
+        parent="purchase_edi_file.edi_purchase_configuration_menu"
+        action="purchase_line_export_action" sequence="5"/>
+
+</odoo>

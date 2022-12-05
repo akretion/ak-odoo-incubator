@@ -8,7 +8,9 @@ class PurchaseOrder(models.Model):
 
     def button_approve(self, force=False):
         res = super().button_approve(force=force)
-        self.generate_and_send_edi_files()
+        # use sudo because the buyer who validates a PO does not necessary have the
+        # right to the odoo export tools, which is used in case of EDI
+        self.sudo().generate_and_send_edi_files()
         return res
 
     def _should_send_edi_file(self):
