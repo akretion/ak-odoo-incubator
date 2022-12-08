@@ -8,7 +8,10 @@
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "license": "AGPL-3",
-    "depends": ["product"],
+    "depends": [
+        "product",
+        "web_domain_field",
+    ],
     "data": [
         "views/product_pricelist.xml",
     ],
