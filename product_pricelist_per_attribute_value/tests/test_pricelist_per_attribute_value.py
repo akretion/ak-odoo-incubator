@@ -5,18 +5,54 @@ from odoo.tests.common import SavepointCase
 
 class TestPriceListPerAttributeValue(SavepointCase):
     @classmethod
+    def _get_variant(cls, values):
+        return cls.template.product_variant_ids.filtered(
+            lambda s: s.product_template_attribute_value_ids.product_attribute_value_id
+            == values
+        )
+
+    @classmethod
     def setUpClass(cls):
         super().setUpClass()
         # ==== Product Attribute Values ====
-        cls.pav_2 = cls.env.ref("product.product_attribute_value_2")
-        cls.pav_3 = cls.env.ref("product.product_attribute_value_3")
-        cls.pav_4 = cls.env.ref("product.product_attribute_value_4")
+        cls.attr_1 = cls.env.ref("product.product_attribute_1")  # Leg
+        cls.pav_1 = cls.env.ref("product.product_attribute_value_1")  # Steel
+        cls.pav_2 = cls.env.ref("product.product_attribute_value_2")  # Aluminium
+        cls.attr_2 = cls.env.ref("product.product_attribute_2")  # Color
+        cls.pav_3 = cls.env.ref("product.product_attribute_value_3")  # White
+        cls.pav_4 = cls.env.ref("product.product_attribute_value_4")  # Black
         # ==== Pricelist ====
         cls.pricelist = cls.env["product.pricelist"].create({"name": "Pricelist 1"})
         # ==== Products ====
-        cls.template = cls.env.ref("product.product_product_4_product_template")
-        cls.variant_1 = cls.env.ref("product.product_product_4c")
-        cls.variant_2 = cls.env.ref("product.product_product_4d")
+        cls.template = cls.env["product.template"].create(
+            {
+                "name": "Table",
+                "list_price": 100,
+                "categ_id": cls.env.ref("product.product_category_1").id,
+                "attribute_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "attribute_id": cls.attr_1.id,
+                            "value_ids": [cls.pav_1.id, cls.pav_2.id],
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "attribute_id": cls.attr_2.id,
+                            "value_ids": [cls.pav_3.id, cls.pav_4.id],
+                        },
+                    ),
+                ],
+            }
+        )
+        # Aluminium White
+        cls.variant_1 = cls._get_variant(cls.pav_2 | cls.pav_3)
+        # Aluminium Black
+        cls.variant_2 = cls._get_variant(cls.pav_2 | cls.pav_4)
         # ==== Partners ====
         cls.partner = cls.env.ref("base.res_partner_1")
 
@@ -43,7 +79,7 @@ class TestPriceListPerAttributeValue(SavepointCase):
 
         self.assertEqual(
             pricelist_item_product.name,
-            "Product: Customizable Desk (CONFIG) (Aluminium, White)",
+            "Product: Table (Aluminium, White)",
         )
 
     def test_leg_aluminum(self):
@@ -93,7 +129,7 @@ class TestPriceListPerAttributeValue(SavepointCase):
             self.variant_2, 1, self.partner, date=False, uom_id=self.variant_2.uom_id.id
         )
         self.assertEqual(res1[0], 45.0)
-        self.assertEqual(res2[0], 800.4)
+        self.assertEqual(res2[0], 100)
 
     def test_color_white_and_black(self):
         self.env["product.pricelist.item"].create(
