@@ -2,11 +2,38 @@
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import logging
+
 from odoo import api, models
+
+_logger = logging.getLogger(__name__)
 
 
 class IrAttachment(models.Model):
     _inherit = "ir.attachment"
+
+    def _register_hook(self):
+        super()._register_hook()
+        self.env.cr.execute(
+            """
+            SELECT id
+            FROM ir_attachment
+            WHERE db_datas IS NULL
+            AND (
+                name='web_icon_data'
+                OR name='favicon'
+                OR name ilike '%.js'
+                OR name ilike '%.css'
+                OR name ilike '%.scss'
+            )"""
+        )
+        ids = [x[0] for x in self.env.cr.fetchall()]
+        if len(ids) > 0:
+            _logger.info("Migrate %s asset Attachment into database", len(ids))
+        for attachment in self.browse(ids):
+            attachment.write(
+                {"datas": attachment.datas, "mimetype": attachment.mimetype}
+            )
 
     def _store_in_db(self, mimetype):
         return (
