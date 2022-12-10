@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import itertools
+import json
 
 from odoo import api, fields, models
 
@@ -34,6 +35,12 @@ class PricelistItem(models.Model):
         string="Attribute Values",
         help="Specify values if this rule only applies to this product "
         "attribute values. Keep empty otherwise.",
+        compute="_compute_product_attribute_value_ids",
+        readonly=False,
+        store=True,
+    )
+    product_attribute_value_domain = fields.Char(
+        compute="_compute_product_attribute_value_domain",
     )
 
     @api.depends("product_attribute_value_ids")
@@ -41,21 +48,39 @@ class PricelistItem(models.Model):
         for record in self:
             record.attribute_value_restricted = bool(record.product_attribute_value_ids)
 
-    @api.onchange("applied_on", "product_tmpl_id", "categ_id")
-    def _onchange_attribute_value_domain(self):
-        self.ensure_one()
-        domain = []
-        self.product_attribute_value_ids = None
-        if self.applied_on == "1_product" and self.product_tmpl_id:
-            values = self.product_tmpl_id.attribute_line_ids.value_ids
-            domain = [("id", "in", values.ids)]
-        elif self.applied_on == "2_product_category" and self.categ_id:
-            product_templates = self.env["product.template"].search(
-                [("categ_id", "child_of", self.categ_id.id)]
-            )
-            values = product_templates.attribute_line_ids.value_ids
-            domain = [("id", "in", values.ids)]
-        return {"domain": {"product_attribute_value_ids": domain}}
+    @api.depends("applied_on", "product_tmpl_id", "categ_id")
+    def _compute_product_attribute_value_domain(self):
+        for record in self:
+            if record.applied_on == "1_product" and record.product_tmpl_id:
+                domain = [
+                    (
+                        "id",
+                        "in",
+                        record.product_tmpl_id.attribute_line_ids.value_ids.ids,
+                    )
+                ]
+            elif record.applied_on == "2_product_category" and record.categ_id:
+                product_templates = record.env["product.template"].search(
+                    [("categ_id", "child_of", record.categ_id.id)]
+                )
+                domain = [
+                    ("id", "in", product_templates.attribute_line_ids.value_ids.ids)
+                ]
+            else:
+                domain = []
+            record.product_attribute_value_domain = json.dumps(domain)
+
+    @api.depends("applied_on", "product_tmpl_id", "categ_id")
+    def _compute_product_attribute_value_ids(self):
+        for record in self:
+            if record.applied_on == "0_product_variant":
+                record.product_attribute_value_ids = None
+            elif record.product_attribute_value_ids:
+                record.product_attribute_value_ids = (
+                    record.product_attribute_value_ids.filtered_domain(
+                        json.loads(record.product_attribute_value_domain)
+                    )
+                )
 
     @api.depends("product_attribute_value_ids.name")
     def _get_pricelist_item_name_price(self):
