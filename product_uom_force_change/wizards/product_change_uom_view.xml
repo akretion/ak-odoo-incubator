@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="product_change_uom_view_form" model="ir.ui.view">
+        <field name="model">product.change.uom</field>
+        <field name="arch" type="xml">
+            <form string="Change UOM">
+                <div>Please select the new UOM to apply to the product</div>
+                <group>
+                    <field name="new_uom_id" />
+                </group>
+                <footer>
+                    <button
+                        name="run"
+                        type="object"
+                        class="btn-primary"
+                        string="Update"
+                    />
+                    <button special="cancel" string="Close" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_procut_change_uom_action">
+        <field name="name">Change UOM</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.change.uom</field>
+        <field name="view_mode">form</field>
+        <field name="binding_model_id" ref="product.model_product_template" />
+        <field name="binding_type">action</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="product_change_uom_view_form" />
+    </record>
+
+</odoo>

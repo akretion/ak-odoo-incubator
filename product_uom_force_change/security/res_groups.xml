@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="group_product_change_uom" model="res.groups">
+        <field name="name">Allow to change the Uom of a product already used</field>
+    </record>
+
+</odoo>
