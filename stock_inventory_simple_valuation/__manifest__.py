@@ -9,7 +9,7 @@
     "category": "Stock",
     "version": "14.0.1.0.0",
     "license": "AGPL-3",
-    "depends": ["stock", "account", "purchase", "report_xlsx", "report_xlsx_helper"],
+    "depends": ["stock", "account", "purchase"],
     "data": ["views/inventory_view.xml"],
     "maintainers": ["bealdav", "PierrickBrun", "mourad-ehm", "kevinkhao"],
 }
