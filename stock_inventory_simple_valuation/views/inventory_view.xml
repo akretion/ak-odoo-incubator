@@ -16,6 +16,7 @@
                 <field name="total_value" />
                 <field name="explanation" />
                 <field name="origin_record_name" />
+                <field name="origin_record_reference" optional="hide" />
             </xpath>
         </field>
     </record>
@@ -46,7 +47,7 @@
         <field name="state">code</field>
         <field name="code">
 if records:
-    action = records._compute_product_cost()
+    action = records.sudo()._compute_product_cost()
         </field>
     </record>
 
