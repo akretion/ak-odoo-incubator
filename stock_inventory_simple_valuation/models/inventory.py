@@ -18,6 +18,14 @@ class StockInventory(models.Model):
         self.ensure_one()
         self.line_ids._compute_product_cost()
 
+    def action_open_inventory_lines(self):
+        action = super().action_open_inventory_lines()
+        if self._context.get("valuation"):
+            action["view_id"] = self.env.ref(
+                "stock_inventory_simple_valuation.stock_inventory_line_tree_valuation"
+            ).id
+        return action
+
 
 class StockInventoryLine(models.Model):
     _inherit = "stock.inventory.line"
