@@ -27,11 +27,9 @@ class StockInventoryLine(models.Model):
     _inherit = "stock.inventory.line"
 
     calc_product_cost = fields.Float(
-        compute="_compute_product_cost",
         string="Computed cost",
-        store=True,
-        compute_sudo=True,
         digits=dp.get_precision("Account"),
+        readonly=True,
     )
     manual_product_cost = fields.Float(
         string="Manual cost",
@@ -40,28 +38,21 @@ class StockInventoryLine(models.Model):
     total_value = fields.Float(
         compute="_compute_total_value",
         string="Value",
-        store=True,
-        compute_sudo=True,
         digits=dp.get_precision("Account"),
+        store=True,
     )
     explanation = fields.Text(
         string="Source",
-        compute="_compute_product_cost",
-        store=True,
-        compute_sudo=True,
         help="Explain computation method for each product",
+        readonly=True,
     )
     origin_record_reference = fields.Char(
         string="Reference",
-        compute="_compute_product_cost",
-        store=True,
-        compute_sudo=True,
+        readonly=True,
     )
     origin_record_name = fields.Char(
         string="Document Name",
-        compute="_compute_product_cost",
-        store=True,
-        compute_sudo=True,
+        readonly=True,
     )
 
     @api.depends("calc_product_cost", "product_qty")
@@ -69,12 +60,7 @@ class StockInventoryLine(models.Model):
         for line in self:
             line.total_value = line.calc_product_cost * line.product_qty
 
-    @api.depends(
-        "product_id",
-        "product_qty",
-        "manual_product_cost",
-    )
-    def _compute_product_cost(self):
+    def _refresh_product_cost(self):
         search_methods = self._get_search_methods()
         for record in self:
             if record.inventory_id and record.product_id:
@@ -83,8 +69,11 @@ class StockInventoryLine(models.Model):
                     if res:
                         record.explanation = method_name
                         record.calc_product_cost, origin = res
-                        record.origin_record_name = origin.display_name
-                        record.origin_record_reference = f"{origin._name},{origin.id}"
+                        if origin:
+                            record.origin_record_name = origin.display_name
+                            record.origin_record_reference = (
+                                f"{origin._name},{origin.id}"
+                            )
                         break
                 else:
                     record.explanation = _("No Cost found")
@@ -147,3 +136,9 @@ class StockInventoryLine(models.Model):
     def _search_cost_standard_price(self):
         if self.product_id.standard_price:
             return (self.product_id.standard_price, self.product_id)
+
+    def write(self, vals):
+        res = super().write(vals)
+        if "manual_product_cost" in vals:
+            self._refresh_product_cost()
+        return res
