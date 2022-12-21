@@ -86,10 +86,11 @@ class StockInventoryLine(models.Model):
                         record.origin_record_name = origin.display_name
                         record.origin_record_reference = f"{origin._name},{origin.id}"
                         break
-                record.explanation = _("No Cost found")
-                record.calc_product_cost = 0.0
-                record.origin_record_reference = None
-                record.origin_record_name = None
+                else:
+                    record.explanation = _("No Cost found")
+                    record.calc_product_cost = 0.0
+                    record.origin_record_reference = None
+                    record.origin_record_name = None
 
     def _get_search_methods(self):
         """Overload this to customize price search methods
@@ -110,16 +111,18 @@ class StockInventoryLine(models.Model):
             return (self.manual_product_cost, None)
 
     def _search_cost_supplierinfo(self):
-        sup_info = self.product_id.seller_ids
+        sup_info = self.product_id._select_seller()
         if sup_info and sup_info[0].price:
             return (sup_info[0].price, sup_info[0])
 
     def _search_cost_invoice_lines(self):
         line = self.env["account.move.line"].search(
             [
+                ("price_unit", "!=", 0),
                 ("product_id", "=", self.product_id.id),
                 ("move_id.state", "=", "posted"),
                 ("move_id.move_type", "=", "in_invoice"),
+                ("company_id", "=", self.env.company.id),
             ],
             order="create_date desc",
             limit=1,
@@ -130,9 +133,12 @@ class StockInventoryLine(models.Model):
     def _search_cost_po_lines(self):
         po_line = self.env["purchase.order.line"].search(
             [
+                ("price_unit", "!=", 0),
                 ("product_id", "=", self.product_id.id),
                 ("order_id.state", "in", ("purchase", "done")),
+                ("company_id", "=", self.env.company.id),
             ],
+            order="create_date desc",
             limit=1,
         )
         if po_line:
