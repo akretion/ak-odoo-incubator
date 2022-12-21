@@ -10,6 +10,6 @@
     "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "depends": ["stock", "account", "purchase", "report_xlsx", "report_xlsx_helper"],
-    "data": ["views/inventory_view.xml", "report/report_view.xml"],
+    "data": ["views/inventory_view.xml"],
     "maintainers": ["bealdav", "PierrickBrun", "mourad-ehm", "kevinkhao"],
 }

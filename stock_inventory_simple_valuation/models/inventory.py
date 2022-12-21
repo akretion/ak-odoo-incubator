@@ -111,17 +111,6 @@ class StockInventoryLine(models.Model):
         ]
         return res
 
-    def get_search_method_strings(self):
-        """Overload this to customize what appears on
-        the excel report"""
-        res = [
-            _("product supplier information"),
-            _("most recent invoices"),
-            _("most recent purchases"),
-            _("product manual cost"),
-        ]
-        return res
-
     def _search_cost_supplierinfo(self):
         sup_info = self.product_id.seller_ids
         if sup_info and sup_info[0].price:
