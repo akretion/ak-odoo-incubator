@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2022 Akretion (<http://www.akretion.com>).
+ @author Kévin Roche <kevin.roche@akretion.com>
+ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="view_purchase_requisition_type_form_inherit">
+        <field name="name">purchase.requisition.type.form</field>
+        <field name="model">purchase.requisition.type</field>
+        <field
+            name="inherit_id"
+            ref="purchase_requisition.view_purchase_requisition_type_form"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']/parent::group" position="after">
+                <group
+                    string="Multi Companies"
+                    attrs="{'invisible':[('exclusive', '!=', 'proposals')]}"
+                >
+                    <field name="multi_company_selection" widget="radio" />
+                    <field name="company_id" invisible="1" />
+                    <field
+                        name="company_to_call_ids"
+                        domain="[('id', '!=', company_id)]"
+                        widget="many2many_checkboxes"
+                        attrs="{'invisible':[('multi_company_selection', '!=', 'selected')]}"
+                    />
+                    <field
+                        name="proposal_template_id"
+                        attrs="{'invisible':[('exclusive', '!=', 'proposals')]}"
+                    />
+                </group>
+            </xpath>
+            <xpath
+                expr="//field[@name='line_copy']/parent::group"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible':[('exclusive', '=', 'proposals')]}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
