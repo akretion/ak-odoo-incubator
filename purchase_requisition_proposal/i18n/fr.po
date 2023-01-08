@@ -1,0 +1,596 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* purchase_requisition_proposal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-16 22:50+0000\n"
+"PO-Revision-Date: 2023-01-16 23:55+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. module: purchase_requisition_proposal
+#: model:mail.template,report_name:purchase_requisition_proposal.mail_template_requisition_proposal
+msgid "${(object.name or '').replace('/','-')}"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:mail.template,subject:purchase_requisition_proposal.mail_template_requisition_proposal
+msgid "${object.company_id.name} Call for Proposals (Ref ${object.name or 'n/a' })"
+msgstr "${object.company_id.name} Appel d'Offres (Ref ${object.name or 'n/a' })"
+
+#. module: purchase_requisition_proposal
+#: model:mail.template,body_html:purchase_requisition_proposal.mail_template_requisition_proposal
+msgid ""
+"<?xml version=\"1.0\"?>\n"
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                    Dear collaborator,<br/><br/>\n"
+"                    <strong>${object.company_id.name}</strong> have a new Call for Proposals: <strong>${object.name}</strong>.<br/>\n"
+"                    The Agreement Deadline is <strong>${format_date(object.date_end)}</strong>.\n"
+"                    <br/><br/>\n"
+"                    Do not hesitate to contact us if you have any questions.\n"
+"                    <br/><br/>\n"
+"                    <div style=\"margin:0px;padding: 0px;\">\n"
+"                        <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\">\n"
+"                            <tbody>\n"
+"                                <tr style=\"border-bottom:2px solid #dee2e6;\">\n"
+"                                    <td style=\"width:150px;\"><strong>Products</strong></td>\n"
+"                                    <td width=\"15%\" align=\"center\"><strong>Schedule Date</strong></td>\n"
+"                                    <td width=\"15%\" align=\"center\"><strong>Quantity</strong></td>\n"
+"                                    <td width=\"20%\" align=\"right\"><strong>Price</strong></td>\n"
+"                                </tr>\n"
+"                            </tbody>\n"
+"                        </table>\n"
+"                        % for line in object.line_ids:\n"
+"                        <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\">\n"
+"                            <tbody>\n"
+"                                <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: #ffffff')}\">\n"
+"                                    <td align=\"left\">${line.product_id.display_name}</td>\n"
+"                                    <td width=\"15%\" align=\"center\">${format_date(line.schedule_date)} </td>\n"
+"                                    <td width=\"15%\" align=\"center\">${line.product_qty} ${line.product_uom_id.name}</td>\n"
+"                                    <td width=\"20%\" align=\"right\"><strong>\n"
+"                                            ${line.price_unit}\n"
+"                                        </strong></td>\n"
+"                                </tr>\n"
+"                            </tbody>\n"
+"                        </table>\n"
+"                        % endfor\n"
+"                        <br/><br/>\n"
+"                        Best regards,\n"
+"                        % if user.signature:\n"
+"                        <br/>\n"
+"                        ${user.signature | safe}\n"
+"                        % endif\n"
+"                    </div>\n"
+"                </p>\n"
+"            </div>\n"
+"        "
+msgstr ""
+"<?xml version=\"1.0\"?>\n"
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                    Cher collaborateur,<br/><br/>\n"
+"                    <strong>{object.company_id.name} $</strong> a un nouvel appel d'offres : <strong>${object.name}.</strong><br/>\n"
+"                    La date limite de l'accord est <strong>${format_date(object.date_end)}.</strong>\n"
+"                   <br/><br/>\n"
+"                    N'hésitez pas à nous contacter si vous avez des questions.\n"
+"                   <br/><br/>\n"
+"                   <div style=\"margin:0px;padding: 0px;\"> \n"
+"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\"> \n"
+"                           <tbody> \n"
+"                               <tr style=\"border-bottom:2px solid #dee2e6;\"> \n"
+"                                   <td style=\"width:150px;\"><strong>Produits</strong></td>\n"
+"                                   <td width=\"15%\" align=\"center\"><strong>Date de Livraison</strong></td>\n"
+"                                   <td width=\"15%\" align=\"center\"><strong>Quantité</strong></td>\n"
+"                                   <td width=\"20%\" align=\"right\"><strong>Prix</strong></td>\n"
+"                               </tr>\n"
+"                           </tbody>\n"
+"                       </table>\n"
+"                       % for line in object.line_ids :\n"
+"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\"> \n"
+"                           <tbody> \n"
+"                               <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: #ffffff')}\"> \n"
+"                                   <td align=\"left\">$</td></tr></tbody></table></div> <div style=\"margin:0px;padding: 0px;\"> <table style=\"color:#454748;font-size: 12px; "
+"border-collapse: collapse;\" width=\"100%\"> <tbody> <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: #ffffff')}\"> <td align=\"left\">${line.product_id."
+"display_name}\n"
+"                                   </td> <td width=\"15%\" align=\"center\">${format_date(line.schedule_date)} </td>\n"
+"                                   <td width=\"15%\" align=\"center\">${line.product_qty} $</td></tr></tbody></table></div> <div style=\"margin:0px;padding: 0px;\"> <table "
+"style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\"> <tbody> <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: "
+"#ffffff')}\"> <td width=\"15%\" align=\"center\">{line.product_uom_id.name}\n"
+"                                   </td> <td width=\"20%\" align=\"right\"><strong> \n"
+"                                            ${line.price_unit}\n"
+"                                       </strong></td>\n"
+"                               </tr>\n"
+"                           </tbody>\n"
+"                       % endfor\n"
+"                       </table>\n"
+"                       <br/><br/>\n"
+"                        Cordialement\n"
+"                       % if user.signature :\n"
+"                       <br/>\n"
+"                        ${user.signature | safe}\n"
+"                       % endif\n"
+"                   </div>\n"
+"                </p>\n"
+"            </div>\n"
+"        "
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.view_purchase_requisition_no_edit_form
+msgid "Accept"
+msgstr "Accepter"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.view_purchase_requisition_no_edit_form
+msgid "Accept and Modify"
+msgstr "Accepter et Modifier"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__exclusive
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__exclusive
+msgid "Agreement Selection Type"
+msgstr "Type de sélection du contrat"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_type__multi_company_selection__all
+msgid "All Companies"
+msgstr "Toutes les sociétés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_type__exclusive__proposals
+msgid "Call for Proposals (non-exclusive)"
+msgstr "Appel d'Offres multi-sociétés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_uom_category_id
+msgid "Category"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__company_to_call_ids
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__company_to_call_ids
+msgid "Companies To Call"
+msgstr "Sociétés Appelées"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__company_id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__requisition_company_id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__company_id
+msgid "Company"
+msgstr "Société"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_res_config_settings
+msgid "Config Settings"
+msgstr "Paramètres de config"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_wizard
+msgid "Confirm"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition_proposal__product_uom_category_id
+msgid "Conversion between Units of Measure can only occur if they belong to the same category. The conversion will be made based on the ratios."
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Create proposal Quotations"
+msgstr "Créer Commandes d'Achat"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__create_uid
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__create_date
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_information_mixin__date_check
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__date_check
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__date_check
+msgid "Date Check"
+msgstr "Vérif. date"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__date_end
+msgid "Date End"
+msgstr "Date Limite"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__schedule_date
+msgid "Delivery Date"
+msgstr "Date de livraison"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_wizard
+msgid "Discard"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order_line__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_information_mixin__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_company__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order__display_name
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order_line__display_name
+msgid "Display Name"
+msgstr "Nom"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.received_requisition_proposal_line_view_tree
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_buttons_wizard
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_information_mixin__qty_check__enough
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_line__qty_check__enough
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_proposal__qty_check__enough
+msgid "Enough"
+msgstr "Suffisant"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order_line__requirement_proposal_id
+msgid "From Proposal"
+msgstr "Offre de l'appel"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order_line__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_information_mixin__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_company__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_config_settings__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order__id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order_line__id
+msgid "ID"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:purchase.requisition.type,name:purchase_requisition_proposal.call_for_proposals_type
+msgid "Intercompany Call for Proposals"
+msgstr "Appel d'offre multi-sociétés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__is_proposal_line_validate
+msgid "Is Line Validate"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order_line____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_information_mixin____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_company____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_config_settings____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order____last_update
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order_line____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__write_uid
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__write_date
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.view_purchase_requisition_type_form_inherit
+msgid "Multi Companies"
+msgstr "Multi-sociétés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__multi_company_selection
+msgid "Multi Company Selection"
+msgstr "Sélectionner les sociétés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.ui.menu,name:purchase_requisition_proposal.menu_my_purchase_requisition
+msgid "My Requisitions"
+msgstr "Mes Appels d'offre"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__name
+msgid "Name"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_type__multi_company_selection__no
+msgid "No"
+msgstr "Non"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_information_mixin__qty_check__not_enough
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_line__qty_check__not_enough
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_proposal__qty_check__not_enough
+msgid "Not Enough"
+msgstr "Non Suffisant"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_information_mixin__date_check__not_respected
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_line__date_check__not_respected
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_proposal__date_check__not_respected
+msgid "Not Respected"
+msgstr "Non Respecté"
+
+#. module: purchase_requisition_proposal
+#: model:ir.ui.menu,name:purchase_requisition_proposal.menu_others_purchase_requisition
+msgid "Others Requisitions"
+msgstr "Appels d'offre entrants"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__partner_id
+msgid "Partner"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Planned Date"
+msgstr "Date planifiée"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__qty_planned
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Planned Quantities"
+msgstr "Quantités planifiées"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_planned
+msgid "Planned Quantity"
+msgstr "Quantité planifiée"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_id
+msgid "Product"
+msgstr "Article"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_order_proposal_view_form
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.sale_order_proposal_view_form
+msgid "Proposal"
+msgstr "Offre"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__proposal_line_ids
+msgid "Proposal Line"
+msgstr "Ligne Proposition"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__proposal_line_count
+msgid "Proposal Line Count"
+msgstr "Nb Offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__date_planned
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__date_planned
+msgid "Proposed Date"
+msgstr "Date Proposée"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_proposed
+msgid "Proposed Quantity"
+msgstr "Quantité Proposée"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__purchase_id
+msgid "Purchase"
+msgstr "Commande d'achat"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__requisition_id
+msgid "Purchase Agreement"
+msgstr "Appel Offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__requisition_line_id
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__requisition_line_id
+msgid "Purchase Agreement Line"
+msgstr "Lignes d'Appel Offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.ui.menu,name:purchase_requisition_proposal.menu_purchase_requisition_type
+msgid "Purchase Agreement Types"
+msgstr "Type d'Appel Offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_purchase_order
+msgid "Purchase Order"
+msgstr "Commande fournisseur"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Ligne de commande d'achat"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_purchase_requisition
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order__purchase_requisition_id
+msgid "Purchase Requisition"
+msgstr "Appel d'offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_purchase_requisition_information_mixin
+msgid "Purchase Requisition Information Mixin"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_purchase_requisition_line
+msgid "Purchase Requisition Line"
+msgstr "Ligne de l'appel d'offre"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_purchase_requisition_proposal
+msgid "Purchase Requisition Proposal"
+msgstr "Propositions d'appels d'offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_purchase_requisition_type
+msgid "Purchase Requisition Type"
+msgstr "Type de demandes d'achat"
+
+#. module: purchase_requisition_proposal
+#: model:ir.actions.act_window,name:purchase_requisition_proposal.purchase_requisition_form_action
+#: model:ir.actions.act_window,name:purchase_requisition_proposal.purchase_requisition_no_edit_form_action
+#: model:ir.ui.menu,name:purchase_requisition_proposal.parent_menu_purchase_requisition_proposal
+msgid "Purchase requisitions"
+msgstr "Appels d'Offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_information_mixin__qty_check
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__qty_check
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_check
+msgid "Qty Check"
+msgstr "Vérif. Quantité"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.received_requisition_proposal_line_view_tree
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_buttons_wizard
+msgid "Remove"
+msgstr "Supprimer"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__proposal_template_id
+msgid "Report Template"
+msgstr "Template mail Appel Offres"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__schedule_date
+msgid "Requested Date"
+msgstr "Date Requise"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_qty
+msgid "Requested Quantity"
+msgstr "Quantité Requise"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order_line__requirement_proposal_id
+msgid "Requirement Proposal"
+msgstr "Proposition appel d'offre"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_company__requisition_intercompany_partner_ids
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_res_config_settings__requisition_intercompany_partner_ids
+msgid "Requisition Intercompany Partners"
+msgstr "Contacts Appel d'Offre Multi-Sociétés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__requisition_proposal_count
+msgid "Requisition Proposal Count"
+msgstr "Nombre Propositions"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_requisition_proposal_wizard
+msgid "Requisition Proposal Wizard"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__requisition_proposal_ids
+msgid "Requisition proposal"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_information_mixin__date_check__respected
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_line__date_check__respected
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_proposal__date_check__respected
+msgid "Respected"
+msgstr "Respecté"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_sale_order
+msgid "Sales Order"
+msgstr "Commande"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model,name:purchase_requisition_proposal.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de bon de commande"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition__exclusive
+#: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition_type__exclusive
+msgid ""
+"Select only one RFQ (exclusive):  when a purchase order is confirmed, cancel the remaining purchase order.\n"
+"\n"
+"                    Select multiple RFQ (non-exclusive): allows multiple purchase orders. On confirmation of a purchase order it does not cancel the remaining orders"
+msgstr ""
+"Sélectionner une seule demande de prix (exclusive) : lorsqu'un bon de commande est confirmé, annuler les autres bons de commande.\n"
+"\n"
+" Sélectionner plusieurs demandes de prix (non-exclusive) : autoriser les demandes de prix multiples. Lorsqu'un bon de commande est confirmé, les autres bons ne sont pas annulés"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_type__multi_company_selection__selected
+msgid "Selected Companies"
+msgstr "Sociétés Sélectionnées"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition__schedule_date
+#: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition_proposal__schedule_date
+msgid "The expected and scheduled delivery date where all the products are received"
+msgstr "La date de livraison prévue et planifiée où tous les produits sont reçus"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__price_unit
+msgid "Unit Price"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_uom_id
+msgid "UoM"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Validate and Call Companies"
+msgstr "Valider et envoyer mail"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__proposal_line_ids
+msgid "proposal Lines"
+msgstr "Lignes d'offres"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "proposals"
+msgstr "Offres"

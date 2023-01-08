@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2023 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="purchase_requisition_proposal_line_view_tree">
+        <field name="name">purchase.requisition.proposal.tree</field>
+        <field name="model">purchase.requisition.proposal</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="0">
+                <field name="partner_id" readonly="1" />
+                <field name="product_id" readonly="1" />
+                <field name="price_unit" readonly="1" />
+                <field name="product_qty" readonly="1" />
+                <field name="product_uom_id" readonly="1" />
+                <field
+                    name="qty_proposed"
+                    readonly=" context.get('received_proposal')"
+                />
+                <field name="qty_planned" readonly="context.get('my_proposal')" />
+                <field
+                    name="qty_check"
+                    widget="badge"
+                    decoration-success="qty_check == 'enough'"
+                    decoration-warning="qty_check == 'not_enough'"
+                    invisible="context.get('my_proposal')"
+                />
+                <field name="schedule_date" readonly="1" />
+                <field
+                    name="date_planned"
+                    readonly=" context.get('received_proposal')"
+                />
+                <field
+                    name="date_check"
+                    widget="badge"
+                    decoration-success="date_check == 'respected'"
+                    decoration-warning="date_check == 'not_respected'"
+                    invisible="context.get('my_proposal')"
+                />
+            </tree>
+
+        </field>
+    </record>
+    <record model="ir.ui.view" id="received_requisition_proposal_line_view_tree">
+        <field name="name">received.requisition.proposal.tree</field>
+        <field name="model">purchase.requisition.proposal</field>
+        <field name="inherit_id" ref="purchase_requisition_proposal_line_view_tree" />
+        <field name="priority">1000</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_check']" position="after">
+                <button string="Duplicate" name="duplicate_line" type="object" />
+                <button string="Remove" name="remove_line" type="object" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
