@@ -68,7 +68,8 @@ class StockMove(models.Model):
         for move in self.filtered(lambda m: m.state not in ['cancel', 'done']):
             recompute = False
             if move.picking_id:
-                candidates_for_empty_picking += move.picking_id
+                if move.picking_id not in candidates_for_empty_picking:
+                    candidates_for_empty_picking += move.picking_id
             picking = move._search_picking_for_assignation()
             if not picking:
                 if not move.picking_type_id:
@@ -84,5 +85,7 @@ class StockMove(models.Model):
         empty_pickings = candidates_for_empty_picking.filtered(
             lambda r: not r.move_lines)
         if empty_pickings:
+            if empty_pickings.mapped('pack_operation_product_ids'):
+                empty_pickings.mapped('pack_operation_product_ids').unlink()
             empty_pickings.unlink()
         return True
