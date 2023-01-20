@@ -15,12 +15,12 @@ class TestPriceListPerAttributeValue(SavepointCase):
     def setUpClass(cls):
         super().setUpClass()
         # ==== Product Attribute Values ====
-        cls.attr_1 = cls.env.ref("product.product_attribute_1")  # Leg
-        cls.pav_1 = cls.env.ref("product.product_attribute_value_1")  # Steel
-        cls.pav_2 = cls.env.ref("product.product_attribute_value_2")  # Aluminium
-        cls.attr_2 = cls.env.ref("product.product_attribute_2")  # Color
-        cls.pav_3 = cls.env.ref("product.product_attribute_value_3")  # White
-        cls.pav_4 = cls.env.ref("product.product_attribute_value_4")  # Black
+        cls.attr_leg = cls.env.ref("product.product_attribute_1")
+        cls.pav_steel = cls.env.ref("product.product_attribute_value_1")
+        cls.pav_alu = cls.env.ref("product.product_attribute_value_2")
+        cls.attr_color = cls.env.ref("product.product_attribute_2")
+        cls.pav_white = cls.env.ref("product.product_attribute_value_3")
+        cls.pav_black = cls.env.ref("product.product_attribute_value_4")
         # ==== Pricelist ====
         cls.pricelist = cls.env["product.pricelist"].create({"name": "Pricelist 1"})
         # ==== Products ====
@@ -34,25 +34,23 @@ class TestPriceListPerAttributeValue(SavepointCase):
                         0,
                         0,
                         {
-                            "attribute_id": cls.attr_1.id,
-                            "value_ids": [cls.pav_1.id, cls.pav_2.id],
+                            "attribute_id": cls.attr_leg.id,
+                            "value_ids": [cls.pav_steel.id, cls.pav_alu.id],
                         },
                     ),
                     (
                         0,
                         0,
                         {
-                            "attribute_id": cls.attr_2.id,
-                            "value_ids": [cls.pav_3.id, cls.pav_4.id],
+                            "attribute_id": cls.attr_color.id,
+                            "value_ids": [cls.pav_white.id, cls.pav_black.id],
                         },
                     ),
                 ],
             }
         )
-        # Aluminium White
-        cls.variant_1 = cls._get_variant(cls.pav_2 | cls.pav_3)
-        # Aluminium Black
-        cls.variant_2 = cls._get_variant(cls.pav_2 | cls.pav_4)
+        cls.variant_alu_white = cls._get_variant(cls.pav_alu | cls.pav_white)
+        cls.variant_alu_black = cls._get_variant(cls.pav_alu | cls.pav_black)
         # ==== Partners ====
         cls.partner = cls.env.ref("base.res_partner_1")
 
@@ -69,8 +67,8 @@ class TestPriceListPerAttributeValue(SavepointCase):
                         6,
                         0,
                         [
-                            self.pav_2.id,
-                            self.pav_3.id,
+                            self.pav_alu.id,
+                            self.pav_white.id,
                         ],
                     )
                 ],
@@ -90,14 +88,22 @@ class TestPriceListPerAttributeValue(SavepointCase):
                 "fixed_price": 45.0,
                 "applied_on": "1_product",
                 "product_tmpl_id": self.template.id,
-                "product_attribute_value_ids": [(6, 0, [self.pav_2.id])],
+                "product_attribute_value_ids": [(6, 0, [self.pav_alu.id])],
             }
         )
         res1 = self.pricelist.get_product_price_rule(
-            self.variant_1, 1, self.partner, date=False, uom_id=self.variant_1.uom_id.id
+            self.variant_alu_white,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_white.uom_id.id,
         )
         res2 = self.pricelist.get_product_price_rule(
-            self.variant_2, 1, self.partner, date=False, uom_id=self.variant_2.uom_id.id
+            self.variant_alu_black,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_black.uom_id.id,
         )
         self.assertEqual(res1[0], 45.0)
         self.assertEqual(res2[0], 45.0)
@@ -115,18 +121,26 @@ class TestPriceListPerAttributeValue(SavepointCase):
                         6,
                         0,
                         [
-                            self.pav_2.id,
-                            self.pav_3.id,
+                            self.pav_alu.id,
+                            self.pav_white.id,
                         ],
                     )
                 ],
             }
         )
         res1 = self.pricelist.get_product_price_rule(
-            self.variant_1, 1, self.partner, date=False, uom_id=self.variant_1.uom_id.id
+            self.variant_alu_white,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_white.uom_id.id,
         )
         res2 = self.pricelist.get_product_price_rule(
-            self.variant_2, 1, self.partner, date=False, uom_id=self.variant_2.uom_id.id
+            self.variant_alu_black,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_black.uom_id.id,
         )
         self.assertEqual(res1[0], 45.0)
         self.assertEqual(res2[0], 100)
@@ -144,18 +158,26 @@ class TestPriceListPerAttributeValue(SavepointCase):
                         6,
                         0,
                         [
-                            self.pav_3.id,
-                            self.pav_4.id,
+                            self.pav_white.id,
+                            self.pav_black.id,
                         ],
                     )
                 ],
             }
         )
         res1 = self.pricelist.get_product_price_rule(
-            self.variant_1, 1, self.partner, date=False, uom_id=self.variant_1.uom_id.id
+            self.variant_alu_white,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_white.uom_id.id,
         )
         res2 = self.pricelist.get_product_price_rule(
-            self.variant_2, 1, self.partner, date=False, uom_id=self.variant_2.uom_id.id
+            self.variant_alu_black,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_black.uom_id.id,
         )
         self.assertEqual(res1[0], 35.0)
         self.assertEqual(res2[0], 35.0)
@@ -173,19 +195,27 @@ class TestPriceListPerAttributeValue(SavepointCase):
                         6,
                         0,
                         [
-                            self.pav_2.id,
-                            self.pav_3.id,
-                            self.pav_4.id,
+                            self.pav_alu.id,
+                            self.pav_white.id,
+                            self.pav_black.id,
                         ],
                     )
                 ],
             }
         )
         res1 = self.pricelist.get_product_price_rule(
-            self.variant_1, 1, self.partner, date=False, uom_id=self.variant_1.uom_id.id
+            self.variant_alu_white,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_white.uom_id.id,
         )
         res2 = self.pricelist.get_product_price_rule(
-            self.variant_2, 1, self.partner, date=False, uom_id=self.variant_2.uom_id.id
+            self.variant_alu_black,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_black.uom_id.id,
         )
         self.assertEqual(res1[0], 35.0)
         self.assertEqual(res2[0], 35.0)
@@ -198,7 +228,7 @@ class TestPriceListPerAttributeValue(SavepointCase):
                 "fixed_price": 45.0,
                 "applied_on": "1_product",
                 "product_tmpl_id": self.template.id,
-                "product_attribute_value_ids": [(6, 0, [self.pav_2.id])],
+                "product_attribute_value_ids": [(6, 0, [self.pav_alu.id])],
             }
         )
         self.env["product.pricelist.item"].create(
@@ -211,10 +241,18 @@ class TestPriceListPerAttributeValue(SavepointCase):
             }
         )
         res1 = self.pricelist.get_product_price_rule(
-            self.variant_1, 1, self.partner, date=False, uom_id=self.variant_1.uom_id.id
+            self.variant_alu_white,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_white.uom_id.id,
         )
         res2 = self.pricelist.get_product_price_rule(
-            self.variant_2, 1, self.partner, date=False, uom_id=self.variant_2.uom_id.id
+            self.variant_alu_black,
+            1,
+            self.partner,
+            date=False,
+            uom_id=self.variant_alu_black.uom_id.id,
         )
         self.assertEqual(res1[0], 45.0)
         self.assertEqual(res2[0], 45.0)
