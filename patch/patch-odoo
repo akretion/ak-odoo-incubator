@@ -4,4 +4,8 @@ set -euxo pipefail
 echo "apply odoo patch"
 current_path=$(pwd)
 cd /opt/odoo
+
+# branch ak 14.0-pricelist-refactor note: merged in V16
 patch -p1 < "${current_path}/patch/odoo_pricelist.diff"
+# branch ak 14.0-filter-seller-refactor note: TODO PR in v17 or v18
+patch -p1 < "${current_path}/patch/odoo_select_seller.diff"
