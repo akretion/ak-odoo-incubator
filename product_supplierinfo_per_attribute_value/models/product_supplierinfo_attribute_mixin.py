@@ -5,9 +5,11 @@
 from odoo import api, fields, models
 
 
-class ProductSupplierinfo(models.Model):
-    _inherit = "product.supplierinfo"
+class ProductSupplierinfoAttributeMixin(models.AbstractModel):
+    _name = "product.supplierinfo.attr.mixin"
+    _description = "Product Supplierinfo Attribute Mixin"
 
+    product_tmpl_id = fields.Many2one("product.template")
     product_definition_precision = fields.Integer(
         compute="_compute_product_definition_precision", store=True
     )
