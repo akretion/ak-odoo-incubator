@@ -95,6 +95,8 @@ class PricelistItem(models.Model):
     def _is_applicable_for(self, product, qty_in_product_uom):
         res = super()._is_applicable_for(product, qty_in_product_uom)
         if self.product_attribute_value_ids:
+            if product._name == "product.template":
+                return False
             ptav = product.product_template_attribute_value_ids
             attr2vals = {
                 attribute: set(values)

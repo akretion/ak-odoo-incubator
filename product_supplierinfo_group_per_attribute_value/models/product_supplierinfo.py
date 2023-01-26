@@ -31,10 +31,9 @@ class ProductSupplierinfo(models.Model):
         group = super()._get_existing_group(mapping, vals)
         if vals.get("product_attribute_value_ids"):
             ids = set(vals["product_attribute_value_ids"][0][2])
-            return group.filtered(
-                lambda s: set(s.product_attribute_value_ids.ids) == ids
-            )
-        return group
+        else:
+            ids = set()
+        return group.filtered(lambda s: set(s.product_attribute_value_ids.ids) == ids)
 
     def _fields_for_group_match(self):
         res = super()._fields_for_group_match()
