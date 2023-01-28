@@ -6,6 +6,5 @@ from odoo import models
 
 
 class ProductSupplierinfoGroup(models.Model):
-    _inherit = ["product.supplierinfo.group", "product.supplierinfo.attr.mixin"]
-    _name = "product.supplierinfo.group"
+    _inherit = "product.supplierinfo.group"
     _order = "sequence, product_definition_precision desc, id"

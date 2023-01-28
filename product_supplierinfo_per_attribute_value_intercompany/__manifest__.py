@@ -17,7 +17,9 @@
     },
     "depends": [
         "product_pricelist_per_attribute_value",
-        "product_supplierinfo_per_attribute_value",
+        # depend on "group" to avoid extra glue module for ordering group
+        # as product_supplierinfo_group_intercompany change it
+        "product_supplierinfo_group_per_attribute_value",
         "product_supplierinfo_intercompany",
     ],
     "data": [],
