@@ -81,7 +81,9 @@ class ProductTemplate(models.Model):
                 for item in items:
                     supplier = get_matching_supplier(suppliers, item)
                     vals = self._prepare_intercompany_supplier_info(pricelist)
-                    self.uom_id._compute_price(item.fixed_price, self.uom_po_id)
+                    vals["price"] = self.uom_id._compute_price(
+                        item.fixed_price, self.uom_po_id
+                    )
                     vals["product_attribute_value_ids"] = [
                         (6, 0, item.product_attribute_value_ids.ids)
                     ]

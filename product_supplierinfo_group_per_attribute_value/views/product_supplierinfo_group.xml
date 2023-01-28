@@ -24,4 +24,17 @@
         </field>
     </record>
 
+    <record id="supplierinfo_group_view_tree" model="ir.ui.view">
+        <field name="model">product.supplierinfo.group</field>
+        <field
+            name="inherit_id"
+            ref="product_supplierinfo_group.supplierinfo_group_view_tree"
+        />
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="product_attribute_value_ids" widget="many2many_tags" />
+            </field>
+        </field>
+    </record>
+
 </odoo>
