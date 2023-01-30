@@ -2,7 +2,7 @@
 # @author Kévin Roche <kevin.roche@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class PurchaseRequisitionLine(models.Model):
@@ -42,21 +42,19 @@ class PurchaseRequisitionLine(models.Model):
                 [line for line in rec.proposal_line_ids if line.qty_proposed]
             )
 
-    def create_proposal(self):
+    def proposal_validation(self):
         self.sudo().write({"is_proposal_line_validate": True})
-        self.env["purchase.requisition.proposal"].create(
-            {
-                "requisition_id": self.requisition_id.id,
-                "requisition_line_id": self.id,
-                "product_id": self.product_id.id,
-                "qty_proposed": self.product_qty,
-                "date_planned": self.schedule_date,
-                "partner_id": self.env.company.partner_id.id,
-            }
-        )
-
-    def create_and_modify_proposal(self):
-        self.create_proposal()
+        if not self.proposal_line_ids:
+            self.env["purchase.requisition.proposal"].create(
+                {
+                    "requisition_id": self.requisition_id.id,
+                    "requisition_line_id": self.id,
+                    "product_id": self.product_id.id,
+                    "qty_proposed": self.product_qty,
+                    "date_planned": self.schedule_date,
+                    "partner_id": self.env.company.partner_id.id,
+                }
+            )
         return self.show_requisition_proposal_line()
 
     def show_requisition_proposal_line(self):
@@ -74,18 +72,10 @@ class PurchaseRequisitionLine(models.Model):
             view = self.env.ref(
                 "purchase_requisition_proposal.requisition_proposal_buttons_wizard"
             )
-            context = {"my_proposal": True, "active_id": self.id,}
-        # return {
-        #     "name": _("proposals"),
-        #     "type": "ir.actions.act_window",
-        #     "view_mode": "form",
-        #     "res_model": "purchase.requisition.proposal",
-        #     "target": "new",
-        #     "domain": domain,
-        #     "context": context,
-        #     "view_id": view.id,
-        # }
-
+            context = {
+                "my_proposal": True,
+                "active_id": self.id,
+            }
         wizard = self.env["requisition.proposal.wizard"].create(
             {
                 "requisition_line_id": self.id,
@@ -101,7 +91,6 @@ class PurchaseRequisitionLine(models.Model):
             "target": "new",
             "context": context,
         }
-
 
     @api.depends("proposal_line_ids.qty_planned")
     def _compute_planned_qty(self):

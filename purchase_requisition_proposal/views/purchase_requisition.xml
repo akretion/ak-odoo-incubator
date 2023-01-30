@@ -11,6 +11,9 @@
             ref="purchase_requisition.view_purchase_requisition_form"
         />
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='state_blanket_order']" position="attributes">
+                <attribute name="statusbar_visible">draft,open,done</attribute>
+            </xpath>
             <field name="line_ids" position="attributes">
                 <attribute
                     name="context"
@@ -37,19 +40,19 @@
                     name="invisible"
                 >context.get('requisitions_from') != 'other'</attribute>
             </xpath>
-            <xpath expr="//header/button[@name='action_cancel']" position="before">
+            <xpath expr="//header/button[@name='action_done']" position="before">
                 <button
-                    name="action_create_call_companies"
-                    string="Validate and Call Companies"
+                    name="action_call_for_proposal_send"
+                    string="Send Mails"
                     type="object"
-                    states="in_progress"
+                    states="open, done"
                     class="btn-primary"
                 />
                 <button
                     name="action_create_quotations"
                     string="Create proposal Quotations"
                     type="object"
-                    states="open,done"
+                    states="open, done"
                     class="btn-primary"
                 />
             </xpath>
@@ -135,7 +138,7 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath
-                expr="//button[@name='action_create_call_companies']"
+                expr="//button[@name='action_call_for_proposal_send']"
                 position="attributes"
             >
                 <attribute name="invisible">1</attribute>
@@ -152,12 +155,7 @@
             >
                 <field name="is_proposal_line_validate" invisible="1" />
 
-                <button string="Accept" name="create_proposal" type="object" />
-                <button
-                    string="Accept and Modify"
-                    name="create_and_modify_proposal"
-                    type="object"
-                />
+                <button string="Accept" name="proposal_validation" type="object" />
             </xpath>
         </field>
     </record>

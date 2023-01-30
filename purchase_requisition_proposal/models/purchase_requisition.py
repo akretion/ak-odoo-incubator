@@ -5,6 +5,7 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
+
 class PurchaseRequisition(models.Model):
     _inherit = "purchase.requisition"
 
@@ -43,16 +44,16 @@ class PurchaseRequisition(models.Model):
             else:
                 rec.company_to_call_ids = False
 
-    def action_create_call_companies(self):
-        self.action_open()
-        return self.action_call_for_proposal_send()
-
     def _get_destinaries_email(self):
-        missing_emails = [comp.name for comp in self.company_to_call_ids if not self.company_to_call_ids.requisition_intercompany_partner_ids]
+        missing_emails = [
+            comp.name
+            for comp in self.company_to_call_ids
+            if not self.company_to_call_ids.requisition_intercompany_partner_ids
+        ]
         if missing_emails:
             raise UserError(
-                _("%s don't have contacts to send emails.") % ( ", ".join(missing_emails)
-            ),
+                _("%s don't have contacts to send emails.")
+                % (", ".join(missing_emails)),
             )
         return self.company_to_call_ids.requisition_intercompany_partner_ids.partner_id
 
