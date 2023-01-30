@@ -80,7 +80,7 @@ msgstr ""
 "                <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
 "                    Cher collaborateur,<br/><br/>\n"
 "                    <strong>{object.company_id.name} $</strong> a un nouvel appel d'offres : <strong>${object.name}.</strong><br/>\n"
-"                    La date limite de l'accord est <strong>${format_date(object.date_end)}.</strong>\n"
+"                    La date limite de réponse est <strong>${format_date(object.date_end)}.</strong>\n"
 "                   <br/><br/>\n"
 "                    N'hésitez pas à nous contacter si vous avez des questions.\n"
 "                   <br/><br/>\n"
@@ -89,7 +89,7 @@ msgstr ""
 "                           <tbody> \n"
 "                               <tr style=\"border-bottom:2px solid #dee2e6;\"> \n"
 "                                   <td style=\"width:150px;\"><strong>Produits</strong></td>\n"
-"                                   <td width=\"15%\" align=\"center\"><strong>Date de Livraison</strong></td>\n"
+"                                   <td width=\"15%\" align=\"center\"><strong>Date de Livraison Attendue</strong></td>\n"
 "                                   <td width=\"15%\" align=\"center\"><strong>Quantité</strong></td>\n"
 "                                   <td width=\"20%\" align=\"right\"><strong>Prix</strong></td>\n"
 "                               </tr>\n"
@@ -215,12 +215,12 @@ msgstr "Vérif. date"
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__date_end
 msgid "Date End"
-msgstr "Date Limite"
+msgstr "Date Limite de Réponse"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__schedule_date
 msgid "Delivery Date"
-msgstr "Date de livraison"
+msgstr "Date de livraison Attendue"
 
 #. module: purchase_requisition_proposal
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_wizard
@@ -373,12 +373,12 @@ msgstr "Date planifiée"
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__qty_planned
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
 msgid "Planned Quantities"
-msgstr "Quantités planifiées"
+msgstr "Quantités Attribuées"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_planned
 msgid "Planned Quantity"
-msgstr "Quantité planifiée"
+msgstr "Quantité Attribuée"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_id

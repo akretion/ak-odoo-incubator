@@ -67,7 +67,7 @@ class TestPurchaseRequirementProposal(MockEmail, TestPurchaseSaleInterCompany):
         cls.call_line2 = cls.call.line_ids[1]
 
         cls.call.action_in_progress()
-        cls.call_line1.with_user(cls.user_company_a).create_proposal()
+        cls.call_line1.with_user(cls.user_company_a).proposal_validation()
         cls.proposal_1 = cls.call_line1.proposal_line_ids[0]
 
     def test_1_call_for_proposal_type(self):
@@ -106,8 +106,8 @@ class TestPurchaseRequirementProposal(MockEmail, TestPurchaseSaleInterCompany):
         self.assertEqual(self.call_line1.product_qty, self.proposal_1.qty_proposed)
         self.assertEqual(self.call_line1.schedule_date, self.proposal_1.date_planned)
         self.assertEqual(self.company_a.partner_id, self.proposal_1.partner_id)
-        self.call_line1.with_user(self.user_company_b).create_proposal()
-        self.assertEqual(self.call_line1.proposal_line_count, 2)
+        self.call_line1.with_company(self.company_b).proposal_validation()
+        self.assertEqual(self.call_line1.proposal_line_count, 1)
 
     def test_5_proposal_duplicate_and_remove(self):
         self.proposal_1.duplicate_line()
@@ -135,7 +135,7 @@ class TestPurchaseRequirementProposal(MockEmail, TestPurchaseSaleInterCompany):
 
     def test_8_create_rfq(self):
         self.call.action_call_for_proposal_send()
-        self.call_line2.with_company(self.company_b).create_proposal()
+        self.call_line2.with_company(self.company_b).proposal_validation()
         self.call.action_create_quotations()
         self.assertFalse(self.call.purchase_ids)
         self.proposal_1.qty_planned = 10
@@ -158,7 +158,7 @@ class TestPurchaseRequirementProposal(MockEmail, TestPurchaseSaleInterCompany):
 
     def test_9_related_sale(self):
         self.call.action_call_for_proposal_send()
-        self.call_line2.with_company(self.company_b).create_proposal()
+        self.call_line2.with_company(self.company_b).proposal_validation()
         self.proposal_1.qty_planned = 10
         self.call_line2.proposal_line_ids[0].qty_planned = 20
         self.call.action_create_quotations()
@@ -179,4 +179,4 @@ class TestPurchaseRequirementProposal(MockEmail, TestPurchaseSaleInterCompany):
             self.call_line2.proposal_line_ids[0].id,
             so_b.order_line.requirement_proposal_id.ids,
         )
-        self.assertEqual(so_b.order_line.mapped("price_unit"),[200.0, 100.0])
+        self.assertEqual(so_b.order_line.mapped("price_unit"), [200.0, 100.0])

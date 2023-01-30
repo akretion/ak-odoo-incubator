@@ -20,7 +20,7 @@
         <field name="perm_read" eval="True" />
         <field
             name="domain_force"
-        >['|','&amp;', ('company_to_call_ids','in',company_ids), ('state', 'in', ['open', 'done']), ('company_id', 'in', company_ids)]</field>
+        >['|','&amp;', ('company_to_call_ids','in',company_ids), ('state', 'in', ['open', 'ongoing', 'done']), ('company_id', 'in', company_ids)]</field>
     </record>
 
     <record model="ir.rule" id="purchase_requisition_line_comp_rule">

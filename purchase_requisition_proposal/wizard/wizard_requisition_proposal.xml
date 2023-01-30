@@ -8,24 +8,54 @@
         <field name="arch" type="xml">
             <form>
                 <group>
-                    <field name="proposal_line_ids" nolabel="1" options="{'no_create': True, 'reload_on_button': True}">
+                    <field
+                        name="proposal_line_ids"
+                        nolabel="1"
+                        options="{'no_create': True, 'reload_on_button': True}"
+                    >
                         <tree create="false" delete="false" editable="bottom">
                             <field name="partner_id" readonly="1" />
                             <field name="product_id" readonly="1" />
                             <field name="price_unit" readonly="1" />
                             <field name="product_qty" readonly="1" />
                             <field name="product_uom_id" readonly="1" />
-                            <field name="qty_proposed" readonly=" context.get('received_proposal')" />
-                            <field name="qty_planned" readonly="context.get('my_proposal')" />
-                            <field name="qty_check" widget="badge" decoration-success="qty_check == 'enough'" decoration-warning="qty_check == 'not_enough'" invisible="context.get('my_proposal')" />
+                            <field
+                                name="qty_proposed"
+                                readonly=" context.get('received_proposal')"
+                            />
+                            <field
+                                name="qty_planned"
+                                readonly="context.get('my_proposal')"
+                            />
+                            <field
+                                name="qty_check"
+                                widget="badge"
+                                decoration-success="qty_check == 'enough'"
+                                decoration-warning="qty_check == 'not_enough'"
+                                invisible="context.get('my_proposal')"
+                            />
                             <field name="schedule_date" readonly="1" />
-                            <field name="date_planned" readonly=" context.get('received_proposal')" />
-                            <field name="date_check" widget="badge" decoration-success="date_check == 'respected'" decoration-warning="date_check == 'not_respected'" invisible="context.get('my_proposal')" />
+                            <field
+                                name="date_planned"
+                                readonly=" context.get('received_proposal')"
+                            />
+                            <field
+                                name="date_check"
+                                widget="badge"
+                                decoration-success="date_check == 'respected'"
+                                decoration-warning="date_check == 'not_respected'"
+                                invisible="context.get('my_proposal')"
+                            />
                         </tree>
                     </field>
                 </group>
                 <footer>
-                    <button name="confirm_lines" type="object" string="Confirm" class="btn-primary" />
+                    <button
+                        name="confirm_lines"
+                        type="object"
+                        string="Confirm"
+                        class="btn-primary"
+                    />
                     <button string="Discard" special="cancel" class="btn-secondary" />
                 </footer>
             </form>

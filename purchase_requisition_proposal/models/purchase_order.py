@@ -9,7 +9,9 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     def _prepare_sale_order_line_data(self, purchase_line, dest_company, sale_order):
-        res = super()._prepare_sale_order_line_data(purchase_line, dest_company, sale_order)
+        res = super()._prepare_sale_order_line_data(
+            purchase_line, dest_company, sale_order
+        )
         res["price_unit"] = purchase_line.price_unit
         return res
 
@@ -21,5 +23,3 @@ class PurchaseOrderLine(models.Model):
         comodel_name="purchase.requisition.proposal",
         string="Requirement Proposal",
     )
-
-
