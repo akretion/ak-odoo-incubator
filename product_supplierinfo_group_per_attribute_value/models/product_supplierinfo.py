@@ -2,11 +2,13 @@
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class ProductSupplierinfo(models.Model):
     _inherit = "product.supplierinfo"
+
+    product_attribute_value_ids = fields.Many2many(readonly=True)
 
     @api.depends("group_id.product_attribute_value_ids")
     def _compute_product_attribute_value_ids(self):
