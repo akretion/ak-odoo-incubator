@@ -100,7 +100,7 @@ class StockInventoryLine(models.Model):
             return (self.manual_product_cost, None)
 
     def _search_cost_supplierinfo(self):
-        sup_info = self.product_id._select_seller()
+        sup_info = self.product_id._select_seller(quantity=self.product_qty or 1)
         if sup_info and sup_info[0].price:
             return (sup_info[0].price, sup_info[0])
 
