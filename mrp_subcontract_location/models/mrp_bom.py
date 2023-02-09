@@ -68,6 +68,10 @@ class MrpBom(models.Model):
                     % supplied_wh.id)
                 return False
         return route
+    
+    def _check_same_wh(self, supply_wh, supplied_wh):
+        return supply_wh == supplied_wh
+    
 
     def check_and_set_product_routes(self):
         """
@@ -103,7 +107,7 @@ class MrpBom(models.Model):
                     continue
                 # Product and raw material are manufactured in the same wh
                 # no need for inter wh routes.
-                if supply_wh == supplied_wh:
+                if self._check_same_wh(supply_wh, supplied_wh):
                     continue
 
                 route = self._get_supply_route(supplied_wh, supply_wh)
