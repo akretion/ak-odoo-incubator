@@ -10,6 +10,7 @@
                 <field
                     name="location_destination_id"
                     domain="[('id', 'child_of', location_id)]"
+                    groups="stock.group_stock_multi_locations"
                 />
             </field>
         </field>
