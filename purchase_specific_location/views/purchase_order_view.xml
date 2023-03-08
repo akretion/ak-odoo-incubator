@@ -12,6 +12,7 @@
                     name="specific_location_id"
                     attrs="{'invisible': [('picking_type_id', '=', False)]}"
                     domain="[('id', 'child_of', default_location_dest_id)]"
+                    groups="stock.group_stock_multi_locations"
                 />
             </field>
         </field>

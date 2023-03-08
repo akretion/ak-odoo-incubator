@@ -6,7 +6,13 @@ from odoo import api, fields, models
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    specific_location_id = fields.Many2one("stock.location", string="Specific Location")
+    specific_location_id = fields.Many2one(
+        "stock.location",
+        string="Specific Location",
+        compute="_compute_specific_location_id",
+        readonly=False,
+        store=True,
+    )
     default_location_dest_id = fields.Many2one(
         related="picking_type_id.default_location_dest_id", string="Default Location"
     )
@@ -18,6 +24,8 @@ class PurchaseOrder(models.Model):
         else:
             return super()._get_destination_location()
 
-    @api.onchange("picking_type_id")
-    def onchange_specific_location(self):
-        self.specific_location_id = False
+    @api.depends("picking_type_id")
+    def _compute_specific_location_id(self):
+        # reset in case the picking type changed
+        for po in self:
+            po.specific_location_id = False
