@@ -2,11 +2,12 @@
     <record id="view_picking_form" model="ir.ui.view">
         <field name="name">stock.picking.form</field>
         <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="delivery_schenker.view_picking_withcarrier_out_form"/>
+        <field name="inherit_id" ref="base_delivery_carrier_label.view_picking_withcarrier_out_form"/>
         <field name="arch" type="xml">
             <button name="do_print_picking" position="before">
                 <button name="print_label" string="Print Label" type="object"/>
                 <button name="create_label" string="Create label" type="object"/>
+                <button name="open_label_wizard" string="Label wizard" type="object"/>
             </button>
         </field>
     </record>

@@ -19,6 +19,18 @@ class StockPicking(models.Model):
     _name = "stock.picking"
     _inherit = ["stock.picking", "proxy.action.helper"]
 
+    def open_label_wizard(self):
+        self.ensure_one()
+        return {
+            "name": "Label wizard",
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": "label.from.record",
+            "target": "new",
+            "context": self.env.context
+        }
+
     def create_label(self):
         self.ensure_one()
         attachment = self.env["ir.attachment"].search(

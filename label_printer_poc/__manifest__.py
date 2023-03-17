@@ -10,8 +10,9 @@
 Toutes les dépendences du projet""",
     'depends': [
         'stock',
-        'proxy_action',
         'base_delivery_carrier_label',
+        'proxy_action',
+        'label_wizard',
     ],
     'data': [
         'views/stock_picking.xml',
