@@ -15,6 +15,7 @@ from odoo.exceptions import Warning as UserError
 
 class LabelFromRecord(models.TransientModel):
     _name = "label.from.record"
+    _inherit = ["proxy.action.helper"]
     _description = "Print products label"
 
     @api.model
@@ -75,7 +76,8 @@ class LabelFromRecord(models.TransientModel):
     def generate_label(self):
         for rec in self:
             if rec.content:
-                products2print, data4print = [], []
+                printed_product_list = []
+                print_data = []
                 lines = rec.content.split("\n")
                 for line in lines:
                     # on remplace le text par des entiers quand possible
@@ -87,14 +89,26 @@ class LabelFromRecord(models.TransientModel):
                         if x.strip()
                     ]
                     rec._sanitize_and_check_parts(parts, line)
-                    products2print.append(parts[:])
-                for info in products2print:
+                    printed_product_list.append(parts[:])
+
+                for info in printed_product_list:
                     product, quantity = rec._search_product(info)
                     if product:
-                        data4print.append((product, quantity))
-                if data4print:
-                    model = data4print[0][0].browse(False)
-                    return model.get_labels_zebra(data4print, with_price=rec.with_price)
+                        print_data.append((product, quantity))
+
+                if len(print_data) > 0:
+                    model = print_data[0][0].browse(False)
+                    zebra_print_data = model.get_labels_zebra(
+                        print_data, with_price=rec.with_price
+                    )
+                    action_list = [
+                        self.get_print_data_action(
+                            data, copies=quantity, printer_name="zebra_large", raw=True
+                        )
+                        for data, quantity in zebra_print_data
+                    ]
+                    return self.send_proxy(action_list)
+
         return {"type": "ir.actions.act_window_close"}
 
     @api.model
