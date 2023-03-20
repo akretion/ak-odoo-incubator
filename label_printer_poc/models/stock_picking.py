@@ -28,7 +28,7 @@ class StockPicking(models.Model):
             "view_mode": "form",
             "res_model": "label.from.record",
             "target": "new",
-            "context": self.env.context
+            "context": {"active_model": "stock.picking", "active_id": self.id}
         }
 
     def create_label(self):
