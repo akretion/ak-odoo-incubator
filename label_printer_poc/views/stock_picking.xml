@@ -5,9 +5,9 @@
         <field name="inherit_id" ref="base_delivery_carrier_label.view_picking_withcarrier_out_form"/>
         <field name="arch" type="xml">
             <button name="do_print_picking" position="before">
-                <button name="print_label" string="Print Label" type="object"/>
-                <button name="create_label" string="Create label" type="object"/>
-                <button name="open_label_wizard" string="Label wizard" type="object"/>
+                <button name="print_shipping_label" string="Print shipping label" type="object"/>
+                <button name="create_shipping_label" string="Create shipping label" type="object"/>
+                <button name="print_product_label" string="Print product barcodes" type="object"/>
             </button>
         </field>
     </record>

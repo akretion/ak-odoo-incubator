@@ -19,7 +19,7 @@ class StockPicking(models.Model):
     _name = "stock.picking"
     _inherit = ["stock.picking", "proxy.action.helper"]
 
-    def open_label_wizard(self):
+    def print_product_label(self):
         self.ensure_one()
         return {
             "name": "Label wizard",
@@ -31,7 +31,7 @@ class StockPicking(models.Model):
             "context": {"active_model": "stock.picking", "active_id": self.id}
         }
 
-    def create_label(self):
+    def create_shipping_label(self):
         self.ensure_one()
         attachment = self.env["ir.attachment"].search(
             [
@@ -62,7 +62,7 @@ class StockPicking(models.Model):
             )
         return self.send_proxy(action_list)
 
-    def print_label(self):
+    def print_shipping_label(self):
         self.ensure_one()
         labels = self.env["shipping.label"].search(
             [
