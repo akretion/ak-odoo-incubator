@@ -46,6 +46,19 @@ class PurchaseRequisitionType(models.Model):
     proposal_template_id = fields.Many2one(
         "mail.template",
         default=lambda self: self._default_proposal_template_id(),
-        string="Report Template",
+        string="Opening Report Template",
+        required=True,
+    )
+
+    def _default_proposal_result_template_id(self):
+        return self.env.ref(
+            "purchase_requisition_proposal.mail_template_result_proposal",
+            raise_if_not_found=False,
+        )
+
+    proposal_result_template_id = fields.Many2one(
+        "mail.template",
+        default=lambda self: self._default_proposal_result_template_id(),
+        string="Closure Email Template",
         required=True,
     )

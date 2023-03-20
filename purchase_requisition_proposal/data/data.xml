@@ -27,9 +27,85 @@
     <record id="mail_template_requisition_proposal" model="mail.template">
         <field name="name">Requistion Call: Send by email</field>
         <field name="model_id" ref="purchase_requisition.model_purchase_requisition" />
+       <field
+           name="subject"
+       >${object.company_id.name} Call for Proposals (Ref ${object.name or 'n/a' })</field>
+       <field
+           name="partner_to"
+       >${','.join([str(partner.id) for partner in object.company_to_call_ids.partner_id]}</field>
+       <field name="body_html" type="xml">
+           <div style="margin: 0px; padding: 0px;">
+               <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                   Dear collaborator,<br /><br />
+                   <strong
+                   >${object.company_id.name}</strong> have a new Call for Proposals: <strong
+                   >${object.name}</strong>.<br />
+                   The Agreement Deadline is <strong
+                   >${format_date(object.date_end)}</strong>.
+                   <br /><br />
+                   Do not hesitate to contact us if you have any questions.
+                   <br /><br />
+                   <div style="margin:0px;padding: 0px;">
+                       <table
+                           style="color:#454748;font-size: 12px; border-collapse: collapse;"
+                           width="70%"
+                       >
+                           <tbody>
+                               <tr style="border-bottom:2px solid #dee2e6;">
+                                   <td width="25%"><strong
+                                       >Products</strong></td>
+                                   <td width="15%" align="center"><strong
+                                       >Quantity</strong></td>
+                                   <td width="10%" align="center"><strong
+                                       >Price</strong></td>
+                                   <td width="15%" align="right"><strong
+                                       >Schedule Date</strong></td>
+                               </tr>
+                           </tbody>
+                       </table>
+                       <table
+                           style="color:#454748;font-size: 12px; border-collapse: collapse;"
+                           width="70%"
+                       >
+                           <tbody>
+                               % for line in object.line_ids:
+                               <tr>
+                                   <td
+                                       width="25%"
+                                   >${line.product_id.display_name}</td>
+                                   <td width="15%" align="center"><strong
+                                       >${line.product_qty}</strong> ${line.product_uom_id.name}</td>
+                                   <td width="10%" align="center"><strong>
+                                           ${line.price_unit}</strong>
+                                       </td>
+                                   <td width="15%" align="right"><strong
+                                       >${format_date(line.schedule_date)} </strong></td>
+                               </tr>
+                               % endfor
+                           </tbody>
+                       </table>
+                       <br /><br />
+                       Best regards,
+                       % if user.signature:
+                       <br />
+                       ${user.signature | safe}
+                       % endif
+                   </div>
+               </p>
+           </div>
+       </field>
+       <field name="report_name">${(object.name or '').replace('/','-')}</field>
+       <field name="lang">${object.company_id.lang}</field>
+       <field name="auto_delete" eval="True" />
+       <field name="email_cc">${object.user_id.email}</field>
+   </record>
+
+    <record id="mail_template_result_proposal" model="mail.template">
+        <field name="name">Requistion Call: Send Result by email</field>
+        <field name="model_id" ref="purchase_requisition.model_purchase_requisition" />
         <field
             name="subject"
-        >${object.company_id.name} Call for Proposals (Ref ${object.name or 'n/a' })</field>
+        >${object.company_id.name} Closed Call for Proposals (Ref ${object.name or 'n/a' })</field>
         <field
             name="partner_to"
         >${','.join([str(partner.id) for partner in object.company_to_call_ids.partner_id]}</field>
@@ -37,60 +113,67 @@
             <div style="margin: 0px; padding: 0px;">
                 <p style="margin: 0px; padding: 0px; font-size: 13px;">
                     Dear collaborator,<br /><br />
-                    <strong
-                    >${object.company_id.name}</strong> have a new Call for Proposals: <strong
-                    >${object.name}</strong>.<br />
-                    The Agreement Deadline is <strong
-                    >${format_date(object.date_end)}</strong>.
-                    <br /><br />
-                    Do not hesitate to contact us if you have any questions.
+                    The Call <strong>${object.name}</strong> from <strong
+                    >${object.company_id.name}</strong> is now closed.<br />
+                    Please find the selected proposals below:
                     <br /><br />
                     <div style="margin:0px;padding: 0px;">
+                        % for line in object.line_ids:
+                        <h4>${line.product_id.display_name}</h4>
+                        <ul>
+                          <li>Schedule Date: ${format_date(line.schedule_date)}</li>
+                          <li
+                            >Quantity: ${line.product_qty} ${line.product_uom_id.name}</li>
+                          <li>Unit Price: ${line.price_unit}</li>
+                          % if not line.qty_planned:
+                          <li><b>Not Planned</b></li>
+                          % endif
+                        </ul>
+
+                        % for prop in line.proposal_line_ids:
+                        % if prop.qty_planned:
                         <table
                             style="color:#454748;font-size: 12px; border-collapse: collapse;"
-                            width="100%"
+                            width="70%"
                         >
                             <tbody>
                                 <tr style="border-bottom:2px solid #dee2e6;">
-                                    <td style="width:150px;"><strong
-                                        >Products</strong></td>
+                                    <td width="10%" align="left"><strong
+                                        >Proposal</strong></td>
+                                    <td width="25%" align="center"><strong
+                                        >Company</strong></td>
                                     <td width="15%" align="center"><strong
-                                        >Schedule Date</strong></td>
-                                    <td width="15%" align="center"><strong
-                                        >Quantity</strong></td>
-                                    <td width="20%" align="right"><strong
-                                        >Price</strong></td>
+                                        >Planned Quantity</strong></td>
+                                    <td width="15%" align="right"><strong
+                                        >Planned Date</strong></td>
                                 </tr>
                             </tbody>
                         </table>
-                        % for line in object.line_ids:
-                        <table
-                            style="color:#454748;font-size: 12px; border-collapse: collapse;"
-                            width="100%"
-                        >
+                        <table width="70%">
                             <tbody>
-                                <tr
-                                    style="${loop.cycle('background-color:#f2f2f2', 'background-color: #ffffff')}"
-                                >
+                                <tr>
+                                    <td width="10%" align="left">${prop.name}</td>
                                     <td
-                                        align="left"
-                                    >${line.product_id.display_name}</td>
+                                        width="25%"
+                                        align="center"
+                                    >${prop.partner_id.name} </td>
                                     <td
                                         width="15%"
                                         align="center"
-                                    >${format_date(line.schedule_date)} </td>
-                                    <td
-                                        width="15%"
-                                        align="center"
-                                    >${line.product_qty} ${line.product_uom_id.name}</td>
-                                    <td width="20%" align="right"><strong>
-                                            ${line.price_unit}
+                                    >${prop.qty_planned} ${prop.product_uom_id.name}</td>
+                                    <td width="15%" align="right"><strong>
+                                            ${prop.date_planned}
                                         </strong></td>
                                 </tr>
                             </tbody>
                         </table>
+                        <br />
+                        % endif
+                        % endfor
                         % endfor
                         <br /><br />
+                        Thank you for your participation.
+                        <br />
                         Best regards,
                         % if user.signature:
                         <br />
@@ -103,5 +186,7 @@
         <field name="report_name">${(object.name or '').replace('/','-')}</field>
         <field name="lang">${object.company_id.lang}</field>
         <field name="auto_delete" eval="True" />
+        <field name="email_cc">${object.user_id.email}</field>
     </record>
+
 </odoo>

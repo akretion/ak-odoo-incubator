@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-16 22:50+0000\n"
-"PO-Revision-Date: 2023-01-16 23:55+0100\n"
+"POT-Creation-Date: 2023-03-20 18:29+0000\n"
+"PO-Revision-Date: 2023-03-20 19:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -19,6 +19,7 @@ msgstr ""
 
 #. module: purchase_requisition_proposal
 #: model:mail.template,report_name:purchase_requisition_proposal.mail_template_requisition_proposal
+#: model:mail.template,report_name:purchase_requisition_proposal.mail_template_result_proposal
 msgid "${(object.name or '').replace('/','-')}"
 msgstr ""
 
@@ -28,43 +29,63 @@ msgid "${object.company_id.name} Call for Proposals (Ref ${object.name or 'n/a' 
 msgstr "${object.company_id.name} Appel d'Offres (Ref ${object.name or 'n/a' })"
 
 #. module: purchase_requisition_proposal
-#: model:mail.template,body_html:purchase_requisition_proposal.mail_template_requisition_proposal
+#: model:mail.template,subject:purchase_requisition_proposal.mail_template_result_proposal
+msgid "${object.company_id.name} Closed Call for Proposals (Ref ${object.name or 'n/a' })"
+msgstr "${object.company_id.name} Fermeture d'Appel d'Offres (Ref ${object.name or 'n/a' })"
+
+#. module: purchase_requisition_proposal
+#: model:mail.template,body_html:purchase_requisition_proposal.mail_template_result_proposal
 msgid ""
 "<?xml version=\"1.0\"?>\n"
 "<div style=\"margin: 0px; padding: 0px;\">\n"
 "                <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
 "                    Dear collaborator,<br/><br/>\n"
-"                    <strong>${object.company_id.name}</strong> have a new Call for Proposals: <strong>${object.name}</strong>.<br/>\n"
-"                    The Agreement Deadline is <strong>${format_date(object.date_end)}</strong>.\n"
-"                    <br/><br/>\n"
-"                    Do not hesitate to contact us if you have any questions.\n"
+"                    The Call <strong>${object.name}</strong> from <strong>${object.company_id.name}</strong> is now closed.<br/>\n"
+"                    Please find the selected proposals below:\n"
 "                    <br/><br/>\n"
 "                    <div style=\"margin:0px;padding: 0px;\">\n"
-"                        <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\">\n"
+"                        % for line in object.line_ids:\n"
+"                        <h4>${line.product_id.display_name}</h4>\n"
+"                        <ul>\n"
+"                          <li>Schedule Date: ${format_date(line.schedule_date)}</li>\n"
+"                          <li>Quantity: ${line.product_qty} ${line.product_uom_id.name}</li>\n"
+"                          <li>Unit Price: ${line.price_unit}</li>\n"
+"                          % if not line.qty_planned:\n"
+"                          <li><b>Not Planned</b></li>\n"
+"                          % endif\n"
+"                        </ul>\n"
+"\n"
+"                        % for prop in line.proposal_line_ids:\n"
+"                        % if prop.qty_planned:\n"
+"                        <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"70%\">\n"
 "                            <tbody>\n"
 "                                <tr style=\"border-bottom:2px solid #dee2e6;\">\n"
-"                                    <td style=\"width:150px;\"><strong>Products</strong></td>\n"
-"                                    <td width=\"15%\" align=\"center\"><strong>Schedule Date</strong></td>\n"
-"                                    <td width=\"15%\" align=\"center\"><strong>Quantity</strong></td>\n"
-"                                    <td width=\"20%\" align=\"right\"><strong>Price</strong></td>\n"
+"                                    <td width=\"10%\" align=\"left\"><strong>Proposal</strong></td>\n"
+"                                    <td width=\"25%\" align=\"center\"><strong>Company</strong></td>\n"
+"                                    <td width=\"15%\" align=\"center\"><strong>Planned Quantity</strong></td>\n"
+"                                    <td width=\"15%\" align=\"right\"><strong>Planned Date</strong></td>\n"
 "                                </tr>\n"
 "                            </tbody>\n"
 "                        </table>\n"
-"                        % for line in object.line_ids:\n"
-"                        <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\">\n"
+"                        <table width=\"70%\">\n"
 "                            <tbody>\n"
-"                                <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: #ffffff')}\">\n"
-"                                    <td align=\"left\">${line.product_id.display_name}</td>\n"
-"                                    <td width=\"15%\" align=\"center\">${format_date(line.schedule_date)} </td>\n"
-"                                    <td width=\"15%\" align=\"center\">${line.product_qty} ${line.product_uom_id.name}</td>\n"
-"                                    <td width=\"20%\" align=\"right\"><strong>\n"
-"                                            ${line.price_unit}\n"
+"                                <tr>\n"
+"                                    <td width=\"10%\" align=\"left\">${prop.name}</td>\n"
+"                                    <td width=\"25%\" align=\"center\">${prop.partner_id.name} </td>\n"
+"                                    <td width=\"15%\" align=\"center\">${prop.qty_planned} ${prop.product_uom_id.name}</td>\n"
+"                                    <td width=\"15%\" align=\"right\"><strong>\n"
+"                                            ${prop.date_planned}\n"
 "                                        </strong></td>\n"
 "                                </tr>\n"
 "                            </tbody>\n"
 "                        </table>\n"
+"                        <br/>\n"
+"                        % endif\n"
+"                        % endfor\n"
 "                        % endfor\n"
 "                        <br/><br/>\n"
+"                        Thank you for your participation.\n"
+"                        <br/>\n"
 "                        Best regards,\n"
 "                        % if user.signature:\n"
 "                        <br/>\n"
@@ -78,61 +99,159 @@ msgstr ""
 "<?xml version=\"1.0\"?>\n"
 "<div style=\"margin: 0px; padding: 0px;\">\n"
 "                <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
-"                    Cher collaborateur,<br/><br/>\n"
-"                    <strong>{object.company_id.name} $</strong> a un nouvel appel d'offres : <strong>${object.name}.</strong><br/>\n"
-"                    La date limite de réponse est <strong>${format_date(object.date_end)}.</strong>\n"
+"                    Chers collaborateurs,<br/><br/>\n"
+"                    L'appel d'offres <strong>${object.name}</strong> de <strong>${object.company_id.name}</strong> est maintenant fermé.<br/>\n"
+"                    Veuillez trouver ci-dessous les propositions retenus:\n"
+"                    <br/><br/>\n"
+"                    <div style=\"margin:0px;padding: 0px;\">\n"
+"                        % for line in object.line_ids:\n"
+"                        <h4>${line.product_id.display_name}</h4>\n"
+"                        <ul>\n"
+"                          <li>Date attendue: ${format_date(line.schedule_date)}</li>\n"
+"                          <li>Quantité: ${line.product_qty} ${line.product_uom_id.name}</li>\n"
+"                          <li>Prix Unitaire: ${line.price_unit}</li>\n"
+"                          % if not line.qty_planned:\n"
+"                          <li><b>Non Retenu</b></li>\n"
+"                          % endif\n"
+"                        </ul>\n"
+"\n"
+"                        % for prop in line.proposal_line_ids:\n"
+"                        % if prop.qty_planned:\n"
+"                        <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"70%\">\n"
+"                            <tbody>\n"
+"                                <tr style=\"border-bottom:2px solid #dee2e6;\">\n"
+"                                    <td width=\"10%\" align=\"left\"><strong>Proposition</strong></td>\n"
+"                                    <td width=\"25%\" align=\"center\"><strong>Société</strong></td>\n"
+"                                    <td width=\"15%\" align=\"center\"><strong>Quantité</strong></td>\n"
+"                                    <td width=\"15%\" align=\"right\"><strong>Date</strong></td>\n"
+"                                </tr>\n"
+"                            </tbody>\n"
+"                        </table>\n"
+"                        <table width=\"70%\">\n"
+"                            <tbody>\n"
+"                                <tr>\n"
+"                                    <td width=\"10%\" align=\"left\">${prop.name}</td>\n"
+"                                    <td width=\"25%\" align=\"center\">${prop.partner_id.name} </td>\n"
+"                                    <td width=\"15%\" align=\"center\">${prop.qty_planned} ${prop.product_uom_id.name}</td>\n"
+"                                    <td width=\"15%\" align=\"right\"><strong>\n"
+"                                            ${prop.date_planned}\n"
+"                                        </strong></td>\n"
+"                                </tr>\n"
+"                            </tbody>\n"
+"                        </table>\n"
+"                        <br/>\n"
+"                        % endif\n"
+"                        % endfor\n"
+"                        % endfor\n"
+"                        <br/><br/>\n"
+"                        Merci de votre participation.\n"
+"                        <br/>\n"
+"                        Cordialement,\n"
+"                        % if user.signature:\n"
+"                        <br/>\n"
+"                        ${user.signature | safe}\n"
+"                        % endif\n"
+"                    </div>\n"
+"                </p>\n"
+"            </div>"
+
+#. module: purchase_requisition_proposal
+#: model:mail.template,body_html:purchase_requisition_proposal.mail_template_requisition_proposal
+msgid ""
+"<?xml version=\"1.0\"?>\n"
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"               <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                   Dear collaborator,<br/><br/>\n"
+"                   <strong>${object.company_id.name}</strong> have a new Call for Proposals: <strong>${object.name}</strong>.<br/>\n"
+"                   The Agreement Deadline is <strong>${format_date(object.date_end)}</strong>.\n"
 "                   <br/><br/>\n"
-"                    N'hésitez pas à nous contacter si vous avez des questions.\n"
+"                   Do not hesitate to contact us if you have any questions.\n"
 "                   <br/><br/>\n"
-"                   <div style=\"margin:0px;padding: 0px;\"> \n"
-"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\"> \n"
-"                           <tbody> \n"
-"                               <tr style=\"border-bottom:2px solid #dee2e6;\"> \n"
-"                                   <td style=\"width:150px;\"><strong>Produits</strong></td>\n"
-"                                   <td width=\"15%\" align=\"center\"><strong>Date de Livraison Attendue</strong></td>\n"
-"                                   <td width=\"15%\" align=\"center\"><strong>Quantité</strong></td>\n"
-"                                   <td width=\"20%\" align=\"right\"><strong>Prix</strong></td>\n"
+"                   <div style=\"margin:0px;padding: 0px;\">\n"
+"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"70%\">\n"
+"                           <tbody>\n"
+"                               <tr style=\"border-bottom:2px solid #dee2e6;\">\n"
+"                                   <td width=\"25%\"><strong>Products</strong></td>\n"
+"                                   <td width=\"15%\" align=\"center\"><strong>Quantity</strong></td>\n"
+"                                   <td width=\"10%\" align=\"center\"><strong>Price</strong></td>\n"
+"                                   <td width=\"15%\" align=\"right\"><strong>Schedule Date</strong></td>\n"
 "                               </tr>\n"
 "                           </tbody>\n"
 "                       </table>\n"
-"                       % for line in object.line_ids :\n"
-"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\"> \n"
-"                           <tbody> \n"
-"                               <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: #ffffff')}\"> \n"
-"                                   <td align=\"left\">$</td></tr></tbody></table></div> <div style=\"margin:0px;padding: 0px;\"> <table style=\"color:#454748;font-size: 12px; "
-"border-collapse: collapse;\" width=\"100%\"> <tbody> <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: #ffffff')}\"> <td align=\"left\">${line.product_id."
-"display_name}\n"
-"                                   </td> <td width=\"15%\" align=\"center\">${format_date(line.schedule_date)} </td>\n"
-"                                   <td width=\"15%\" align=\"center\">${line.product_qty} $</td></tr></tbody></table></div> <div style=\"margin:0px;padding: 0px;\"> <table "
-"style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"100%\"> <tbody> <tr style=\"${loop.cycle('background-color:#f2f2f2', 'background-color: "
-"#ffffff')}\"> <td width=\"15%\" align=\"center\">{line.product_uom_id.name}\n"
-"                                   </td> <td width=\"20%\" align=\"right\"><strong> \n"
-"                                            ${line.price_unit}\n"
-"                                       </strong></td>\n"
+"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"70%\">\n"
+"                           <tbody>\n"
+"                               % for line in object.line_ids:\n"
+"                               <tr>\n"
+"                                   <td width=\"25%\">${line.product_id.display_name}</td>\n"
+"                                   <td width=\"15%\" align=\"center\"><strong>${line.product_qty}</strong> ${line.product_uom_id.name}</td>\n"
+"                                   <td width=\"10%\" align=\"center\"><strong>\n"
+"                                           ${line.price_unit}</strong>\n"
+"                                       </td>\n"
+"                                   <td width=\"15%\" align=\"right\"><strong>${format_date(line.schedule_date)} </strong></td>\n"
 "                               </tr>\n"
+"                               % endfor\n"
 "                           </tbody>\n"
-"                       % endfor\n"
 "                       </table>\n"
 "                       <br/><br/>\n"
-"                        Cordialement\n"
-"                       % if user.signature :\n"
+"                       Best regards,\n"
+"                       % if user.signature:\n"
 "                       <br/>\n"
-"                        ${user.signature | safe}\n"
+"                       ${user.signature | safe}\n"
 "                       % endif\n"
 "                   </div>\n"
-"                </p>\n"
-"            </div>\n"
-"        "
+"               </p>\n"
+"           </div>\n"
+"       "
+msgstr ""
+"<?xml version=\"1.0\"?>\n"
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"               <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                   Cher collaborateur,<br/><br/>\n"
+"                   <strong>${object.company_id.name}</strong> a un nouvel appel d'offres:  <strong>${object.name}</strong>.<br/>\n"
+"                   La date limite de réponse est <strong>${format_date(object.date_end)}</strong>.\n"
+"                   <br/><br/>\n"
+"                   N'hésitez pas à nous contacter si vous avez des questions.\n"
+"                   <br/><br/>\n"
+"                   <div style=\"margin:0px;padding: 0px;\">\n"
+"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"70%\">\n"
+"                           <tbody>\n"
+"                               <tr style=\"border-bottom:2px solid #dee2e6;\">\n"
+"                                   <td width=\"25%\"><strong>Article</strong></td>\n"
+"                                   <td width=\"15%\" align=\"center\"><strong>Quantité</strong></td>\n"
+"                                   <td width=\"10%\" align=\"center\"><strong>Prix</strong></td>\n"
+"                                   <td width=\"15%\" align=\"right\"><strong>Date de Livraison Attendue</strong></td>\n"
+"                               </tr>\n"
+"                           </tbody>\n"
+"                       </table>\n"
+"                       <table style=\"color:#454748;font-size: 12px; border-collapse: collapse;\" width=\"70%\">\n"
+"                           <tbody>\n"
+"                               % for line in object.line_ids:\n"
+"                               <tr>\n"
+"                                   <td width=\"25%\">${line.product_id.display_name}</td>\n"
+"                                   <td width=\"15%\" align=\"center\"><strong>${line.product_qty}</strong> ${line.product_uom_id.name}</td>\n"
+"                                   <td width=\"10%\" align=\"center\"><strong>\n"
+"                                           ${line.price_unit}</strong>\n"
+"                                       </td>\n"
+"                                   <td width=\"15%\" align=\"right\"><strong>${format_date(line.schedule_date)} </strong></td>\n"
+"                               </tr>\n"
+"                               % endfor\n"
+"                           </tbody>\n"
+"                       </table>\n"
+"                       <br/><br/>\n"
+"                       Cordialement,\n"
+"                       % if user.signature:\n"
+"                       <br/>\n"
+"                       ${user.signature | safe}\n"
+"                       % endif\n"
+"                   </div>\n"
+"               </p>\n"
+"           </div>\n"
+"       "
 
 #. module: purchase_requisition_proposal
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.view_purchase_requisition_no_edit_form
 msgid "Accept"
 msgstr "Accepter"
-
-#. module: purchase_requisition_proposal
-#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.view_purchase_requisition_no_edit_form
-msgid "Accept and Modify"
-msgstr "Accepter et Modifier"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__exclusive
@@ -146,6 +265,12 @@ msgid "All Companies"
 msgstr "Toutes les sociétés"
 
 #. module: purchase_requisition_proposal
+#: code:addons/purchase_requisition_proposal/models/purchase_requisition.py:0
+#, python-format
+msgid "All the propositions selected are already related to a purchase request."
+msgstr "Toutes les propositions sont déjà reliées à une commande d'achat."
+
+#. module: purchase_requisition_proposal
 #: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_type__exclusive__proposals
 msgid "Call for Proposals (non-exclusive)"
 msgstr "Appel d'Offres multi-sociétés"
@@ -154,6 +279,11 @@ msgstr "Appel d'Offres multi-sociétés"
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_uom_category_id
 msgid "Category"
 msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__proposal_result_template_id
+msgid "Closure Email Template"
+msgstr "Email de clôture"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model,name:purchase_requisition_proposal.model_res_company
@@ -171,7 +301,7 @@ msgstr "Sociétés Appelées"
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__requisition_company_id
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__company_id
 msgid "Company"
-msgstr "Société"
+msgstr "Société émettrice"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model,name:purchase_requisition_proposal.model_res_config_settings
@@ -181,7 +311,7 @@ msgstr "Paramètres de config"
 #. module: purchase_requisition_proposal
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_wizard
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmer"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition_proposal__product_uom_category_id
@@ -215,17 +345,17 @@ msgstr "Vérif. date"
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__date_end
 msgid "Date End"
-msgstr "Date Limite de Réponse"
+msgstr ""
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__schedule_date
 msgid "Delivery Date"
-msgstr "Date de livraison Attendue"
+msgstr "Date de livraison"
 
 #. module: purchase_requisition_proposal
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_wizard
 msgid "Discard"
-msgstr ""
+msgstr "Annuler"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order__display_name
@@ -241,10 +371,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order__display_name
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_sale_order_line__display_name
 msgid "Display Name"
-msgstr "Nom"
+msgstr "Nom affiché"
 
 #. module: purchase_requisition_proposal
-#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.received_requisition_proposal_line_view_tree
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_buttons_wizard
 msgid "Duplicate"
 msgstr "Dupliquer"
@@ -283,11 +412,6 @@ msgid "Intercompany Call for Proposals"
 msgstr "Appel d'offre multi-sociétés"
 
 #. module: purchase_requisition_proposal
-#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__is_proposal_line_validate
-msgid "Is Line Validate"
-msgstr ""
-
-#. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order____last_update
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order_line____last_update
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition____last_update
@@ -316,11 +440,17 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__missing_procurment_contacts
+msgid "Missing Procurment Contacts"
+msgstr ""
+
+#. module: purchase_requisition_proposal
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.view_purchase_requisition_type_form_inherit
 msgid "Multi Companies"
 msgstr "Multi-sociétés"
 
 #. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__multi_company_selection
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__multi_company_selection
 msgid "Multi Company Selection"
 msgstr "Sélectionner les sociétés"
@@ -328,7 +458,7 @@ msgstr "Sélectionner les sociétés"
 #. module: purchase_requisition_proposal
 #: model:ir.ui.menu,name:purchase_requisition_proposal.menu_my_purchase_requisition
 msgid "My Requisitions"
-msgstr "Mes Appels d'offre"
+msgstr "Mes Appels d'offres"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__name
@@ -339,6 +469,12 @@ msgstr ""
 #: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_type__multi_company_selection__no
 msgid "No"
 msgstr "Non"
+
+#. module: purchase_requisition_proposal
+#: code:addons/purchase_requisition_proposal/models/purchase_requisition.py:0
+#, python-format
+msgid "No contacts to send emails : %s"
+msgstr "Contacts manquants pour envoyer emails  : %s"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_information_mixin__qty_check__not_enough
@@ -353,6 +489,21 @@ msgstr "Non Suffisant"
 #: model:ir.model.fields.selection,name:purchase_requisition_proposal.selection__purchase_requisition_proposal__date_check__not_respected
 msgid "Not Respected"
 msgstr "Non Respecté"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__product_description_variants
+msgid "Note"
+msgstr ""
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__proposal_template_id
+msgid "Opening Report Template"
+msgstr "Template d'email de lancement"
+
+#. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__qty_ordered
+msgid "Ordered Qty"
+msgstr "Qté Commandée"
 
 #. module: purchase_requisition_proposal
 #: model:ir.ui.menu,name:purchase_requisition_proposal.menu_others_purchase_requisition
@@ -371,14 +522,14 @@ msgstr "Date planifiée"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__qty_planned
-#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
-msgid "Planned Quantities"
-msgstr "Quantités Attribuées"
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_planned
+msgid "Planned Qty"
+msgstr "Qté plannifiée"
 
 #. module: purchase_requisition_proposal
-#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_planned
-msgid "Planned Quantity"
-msgstr "Quantité Attribuée"
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Planned Quantities"
+msgstr "Qté Attribuée"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_id
@@ -402,6 +553,11 @@ msgid "Proposal Line Count"
 msgstr "Nb Offres"
 
 #. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Proposals"
+msgstr "Propositions"
+
+#. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__date_planned
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__date_planned
 msgid "Proposed Date"
@@ -409,8 +565,8 @@ msgstr "Date Proposée"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_proposed
-msgid "Proposed Quantity"
-msgstr "Quantité Proposée"
+msgid "Proposed Qty"
+msgstr "Qté proposée"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__purchase_id
@@ -426,7 +582,7 @@ msgstr "Appel Offres"
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__requisition_line_id
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_requisition_proposal_wizard__requisition_line_id
 msgid "Purchase Agreement Line"
-msgstr "Lignes d'Appel Offres"
+msgstr "Lignes d'Appel d'Offres"
 
 #. module: purchase_requisition_proposal
 #: model:ir.ui.menu,name:purchase_requisition_proposal.menu_purchase_requisition_type
@@ -477,6 +633,11 @@ msgid "Purchase requisitions"
 msgstr "Appels d'Offres"
 
 #. module: purchase_requisition_proposal
+#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition__product_qty
+msgid "Qty"
+msgstr "Qté"
+
+#. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_information_mixin__qty_check
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__qty_check
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__qty_check
@@ -484,15 +645,9 @@ msgid "Qty Check"
 msgstr "Vérif. Quantité"
 
 #. module: purchase_requisition_proposal
-#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.received_requisition_proposal_line_view_tree
 #: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.requisition_proposal_buttons_wizard
 msgid "Remove"
 msgstr "Supprimer"
-
-#. module: purchase_requisition_proposal
-#: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_type__proposal_template_id
-msgid "Report Template"
-msgstr "Template mail Appel Offres"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__schedule_date
@@ -501,8 +656,8 @@ msgstr "Date Requise"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_qty
-msgid "Requested Quantity"
-msgstr "Quantité Requise"
+msgid "Requested Qty"
+msgstr "Qté demandée"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_order_line__requirement_proposal_id
@@ -539,13 +694,18 @@ msgstr "Respecté"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model,name:purchase_requisition_proposal.model_sale_order
-msgid "Sales Order"
-msgstr "Commande"
+msgid "Sale Order"
+msgstr ""
 
 #. module: purchase_requisition_proposal
 #: model:ir.model,name:purchase_requisition_proposal.model_sale_order_line
 msgid "Sales Order Line"
 msgstr "Ligne de bon de commande"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.view_purchase_requisition_no_edit_form
+msgid "See all proposals"
+msgstr "Toutes les propositions"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition__exclusive
@@ -565,6 +725,22 @@ msgid "Selected Companies"
 msgstr "Sociétés Sélectionnées"
 
 #. module: purchase_requisition_proposal
+#: code:addons/purchase_requisition_proposal/models/purchase_requisition_proposal.py:0
+#, python-format
+msgid "Selected Quantity can not be superior than Proposed Quantity."
+msgstr "La Quantité Sélectionnée ne peut pas être supérieure à la Quantité Proposée."
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Send Mails"
+msgstr "Envoyer email ouverture"
+
+#. module: purchase_requisition_proposal
+#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
+msgid "Send closure email"
+msgstr "Envoyer email fermeture"
+
+#. module: purchase_requisition_proposal
 #: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition__schedule_date
 #: model:ir.model.fields,help:purchase_requisition_proposal.field_purchase_requisition_proposal__schedule_date
 msgid "The expected and scheduled delivery date where all the products are received"
@@ -573,7 +749,7 @@ msgstr "La date de livraison prévue et planifiée où tous les produits sont re
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__price_unit
 msgid "Unit Price"
-msgstr ""
+msgstr "PU"
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_proposal__product_uom_id
@@ -581,9 +757,14 @@ msgid "UoM"
 msgstr ""
 
 #. module: purchase_requisition_proposal
-#: model_terms:ir.ui.view,arch_db:purchase_requisition_proposal.purchase_requisition_view_form
-msgid "Validate and Call Companies"
-msgstr "Valider et envoyer mail"
+#: code:addons/purchase_requisition_proposal/models/purchase_requisition.py:0
+#, python-format
+msgid ""
+"You need to select at least one proposition.\n"
+"To do so, select a line, click on 'Proposals' then choose a quantity to command from the available propositions."
+msgstr ""
+"Aucune proposition n'a été sélectionnée.\n"
+"Pour cela, choisissez une ligne, cliquez sur 'Propositions' puis choisissez une quantité à commander parmis les propositions disponibles."
 
 #. module: purchase_requisition_proposal
 #: model:ir.model.fields,field_description:purchase_requisition_proposal.field_purchase_requisition_line__proposal_line_ids

@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 
 class PurchaseRequisition(models.Model):
@@ -17,6 +17,11 @@ class PurchaseRequisition(models.Model):
         inverse_name="requisition_id",
         string="Requisition proposal",
     )
+    multi_company_selection = fields.Selection(
+        string="Multi Company Selection",
+        related="type_id.multi_company_selection",
+        readonly=True,
+    )
     requisition_proposal_count = fields.Integer(
         compute="_compute_requisition_proposal_count"
     )
@@ -26,6 +31,12 @@ class PurchaseRequisition(models.Model):
         string="Companies To Call",
         readonly=False,
         store=True,
+    )
+    qty_ordered = fields.Float(
+        string="Ordered Qty",
+    )
+    product_qty = fields.Float(
+        string="Qty",
     )
 
     @api.depends("exclusive")
@@ -44,17 +55,23 @@ class PurchaseRequisition(models.Model):
             else:
                 rec.company_to_call_ids = False
 
-    def _get_destinaries_email(self):
-        missing_emails = [
-            comp.name
-            for comp in self.company_to_call_ids
-            if not self.company_to_call_ids.requisition_intercompany_partner_ids
-        ]
-        if missing_emails:
-            raise UserError(
-                _("%s don't have contacts to send emails.")
-                % (", ".join(missing_emails)),
+    missing_procurment_contacts = fields.Html(
+        readonly=True, compute="_compute_missing_procurment_contacts"
+    )
+
+    @api.depends("company_to_call_ids.requisition_intercompany_partner_ids")
+    def _compute_missing_procurment_contacts(self):
+        for rec in self:
+            missing_emails = [comp.name for comp in rec.company_to_call_ids if not comp.requisition_intercompany_partner_ids]
+            message = _("No contacts to send emails : %s") % (
+                "\n - ".join(missing_emails)
             )
+            if missing_emails:
+                rec.missing_procurment_contacts = message
+            else:
+                rec.missing_procurment_contacts = False
+
+    def _get_destinaries_email(self):
         return self.company_to_call_ids.requisition_intercompany_partner_ids.partner_id
 
     def action_call_for_proposal_send(self):
@@ -154,7 +171,7 @@ class PurchaseRequisition(models.Model):
                     }
                     po_lines.append((0, 0, proposal_line))
 
-                self.env["purchase.order"].create(
+                line.purchase_id = self.env["purchase.order"].create(
                     {
                         "requisition_id": self.id,
                         "partner_id": partner.id,
@@ -164,9 +181,58 @@ class PurchaseRequisition(models.Model):
                     }
                 )
 
+        elif bool(self.requisition_proposal_ids.filtered(lambda x: x.qty_planned > 0)):
+            raise ValidationError(
+                _(
+                    "All the propositions selected are already"
+                    " related to a purchase request."
+                )
+            )
+
+        else:
+            raise ValidationError(
+                _(
+                    "You need to select at least one proposition.\n"
+                    "To do so, select a line, click on 'Proposals' "
+                    "then choose a quantity to command from the available "
+                    "propositions."
+                )
+            )
+
     def action_in_progress(self):
-        super().action_in_progress()
+        res = super().action_in_progress()
         if self.type_id.exclusive == "proposals":
             self.name = self.env["ir.sequence"].next_by_code(
                 "purchase.requisition.purchase.call"
             )
+        self.action_open()
+        return res
+
+    def action_send_result_email(self):
+        self.ensure_one()
+        template_id = self.type_id.proposal_result_template_id.id
+        lang = self.env.context.get("lang")
+        template = self.env["mail.template"].browse(template_id)
+        if template.lang:
+            lang = template._render_lang(self.ids)[self.id]
+        ctx = {
+            "default_model": "purchase.requisition",
+            "default_res_id": self.id,
+            "default_use_template": bool(template_id),
+            "default_template_id": template_id,
+            "default_partner_ids": self._get_destinaries_email().ids,
+            "default_composition_mode": "comment",
+            "custom_layout": "mail.mail_notification_light",
+            "force_email": True,
+            "model_description": self.with_context(lang=lang).name,
+        }
+
+        return {
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "mail.compose.message",
+            "views": [(False, "form")],
+            "view_id": False,
+            "target": "new",
+            "context": ctx,
+        }

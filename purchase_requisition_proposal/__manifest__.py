@@ -23,7 +23,6 @@
         "views/purchase_order.xml",
         "views/sale_order.xml",
         "views/purchase_requisition.xml",
-        "views/purchase_requisition_proposal.xml",
         "views/purchase_requisition_type.xml",
         "wizard/wizard_requisition_proposal.xml",
         "views/ir_config.xml",

@@ -13,14 +13,13 @@ class PurchaseRequisitionLine(models.Model):
         "purchase.requisition.proposal", "requisition_line_id", string="proposal Lines"
     )
     proposal_line_count = fields.Integer(compute="_compute_proposal_line_count")
-    qty_planned = fields.Float(
-        compute="_compute_planned_qty", string="Planned Quantities"
-    )
+    qty_planned = fields.Float(compute="_compute_planned_qty", string="Planned Qty")
     date_planned = fields.Date(string="Proposed Date", compute="_compute_date_planned")
-    is_proposal_line_validate = fields.Boolean(
-        string="Is Line Validate",
-        default=False,
-    )
+    product_description_variants = fields.Char("Note")
+
+    state = fields.Selection(
+        related="requisition_id.state"
+        )
 
     @api.depends("proposal_line_ids.date_planned")
     def _compute_date_planned(self):
@@ -35,22 +34,30 @@ class PurchaseRequisitionLine(models.Model):
             else:
                 rec.date_planned = False
 
-    @api.depends("proposal_line_ids")
     def _compute_proposal_line_count(self):
-        for rec in self:
-            rec.proposal_line_count = len(
-                [line for line in rec.proposal_line_ids if line.qty_proposed]
-            )
+            for rec in self:
+                # test if allowed_company_ids for test purpose
+                if not rec.env.context.get('allowed_company_ids', False):
+                    current_company = self.env.user.company_id.id
+                else:
+                    current_company = rec.env.context['allowed_company_ids'][0]
+
+                if rec.company_id.id == current_company:
+                    rec.proposal_line_count = len(
+                        [line for line in rec.proposal_line_ids if line.qty_proposed]
+                    )
+                else:
+                    rec.proposal_line_count = len(
+                        [line for line in rec.proposal_line_ids if line.qty_proposed and line.company_id.id == current_company])
 
     def proposal_validation(self):
-        self.sudo().write({"is_proposal_line_validate": True})
-        if not self.proposal_line_ids:
+        if not self.proposal_line_ids.filtered(lambda x: x.partner_id == self.env.company.partner_id):
             self.env["purchase.requisition.proposal"].create(
                 {
                     "requisition_id": self.requisition_id.id,
                     "requisition_line_id": self.id,
                     "product_id": self.product_id.id,
-                    "qty_proposed": self.product_qty,
+                    "qty_proposed": 0,
                     "date_planned": self.schedule_date,
                     "partner_id": self.env.company.partner_id.id,
                 }
@@ -67,7 +74,7 @@ class PurchaseRequisitionLine(models.Model):
         else:
             domain = [
                 ("requisition_line_id", "=", self.id),
-                ("partner_id", "=", self.env.user.company_id.partner_id.id),
+                ("partner_id", "=", self.env.company.partner_id.id),
             ]
             view = self.env.ref(
                 "purchase_requisition_proposal.requisition_proposal_buttons_wizard"
@@ -90,6 +97,25 @@ class PurchaseRequisitionLine(models.Model):
             "view_id": view.id,
             "target": "new",
             "context": context,
+        }
+
+    def show_all_requisition_proposal_line(self):
+        domain = [("requisition_line_id", "=", self.id)]
+        view = self.env.ref("purchase_requisition_proposal.requisition_proposal_wizard")
+        wizard = self.env["requisition.proposal.wizard"].create(
+            {
+                "requisition_line_id": self.id,
+                "proposal_line_ids": self.proposal_line_ids.filtered_domain(domain).ids,
+            }
+        )
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "requisition.proposal.wizard",
+            "res_id": wizard.id,
+            "view_mode": "form",
+            "view_id": view.id,
+            "target": "new",
+            "context": {"show_all_lines": True},
         }
 
     @api.depends("proposal_line_ids.qty_planned")

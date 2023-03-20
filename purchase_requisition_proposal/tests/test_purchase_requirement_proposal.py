@@ -1,7 +1,7 @@
 # Copyright 2023 Akretion (https://www.akretion.com).
 # @author Kévin Roche <kevin.roche@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-
+from odoo.exceptions import ValidationError
 from odoo.addons.mail.tests.common import MockEmail
 from odoo.addons.purchase_sale_inter_company.tests.test_inter_company_purchase_sale import (
     TestPurchaseSaleInterCompany,
@@ -136,10 +136,12 @@ class TestPurchaseRequirementProposal(MockEmail, TestPurchaseSaleInterCompany):
     def test_8_create_rfq(self):
         self.call.action_call_for_proposal_send()
         self.call_line2.with_company(self.company_b).proposal_validation()
-        self.call.action_create_quotations()
-        self.assertFalse(self.call.purchase_ids)
+        with self.assertRaises(ValidationError) as m:
+            self.call.action_create_quotations()
+        self.assertIn("You need to select at least one proposition", m.exception.args[0]
+            )
         self.proposal_1.qty_planned = 10
-        self.call_line2.proposal_line_ids[0].qty_planned = 30
+        self.call_line2.proposal_line_ids[0].qty_planned = 20
         self.call.action_create_quotations()
         self.assertEqual(len(self.call.purchase_ids), 2)
         self.assertEqual(self.call.purchase_ids[0].partner_id, self.partner_company_a)
