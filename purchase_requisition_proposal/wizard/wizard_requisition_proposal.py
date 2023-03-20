@@ -19,8 +19,10 @@ class RequisitionProposalWizard(models.TransientModel):
     )
 
     def confirm_lines(self):
-        self.requisition_line_id.sudo().write(
-            {
-                "proposal_line_ids": self.proposal_line_ids.ids,
-            }
-        )
+        for line in self.proposal_line_ids:
+            proposal_line = self.env["purchase.requisition.proposal"].browse(line.id)
+            proposal_line.write(
+                {
+                    "requisition_line_id": self.requisition_line_id.id,
+                }
+            )

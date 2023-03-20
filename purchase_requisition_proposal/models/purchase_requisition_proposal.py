@@ -2,7 +2,8 @@
 # @author Kévin Roche <kevin.roche@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class PurchaseRequisitionProposal(models.Model):
@@ -19,7 +20,7 @@ class PurchaseRequisitionProposal(models.Model):
         "purchase.requisition", string="Purchase Agreement"
     )
     purchase_id = fields.Many2one(
-        comodel_name="purchase",
+        comodel_name="purchase.order",
         string="Purchase",
     )
     requisition_line_id = fields.Many2one(
@@ -57,7 +58,7 @@ class PurchaseRequisitionProposal(models.Model):
         readonly=True,
     )
     product_qty = fields.Float(
-        string="Requested Quantity",
+        string="Requested Qty",
         digits="Product Unit of Measure",
         related="requisition_line_id.product_qty",
         readonly=True,
@@ -66,12 +67,12 @@ class PurchaseRequisitionProposal(models.Model):
         string="Requested Date", required=True, related="requisition_id.schedule_date"
     )
     qty_proposed = fields.Float(
-        string="Proposed Quantity",
+        string="Proposed Qty",
         digits="Product Unit of Measure",
         default=lambda self: self.product_qty,
     )
     qty_planned = fields.Float(
-        string="Planned Quantity",
+        string="Planned Qty",
         digits="Product Unit of Measure",
         default=lambda self: self.product_qty,
     )
@@ -83,6 +84,17 @@ class PurchaseRequisitionProposal(models.Model):
             "purchase.requisition.proposal"
         )
         return super().create(vals)
+
+    @api.constrains("qty_planned")
+    def _check_company_id_date_range_id(self):
+        for rec in self:
+            if rec.qty_planned > rec.qty_proposed:
+                raise ValidationError(
+                    _(
+                        "Selected Quantity can not be superior than "
+                        "Proposed Quantity."
+                    )
+                )
 
     def duplicate_line(self):
         self.create(

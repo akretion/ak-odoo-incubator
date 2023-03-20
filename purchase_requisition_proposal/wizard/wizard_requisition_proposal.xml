@@ -16,15 +16,26 @@
                         <tree create="false" delete="false" editable="bottom">
                             <field name="partner_id" readonly="1" />
                             <field name="product_id" readonly="1" />
-                            <field name="price_unit" readonly="1" />
-                            <field name="product_qty" readonly="1" />
-                            <field name="product_uom_id" readonly="1" />
+                            <field name="purchase_id" invisible="1" />
+                            <field
+                                name="product_qty"
+                                readonly="1"
+                                decoration-info="1"
+                            />
+                            <field
+                                name="product_uom_id"
+                                readonly="1"
+                                decoration-info="1"
+                            />
                             <field
                                 name="qty_proposed"
-                                readonly=" context.get('received_proposal')"
+                                decoration-bf="1"
+                                readonly="context.get('received_proposal')"
+                                attrs="{'readonly':[('qty_planned', '!=', 0)]}"
                             />
                             <field
                                 name="qty_planned"
+                                decoration-danger="1"
                                 readonly="context.get('my_proposal')"
                             />
                             <field
@@ -34,10 +45,16 @@
                                 decoration-warning="qty_check == 'not_enough'"
                                 invisible="context.get('my_proposal')"
                             />
-                            <field name="schedule_date" readonly="1" />
+                            <field
+                                name="schedule_date"
+                                readonly="1"
+                                decoration-info="1"
+                            />
                             <field
                                 name="date_planned"
-                                readonly=" context.get('received_proposal')"
+                                decoration-bf="1"
+                                readonly="context.get('received_proposal')"
+                                attrs="{'readonly':[('qty_planned', '!=', 0)]}"
                             />
                             <field
                                 name="date_check"
@@ -46,6 +63,7 @@
                                 decoration-warning="date_check == 'not_respected'"
                                 invisible="context.get('my_proposal')"
                             />
+                            <field name="price_unit" readonly="1" decoration-info="1" />
                         </tree>
                     </field>
                 </group>
@@ -68,9 +86,19 @@
         <field name="priority">1000</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <xpath expr="//tree/field[@name='date_check']" position="after">
-                <button string="Duplicate" name="duplicate_line" type="object" />
-                <button string="Remove" name="remove_line" type="object" />
+            <xpath expr="//tree/field[@name='price_unit']" position="after">
+                <button
+                    string="Duplicate"
+                    name="duplicate_line"
+                    type="object"
+                    attrs="{'invisible':[('qty_planned', '!=', 0)]}"
+                />
+                <button
+                    string="Remove"
+                    name="remove_line"
+                    type="object"
+                    attrs="{'invisible':[('qty_planned', '!=', 0)]}"
+                />
             </xpath>
         </field>
     </record>

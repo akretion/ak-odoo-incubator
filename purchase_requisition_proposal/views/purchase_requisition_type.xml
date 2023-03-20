@@ -28,6 +28,11 @@
                         name="proposal_template_id"
                         attrs="{'invisible':[('exclusive', '!=', 'proposals')]}"
                     />
+                    <field
+                        name="proposal_result_template_id"
+                        attrs="{'invisible':[('exclusive', '!=', 'proposals')]}"
+                    />
+
                 </group>
             </xpath>
             <xpath

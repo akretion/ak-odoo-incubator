@@ -11,6 +11,16 @@
             ref="purchase_requisition.view_purchase_requisition_form"
         />
         <field name="arch" type="xml">
+            <sheet position="before">
+                <div
+                    class="alert alert-danger alert-dismissable"
+                    role="alert"
+                    style="margin-bottom:0px;"
+                    attrs="{'invisible':[('missing_procurment_contacts','=', False)]}"
+                >
+                    <field name="missing_procurment_contacts" />
+                </div>
+            </sheet>
             <xpath expr="//field[@name='state_blanket_order']" position="attributes">
                 <attribute name="statusbar_visible">draft,open,done</attribute>
             </xpath>
@@ -42,27 +52,35 @@
             </xpath>
             <xpath expr="//header/button[@name='action_done']" position="before">
                 <button
-                    name="action_call_for_proposal_send"
-                    string="Send Mails"
-                    type="object"
-                    states="open, done"
-                    class="btn-primary"
-                />
-                <button
                     name="action_create_quotations"
                     string="Create proposal Quotations"
                     type="object"
                     states="open, done"
                     class="btn-primary"
                 />
+                <button
+                    name="action_call_for_proposal_send"
+                    string="Send Mails"
+                    type="object"
+                    states="open"
+                    class="btn-secondary"
+                />
+                <button
+                    name="action_send_result_email"
+                    string="Send closure email"
+                    type="object"
+                    states="done"
+                    class="btn-secondary"
+                />
             </xpath>
 
             <xpath expr="//field[@name='vendor_id']" position="after">
                 <field name="exclusive" invisible="1" />
+                <field name="multi_company_selection" readonly="1" />
                 <field
                     name="company_to_call_ids"
                     widget="many2many_tags"
-                    attrs="{'invisible': [('exclusive', '!=', 'proposals')]}"
+                    attrs="{'invisible': ['|', ('exclusive', '!=', 'proposals'), ('multi_company_selection','!=', 'selected')]}"
                     domain="[('id', '!=', company_id)]"
                 />
             </xpath>
@@ -77,8 +95,32 @@
                 attrs="{'required': [('is_quantity_copy', '=', 'none')], 'readonly': [('state', 'in', ['ongoing','done'])]}"
             />
 
+            <xpath expr="//tree/field[@name='qty_ordered']" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'column_invisible': [('parent.state', '!=', 'done')]}</attribute>
+                <attribute name="decoration-bf">1</attribute>
+
+            </xpath>
+
+            <xpath expr="//tree/field[@name='schedule_date']" position="attributes">
+                <attribute name="decoration-info">1</attribute>
+            </xpath>
+
+            <xpath expr="//tree/field[@name='product_qty']" position="attributes">
+                <attribute name="decoration-info">1</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='price_unit']" position="attributes">
+                <attribute name="decoration-info">1</attribute>
+            </xpath>
+
             <xpath expr="//tree/field[@name='qty_ordered']" position="before">
-                <field name="qty_planned" string="Planned Quantities" />
+                <field
+                    name="qty_planned"
+                    string="Planned Quantities"
+                    decoration-bf="1"
+                    attrs="{'column_invisible': [('parent.state', '=', 'done')]}"
+                />
             </xpath>
             <xpath expr="//tree/field[@name='qty_ordered']" position="after">
                 <field
@@ -88,19 +130,9 @@
                     decoration-warning="qty_check == 'not_enough'"
                     invisible="context.get('requisitions_from') != 'me'"
                 />
-                <field name="date_planned" string="Planned Date" />
-            </xpath>
-            <xpath expr="//tree/field[@name='price_unit']" position="after">
-                <field name="proposal_line_count" string="proposals" />
-                <button
-                    name="show_requisition_proposal_line"
-                    type="object"
-                    class="oe_stat_button"
-                    icon="fa-server"
-                >
-                </button>
             </xpath>
             <xpath expr="//tree/field[@name='schedule_date']" position="after">
+                <field name="date_planned" string="Planned Date" decoration-bf="1" />
                 <field
                     name="date_check"
                     widget="badge"
@@ -109,10 +141,22 @@
                     invisible="context.get('requisitions_from') != 'me'"
                 />
             </xpath>
+            <xpath expr="//tree/field[@name='price_unit']" position="after">
+                <field
+                    name="proposal_line_count"
+                    string="proposals"
+                    decoration-bf="1"
+                />
+                <button
+                    string="Proposals"
+                    name="show_requisition_proposal_line"
+                    type="object"
+                    attrs="{'invisible': [('proposal_line_count', '=', 0)]}"
+                    class="btn btn-info"
+                />
+            </xpath>
             <xpath expr="//tree" position="attributes">
-                <attribute
-                    name="decoration-success"
-                >qty_check == 'enough' and date_check == 'respected'</attribute>
+                <attribute name="decoration-success">qty_planned != 0</attribute>
             </xpath>
         </field>
     </record>
@@ -124,6 +168,16 @@
         <field name="priority">1000</field>
         <field name="mode">primary</field>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='missing_procurment_contacts']/parent::div" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath
+                expr="//button[@name='%(purchase_requisition.action_purchase_requisition_list)d']"
+                position="attributes"
+            >
+                <attribute name="invisible">1</attribute>
+
+            </xpath>
             <xpath expr="//form" position="attributes">
                 <attribute name="create">0</attribute>
                 <attribute name="edit">0</attribute>
@@ -151,11 +205,30 @@
             </xpath>
             <xpath
                 expr="//tree/button[@name='show_requisition_proposal_line']"
+                position="before"
+            >
+
+                <button
+                    string="Accept"
+                    name="proposal_validation"
+                    class="btn btn-success"
+                    type="object"
+                    attrs="{'invisible': [('proposal_line_count', '!=', 0)]}"
+                />
+            </xpath>
+            <xpath
+                expr="//tree/button[@name='show_requisition_proposal_line']"
                 position="after"
             >
-                <field name="is_proposal_line_validate" invisible="1" />
+                <field name="state" invisible="1"/>
 
-                <button string="Accept" name="proposal_validation" type="object" />
+                <button
+                    string="See all proposals"
+                    name="show_all_requisition_proposal_line"
+                    type="object"
+                    class="btn btn-link"
+                    attrs="{'invisible': [('state', '!=', 'done')]}"
+                />
             </xpath>
         </field>
     </record>
