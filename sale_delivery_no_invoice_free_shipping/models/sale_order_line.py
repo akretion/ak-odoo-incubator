@@ -6,23 +6,36 @@ from odoo import api, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    @api.depends("price_unit")
+    def _is_invoiced_free_delivery(self):
+        self.ensure_one()
+        if (
+            self.order_id.state in ("sale", "done")
+            and self.is_delivery
+            and not self.price_unit
+        ):
+            return True
+        return False
+
+    @api.depends("price_unit", "order_id.state")
     def _compute_invoice_status(self):
-        super()._compute_invoice_status()
+        res = super()._compute_invoice_status()
         for line in self:
-            if line.is_delivery and not line.price_unit:
+            if line._is_invoiced_free_delivery():
                 line.invoice_status = "invoiced"
+        return res
 
-    @api.depends("price_unit")
-    def _get_to_invoice_qty(self):
-        super()._get_to_invoice_qty()
+    @api.depends("price_unit", "order_id.state")
+    def _compute_qty_to_invoice(self):
+        res = super()._compute_qty_to_invoice()
         for line in self:
-            if line.is_delivery and not line.price_unit:
+            if line._is_invoiced_free_delivery():
                 line.qty_to_invoice = 0
+        return res
 
-    @api.depends("price_unit")
-    def _get_invoice_qty(self):
-        super()._get_invoice_qty()
+    @api.depends("price_unit", "order_id.state")
+    def _compute_qty_invoiced(self):
+        res = super()._compute_qty_invoiced()
         for line in self:
-            if line.is_delivery and not line.price_unit:
+            if line._is_invoiced_free_delivery():
                 line.qty_invoiced = line.product_uom_qty
+        return res

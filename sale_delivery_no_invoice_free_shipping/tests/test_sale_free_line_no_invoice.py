@@ -1,16 +1,16 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import Form, SavepointCase
+from odoo.tests.common import Form, TransactionCase
 
 
-class TestSaleNoInvoicingFreeLine(SavepointCase):
+class TestSaleNoInvoicingFreeLine(TransactionCase):
     def test_sale_free_line_no_invoice(self):
         sale = self.env.ref("sale.sale_order_3")
         # add free shipping free
         free_carrier = self.env.ref("delivery.free_delivery_carrier")
         wizard_ctx = sale.action_open_delivery_wizard()["context"]
         delivery_wizard = Form(
-            self.env["choose.delivery.carrier"].with_context(wizard_ctx)
+            self.env["choose.delivery.carrier"].with_context(**wizard_ctx)
         )
         delivery_wizard.carrier_id = free_carrier
         delivery_wizard = delivery_wizard.save()
@@ -29,7 +29,7 @@ class TestSaleNoInvoicingFreeLine(SavepointCase):
         }
         payment = (
             self.env["sale.advance.payment.inv"]
-            .with_context(context)
+            .with_context(**context)
             .create({"advance_payment_method": "delivered"})
         )
         payment.create_invoices()
