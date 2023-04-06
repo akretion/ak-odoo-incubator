@@ -12,16 +12,20 @@
         <field name="arch" type="xml">
             <div name="barcode_setting_container" position="inside">
                 <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_name">
-                    <label for="zebra_printer_name" />
-                    <field name="zebra_printer_name"/>
+                    <label for="printer_host" />
+                    <field name="printer_host"/>
                 </div>
-                <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_host">
-                    <label for="zebra_printer_host" />
-                    <field name="zebra_printer_host" widget="url"/>
+                <div class="col-12 col-lg-6 o_setting_box" id="product_label_printer_name">
+                    <label for="product_label_printer_name" />
+                    <field name="product_label_printer_name"/>
                 </div>
-                <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_port">
-                    <label for="zebra_printer_port" />
-                    <field name="zebra_printer_port"/>
+                <div class="col-12 col-lg-6 o_setting_box" id="shipping_label_printer_name">
+                    <label for="shipping_label_printer_name" />
+                    <field name="shipping_label_printer_name" />
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="a4_printer_name">
+                    <label for="a4_printer_name" />
+                    <field name="a4_printer_name"/>
                 </div>
             </div>
         </field>

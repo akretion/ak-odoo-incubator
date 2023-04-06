@@ -10,14 +10,14 @@ from odoo.exceptions import ValidationError
 class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
-    zebra_printer_host = fields.Char(
-        string="Printer host url",
-        help="The Url of the printer onto which the barcode will be printer",
-        default="https://localhost",
+    printer_host = fields.Char(
+        string="Printers host url",
+        help="The Url of the printer server",
+        default="https://localhost:443",
         config_parameter="label_printer_poc.zebra_printer_host"
     )
 
-    @api.constrains('zebra_printer_host')
+    @api.constrains('printer_host')
     def _host_validation(self):
         for record in self:
             regex = re.compile(
@@ -30,16 +30,20 @@ class ResConfigSettings(models.TransientModel):
             if (regex.match(record.zebra_printer_host) is None):
                 raise ValidationError('Barcode: Printer host url Must be a valid url')
 
-
-    zebra_printer_port = fields.Integer(
-        string="Printer host port",
-        help="The port of the printer onto which the barcode will be printer",
-        default="443",
-        config_parameter="label_printer_poc.zebra_printer_port"
-    )
-
-    zebra_printer_name = fields.Char(
-        string="Printer name",
-        help="The name of the printer onto which the barcode will be printer",
+    product_label_printer_name = fields.Char(
+        string="Product label printer name",
+        help="The name of the printer onto which the product label will be printed",
         default="zebra_large",
+        config_parameter="label_printer_poc.zebra_printer_name")
+
+    shipping_label_printer_name = fields.Char(
+        string="Shipping label printer name",
+        help="The name of the printer onto which the shipping label will be printed",
+        default="zebra_large",
+        config_parameter="label_printer_poc.zebra_printer_name")
+
+    a4_printer_name = fields.Char(
+        string="Printer name",
+        help="The name of the printer onto which a4 document will be printed",
+        default="printer",
         config_parameter="label_printer_poc.zebra_printer_name")
