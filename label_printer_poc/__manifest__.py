@@ -16,6 +16,7 @@ Toutes les dépendences du projet""",
     ],
     'data': [
         'views/stock_picking.xml',
+        'views/res_config_settings.xml',
     ],
     'installable': True,
     'application': False,

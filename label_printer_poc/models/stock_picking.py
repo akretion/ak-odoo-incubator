@@ -7,10 +7,6 @@ from odoo import exceptions, fields, models
 
 _logger = logging.getLogger(__name__)
 
-# Put this in generic module with printer model so we configure it??? Worth it?
-LABEL_ZEBRA_PRINTER = "zebra_large"
-A4_PRINTER = "HP_LaserJet_400_M401d"
-
 # Use the generate_label from label2print.py in label_wizard then attach the Labels
 # to the stock.picking
 
@@ -52,18 +48,28 @@ class StockPicking(models.Model):
             }
         )
 
-    def create_print_label_action_list(self, printer_name, labels):
+    def create_print_label_action_list(self, host, printer_name, labels):
         action_list = []
         for label in labels:
             action_list.append(
                 self.get_print_data_action(
-                    label.datas, printer_name=printer_name, raw=True
+                    label.datas, printer_name=printer_name, raw=True, host=host
                 )
             )
         return self.send_proxy(action_list)
 
     def print_shipping_label(self):
         self.ensure_one()
+        zebra_printer_host = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.zebra_printer_host")
+        )
+        zebra_printer_name = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.zebra_printer_name")
+        )
         labels = self.env["shipping.label"].search(
             [
                 ("res_model", "=", "stock.picking"),
@@ -81,4 +87,7 @@ class StockPicking(models.Model):
             if not labels:
                 raise exceptions.UserError("No label found")
 
-        return self.create_print_label_action_list(LABEL_ZEBRA_PRINTER, labels)
+        return self.create_print_label_action_list(
+            zebra_printer_host, zebra_printer_name, labels
+        )
+
