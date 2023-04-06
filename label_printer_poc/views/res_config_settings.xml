@@ -11,13 +11,17 @@
         <field name="inherit_id" ref="stock.res_config_settings_view_form" />
         <field name="arch" type="xml">
             <div name="barcode_setting_container" position="inside">
-                <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_host">
-                    <label for="zebra_printer_host" />
-                    <field name="zebra_printer_host"/>
-                </div>
                 <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_name">
                     <label for="zebra_printer_name" />
                     <field name="zebra_printer_name"/>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_host">
+                    <label for="zebra_printer_host" />
+                    <field name="zebra_printer_host" widget="url"/>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_port">
+                    <label for="zebra_printer_port" />
+                    <field name="zebra_printer_port"/>
                 </div>
             </div>
         </field>

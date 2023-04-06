@@ -70,6 +70,11 @@ class StockPicking(models.Model):
             .sudo()
             .get_param("label_printer_poc.zebra_printer_name")
         )
+        zebra_printer_port = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.zebra_printer_port")
+        )
         labels = self.env["shipping.label"].search(
             [
                 ("res_model", "=", "stock.picking"),
@@ -88,6 +93,6 @@ class StockPicking(models.Model):
                 raise exceptions.UserError("No label found")
 
         return self.create_print_label_action_list(
-            zebra_printer_host, zebra_printer_name, labels
+                "{}:{}".format(zebra_printer_host, zebra_printer_port), zebra_printer_name, labels
         )
 
