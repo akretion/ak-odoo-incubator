@@ -74,6 +74,21 @@ class LabelFromRecord(models.TransientModel):
         return "\n".join(infos)
 
     def generate_label(self):
+        zebra_printer_host = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.zebra_printer_host")
+        )
+        zebra_printer_name = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.zebra_printer_name")
+        )
+        zebra_printer_port = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.zebra_printer_port")
+        )
         for rec in self:
             if rec.content:
                 printed_product_list = []
@@ -103,7 +118,11 @@ class LabelFromRecord(models.TransientModel):
                     )
                     action_list = [
                         self.get_print_data_action(
-                            data, copies=quantity, printer_name="zebra_large", raw=True
+                            data,
+                            copies=quantity,
+                            printer_name=zebra_printer_name,
+                            raw=True,
+                            host="{}:{}".format(zebra_printer_host, zebra_printer_port),
                         )
                         for data, quantity in zebra_print_data
                     ]
