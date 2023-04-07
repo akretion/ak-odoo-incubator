@@ -6,7 +6,6 @@
         <field name="arch" type="xml">
             <button name="do_print_picking" position="before">
                 <button name="print_shipping_label" string="Print shipping label" type="object"/>
-                <button name="create_shipping_label" string="Create shipping label" type="object"/>
                 <button name="print_product_label" string="Print product label" type="object"/>
             </button>
         </field>

@@ -27,27 +27,6 @@ class StockPicking(models.Model):
             "context": {"active_model": "stock.picking", "active_id": self.id}
         }
 
-    def create_shipping_label(self):
-        self.ensure_one()
-        attachment = self.env["ir.attachment"].search(
-            [
-                ("res_id", "=", self.id),
-                ("res_model", "=", "stock.picking"),
-                ("company_id", "=", self.company_id.id),
-            ],
-            order="create_date desc",
-            limit=1,
-        )
-        self.env["shipping.label"].create(
-            {
-                "name": self.name + "label",
-                "res_id": self.id,
-                "res_model": "stock.picking",
-                "datas": attachment.raw,
-                "file_type": "pdf",
-            }
-        )
-
     def create_print_label_action_list(self, host, printer_name, labels):
         action_list = []
         for label in labels:
