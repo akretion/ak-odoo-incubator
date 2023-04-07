@@ -14,7 +14,7 @@ class ResConfigSettings(models.TransientModel):
         string="Printers host url",
         help="The Url of the printer server",
         default="https://localhost:443",
-        config_parameter="label_printer_poc.zebra_printer_host"
+        config_parameter="label_printer_poc.printer_host"
     )
 
     @api.constrains('printer_host')
