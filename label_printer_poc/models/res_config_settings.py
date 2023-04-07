@@ -27,23 +27,23 @@ class ResConfigSettings(models.TransientModel):
                     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
                     r'(?::\d+)?' # optional port
                     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-            if (regex.match(record.zebra_printer_host) is None):
+            if (regex.match(record.printer_host) is None):
                 raise ValidationError('Barcode: Printer host url Must be a valid url')
 
     product_label_printer_name = fields.Char(
         string="Product label printer name",
         help="The name of the printer onto which the product label will be printed",
         default="zebra_large",
-        config_parameter="label_printer_poc.zebra_printer_name")
+        config_parameter="label_printer_poc.product_label_printer_name")
 
     shipping_label_printer_name = fields.Char(
         string="Shipping label printer name",
         help="The name of the printer onto which the shipping label will be printed",
         default="zebra_large",
-        config_parameter="label_printer_poc.zebra_printer_name")
+        config_parameter="label_printer_poc.shipping_label_printer_name")
 
     a4_printer_name = fields.Char(
-        string="Printer name",
+        string="A4 printer name",
         help="The name of the printer onto which a4 document will be printed",
         default="printer",
-        config_parameter="label_printer_poc.zebra_printer_name")
+        config_parameter="label_printer_poc.a4_printer_name")

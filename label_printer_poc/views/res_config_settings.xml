@@ -10,22 +10,25 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="stock.res_config_settings_view_form" />
         <field name="arch" type="xml">
-            <div name="barcode_setting_container" position="inside">
-                <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_name">
-                    <label for="printer_host" />
-                    <field name="printer_host"/>
-                </div>
-                <div class="col-12 col-lg-6 o_setting_box" id="product_label_printer_name">
-                    <label for="product_label_printer_name" />
-                    <field name="product_label_printer_name"/>
-                </div>
-                <div class="col-12 col-lg-6 o_setting_box" id="shipping_label_printer_name">
-                    <label for="shipping_label_printer_name" />
-                    <field name="shipping_label_printer_name" />
-                </div>
-                <div class="col-12 col-lg-6 o_setting_box" id="a4_printer_name">
-                    <label for="a4_printer_name" />
-                    <field name="a4_printer_name"/>
+            <div name="barcode_setting_container" position="after">
+                <h2>Printers</h2>
+                <div class="row mt16 o_settings_container" name="barcode_setting_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="zebra_printer_name">
+                        <label for="printer_host" />
+                        <field name="printer_host"/>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="product_label_printer_name">
+                        <label for="product_label_printer_name" />
+                        <field name="product_label_printer_name"/>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="shipping_label_printer_name">
+                        <label for="shipping_label_printer_name" />
+                        <field name="shipping_label_printer_name" />
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="a4_printer_name">
+                        <label for="a4_printer_name" />
+                        <field name="a4_printer_name"/>
+                    </div>
                 </div>
             </div>
         </field>
