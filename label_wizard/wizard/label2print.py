@@ -115,7 +115,7 @@ class LabelFromRecord(models.TransientModel):
                         self.get_print_data_action(
                             data,
                             copies=quantity,
-                            printer_name=zebra_printer_name,
+                            printer_name=printer_name,
                             raw=True,
                             host=printer_host,
                         )
