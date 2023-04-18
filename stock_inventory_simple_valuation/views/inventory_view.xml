@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="stock_inventory_line_tree_valuation">
+        <field name="model">stock.inventory.line</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="stock.stock_inventory_line_tree" />
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="js_class" />
+                <attribute name="create">0</attribute>
+            </tree>
+            <xpath expr="//tree/field[@name='product_qty']" position="after">
+                <field name="calc_product_cost" />
+                <field name="manual_product_cost" />
+                <field name="total_value" />
+                <field name="explanation" />
+                <field name="origin_record_name" />
+                <field name="origin_record_reference" optional="hide" />
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_inventory_form">
+        <field name="model">stock.inventory</field>
+        <field name="inherit_id" ref="stock.view_inventory_form" />
+        <field name="arch" type="xml">
+            <div class="oe_button_box" name="button_box">
+                <button
+                    string="Inventory Line Valuation"
+                    type="object"
+                    name="action_open_inventory_lines"
+                    class="oe_stat_button"
+                    icon="fa-eye"
+                    context="{'no_reference': True, 'valuation': True}"
+                />
+            </div>
+        </field>
+    </record>
+
+    <record
+        id="model_stock_inventory_line_action_compute_product_cost"
+        model="ir.actions.server"
+    >
+        <field name="name">Recompute valuation</field>
+        <field name="model_id" ref="model_stock_inventory_line" />
+        <field name="binding_model_id" ref="model_stock_inventory_line" />
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = records.sudo()._refresh_product_cost()
+        </field>
+    </record>
+
+</odoo>

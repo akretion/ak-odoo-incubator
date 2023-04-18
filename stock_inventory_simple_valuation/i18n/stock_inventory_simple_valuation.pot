@@ -1,0 +1,230 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* stock_inventory_simple_valuation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__calc_product_cost
+msgid "Computed cost"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__display_name
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__origin_record_name
+msgid "Document Name"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory_line__explanation
+msgid "Explain computation method for each product"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_channel_ids
+msgid "Followers (Channels)"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__id
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__id
+msgid "ID"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_needaction
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_unread
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_has_error
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model,name:stock_inventory_simple_valuation.model_stock_inventory
+msgid "Inventory"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model,name:stock_inventory_simple_valuation.model_stock_inventory_line
+msgid "Inventory Line"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model_terms:ir.ui.view,arch_db:stock_inventory_simple_valuation.view_inventory_form
+msgid "Inventory Line Valuation"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, python-format
+msgid "Invoice"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory____last_update
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__manual_product_cost
+msgid "Manual cost"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, python-format
+msgid "Manual setting"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, python-format
+msgid "No Cost found"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_unread_counter
+msgid "Number of unread messages"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, python-format
+msgid "Purchase Order"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.actions.server,name:stock_inventory_simple_valuation.model_stock_inventory_line_action_compute_product_cost
+msgid "Recompute valuation"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__origin_record_reference
+msgid "Reference"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__explanation
+msgid "Source"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, python-format
+msgid "Standard price"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, python-format
+msgid "Supplier info"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_unread
+msgid "Unread Messages"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__total_value
+msgid "Value"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__website_message_ids
+msgid "Website communication history"
+msgstr ""
