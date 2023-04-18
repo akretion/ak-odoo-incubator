@@ -29,6 +29,7 @@ msgid "Computed cost"
 msgstr ""
 
 #. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template__display_name
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__display_name
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__display_name
 msgid "Display Name"
@@ -60,6 +61,19 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_product__force_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template__force_valuation
+msgid "Force Inventory Valuation"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, python-format
+msgid "Force product valuation"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template__id
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__id
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__id
 msgid "ID"
@@ -104,6 +118,7 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template____last_update
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory____last_update
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line____last_update
 msgid "Last Modified on"
@@ -164,6 +179,11 @@ msgstr ""
 #. module: stock_inventory_simple_valuation
 #: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_unread_counter
 msgid "Number of unread messages"
+msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model,name:stock_inventory_simple_valuation.model_product_template
+msgid "Product Template"
 msgstr ""
 
 #. module: stock_inventory_simple_valuation

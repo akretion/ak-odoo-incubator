@@ -33,6 +33,7 @@ msgid "Computed cost"
 msgstr "Coût calculé"
 
 #. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template__display_name
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__display_name
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__display_name
 msgid "Display Name"
@@ -64,6 +65,20 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_product__force_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template__force_valuation
+#, fuzzy
+msgid "Force Inventory Valuation"
+msgstr "Forcer la valorisation d'inventaire"
+
+#. module: stock_inventory_simple_valuation
+#: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
+#, fuzzy, python-format
+msgid "Force product valuation"
+msgstr "Forcé par le produit"
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template__id
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory__id
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line__id
 msgid "ID"
@@ -109,6 +124,7 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: stock_inventory_simple_valuation
+#: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_product_template____last_update
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory____last_update
 #: model:ir.model.fields,field_description:stock_inventory_simple_valuation.field_stock_inventory_line____last_update
 msgid "Last Modified on"
@@ -170,6 +186,12 @@ msgstr ""
 #: model:ir.model.fields,help:stock_inventory_simple_valuation.field_stock_inventory__message_unread_counter
 msgid "Number of unread messages"
 msgstr ""
+
+#. module: stock_inventory_simple_valuation
+#: model:ir.model,name:stock_inventory_simple_valuation.model_product_template
+#, fuzzy
+msgid "Product Template"
+msgstr "Article"
 
 #. module: stock_inventory_simple_valuation
 #: code:addons/stock_inventory_simple_valuation/models/inventory.py:0
@@ -251,9 +273,6 @@ msgstr ""
 
 #~ msgid "Print Simple Valuation to Excel"
 #~ msgstr "Imprimer inventaire valorisé"
-
-#~ msgid "Product"
-#~ msgstr "Article"
 
 #~ msgid "Quantity"
 #~ msgstr "Quantité"
