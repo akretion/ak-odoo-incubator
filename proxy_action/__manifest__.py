@@ -13,7 +13,7 @@
     "data": ["security/ir.model.access.csv"],
     "assets": {
         "web.assets_backend": [
-            "proxy_action/static/src/js/proxy_view.js",
+            "proxy_action/static/src/js/proxy_view.esm.js",
         ],
     },
     "installable": True,
