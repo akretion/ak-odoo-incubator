@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class IrModuleModule(models.Model):
@@ -15,6 +15,7 @@ class IrModuleModule(models.Model):
         store=True,
     )
 
+    @api.depends("python_code_qty", "xml_code_qty", "js_code_qty")
     def _compute_code_qty(self):
         for record in self:
             record.code_qty = (
