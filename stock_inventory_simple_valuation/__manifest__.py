@@ -10,6 +10,9 @@
     "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "depends": ["stock", "account", "purchase"],
-    "data": ["views/inventory_view.xml"],
+    "data": [
+        "views/inventory_view.xml",
+        "views/product_template_view.xml",
+    ],
     "maintainers": ["bealdav", "PierrickBrun", "mourad-ehm", "kevinkhao"],
 }

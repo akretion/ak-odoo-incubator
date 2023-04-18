@@ -89,6 +89,7 @@ class StockInventoryLine(models.Model):
         found"""
         return [
             ("_search_cost_manual", _("Manual setting")),
+            ("_search_cost_force_valuation", _("Force product valuation")),
             ("_search_cost_invoice_lines", _("Invoice")),
             ("_search_cost_supplierinfo", _("Supplier info")),
             ("_search_cost_po_lines", _("Purchase Order")),
@@ -98,6 +99,10 @@ class StockInventoryLine(models.Model):
     def _search_cost_manual(self):
         if self.manual_product_cost:
             return (self.manual_product_cost, None)
+
+    def _search_cost_force_valuation(self):
+        if self.product_id.force_valuation:
+            return (self.product_id.force_valuation, None)
 
     def _search_cost_supplierinfo(self):
         sup_info = self.product_id._select_seller(quantity=self.product_qty or 1)

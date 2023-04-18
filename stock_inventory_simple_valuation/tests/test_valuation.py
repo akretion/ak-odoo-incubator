@@ -44,9 +44,18 @@ class TestStockInventoryValuation(TransactionCase):
     def test_manual_cost(self):
         new_manual_cost = 1.11
         self.large_cabinet_inventory_line.manual_product_cost = new_manual_cost
-        self.inventory.button_compute_line_costs()
+        self.inventory.line_ids._refresh_product_cost()
         self.assertEqual(
             new_manual_cost,
+            self.large_cabinet_inventory_line.calc_product_cost,
+        )
+
+    def test_force_valuation_cost(self):
+        force_valuation = 1.33
+        self.large_cabinet_inventory_line.product_id.force_valuation = force_valuation
+        self.inventory.line_ids._refresh_product_cost()
+        self.assertEqual(
+            force_valuation,
             self.large_cabinet_inventory_line.calc_product_cost,
         )
 
@@ -54,7 +63,7 @@ class TestStockInventoryValuation(TransactionCase):
         new_supplierinfo_price = 3.33
         for supplierinfo in self.large_cabinet.seller_ids:
             supplierinfo.price = new_supplierinfo_price
-        self.inventory.button_compute_line_costs()
+        self.inventory.line_ids._refresh_product_cost()
         self.assertEqual(
             new_supplierinfo_price,
             self.large_cabinet_inventory_line.calc_product_cost,
@@ -85,7 +94,7 @@ class TestStockInventoryValuation(TransactionCase):
 
         invoice_with_cabinet = self.env["account.move"].create(invoice_vals)
         invoice_with_cabinet.action_post()
-        self.inventory.button_compute_line_costs()
+        self.inventory.line_ids._refresh_product_cost()
         self.assertEqual(
             invoice_with_cabinet.invoice_line_ids[0].price_unit,
             self.large_cabinet_inventory_line.calc_product_cost,
@@ -98,7 +107,7 @@ class TestStockInventoryValuation(TransactionCase):
         # purchase/models/purchase.py l 324: confirming a PO
         # generates a supplierinfo if there are less than 10
         self._clearUp(["supplierinfo"])
-        self.inventory.button_compute_line_costs()
+        self.inventory.line_ids._refresh_product_cost()
         self.assertEqual(
             self.large_cabinet_po_line.price_unit,
             self.large_cabinet_inventory_line.calc_product_cost,
@@ -107,7 +116,7 @@ class TestStockInventoryValuation(TransactionCase):
     def test_search_standard_price(self):
         self._clearUp(["supplierinfo", "po", "invoice"])
         self.large_cabinet.standard_price = 8.88
-        self.inventory.button_compute_line_costs()
+        self.inventory.line_ids._refresh_product_cost()
         self.assertEqual(
             self.large_cabinet.standard_price,
             self.large_cabinet_inventory_line.calc_product_cost,
@@ -115,8 +124,6 @@ class TestStockInventoryValuation(TransactionCase):
 
     def test_give_up(self):
         self._clearUp(["supplierinfo", "po", "standard price", "invoice"])
-        self.inventory.button_compute_line_costs()
+        self.inventory.line_ids._refresh_product_cost()
         self.assertEqual(0.0, self.large_cabinet_inventory_line.calc_product_cost)
-        self.assertEqual(
-            "n/a", self.large_cabinet_inventory_line.origin_record_reference
-        )
+        self.assertFalse(self.large_cabinet_inventory_line.origin_record_reference)
