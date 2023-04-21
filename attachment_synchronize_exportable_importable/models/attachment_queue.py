@@ -9,10 +9,10 @@ from odoo import models
 class AttachmentQueue(models.Model):
     _inherit = "attachment.queue"
 
-    def track_model_import(self, mode, recs):
+    def track_model_import(self, recs):
         recs.write(
             {
-                "import_date": {mode: datetime.datetime.now()},
-                "import_file_ids": {mode: self.id},
+                "import_date": datetime.datetime.now(),
+                "import_file_id": self.id,
             }
         )

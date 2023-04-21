@@ -10,7 +10,7 @@ class AttachmentSynchronizeTask(models.Model):
     def _send_to_backend(self, file, filename, mode):
         return getattr(self, "_send_to_backend_{}".format(mode))(file, filename, mode)
 
-    def scheduler_export(self, model, mode):
-        recs = self.env[model].search([("export_flag", "ilike", "{}:".format(mode))])
-        file, filename = recs.synchronize_export(mode)
+    def scheduler_export(self, model):
+        recs = self.env[model].search([("export_flag", "=", True)])
+        file, filename = recs.synchronize_export()
         self._send_to_backend(file, filename, mode)
