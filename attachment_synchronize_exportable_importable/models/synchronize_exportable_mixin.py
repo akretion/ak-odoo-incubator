@@ -21,7 +21,7 @@ class SynchronizeExportableMixin(models.AbstractModel):
 
     def write(self, vals):
         fields_changed = list(vals.keys())
-        for mode, field_trigger in self.sync_fields:
+        for field_trigger in self.sync_fields:
             if field_trigger in fields_changed:
                 self.export_flag = True
         return super().write(vals)
@@ -44,21 +44,27 @@ class SynchronizeExportableMixin(models.AbstractModel):
     def synchronize_export(self, **kwargs):
         data = self._prepare_export_data(**kwargs)
         attachment = self._format_to_exportfile(data, **kwargs)
-        self._postprocess_export(data, attachment **kwargs)
+        self._postprocess_export(data, attachment, **kwargs)
         self.track_export_date()
         self.track_export_attachment(attachment)
         self.unset_flag_export()
         return attachment
 
-    def _prepare_export_data(self, mode=False, **kwargs) -> dict:
+    def _prepare_export_data(self, mode=False, **kwargs) -> list:
         try:
             fn = getattr(self, "_prepare_export_data_" + mode)(**kwargs)
         except AttributeError:
-            data = {}
-            self._map_data_simple(data)
-            self._map_data_process(data)
-            return data
+            return self._default_prepare_export_data()
         return fn(**kwargs)
+
+    def _default_prepare_export_data(self):
+        res = []
+        for rec in self:
+            data = {}
+            rec._map_data_simple(data)
+            rec._map_data_process(data)
+            res.append(data)
+        return res
 
     def _format_to_exportfile(self, data, fmt=False, **kwargs):
         try:
