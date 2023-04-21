@@ -42,43 +42,56 @@ class SynchronizeExportableMixin(models.AbstractModel):
         self.export_flag = False
 
     def synchronize_export(self, **kwargs):
-        data = self._prepare_export_data(**kwargs)
-        attachment = self._format_to_exportfile(data, **kwargs)
-        self._postprocess_export(data, attachment, **kwargs)
+        if kwargs.get("export_flow"):
+            self = self.with_context(export_flow=kwargs["export_flow"])
+        data = self._prepare_export_data()
+        attachment = self._format_to_exportfile(data)
+        self._postprocess_export(data, attachment)
         self.track_export_date()
         self.track_export_attachment(attachment)
         self.unset_flag_export()
         return attachment
 
-    def _prepare_export_data(self, mode=False, **kwargs) -> list:
+    def _prepare_export_data(self) -> list:
         try:
-            fn = getattr(self, "_prepare_export_data_" + mode)(**kwargs)
+            fn = getattr(
+                self,
+                "_prepare_export_data_{}".format(str(self.env.context.get("flow"))),
+            )
         except AttributeError:
-            return self._default_prepare_export_data()
-        return fn(**kwargs)
+            res = []
+            for rec in self:
+                data = rec._export_map_fields()
+                res += data
+            return res
+        return fn()
 
     def _default_prepare_export_data(self):
         res = []
         for rec in self:
-            data = {}
-            rec._map_data_simple(data)
-            rec._map_data_process(data)
-            res.append(data)
+            data = rec._export_map_fields()
+            res += data
         return res
 
-    def _format_to_exportfile(self, data, fmt=False, **kwargs):
+    def _export_map_fields(self):
+        res = {}
+        res.update(self._map_data_simple())
+        res.update(self._map_data_process())
+        return [res]
+
+    def _format_to_exportfile(self, data, fmt=False):
         try:
-            fn = getattr(self, "_format_to_exportfile_" + fmt)(data, **kwargs)
+            fn = getattr(self, "_format_to_exportfile_" + fmt)(data)
         except AttributeError:
             return format_export_to_csv(data)
-        return fn(data, **kwargs)
+        return fn(data)
 
-    def _postprocess_export(self, data, file, filename, fname=False, **kwargs):
+    def _postprocess_export(self, data, file, filename, fname=False):
         try:
             fn = getattr(self, "_postprocess_export_" + fname)
         except AttributeError:
             return
-        return fn(data, file, filename, **kwargs)
+        return fn(data, file, filename)
 
     # Helpers for _prepare_export_data
 
@@ -88,12 +101,16 @@ class SynchronizeExportableMixin(models.AbstractModel):
 
     @property
     def fields_map_process(self):
-        return []
+        return {}
 
-    def _map_data_simple(self, data: dict):
-        for field_file, field_odoo in self.fields_map_simple:
-            data[field_file] = self[field_odoo]
+    def _map_data_simple(self):
+        res = {}
+        for field_file, field_odoo in self.fields_map_simple():
+            res[field_file] = self[field_odoo]
+        return res
 
-    def _map_data_process(self, data: dict):
-        for field, fn in self.fields_map_process:
-            data[field] = getattr(self, fn)()
+    def _map_data_process(self):
+        res = {}
+        for field, fn in self.fields_map_process().items():
+            res[field] = getattr(self, fn)()
+        return res

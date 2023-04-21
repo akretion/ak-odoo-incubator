@@ -7,10 +7,19 @@ from odoo import models
 class AttachmentSynchronizeTask(models.Model):
     _inherit = "attachment.synchronize.task"
 
-    def _send_to_backend(self, file, filename, mode):
-        return getattr(self, "_send_to_backend_{}".format(mode))(file, filename, mode)
+    def _send_to_backend(self, file, filename, flow):
+        return getattr(self, "_send_to_backend_{}".format(flow))(file, filename)
 
-    def scheduler_export(self, model):
+    def scheduler_export_flagged(self, model):
         recs = self.env[model].search([("export_flag", "=", True)])
         file, filename = recs.synchronize_export()
-        self._send_to_backend(file, filename, mode)
+        self._send_to_backend(file, filename)
+
+    def scheduler_export(self, model, flow):
+        domain = self._get_domain_for(flow)
+        recs = self.env[model].search(domain)
+        attachment = recs.synchronize_export
+        self._send_to_backend(attachment, flow)
+
+    def _get_domain_for(self, flow):
+        return [()]
