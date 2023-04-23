@@ -1,0 +1,16 @@
+<odoo noupdate="1">
+    <record model="queue.job.channel" id="channel_default">
+        <field name="name">default</field>
+        <field name="parent_id" ref="queue_job.channel_root" />
+    </record>
+
+    <record model="queue.job.channel" id="channel_default_slow_job">
+        <field name="name">slow_job</field>
+        <field name="parent_id" ref="channel_default" />
+    </record>
+
+    <record model="queue.job.channel" id="channel_default_basic_job">
+        <field name="name">basic_job</field>
+        <field name="parent_id" ref="channel_default" />
+    </record>
+</odoo>
