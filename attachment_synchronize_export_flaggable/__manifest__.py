@@ -13,7 +13,6 @@
         "base_sparse_field",
         "attachment_synchronize",
     ],
-    "installable": False,
     "data": [],
     "demo": [],
 }

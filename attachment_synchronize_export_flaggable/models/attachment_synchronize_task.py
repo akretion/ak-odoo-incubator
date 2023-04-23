@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models
+from odoo.osv.expression import AND
 
 
 class AttachmentSynchronizeTask(models.Model):
@@ -12,14 +13,13 @@ class AttachmentSynchronizeTask(models.Model):
 
     def scheduler_export_flagged(self, model):
         recs = self.env[model].search([("export_flag", "=", True)])
-        file, filename = recs.synchronize_export()
-        self._send_to_backend(file, filename)
+        attachments = recs.synchronize_export()
+        self._send_to_backend(attachments)
 
-    def scheduler_export_flow(self, model, flow):
-        domain = self._get_domain_for(flow)
+    def scheduler_export_unexported(self, model, domain=False):
+        if not domain:
+            domain = []
+        domain = AND([("export_date", "=", False), domain])
         recs = self.env[model].search(domain)
-        attachment = recs.synchronize_export()
-        self._send_to_backend(attachment, flow)
-
-    def _get_domain_for(self, flow):
-        return [()]
+        attachments = recs.synchronize_export()
+        self._send_to_backend(attachments)
