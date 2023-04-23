@@ -5,7 +5,7 @@
 {
     "name": "Queue Job Default Channel",
     "summary": "Default channel for queue job",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "development_status": "Alpha",
     "category": "Job",
     "website": "https://github.com/akretion/ak-odoo-incubator",
