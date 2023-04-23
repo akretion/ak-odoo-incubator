@@ -44,7 +44,7 @@ class SynchronizeExportableMixin(models.AbstractModel):
     def _prepare_export_data(self) -> list:
         raise NotImplementedError
 
-    def _format_to_exportfile(self, data) -> list:
+    def _format_to_exportfile(self, data):
         return self._format_to_exportfile_csv(data)
 
     def _format_to_exportfile_csv(self, data):
