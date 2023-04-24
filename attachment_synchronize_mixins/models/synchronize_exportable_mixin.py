@@ -4,6 +4,7 @@
 import base64
 import csv
 import datetime
+import uuid
 from io import StringIO
 
 from odoo import fields, models
@@ -55,5 +56,11 @@ class SynchronizeExportableMixin(models.AbstractModel):
             writer.writerow(row)
         csv_file.seek(0)
         return self.env["attachment.queue"].create(
-            {"datas": base64.b64encode(csv_file.getvalue().encode("utf-8"))}
+            {
+                "name": self._get_export_name(),
+                "datas": base64.b64encode(csv_file.getvalue().encode("utf-8")),
+            }
         )
+
+    def _get_export_name(self):
+        return str(uuid.uuid4())

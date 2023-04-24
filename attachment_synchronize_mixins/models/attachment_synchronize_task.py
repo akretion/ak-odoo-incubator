@@ -1,6 +1,8 @@
 # Copyright 2023 Akretion
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import base64
+
 from odoo import models
 from odoo.osv.expression import AND
 
@@ -11,7 +13,7 @@ class AttachmentSynchronizeTask(models.Model):
     def scheduler_export_flagged(self, model):
         recs = self.env[model].search([("export_flag", "=", True)])
         attachments = recs.synchronize_export()
-        self._send_to_backend(attachments)
+        self.send_to_backend(attachments)
 
     def scheduler_export_unexported(self, model, domain=False):
         if not domain:
@@ -19,7 +21,7 @@ class AttachmentSynchronizeTask(models.Model):
         domain = AND([[("export_date", "=", False)], domain])
         recs = self.env[model].search(domain)
         attachments = recs.synchronize_export()
-        self._send_to_backend(attachments)
+        self.send_to_backend(attachments)
 
-    def _send_to_backend(self, attachment):
-        raise NotImplementedError
+    def send_to_backend(self, attachment):
+        self.backend_id.add(attachment.name, base64.b64decode(attachment.datas))
