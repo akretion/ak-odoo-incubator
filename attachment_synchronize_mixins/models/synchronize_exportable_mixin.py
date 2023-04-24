@@ -55,5 +55,5 @@ class SynchronizeExportableMixin(models.AbstractModel):
             writer.writerow(row)
         csv_file.seek(0)
         return self.env["attachment.queue"].create(
-            {"datas": base64.b64encode(csv_file)}
+            {"datas": base64.b64encode(csv_file.getvalue().encode("utf-8"))}
         )
