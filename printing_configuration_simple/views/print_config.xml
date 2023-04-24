@@ -1,0 +1,130 @@
+<odoo>
+
+<!--     <record id="view_company_form" model="ir.ui.view">
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[last()]" position="after">
+                <page name="printing" string="Printing">
+                    <div>
+                        Server defined here must be managed with cups. Ensure all informations here match with your own network configuration.
+                    </div>
+                    <group name="printer_server" string="Printer Server" col="4">
+                        <field name="printing_server" />
+                        <field name="printing_port" />
+                    </group>
+                    <group name="printers" string="🖨 Printers" col="1">
+                        <field name="printing_printer_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="name" required="1" />
+                                <field
+                                    name="usage"
+                                    attrs="{'readonly': [('readonly','=', True)]}"
+                                />
+                                <field
+                                    name="comment"
+                                    attrs="{'readonly': [('readonly','=', True)]}"
+                                />
+                                <field name="company_id" invisible="1" />
+                                <field name="readonly" invisible="1" />
+                            </tree>
+                        </field>
+                    </group>
+                    <group col="1">
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+ -->
+
+
+<record id="print_config_form" model="ir.ui.view">
+    <field name="model">print.config</field>
+    <field name="arch" type="xml">
+        <form>
+            <header>
+            </header>
+            <sheet>
+                <div>
+                    Server defined here must be managed with cups. Ensure all informations here match with your own network configuration.
+                </div>
+                <group name="main">
+                    <group name="left">
+                        <field name="server" />
+                        <field name="port" />
+                    </group>
+                    <group name="right">
+                        <field name="warehouse_id" />
+                        <field name="company_id" />
+                    </group>
+                </group>
+                <group name="printers" string="🖨 Printers" col="1">
+                    <field name="printing_printer_ids" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="name" required="1" />
+                            <field
+                                    name="usage"
+                                    attrs="{'readonly': [('readonly','=', True)]}"
+                                />
+                            <field
+                                    name="comment"
+                                    attrs="{'readonly': [('readonly','=', True)]}"
+                                />
+                            <field name="config_id" invisible="1" />
+                            <field name="readonly" invisible="1" />
+                        </tree>
+                    </field>
+                    <span />
+                    <field name="printing_printer_name_missing" nolabel="1" />
+                </group>
+            </sheet>
+<!--             <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="activity_ids" widget="mail_activity"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div> -->
+        </form>
+    </field>
+</record>
+
+<record id='print_config_tree' model='ir.ui.view'>
+    <field name='model'>print.config</field>
+    <field name='arch' type='xml'>
+        <tree>
+            <field name="server" />
+            <field name="port" />
+            <field name="warehouse_id" />
+            <field name="company_id" />
+        </tree>
+    </field>
+</record>
+
+<record id="print_config_search" model="ir.ui.view">
+    <field name="model">print.config</field>
+    <field name="arch" type="xml">
+        <search>
+            <filter name="server" />
+            <filter name="port" />
+            <filter name="warehouse_id" />
+            <filter name="company_id" />
+            <!-- <filter name="" string="" domain="[]" context="{'group_by' : ''}" -->/>
+        </search>
+    </field>
+</record>
+
+<record id="print_config_action" model="ir.actions.act_window">
+    <field name="name">print_config_action</field>
+    <field name="res_model">print.config</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="print_config_menu"
+        name="🖨"
+        groups="base.group_erp_manager"
+        parent="base.menu_administration"
+        action="print_config_action"
+    />
+</odoo>
