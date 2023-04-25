@@ -37,6 +37,23 @@ class StockPicking(models.Model):
             )
         return self.send_proxy(action_list)
 
+    def print_receipt_report(self):
+        self.ensure_one()
+        printer_host = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.printer_host")
+        )
+        printer_name = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("label_printer_poc.a4_printer_name")
+        )
+        report = self.env.ref('stock.action_report_picking')
+        result, _ = report.with_context(self.env.context)._render_qweb_pdf(self.id)
+        return self.send_proxy([self.get_print_data_action(result, printer_name=printer_name, host=printer_host, raw=True)])
+
+
     def print_shipping_label(self):
         self.ensure_one()
         printer_host = (
