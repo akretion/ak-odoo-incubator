@@ -17,8 +17,9 @@ class AttachmentSynchronizeTask(models.Model):
 
     def scheduler_export_unexported(self, model, domain=False):
         if not domain:
-            domain = [()]
-        domain = AND([[("export_date", "=", False)], domain])
+            domain = [("export_date", "=", False)]
+        else:
+            domain = AND([[("export_date", "=", False)], domain])
         recs = self.env[model].search(domain)
         attachments = recs.synchronize_export()
         self.send_to_backend(attachments)

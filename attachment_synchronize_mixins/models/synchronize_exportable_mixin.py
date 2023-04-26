@@ -18,12 +18,12 @@ class SynchronizeExportableMixin(models.AbstractModel):
     export_flag = fields.Boolean()
 
     @property
-    def sync_fields(self):
+    def _sync_fields(self):
         return []
 
     def write(self, vals):
         fields_changed = list(vals.keys())
-        for field_trigger in self.sync_fields:
+        for field_trigger in self._sync_fields:
             if field_trigger in fields_changed:
                 self.export_flag = True
         return super().write(vals)
