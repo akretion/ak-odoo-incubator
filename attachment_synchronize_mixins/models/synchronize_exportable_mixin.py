@@ -28,19 +28,19 @@ class SynchronizeExportableMixin(models.AbstractModel):
                 self.export_flag = True
         return super().write(vals)
 
-    def track_date_processed(self, date):
-        self.export_date_processed = date
-
-    def track_export(self, attachment):
-        self.export_date = datetime.datetime.now()
-        self.export_attachment = attachment
-
     def synchronize_export(self):
         data = self._prepare_export_data()
         attachment = self._format_to_exportfile(data)
         self.track_export(attachment)
         self.export_flag = False
         return attachment
+
+    def track_date_processed(self, date):
+        self.export_date_processed = date
+
+    def track_export(self, attachment):
+        self.export_date = datetime.datetime.now()
+        self.export_attachment = attachment
 
     def _prepare_export_data(self) -> list:
         raise NotImplementedError
