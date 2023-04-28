@@ -55,12 +55,14 @@ class SynchronizeExportableMixin(models.AbstractModel):
         for row in data:
             writer.writerow(row)
         csv_file.seek(0)
-        return self.env["attachment.queue"].create(
-            {
-                "name": self._get_export_name(),
-                "datas": base64.b64encode(csv_file.getvalue().encode("utf-8")),
-            }
-        )
+        ast = self.env.context.get("attachment_task")
+        vals = {
+            "name": self._get_export_name(),
+            "datas": base64.b64encode(csv_file.getvalue().encode("utf-8")),
+            "task_id": ast.id,
+            "file_type": ast.file_type,
+        }
+        return self.env["attachment.queue"].create(vals)
 
     def _get_export_name(self):
         return str(uuid.uuid4())

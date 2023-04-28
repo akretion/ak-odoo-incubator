@@ -12,7 +12,7 @@ class AttachmentSynchronizeTask(models.Model):
 
     def scheduler_export_flagged(self, model):
         recs = self.env[model].search([("export_flag", "=", True)])
-        attachments = recs.synchronize_export()
+        attachments = recs.with_context(attachment_task=self).synchronize_export()
         self.send_to_backend(attachments)
 
     def scheduler_export_unexported(self, model, domain=False):
@@ -21,7 +21,7 @@ class AttachmentSynchronizeTask(models.Model):
         else:
             domain = AND([[("export_date", "=", False)], domain])
         recs = self.env[model].search(domain)
-        attachments = recs.synchronize_export()
+        attachments = recs.with_context(attachment_task=self).synchronize_export()
         self.send_to_backend(attachments)
 
     def send_to_backend(self, attachment):
