@@ -50,7 +50,10 @@ class SynchronizeExportableMixin(models.AbstractModel):
 
     def _format_to_exportfile_csv(self, data):
         csv_file = StringIO()
-        writer = csv.DictWriter(csv_file, fieldnames=data[0].keys())
+        delimiter = self.env.context.get("csv_delimiter") or ";"
+        writer = csv.DictWriter(
+            csv_file, fieldnames=data[0].keys(), delimiter=delimiter
+        )
         writer.writeheader()
         for row in data:
             writer.writerow(row)
