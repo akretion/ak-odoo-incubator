@@ -14,19 +14,7 @@ class SynchronizeExportableMixin(models.AbstractModel):
     _name = "synchronize.exportable.mixin"
     export_date = fields.Date()
     export_attachment = fields.Char()
-    export_date_processed = fields.Date()
     export_flag = fields.Boolean()
-
-    @property
-    def _sync_fields(self):
-        return []
-
-    def write(self, vals):
-        fields_changed = list(vals.keys())
-        for field_trigger in self._sync_fields:
-            if field_trigger in fields_changed:
-                vals["export_flag"] = True
-        return super().write(vals)
 
     def synchronize_export(self):
         data = self._prepare_export_data()
@@ -34,9 +22,6 @@ class SynchronizeExportableMixin(models.AbstractModel):
         self.track_export(attachment)
         self.export_flag = False
         return attachment
-
-    def track_date_processed(self, date):
-        self.export_date_processed = date
 
     def track_export(self, attachment):
         self.export_date = datetime.datetime.now()
