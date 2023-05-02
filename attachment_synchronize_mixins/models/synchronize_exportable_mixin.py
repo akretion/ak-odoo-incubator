@@ -25,7 +25,7 @@ class SynchronizeExportableMixin(models.AbstractModel):
         fields_changed = list(vals.keys())
         for field_trigger in self._sync_fields:
             if field_trigger in fields_changed:
-                self.export_flag = True
+                vals["export_flag"] = True
         return super().write(vals)
 
     def synchronize_export(self):
