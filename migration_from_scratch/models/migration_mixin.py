@@ -2,12 +2,15 @@
 
 
 import collections
+import logging
 
 from psycopg2 import sql
 
 from odoo import _, exceptions, fields, models
 
 from ..sql_db import get_external_cursor
+
+_logger = logging.getLogger(__name__)
 
 # mapping dict options : old_name (renaming of field), migration_method,
 # if we need to transfort the data
@@ -26,7 +29,17 @@ class MigrationMixin(models.AbstractModel):
 
     old_odoo_id = fields.Integer("Id in previous Odoo version", index=True, copy=False)
 
+    @property
+    def mapped_fields(self):
+        default = self.mapped_fields_default()
+        default.update({"old_odoo_id": {"old_name": "id"}})
+        return default
+
+    def mapped_fields_default(self):
+        return {}
+
     def migrate_data(self, batch=0, domain=None):
+        _logger.debug("Start migration of %s", self._name)
         if domain is None:
             domain = []
         data, m2m_data, company_dep_data = self.get_old_data(domain)
@@ -39,11 +52,13 @@ class MigrationMixin(models.AbstractModel):
             new_records, updated_records = self.import_data(
                 data, m2m_data, company_dep_data
             )
+        _logger.debug("End migration of %s", self._name)
         return new_records, updated_records
 
     # Methods to get table data
 
     def get_old_data(self, domain):
+        _logger.debug("Getting old data of %s", self._name)
         old_cr = get_external_cursor()
         old_data = self._get_old_data(domain, old_cr)
         old_m2m_data = self._get_old_m2m_data(old_cr)
@@ -160,18 +175,10 @@ class MigrationMixin(models.AbstractModel):
         old_cr.close()
         return data
 
-    @property
-    def mapped_fields(self):
-        default = self.mapped_fields_default()
-        default.update({"old_odoo_id": {"old_name": "id"}})
-        return default
-
-    def mapped_fields_default(self):
-        return {}
-
     # Methods to import data
 
     def import_data(self, data, m2m_data, company_dep_data):
+        _logger.debug("Importing data of %s", self._name)
         transformed_data = self._transform_data(data, m2m_data, company_dep_data)
         new_records, updated_records = self.create_or_update_records(
             transformed_data, company_dep_data
@@ -180,6 +187,7 @@ class MigrationMixin(models.AbstractModel):
         return new_records, updated_records
 
     def _transform_data(self, data, m2m_data, company_dep_data):
+        _logger.debug("Transform data of %s", self._name)
         single_company = self._is_single_company()
         m2m_id_mapping = self._m2m_id_mapping(m2m_data)
         all_fields = self._fields
