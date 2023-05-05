@@ -2,12 +2,15 @@
 
 
 import collections
+import logging
 
 from psycopg2 import sql
 
 from odoo import _, exceptions, fields, models
 
 from ..sql_db import get_external_cursor
+
+_logger = logging.getLogger(__name__)
 
 # mapping dict options : old_name (renaming of field), migration_method,
 # if we need to transfort the data
@@ -17,7 +20,7 @@ from ..sql_db import get_external_cursor
 
 class MigrationMixin(models.AbstractModel):
     _name = "migration.mixin"
-    _description = "Mixing  to help migrate data from another odoo database"
+    _description = "Mixing to help migrate data from another odoo database"
 
     _update_allowed = True
     old_table_name = ""
@@ -26,17 +29,48 @@ class MigrationMixin(models.AbstractModel):
 
     old_odoo_id = fields.Integer("Id in previous Odoo version", index=True, copy=False)
 
-    def _is_single_company(self):
-        return len(self.env["res.company"].search([])) == 1
-
-    def mapped_fields_default(self):
-        return {}
-
     @property
     def mapped_fields(self):
         default = self.mapped_fields_default()
         default.update({"old_odoo_id": {"old_name": "id"}})
         return default
+
+    def mapped_fields_default(self):
+        return {}
+
+    def migrate_data(self, batch=0, domain=None):
+        _logger.debug("Start migration of %s", self._name)
+        if domain is None:
+            domain = []
+        data, m2m_data, company_dep_data = self.get_old_data(domain)
+        if batch:
+            for i in range(0, len(data), batch):
+                ongoing_data = data[i : i + batch]
+                new_records = updated_records = self.browse(False)
+                self.with_delay().import_data(ongoing_data, m2m_data, company_dep_data)
+        else:
+            new_records, updated_records = self.import_data(
+                data, m2m_data, company_dep_data
+            )
+        _logger.debug("End migration of %s", self._name)
+        return new_records, updated_records
+
+    # Methods to get table data
+
+    def get_old_data(self, domain):
+        _logger.debug("Getting old data of %s", self._name)
+        old_cr = get_external_cursor()
+        old_data = self._get_old_data(domain, old_cr)
+        old_m2m_data = self._get_old_m2m_data(old_cr)
+        old_company_dep_data = self._get_old_company_dep_data(old_cr)
+        old_cr.close()
+        return old_data, old_m2m_data, old_company_dep_data
+
+    def _get_old_data(self, domain, old_cr):
+        query, params = self._old_data_query(domain)
+        old_cr.execute(query, params)
+        old_data = old_cr.dictfetchall()
+        return old_data
 
     def _old_data_query(self, domain):
         select_list = []
@@ -91,12 +125,6 @@ class MigrationMixin(models.AbstractModel):
         }
         return query, where_clause_params
 
-    def _get_old_data(self, domain, old_cr):
-        query, params = self._old_data_query(domain)
-        old_cr.execute(query, params)
-        old_data = old_cr.dictfetchall()
-        return old_data
-
     def _get_old_m2m_data(self, old_cr):
         all_fields = self._fields
         old_m2m_data = {}
@@ -119,7 +147,7 @@ class MigrationMixin(models.AbstractModel):
                 model = self.old_model_name or self._name
                 old_model_size = len(model) + 2
                 query = sql.SQL(
-                    "SELECT {col1}, company_id, SUBSTRING(res_id, %s)::integer"
+                    "SELECT {col1}, company_id, SUBSTRING(res_id, %s) ::integer "
                     "FROM ir_property WHERE name = %s and res_id IS NOT NULL"
                 ).format(
                     col1=sql.Identifier(options["property_column"]),
@@ -147,144 +175,124 @@ class MigrationMixin(models.AbstractModel):
         old_cr.close()
         return data
 
-    def get_old_data(self, domain):
-        old_cr = get_external_cursor()
-        old_data = self._get_old_data(domain, old_cr)
-        old_m2m_data = self._get_old_m2m_data(old_cr)
-        old_company_dep_data = self._get_old_company_dep_data(old_cr)
-        old_cr.close()
-        return old_data, old_m2m_data, old_company_dep_data
+    # Methods to import data
 
-    def migrate_data(self, batch=0, domain=None):
-        if domain is None:
-            domain = []
-        data, m2m_data, company_dep_data = self.get_old_data(domain)
-        if batch:
-            for i in range(0, len(data), batch):
-                ongoing_data = data[i : i + batch]
-                new_records = updated_records = self.browse(False)
-                self.with_delay().import_old_data(
-                    ongoing_data, m2m_data, company_dep_data
-                )
-        else:
-            new_records, updated_records = self.import_old_data(
-                data, m2m_data, company_dep_data
-            )
-        return new_records, updated_records
-
-    def _get_m2m_id_mapping(self, m2m_data):
-        all_fields = self._fields
-        m2m_id_mapping = {}
-        for m2m_field_name, m2m_field_data in m2m_data.items():
-            m2m_field = all_fields[m2m_field_name]
-            comodel_id_mapping = self.env[m2m_field.comodel_name]._get_id_mapping()
-            m2m_id_mapping[m2m_field_name] = collections.defaultdict(list)
-            for old_id, old_comodel_id in m2m_field_data:
-                comodel_new_id = comodel_id_mapping.get(old_comodel_id, False)
-                if comodel_new_id:
-                    m2m_id_mapping[m2m_field_name][old_id].append(comodel_new_id)
-            return m2m_id_mapping
-
-    def _transform_data(self, data, m2m_data, company_dep_data):
-        single_company = self._is_single_company()
-        m2m_id_mapping = self._get_m2m_id_mapping(m2m_data)
-        all_fields = self._fields
-        # Create all m2x mapping dict (to avoid search on each row of the loop
-        m2o_id_mapping = {}
-        # company_id_mapping = self.env["res.company"]._get_id_mapping()
-        for field_name, _options in self.mapped_fields.items():
-            myfield = all_fields[field_name]
-            if myfield.type == "many2one":
-                m2o_id_mapping[field_name] = self.env[
-                    myfield.comodel_name
-                ]._get_id_mapping()
-        # loop on data to transform it with new version data
-        for record_data in data:
-            for field_name, options in self.mapped_fields.items():
-                if options.get("migration_method"):
-                    new_val = getattr(self, options["migration_method"])(
-                        record_data[field_name]
-                    )
-                    record_data[field_name] = new_val
-                myfield = all_fields[field_name]
-                if myfield.type == "many2one" and not options.get("company_dependent"):
-                    new_val = m2o_id_mapping[field_name].get(
-                        record_data[field_name], False
-                    )  # TODO manage error ? in case we got old id and not new ?
-                    record_data[field_name] = new_val
-                if myfield.type == "many2many":
-                    old_id = record_data["old_odoo_id"]
-                    new_ids = m2m_id_mapping[field_name].get(old_id, [])
-                    record_data[field_name] = [(6, 0, new_ids)]
-                if options.get("company_dependent"):
-                    old_id = record_data["old_odoo_id"]
-                    property_vals = company_dep_data[field_name].get(old_id, [])
-                    if single_company:
-                        if property_vals:
-                            old_company_id, val = property_vals[0]
-                            # company_id_mapping[old_company_id]
-                            if myfield.type == "many2one":
-                                related_model = (
-                                    self.env[myfield.comodel_name].old_model_name
-                                    or self.env[myfield.comodel_name]._name
-                                )
-                                old_m2o_id = int(val[len(related_model) + 1 :])
-                                new_val = m2o_id_mapping[field_name].get(
-                                    old_m2o_id, False
-                                )
-                            else:
-                                new_val = val
-                            record_data[field_name] = new_val
-                    else:
-                        # TODO convert old company and val (in case of m2o) to new ids
-                        # update company_dep_data accordingly
-                        pass
-        return data
-
-    def import_old_data(self, data, m2m_data, company_dep_data):
+    def import_data(self, data, m2m_data, company_dep_data):
+        _logger.debug("Importing data of %s", self._name)
         transformed_data = self._transform_data(data, m2m_data, company_dep_data)
-        new_records, updated_records = self.create_or_update_from_old_data(
+        new_records, updated_records = self.create_or_update_records(
             transformed_data, company_dep_data
         )
         self._after_import(new_records, updated_records, transformed_data)
         return new_records, updated_records
 
-    def _get_id_mapping(self):
+    def _transform_data(self, data, m2m_data, company_dep_data):
+        _logger.debug("Transform data of %s", self._name)
+        single_company = self._is_single_company()
+        m2m_id_mapping = self._m2m_id_mapping(m2m_data)
+        all_fields = self._fields
+        m2o_id_mapping = self._m2o_id_mapping(all_fields)
+        # loop on data to transform it with new version data
+        for record_data in data:
+            self._transform_single_data(
+                record_data,
+                m2o_id_mapping,
+                m2m_id_mapping,
+                company_dep_data,
+                single_company,
+                all_fields,
+            )
+        return data
+
+    def _transform_single_data(
+        self,
+        record_data,
+        m2o_id_mapping,
+        m2m_id_mapping,
+        company_dep_data,
+        single_company,
+        all_fields,
+    ):
+        for field_name, options in self.mapped_fields.items():
+            if options.get("migration_method"):
+                new_val = getattr(self, options["migration_method"])(
+                    record_data[field_name]
+                )
+                record_data[field_name] = new_val
+            myfield = all_fields[field_name]
+            if myfield.type == "many2one" and not options.get("company_dependent"):
+                new_val = m2o_id_mapping[field_name].get(
+                    record_data[field_name], False
+                )  # TODO manage error ? in case we got old id and not new ?
+                record_data[field_name] = new_val
+            if myfield.type == "many2many":
+                old_id = record_data["old_odoo_id"]
+                new_ids = m2m_id_mapping[field_name].get(old_id, [])
+                record_data[field_name] = [(6, 0, new_ids)]
+            if options.get("company_dependent"):
+                old_id = record_data["old_odoo_id"]
+                property_vals = company_dep_data[field_name].get(old_id, [])
+                if single_company:
+                    if property_vals:
+                        old_company_id, val = property_vals[0]
+                        # company_id_mapping[old_company_id]
+                        if myfield.type == "many2one":
+                            related_model = (
+                                self.env[myfield.comodel_name].old_model_name
+                                or self.env[myfield.comodel_name]._name
+                            )
+                            old_m2o_id = int(val[len(related_model) + 1 :])
+                            new_val = m2o_id_mapping[field_name].get(old_m2o_id, False)
+                        else:
+                            new_val = val
+                        record_data[field_name] = new_val
+                else:
+                    # TODO convert old company and val (in case of m2o) to new ids
+                    # update company_dep_data accordingly
+                    pass
+        return record_data
+
+    def _is_single_company(self):
+        return len(self.env["res.company"].search([])) == 1
+
+    def _m2o_id_mapping(self, all_fields):
+        # Create all m2x mapping dict (to avoid search on each row of the loop
+        m2o_id_mapping = {}
+        # company_id_mapping = self.env["res.company"]._id_mapping()
+        for field_name, _options in self.mapped_fields.items():
+            myfield = all_fields[field_name]
+            if myfield.type == "many2one":
+                m2o_id_mapping[field_name] = self.env[
+                    myfield.comodel_name
+                ]._id_mapping()
+        return m2o_id_mapping
+
+    def _m2m_id_mapping(self, m2m_data):
+        all_fields = self._fields
+        m2m_id_mapping = {}
+        for m2m_field_name, m2m_field_data in m2m_data.items():
+            m2m_field = all_fields[m2m_field_name]
+            comodel_id_mapping = self.env[m2m_field.comodel_name]._id_mapping()
+            m2m_id_mapping[m2m_field_name] = collections.defaultdict(list)
+            for old_id, old_comodel_id in m2m_field_data:
+                comodel_new_id = comodel_id_mapping.get(old_comodel_id, False)
+                if comodel_new_id:
+                    m2m_id_mapping[m2m_field_name][old_id].append(comodel_new_id)
+        return m2m_id_mapping
+
+    def _id_mapping(self):
         read_data = self.search_read([("old_odoo_id", ">", 0)], ["id", "old_odoo_id"])
         return {x["old_odoo_id"]: x["id"] for x in read_data}
 
-    # still usefull ? maybe not since we search in batch with
-    # _get_existing_records_by_unique_field
-    def _get_existing_record(self, vals):
-        ref_field = self.unique_field
-        ref_val = vals.get(ref_field)
-        domain = [(ref_field, "=", ref_val)]
-        record = self.search(domain)
-        if len(record) > 1:
-            raise exceptions.UserError(
-                _(
-                    "Too much records found (%(record_size)s) for %(field)s with value %(val)s"
-                )
-                % {"record_size": len(record), "field": ref_field, "val": ref_val}
-            )
-        return record
-
-    def _get_existing_records_by_unique_field(self):
-        ref_field = self.unique_field
-        read_data = self.with_context(active_test=False).search_read(
-            [(ref_field, "!=", False)], [ref_field]
-        )
-        return {x[ref_field]: x["id"] for x in read_data}
-
-    def create_or_update_from_old_data(self, data, company_dep_data):
+    def create_or_update_records(self, data, company_dep_data):
         create_vals_list = []
         created_records = self.browse(False)
         updated_records = self.browse(False)
 
-        existing_record_mapping = self._get_existing_records_by_unique_field()
+        existing_record = self._existing_records_by_unique_field()
         ref_field = self.unique_field
         for rec_vals in data:
-            record_id = existing_record_mapping.get(rec_vals[ref_field], False)
+            record_id = existing_record.get(rec_vals[ref_field], False)
             if record_id:
                 if not self._update_allowed:
                     continue
@@ -305,5 +313,28 @@ class MigrationMixin(models.AbstractModel):
 
         return created_records, updated_records
 
+    def _existing_records_by_unique_field(self):
+        ref_field = self.unique_field
+        read_data = self.with_context(active_test=False).search_read(
+            [(ref_field, "!=", False)], [ref_field]
+        )
+        return {x[ref_field]: x["id"] for x in read_data}
+
     def _after_import(self, new_records, updated_records, transformed_data):
         return
+
+    # still usefull ? maybe not since we search in batch with
+    # _existing_records_by_unique_field
+    def _get_existing_record(self, vals):
+        ref_field = self.unique_field
+        ref_val = vals.get(ref_field)
+        domain = [(ref_field, "=", ref_val)]
+        record = self.search(domain)
+        if len(record) > 1:
+            raise exceptions.UserError(
+                _(
+                    "Too much records found (%(record_size)s) for %(field)s with value %(val)s"
+                )
+                % {"record_size": len(record), "field": ref_field, "val": ref_val}
+            )
+        return record
