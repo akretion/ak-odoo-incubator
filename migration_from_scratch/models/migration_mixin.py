@@ -21,9 +21,13 @@ class MigrationMixin(models.AbstractModel):
 
     _update_allowed = True
     old_table_name = ""
+    old_model_name = ""
     unique_field = "old_odoo_id"
 
     old_odoo_id = fields.Integer("Id in previous Odoo version", index=True, copy=False)
+
+    def _is_single_company(self):
+        return len(self.env["res.company"].search([])) == 1
 
     def mapped_fields_default(self):
         return {}
@@ -50,6 +54,9 @@ class MigrationMixin(models.AbstractModel):
             # so we ignore these fields in the select query, it will be managed
             # during the update.
             if all_fields[field_name].type == "many2many":
+                continue
+            # ignore company_dep fields since it is in different table
+            if options.get("company_dependent"):
                 continue
 
             old_field_name = options.get("old_name") or field_name
@@ -104,24 +111,57 @@ class MigrationMixin(models.AbstractModel):
                 old_m2m_data[new_field] = old_cr.fetchall()
         return old_m2m_data
 
+    def _get_old_company_dep_data(self, old_cr):
+        old_property_data = {}
+        for new_field, options in self.mapped_fields.items():
+            if options.get("company_dependent"):
+                old_property_data[new_field] = {}
+                model = self.old_model_name or self._name
+                old_model_size = len(model) + 2
+                query = sql.SQL(
+                    "SELECT {col1}, company_id, SUBSTRING(res_id, %s)::integer"
+                    "FROM ir_property WHERE name = %s and res_id IS NOT NULL"
+                ).format(
+                    col1=sql.Identifier(options["property_column"]),
+                )
+                old_field_name = options.get("old_name") or new_field
+                old_cr.execute(
+                    query,
+                    (
+                        old_model_size,
+                        old_field_name,
+                    ),
+                )
+                property_data = old_cr.fetchall()
+                for (value, company_id, old_id) in property_data:
+                    if old_id not in old_property_data[new_field]:
+                        old_property_data[new_field][old_id] = []
+                    old_property_data[new_field][old_id].append((company_id, value))
+        return old_property_data
+
     def get_old_data(self, domain):
         old_cr = get_external_cursor()
         old_data = self._get_old_data(domain, old_cr)
         old_m2m_data = self._get_old_m2m_data(old_cr)
+        old_company_dep_data = self._get_old_company_dep_data(old_cr)
         old_cr.close()
-        return old_data, old_m2m_data
+        return old_data, old_m2m_data, old_company_dep_data
 
     def migrate_data(self, batch=0, domain=None):
         if domain is None:
             domain = []
-        data, m2m_data = self.get_old_data(domain)
+        data, m2m_data, company_dep_data = self.get_old_data(domain)
         if batch:
             for i in range(0, len(data), batch):
                 ongoing_data = data[i : i + batch]
                 new_records = updated_records = self.browse(False)
-                self.with_delay().import_old_data(ongoing_data, m2m_data)
+                self.with_delay().import_old_data(
+                    ongoing_data, m2m_data, company_dep_data
+                )
         else:
-            new_records, updated_records = self.import_old_data(data, m2m_data)
+            new_records, updated_records = self.import_old_data(
+                data, m2m_data, company_dep_data
+            )
         return new_records, updated_records
 
     def _get_m2m_id_mapping(self, m2m_data):
@@ -137,11 +177,13 @@ class MigrationMixin(models.AbstractModel):
                     m2m_id_mapping[m2m_field_name][old_id].append(comodel_new_id)
             return m2m_id_mapping
 
-    def _transform_data(self, data, m2m_data):
+    def _transform_data(self, data, m2m_data, company_dep_data):
+        single_company = self._is_single_company()
         m2m_id_mapping = self._get_m2m_id_mapping(m2m_data)
         all_fields = self._fields
         # Create all m2x mapping dict (to avoid search on each row of the loop
         m2o_id_mapping = {}
+        # company_id_mapping = self.env["res.company"]._get_id_mapping()
         for field_name, _options in self.mapped_fields.items():
             myfield = all_fields[field_name]
             if myfield.type == "many2one":
@@ -157,7 +199,7 @@ class MigrationMixin(models.AbstractModel):
                     )
                     record_data[field_name] = new_val
                 myfield = all_fields[field_name]
-                if myfield.type == "many2one":
+                if myfield.type == "many2one" and not options.get("company_dependent"):
                     new_val = m2o_id_mapping[field_name].get(
                         record_data[field_name], False
                     )  # TODO manage error ? in case we got old id and not new ?
@@ -166,12 +208,35 @@ class MigrationMixin(models.AbstractModel):
                     old_id = record_data["old_odoo_id"]
                     new_ids = m2m_id_mapping[field_name].get(old_id, [])
                     record_data[field_name] = [(6, 0, new_ids)]
+                if options.get("company_dependent"):
+                    old_id = record_data["old_odoo_id"]
+                    property_vals = company_dep_data[field_name].get(old_id, [])
+                    if single_company:
+                        if property_vals:
+                            old_company_id, val = property_vals[0]
+                            # company_id_mapping[old_company_id]
+                            if myfield.type == "many2one":
+                                related_model = (
+                                    self.env[myfield.comodel_name].old_model_name
+                                    or self.env[myfield.comodel_name]._name
+                                )
+                                old_m2o_id = int(val[len(related_model) + 1 :])
+                                new_val = m2o_id_mapping[field_name].get(
+                                    old_m2o_id, False
+                                )
+                            else:
+                                new_val = val
+                            record_data[field_name] = new_val
+                    else:
+                        # TODO convert old company and val (in case of m2o) to new ids
+                        # update company_dep_data accordingly
+                        pass
         return data
 
-    def import_old_data(self, data, m2m_data):
-        transformed_data = self._transform_data(data, m2m_data)
+    def import_old_data(self, data, m2m_data, company_dep_data):
+        transformed_data = self._transform_data(data, m2m_data, company_dep_data)
         new_records, updated_records = self.create_or_update_from_old_data(
-            transformed_data
+            transformed_data, company_dep_data
         )
         self._after_import(new_records, updated_records, transformed_data)
         return new_records, updated_records
@@ -203,7 +268,7 @@ class MigrationMixin(models.AbstractModel):
         )
         return {x[ref_field]: x["id"] for x in read_data}
 
-    def create_or_update_from_old_data(self, data):
+    def create_or_update_from_old_data(self, data, company_dep_data):
         create_vals_list = []
         created_records = self.browse(False)
         updated_records = self.browse(False)
@@ -225,6 +290,11 @@ class MigrationMixin(models.AbstractModel):
                 create_vals_list.append(rec_vals)
         if create_vals_list:
             created_records = self.create(create_vals_list)
+        if company_dep_data and not self._is_single_company():
+            # TODO loop on fields, old_id and company to write each company_dep data
+            # on records with "with_company"...
+            pass
+
         return created_records, updated_records
 
     def _after_import(self, new_records, updated_records, transformed_data):
