@@ -132,7 +132,7 @@ class MigrationMixin(models.AbstractModel):
                 model = self.old_model_name or self._name
                 old_model_size = len(model) + 2
                 query = sql.SQL(
-                    "SELECT {col1}, company_id, SUBSTRING(res_id, %s)::integer"
+                    "SELECT {col1}, company_id, SUBSTRING(res_id, %s) ::integer "
                     "FROM ir_property WHERE name = %s and res_id IS NOT NULL"
                 ).format(
                     col1=sql.Identifier(options["property_column"]),
@@ -171,7 +171,7 @@ class MigrationMixin(models.AbstractModel):
 
     # Methods to import data
 
-    def import_old_data(self, data, m2m_data, company_dep_data):
+    def import_data(self, data, m2m_data, company_dep_data):
         transformed_data = self._transform_data(data, m2m_data, company_dep_data)
         new_records, updated_records = self.create_or_update_records(
             transformed_data, company_dep_data
