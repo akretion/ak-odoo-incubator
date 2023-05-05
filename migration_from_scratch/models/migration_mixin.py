@@ -139,6 +139,14 @@ class MigrationMixin(models.AbstractModel):
                     old_property_data[new_field][old_id].append((company_id, value))
         return old_property_data
 
+    # helper
+    def _execute_external_query(self, query):
+        old_cr = get_external_cursor()
+        old_cr.execute(query)
+        data = old_cr.fetchall()
+        old_cr.close()
+        return data
+
     def get_old_data(self, domain):
         old_cr = get_external_cursor()
         old_data = self._get_old_data(domain, old_cr)
