@@ -172,21 +172,21 @@ class MigrationMixin(models.AbstractModel):
     # Methods to import data
 
     def import_old_data(self, data, m2m_data, company_dep_data):
-        transformed_data = self._transform_datas(data, m2m_data, company_dep_data)
+        transformed_data = self._transform_data(data, m2m_data, company_dep_data)
         new_records, updated_records = self.create_or_update_records(
             transformed_data, company_dep_data
         )
         self._after_import(new_records, updated_records, transformed_data)
         return new_records, updated_records
 
-    def _transform_datas(self, data, m2m_data, company_dep_data):
+    def _transform_data(self, data, m2m_data, company_dep_data):
         single_company = self._is_single_company()
         m2m_id_mapping = self._m2m_id_mapping(m2m_data)
         all_fields = self._fields
         m2o_id_mapping = self._m2o_id_mapping(all_fields)
         # loop on data to transform it with new version data
         for record_data in data:
-            self._transform_data(
+            self._transform_single_data(
                 record_data,
                 m2o_id_mapping,
                 m2m_id_mapping,
@@ -196,7 +196,7 @@ class MigrationMixin(models.AbstractModel):
             )
         return data
 
-    def _transform_data(
+    def _transform_single_data(
         self,
         record_data,
         m2o_id_mapping,
