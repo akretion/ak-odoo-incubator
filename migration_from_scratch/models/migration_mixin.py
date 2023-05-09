@@ -39,7 +39,7 @@ class MigrationMixin(models.AbstractModel):
         return {}
 
     def migrate_data(self, batch=0, domain=None):
-        _logger.debug("Start migration of %s", self._name)
+        _logger.info("Start migration of %s", self._name)
         if domain is None:
             domain = []
         data, m2m_data, company_dep_data = self.get_old_data(domain)
@@ -52,13 +52,13 @@ class MigrationMixin(models.AbstractModel):
             new_records, updated_records = self.import_data(
                 data, m2m_data, company_dep_data
             )
-        _logger.debug("End migration of %s", self._name)
+        _logger.info("End migration of %s", self._name)
         return new_records, updated_records
 
     # Methods to get table data
 
     def get_old_data(self, domain):
-        _logger.debug("Getting old data of %s", self._name)
+        _logger.info("Getting old data of %s", self._name)
         old_cr = get_external_cursor()
         old_data = self._get_old_data(domain, old_cr)
         old_m2m_data = self._get_old_m2m_data(old_cr)
@@ -178,7 +178,7 @@ class MigrationMixin(models.AbstractModel):
     # Methods to import data
 
     def import_data(self, data, m2m_data, company_dep_data):
-        _logger.debug("Importing data of %s", self._name)
+        _logger.info("Importing data of %s", self._name)
         transformed_data = self._transform_data(data, m2m_data, company_dep_data)
         new_records, updated_records = self.create_or_update_records(
             transformed_data, company_dep_data
@@ -187,7 +187,7 @@ class MigrationMixin(models.AbstractModel):
         return new_records, updated_records
 
     def _transform_data(self, data, m2m_data, company_dep_data):
-        _logger.debug("Transform data of %s", self._name)
+        _logger.info("Transform data of %s", self._name)
         single_company = self._is_single_company()
         m2m_id_mapping = self._m2m_id_mapping(m2m_data)
         all_fields = self._fields
