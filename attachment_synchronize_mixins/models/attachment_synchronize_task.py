@@ -12,6 +12,8 @@ class AttachmentSynchronizeTask(models.Model):
             recs = self.env[model].search()
         else:
             recs = self.env[model].search(domain)
+        if not recs:
+            return
         attachments = recs.with_context(attachment_task=self).synchronize_export()
         attachments.run()
 
