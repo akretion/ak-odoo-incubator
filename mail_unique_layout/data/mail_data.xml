@@ -77,23 +77,26 @@ Layout is essentially a combination of:
                                         <t t-esc="access_name" />
                                     </a>
                                 </div>
-                                <t
-                                            t-if="record.user_id and not record.env.user._is_superuser()"
-                                        >
-                                    <div
-                                                style="margin: 0px; padding: 0px; font-size:13px;"
+                                <t t-if="'user_id' in record">
+                                    <t
+                                                t-if="record.user_id and not record.env.user._is_superuser()"
                                             >
-                                        Best regards,
-                                    </div>
-                                    <div>&amp;nbsp;</div>
-                                    <div
-                                                t-if="record.user_id.sudo().signature"
-                                                style="font-size: 13px;"
-                                            >
-                                        <div t-raw="record.user_id.sudo().signature" />
-                                    </div>
+                                        <div
+                                                    style="margin: 0px; padding: 0px; font-size:13px;"
+                                                >
+                                            Best regards,
+                                        </div>
+                                        <div>&amp;nbsp;</div>
+                                        <div
+                                                    t-if="record.user_id.sudo().signature"
+                                                    style="font-size: 13px;"
+                                                >
+                                            <div
+                                                        t-raw="record.user_id.sudo().signature"
+                                                    />
+                                        </div>
+                                    </t>
                                 </t>
-
                                 <!-- extracted from notification -->
                                 <div
                                             t-if="has_button_access"
@@ -120,7 +123,7 @@ Layout is essentially a combination of:
                                     </div>
                                 </div>
                                 <div
-                                            t-if="has_button_access or len(actions) &gt; 0 or not is_discussion"
+                                            t-if="has_button_access or (actions and len(actions) &gt; 0) or not is_discussion"
                                             summary="o_mail_notification"
                                             style="padding: 0px; width:600px;"
                                         >
@@ -166,7 +169,7 @@ Layout is essentially a combination of:
                                                             style="text-align:center;"
                                                         >
                                                     <p
-                                                                t-if="subtype.internal"
+                                                                t-if="subtype and subtype.internal"
                                                                 style="background-color: #f2dede; padding: 5px; margin-bottom: 16px;"
                                                             >
                                                         <strong
