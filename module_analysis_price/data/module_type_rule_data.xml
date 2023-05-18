@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="module_type_rule_odoo_framework" model="ir.module.type.rule">
+        <field name="sequence">0</field>
+        <field name="module_type_id" ref="module_type_odoo_framework" />
+        <field
+            name="module_domain"
+        >[('name', 'in', ('base', 'web', 'iap', 'iap_mail', 'mail', 'web_editor', 'web_kanban_gauge', 'web_tour', 'rating', 'portal', 'rating', 'utm', 'http_routing', 'digest', 'fetchmail', 'bus', 'board', 'base_automation', 'base_vat', 'base_import', 'base_iban', 'base_setup', 'base_sparse_field', 'auth_password_policy', 'auth_password_policy_signup', 'auth_signup'))]</field>
+    </record>
+
+    <record id="module_type_rule_shopinvader" model="ir.module.type.rule">
+        <field name="sequence">150</field>
+        <field name="module_type_id" ref="module_type_shopinvader" />
+        <field
+            name="module_domain"
+        >['|', ('website', 'ilike', 'shopinvader'), ('name', 'ilike', 'shopinvader')]</field>
+    </record>
+
+    <record id="module_type_rule_custom" model="ir.module.type.rule">
+        <field name="sequence">200</field>
+        <field name="module_type_id" ref="module_type_custom" />
+        <field
+            name="module_domain"
+        >[('website', 'ilike', 'https://gitlab.akretion.com')]</field>
+    </record>
+
+    <record id="module_type_rule_incubator" model="ir.module.type.rule">
+        <field name="sequence">250</field>
+        <field name="module_type_id" ref="module_type_incubator" />
+        <field name="module_domain">[('author_ids', '=', 'Akretion')]</field>
+    </record>
+
+</odoo>
