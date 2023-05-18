@@ -16,9 +16,3 @@ class AttachmentSynchronizeTask(models.Model):
             return
         attachments = recs.with_context(attachment_task=self).synchronize_export()
         attachments.run()
-
-    def get_domain_unexported(self):
-        return [("export_date", "=", False)]
-
-    def get_domain_flagged(self):
-        return [("export_flag", "=", True)]

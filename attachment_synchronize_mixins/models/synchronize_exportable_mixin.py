@@ -18,6 +18,8 @@ class SynchronizeExportableMixin(models.AbstractModel):
 
     def synchronize_export(self):
         data = self._prepare_export_data()
+        if not data:
+            return self.env["attachment.queue"]
         attachment = self._format_to_exportfile(data)
         self.track_export(attachment)
         self.export_flag = False
