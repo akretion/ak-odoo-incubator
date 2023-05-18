@@ -6,14 +6,14 @@
             <field name="inherit_id" ref="sale.view_order_form" />
             <field name="arch" type="xml">
                 <xpath
-                    expr="//field[@name='order_line']/form/field[@name='name']"
-                    position="after"
-                >
+                expr="//field[@name='order_line']/form/field[@name='name']"
+                position="after"
+            >
                     <group name="config" string="Configuration">
                         <field
-                            name="commercial_config_text"
-                            string="Commercial Configuration"
-                        />
+                        name="commercial_config_text"
+                        string="Commercial Configuration"
+                    />
                         <field name="config_text" string="Technical Configuration" />
                     </group>
                 </xpath>
