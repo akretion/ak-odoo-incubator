@@ -41,7 +41,6 @@ class SynchronizeExportableMixin(models.AbstractModel):
         writer = csv.DictWriter(
             csv_file, fieldnames=data[0].keys(), delimiter=delimiter
         )
-        writer.writeheader()
         for row in data:
             writer.writerow(row)
         csv_file.seek(0)
