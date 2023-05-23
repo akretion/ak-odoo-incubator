@@ -8,36 +8,26 @@ from odoo.tools.misc import format_date, formatLang
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    reconcile_debit_info = fields.Char(
-        "Reconciliation Debit Info", compute="_compute_reconcile_info"
-    )
-    reconcile_credit_info = fields.Char(
-        "Reconciliation Credit Info", compute="_compute_reconcile_info"
-    )
-    reconcile_info = fields.Char(
-        "Reconciliation Info", compute="_compute_reconcile_info"
-    )
+    reconcile_debit_info = fields.Text(compute="_compute_reconcile_info")
+    reconcile_credit_info = fields.Text(compute="_compute_reconcile_info")
+    reconcile_debit_info_export = fields.Char(compute="_compute_reconcile_info")
+    reconcile_credit_info_export = fields.Char(compute="_compute_reconcile_info")
 
     def _get_spreadsheet_link(self, base_url, action, rec, string):
         model = action.res_model
         return (
             '=HYPERLINK("%(url)s/web#id=%(id)s&action=%(action)s&'
             'model=%(model)s&view_type=form&cids=1"'
-            # 'model=%(model)s&view_type=form&cids=%(company_id)s"'
             % {
                 "url": base_url,
                 "id": rec.id,
                 "model": model,
                 "action": action and action.id,
-                # "company_id": id_.company_id.id,
             }
-            + ', "%(text)s")'
-            % {
-                "text": "🔗 " + string,
-            }
+            + ', "%(text)s")' % {"text": "🔗 " + string}
         )
 
-    def _get_reconcile_info(self, base_url, action, reconciled):
+    def _get_reconcile_info(self, base_url, action, reconciled, export=False):
         msg = []
         reconcile_info = ""
         for amount, line_id in reconciled:
@@ -50,8 +40,11 @@ class AccountMove(models.Model):
                 and move.partner_id.name[:20]
                 or ""
             )
+            pattern = "%(amount)s %(name)s"
+            if export:
+                pattern = "%(date)s %(amount)s %(name)s %(partner_name)s (id_%(id)s)"
             msg.append(
-                "%(date)s %(amount)s %(name)s %(partner_name)s (id_%(id)s)"
+                pattern
                 % {
                     "amount": formatLang(self.env, amount, currency_obj=curr_id),
                     "name": name,
@@ -61,7 +54,7 @@ class AccountMove(models.Model):
                 }
             )
 
-        if len(msg) == 1:
+        if len(msg) == 1 and export:
             rec = reconciled[0][1].move_id
             # hyperlink to account.payment if move is a payment
             if rec.payment_id:
@@ -94,6 +87,9 @@ class AccountMove(models.Model):
             rec.reconcile_credit_info = self._get_reconcile_info(
                 base_url, action, reconciled_credit
             )
-            rec.reconcile_info = "{};\n{}".format(
-                rec.reconcile_debit_info, rec.reconcile_credit_info
+            rec.reconcile_debit_info_export = self._get_reconcile_info(
+                base_url, action, reconciled_debit, export=True
+            )
+            rec.reconcile_credit_info_export = self._get_reconcile_info(
+                base_url, action, reconciled_credit, export=True
             )

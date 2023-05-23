@@ -9,7 +9,6 @@
                 <field name="move_id" position="after">
                     <field name="reconcile_debit_info" />
                     <field name="reconcile_credit_info" />
-                    <field name="reconcile_info" />
                 </field>
             </field>
         </record>
