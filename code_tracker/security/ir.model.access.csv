@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+"access_tracker_code_info_group_system","tracker code info groupe systeme","model_tracker_code_info","base.group_system",1,1,1,0
