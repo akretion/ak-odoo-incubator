@@ -4,7 +4,7 @@
 from odoo import fields, models
 
 
-class tracker_code_info(models.Model):
+class TrackerCodeInfo(models.Model):
     _name = "tracker.code.info"
     _description = "see if a function is used"
 

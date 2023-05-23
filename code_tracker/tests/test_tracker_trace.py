@@ -3,10 +3,10 @@
 
 from odoo_test_helper import FakeModelLoader
 
-from odoo.tests import SavepointCase as TransactionCase
+from odoo.tests import SavepointCase
 
 
-class TestTrackerTrace(TransactionCase):
+class TestTrackerTrace(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -26,11 +26,9 @@ class TestTrackerTrace(TransactionCase):
 
     def test_tracker_trace(self):
 
-        method_tracker = "fonction_tracker_test"  #'name of the method called by the _onchange_method'
-        method_onchange = "_onchange_state"  #'name of the _onchange_method'
-        log = self.env["tracker.code.info"].search(
-            [("log_trace", "=", method_onchange)]
-        )
+        # Name of the _onchange_method and on the method called by the _onchange_method
+        method_tracker = "fonction_tracker_test"
+        method_onchange = "_onchange_state"
 
         function = self.env["tracker.code.info"].search(
             [("function_name", "=", method_tracker)], order="id desc", limit=1

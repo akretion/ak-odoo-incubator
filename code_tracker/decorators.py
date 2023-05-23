@@ -3,15 +3,15 @@
 
 import logging
 import traceback
+from functools import wraps
 
 from odoo import fields
 
 _logger = logging.getLogger(__name__)
 
-from functools import wraps
-
-
 # the decorator to know which function is called or not
+
+
 def tracker_code(func):
     @wraps(func)
     def tracker_code_information(cls):
