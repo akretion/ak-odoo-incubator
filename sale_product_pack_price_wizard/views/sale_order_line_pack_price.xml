@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2023 Akretion
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record model="ir.ui.view" id="sale_order_line_pack_price_form_view">
+        <field name="name">sale.order.line.pack.price.form (in sale_product_pack_price_wizard)</field>
+        <field name="model">sale.order.line.pack.price</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="sale_order_line_id" readonly="1" />
+                        <field name="pack_price_catalog"/>
+                        <field name="pack_price_edit"/>
+                        <field name="computed_discount"/>
+                    </group>
+                </sheet>
+                    <footer>
+                        <button string="Appliquer" name="action_set_price" type="object" class="oe_highlight" data-hotkey="q"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale_order_line_pack_price_action" model="ir.actions.act_window">
+        <field name="name">Pack Price</field>
+        <field name="res_model">sale.order.line.pack.price</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="sale_order_form" model="ir.ui.view">
+        <field name="name">sale.order.form (in sale_product_pack_price_wizard)</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree//field[@name='price_unit']" position="after">
+                <button
+                    name="%(sale_order_line_pack_price_action)d"
+                    string="Changer prix"
+                    type="action"
+                    icon="fa-calculator"
+                    attrs="{'invisible': [('product_id', '=', False)]}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
