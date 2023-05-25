@@ -38,12 +38,13 @@
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//tree//field[@name='price_unit']" position="after">
+                <field name="is_pack_line" invisible="1" />
                 <button
                     name="%(sale_order_line_pack_price_action)d"
                     string="Changer prix"
                     type="action"
                     icon="fa-calculator"
-                    attrs="{'invisible': [('product_id', '=', False)]}"
+                    attrs="{'invisible': [('is_pack_line', '=', False)]}"
                 />
             </xpath>
         </field>
