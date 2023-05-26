@@ -11,7 +11,7 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="sale_order_line_id" readonly="1" />
+                        <field name="sale_order_line_id" readonly="1" invisible="1"/>
                         <field name="pack_price_catalog"/>
                         <field name="pack_price_edit"/>
                         <field name="computed_discount"/>
