@@ -21,19 +21,10 @@ class SaleOrderLinePackPrice(models.Model):
         else:
             order_lines = order_line.pack_child_line_ids
 
-        total = 0
-        for line in order_lines:
-            taxes = line.tax_id.compute_all(
-                line.product_id.list_price,  # * (1 - line.discount / 100.0),
-                line.order_id.currency_id,
-                line.product_uom_qty,
-                product=line.product_id,
-                partner=line.order_id.partner_shipping_id,
-            )
-            if line.tax_id.price_include:
-                total += taxes["total_included"]
-            else:
-                total += taxes["total_excluded"]
+        total = sum(
+            line.product_id.list_price * line.product_uom_qty
+            for line in order_lines
+        )
         return total
 
     sale_order_line_id = fields.Many2one(
@@ -44,16 +35,17 @@ class SaleOrderLinePackPrice(models.Model):
     currency_id = fields.Many2one(related="sale_order_line_id.currency_id")
 
     pack_price_catalog = fields.Monetary(
-        string="Pack Price",
+        string="Prix catalogue du Pack",
         compute="_compute_pack_price_catalog",
         currency_field="currency_id",
     )
     pack_price_edit = fields.Monetary(
-        string="New Pack Price",
+        string="Prix remisé",
         currency_field="currency_id",
         default=_default_pack_price_edit,
     )
     computed_discount = fields.Float(
+        string="Taux de remise",
         digits=(2, 14), compute="_compute_computed_discount"
     )
 
