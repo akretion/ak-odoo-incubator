@@ -19,10 +19,10 @@ def tracker_code(func):
         running_time = fields.Datetime.now()
         model_name = cls._name
         user = cls.env.user.name
-        log_trace = ""
-        trace = traceback.format_stack()
-        for line in trace:
-            log_trace += line
+        trace = ""
+        trace_back = traceback.format_stack()
+        for line in trace_back:
+            trace += line
         trace_back_info = {}
 
         function_name = func.__name__
@@ -31,7 +31,7 @@ def tracker_code(func):
             "model_name": model_name,
             "running_time": running_time,
             "user": user,
-            "log_trace": log_trace,
+            "trace": trace,
         }
         cls.env["tracker.code.info"].create(trace_back_info)
         return result

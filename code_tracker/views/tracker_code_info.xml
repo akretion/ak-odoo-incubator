@@ -29,7 +29,7 @@
                     <field name="user" />
                 </group>
                 <group>
-                    <field name="log_trace" />
+                    <field name="trace" />
                 </group>
             </form>
         </field>

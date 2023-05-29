@@ -12,4 +12,4 @@ class TrackerCodeInfo(models.Model):
     model_name = fields.Char(string="Model name")
     running_time = fields.Datetime(string="Running time")
     user = fields.Char(string="User")
-    log_trace = fields.Text(string="Logger")
+    trace = fields.Text(string="Logger")
