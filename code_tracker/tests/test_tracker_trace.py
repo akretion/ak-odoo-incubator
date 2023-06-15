@@ -36,4 +36,4 @@ class TestTrackerTrace(SavepointCase):
 
         self.assertTrue(function)
         self.assertTrue(function.user)
-        self.assertIn(method_onchange, function.log_trace)
+        self.assertIn(method_onchange, function.trace)
