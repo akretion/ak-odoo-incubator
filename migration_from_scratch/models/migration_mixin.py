@@ -23,8 +23,8 @@ class MigrationMixin(models.AbstractModel):
     _description = "Mixing to help migrate data from another odoo database"
 
     _update_allowed = True
-    old_table_name = ""
-    old_model_name = ""
+    old_table_name = ""  # Eg sale_order
+    old_model_name = ""  # Eg sale.order
     unique_field = "old_odoo_id"
 
     old_odoo_id = fields.Integer("Id in previous Odoo version", index=True, copy=False)
@@ -52,6 +52,8 @@ class MigrationMixin(models.AbstractModel):
             new_records, updated_records = self.import_data(
                 data, m2m_data, company_dep_data
             )
+        _logger.info("Created records %s", len(new_records))
+        _logger.info("Updated records %s", len(updated_records))
         _logger.info("End migration of %s", self._name)
         return new_records, updated_records
 
@@ -68,6 +70,7 @@ class MigrationMixin(models.AbstractModel):
 
     def _get_old_data(self, domain, old_cr):
         query, params = self._old_data_query(domain)
+        _logger.info("Old data request %s", old_cr.mogrify(query, params))
         old_cr.execute(query, params)
         old_data = old_cr.dictfetchall()
         return old_data
@@ -81,7 +84,6 @@ class MigrationMixin(models.AbstractModel):
             # replace in the query the from table but keep the old_alias to avoid issue
             # in where clauses. exemple with stock_lot, we'd have
             # from stock_production_lot as stock_lot
-            table_name = self.old_table_name
             query._tables[self._table] = table_name
         for field_name, options in self.mapped_fields.items():
             # many2many have no fields on table, it is a separated table
@@ -109,9 +111,9 @@ class MigrationMixin(models.AbstractModel):
                     self._inherits[options["inherits"]],
                 )
             else:
-                alias = table_name
+                alias = self._table
             select_list.append("%s.%s as %s" % (alias, old_field_name, field_name))
-        select_query = ",".join(select_list)
+        select_query = ", ".join(select_list)
         from_clause, where_clause, where_clause_params = query.get_sql()
         where_clause = where_clause and "WHERE %s" % where_clause or ""
         query = """
@@ -285,6 +287,7 @@ class MigrationMixin(models.AbstractModel):
         return {x["old_odoo_id"]: x["id"] for x in read_data}
 
     def create_or_update_records(self, data, company_dep_data):
+        _logger.info("Create/update data of %s", self._name)
         create_vals_list = []
         created_records = self.browse(False)
         updated_records = self.browse(False)
