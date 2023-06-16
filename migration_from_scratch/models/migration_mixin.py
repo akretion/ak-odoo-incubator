@@ -6,7 +6,7 @@ import logging
 
 from psycopg2 import sql
 
-from odoo import _, exceptions, fields, models
+from odoo import _, api, exceptions, fields, models, registry
 
 from ..sql_db import get_external_cursor
 
@@ -289,7 +289,6 @@ class MigrationMixin(models.AbstractModel):
     def create_or_update_records(self, data, company_dep_data):
         _logger.info("Create/update data of %s", self._name)
         create_vals_list = []
-        created_records = self.browse(False)
         updated_records = self.browse(False)
 
         existing_record = self._existing_records_by_unique_field()
@@ -307,8 +306,26 @@ class MigrationMixin(models.AbstractModel):
                 updated_records |= record
             else:
                 create_vals_list.append(rec_vals)
-        if create_vals_list:
-            created_records = self.create(create_vals_list)
+        # Creation of a lot of record has performance problem. Tested only for
+        # product import, it could be nice to do some tests without this logic
+        # for other big imports to confirm it is a global issue.
+        # making a create of a very big list of value or even creating in smaller
+        # batch takes longer and longer.
+        # Creating in batch with invalidating the cache and flushing on each loop
+        # did improve perf significally, but each loop last more than the previous
+        # one and so it still is an issue.
+        # Creating a new cursor/env on each loop make the problem disappear
+        created_record_ids = []
+        batch_size = 500
+        for i in range(0, len(create_vals_list), batch_size):
+            with registry(self.env.cr.dbname).cursor() as new_cr:
+                new_env = api.Environment(new_cr, self.env.uid, self.env.context)
+                products_batch_vals_list = create_vals_list[i : i + batch_size]
+                created_record_ids += (
+                    self.with_env(new_env).create(products_batch_vals_list).ids
+                )
+        created_records = self.browse(created_record_ids)
+
         if company_dep_data and not self._is_single_company():
             # TODO loop on fields, old_id and company to write each company_dep data
             # on records with "with_company"...
