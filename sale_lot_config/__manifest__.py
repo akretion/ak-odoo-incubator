@@ -14,5 +14,8 @@
     "data": [
         "views/sale_order.xml",
     ],
+    "external_dependencies": {
+        "python": ["simplejson"],
+    },
     "installable": True,
 }
