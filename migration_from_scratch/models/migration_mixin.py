@@ -326,10 +326,23 @@ class MigrationMixin(models.AbstractModel):
         # commiting make the problem disappear and seems reasonable here since
         # it is only used in an initialisation script
         batch_size = 500
+        do_commit = len(create_vals_list) > batch_size
         for i in range(0, len(create_vals_list), batch_size):
             products_batch_vals_list = create_vals_list[i : i + batch_size]
             created_record_ids += self.create(products_batch_vals_list).ids
-            self.env.cr.commit()
+            if do_commit:
+                # we should be fine committing here because this should be used mainly
+                # on the database initialization (in case of issue, we can just drop
+                # database and retry and it is done after a clean creation and should
+                # not lead to weird/corrupted data...
+                # also we limit the use of commit only for batches, meaning if this
+                # method is still used really during production to import some unitary
+                # records, it won't be an issue.
+                # If we think it could be, we could even put a context in the
+                # if condition and make sure to pass the context only during the
+                # database initialization phase...
+                if do_commit:
+                    self.env.cr.commit()
         created_records = self.browse(created_record_ids)
         if company_dep_data and not self._is_single_company():
             # TODO loop on fields, old_id and company to write each company_dep data
