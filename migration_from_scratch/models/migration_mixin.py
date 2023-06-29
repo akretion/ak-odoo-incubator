@@ -16,6 +16,8 @@ _logger = logging.getLogger(__name__)
 # if we need to transfort the data
 # {"old_table": "account_account_tax_default_rel",
 # "old_col1": "account_id", "old_col2": "tax_id"} # for m2m
+# "inherits": table
+# "join": table + "join_col": column => Same as inherit but have to specify field
 
 
 class MigrationMixin(models.AbstractModel):
@@ -96,19 +98,25 @@ class MigrationMixin(models.AbstractModel):
                 continue
 
             old_field_name = options.get("old_name") or field_name
-            if options.get("inherits"):
-                inherited_model = self.env[options["inherits"]]
+            if options.get("inherits") or options.get("join"):
+                join_model_name = options.get("inherits") or options.get("join")
+                join_model = self.env[join_model_name]
                 field_table_name = (
-                    hasattr(inherited_model, "old_table_name")
-                    and inherited_model.old_table_name
-                    or inherited_model._table
+                    hasattr(join_model, "old_table_name")
+                    and join_model.old_table_name
+                    or join_model._table
+                )
+                col = (
+                    options.get("inherits")
+                    and self._inherits[options["inherits"]]
+                    or options.get("join_col")
                 )
                 alias = query.join(
                     table_name,
-                    self._inherits[options["inherits"]],
+                    col,
                     field_table_name,
                     "id",
-                    self._inherits[options["inherits"]],
+                    col,
                 )
             else:
                 alias = self._table
