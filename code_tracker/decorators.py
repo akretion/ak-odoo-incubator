@@ -14,8 +14,8 @@ _logger = logging.getLogger(__name__)
 
 def tracker_code(func):
     @wraps(func)
-    def tracker_code_information(cls):
-        result = func(cls)
+    def tracker_code_information(cls, *args, **kwargs):
+        result = func(cls, *args, **kwargs)
         running_time = fields.Datetime.now()
         model_name = cls._name
         user = cls.env.user.name
