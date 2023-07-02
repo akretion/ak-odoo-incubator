@@ -291,7 +291,9 @@ class MigrationMixin(models.AbstractModel):
         return m2m_id_mapping
 
     def _id_mapping(self):
-        read_data = self.search_read([("old_odoo_id", ">", 0)], ["id", "old_odoo_id"])
+        read_data = self.with_context(active_test=False).search_read(
+            [("old_odoo_id", ">", 0)], ["id", "old_odoo_id"]
+        )
         return {x["old_odoo_id"]: x["id"] for x in read_data}
 
     def create_or_update_records(self, data, company_dep_data):
