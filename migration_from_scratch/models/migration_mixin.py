@@ -28,6 +28,7 @@ class MigrationMixin(models.AbstractModel):
     old_table_name = ""  # Eg sale_order
     old_model_name = ""  # Eg sale.order
     unique_field = "old_odoo_id"
+    after_import_dependencies = []  # Eg [('res.partner.bank', 'partner_id')]
 
     old_odoo_id = fields.Integer("Id in previous Odoo version", index=True, copy=False)
 
@@ -361,6 +362,12 @@ class MigrationMixin(models.AbstractModel):
         return {x[ref_field]: x["id"] for x in read_data}
 
     def _after_import(self, new_records, updated_records, transformed_data):
+        if new_records:
+            for (model, old_field_name) in self.after_import_dependencies:
+                domain = [(old_field_name, "in", new_records.mapped("old_odoo_id"))]
+                self.env[model].with_context(active_test=False).migrate_data(
+                    domain=domain
+                )
         return
 
     # still usefull ? maybe not since we search in batch with
