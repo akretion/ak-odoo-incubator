@@ -13,9 +13,11 @@ class PurchaseOrderLine(models.Model):
         }
         for line in self:
             product = line.product_id
-            seller = product._select_seller(
-                partner_id=partner, quantity=line.product_uom_qty
-            )
+            # the goal of finding the supplierinfo is to get the edi profile
+            # so we don't need to put the right line quantity, just any supplierinfo
+            # for this supplier should be enough. (We avoid error in case purchased
+            # qty is forced to less than the min of supplierinfo
+            seller = product._select_seller(partner_id=partner, quantity=None)
             purchase_edi = seller.purchase_edi_id
             # Services should not appear in EDI file unless an EDI profile
             # is specifically on the supplier info. This way, we avoid
