@@ -11,5 +11,6 @@
         "mrp",
         "sale_order_lot_generator",
     ],
+    "data": ["views/mrp_production_views.xml"],
     "installable": True,
 }
