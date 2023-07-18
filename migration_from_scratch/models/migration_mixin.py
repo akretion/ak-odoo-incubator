@@ -18,6 +18,8 @@ _logger = logging.getLogger(__name__)
 # "old_col1": "account_id", "old_col2": "tax_id"} # for m2m
 # "inherits": table
 # "join": table + "join_col": column => Same as inherit but have to specify field
+# ignore : True => remove this data in the create_or_update method. Used to retrieve a
+# data for custom treatment in after_import for example.
 
 
 class MigrationMixin(models.AbstractModel):
@@ -92,7 +94,7 @@ class MigrationMixin(models.AbstractModel):
             # many2many have no fields on table, it is a separated table
             # so we ignore these fields in the select query, it will be managed
             # during the update.
-            if all_fields[field_name].type == "many2many":
+            if not options.get("ignore") and all_fields[field_name].type == "many2many":
                 continue
             # ignore company_dep fields since it is in different table
             if options.get("company_dependent"):
@@ -140,7 +142,7 @@ class MigrationMixin(models.AbstractModel):
         all_fields = self._fields
         old_m2m_data = {}
         for new_field, options in self.mapped_fields.items():
-            if all_fields[new_field].type == "many2many":
+            if not options.get("ignore") and all_fields[new_field].type == "many2many":
                 query = sql.SQL("SELECT {col1}, {col2} FROM {table}").format(
                     col1=sql.Identifier(options["old_col1"]),
                     col2=sql.Identifier(options["old_col2"]),
@@ -227,9 +229,11 @@ class MigrationMixin(models.AbstractModel):
         for field_name, options in self.mapped_fields.items():
             if options.get("migration_method"):
                 new_val = getattr(self, options["migration_method"])(
-                    record_data[field_name]
+                    record_data[field_name], record_data
                 )
                 record_data[field_name] = new_val
+            if field_name not in all_fields and options.get("ignore"):
+                continue
             myfield = all_fields[field_name]
             if myfield.type == "many2one" and not options.get("company_dependent"):
                 new_val = m2o_id_mapping[field_name].get(
@@ -270,7 +274,9 @@ class MigrationMixin(models.AbstractModel):
         # Create all m2x mapping dict (to avoid search on each row of the loop
         m2o_id_mapping = {}
         # company_id_mapping = self.env["res.company"]._id_mapping()
-        for field_name, _options in self.mapped_fields.items():
+        for field_name, options in self.mapped_fields.items():
+            if options.get("ignore"):
+                continue
             myfield = all_fields[field_name]
             if myfield.type == "many2one":
                 m2o_id_mapping[field_name] = self.env[
@@ -303,8 +309,16 @@ class MigrationMixin(models.AbstractModel):
         updated_records = self.browse(False)
 
         existing_record = self._existing_records_by_unique_field()
+        to_ignore_fields = [
+            field_name
+            for field_name, options in self.mapped_fields.items()
+            if options.get("ignore")
+        ]
         ref_field = self.unique_field
-        for rec_vals in data:
+        for rec_orig_vals in data:
+            rec_vals = rec_orig_vals.copy()
+            for ignored_field in to_ignore_fields:
+                rec_vals.pop(ignored_field, None)
             record_id = existing_record.get(rec_vals[ref_field], False)
             if record_id:
                 if not self._update_allowed:
