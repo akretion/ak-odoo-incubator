@@ -8,6 +8,7 @@ from odoo import fields, models
 
 class SynchronizeImportableMixin(models.AbstractModel):
     _name = "synchronize.importable.mixin"
+    _description = "Synchronizable import mixin"
 
     import_date = fields.Date()
     import_file_id = fields.Many2one("attachment.queue")

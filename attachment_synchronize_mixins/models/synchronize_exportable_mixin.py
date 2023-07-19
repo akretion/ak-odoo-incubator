@@ -12,6 +12,7 @@ from odoo import fields, models
 
 class SynchronizeExportableMixin(models.AbstractModel):
     _name = "synchronize.exportable.mixin"
+    _description = "Synchronizable export mixin"
     export_date = fields.Date()
     export_attachment = fields.Char()
     export_flag = fields.Boolean()
