@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem
+        id="project_workload_menu"
+        parent="project.menu_main_pm"
+        sequence="20"
+        name="Workload"
+    />
+
+    <menuitem
+        id="project_user_capacity_menu"
+        parent="project_workload_menu"
+        sequence="20"
+        action="project_user_capacity_action"
+    />
+
+</odoo>

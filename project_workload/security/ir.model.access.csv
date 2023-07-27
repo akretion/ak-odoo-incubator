@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edit_project_user_capacity,edit project user capacity,model_project_user_capacity,project.group_project_user,1,1,1,1
+access_edit_project_user_capacity_line,edit project user capacity line,model_project_user_capacity_line,project.group_project_user,1,1,1,1
+access_edit_project_capacity_unit,edit project capacity unit,model_project_capacity_unit,project.group_project_user,1,1,1,1
+access_edit_project_task_workload,edit project task workload,model_project_task_workload,project.group_project_user,1,1,1,1
