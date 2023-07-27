@@ -23,8 +23,16 @@ class ProductSupplierinfoAttributeMixin(models.AbstractModel):
         store=True,
     )
     allowed_attribute_value_ids = fields.Many2many(
-        related="product_tmpl_id.attribute_line_ids.value_ids",
+        "product.attribute.value",
+        compute="_compute_allowed_attribute_value_ids",
     )
+
+    @api.depends("product_tmpl_id.attribute_line_ids.value_ids")
+    def _compute_allowed_attribute_value_ids(self):
+        for record in self:
+            record.allowed_attribute_value_ids = (
+                record.product_tmpl_id.attribute_line_ids.value_ids
+            )
 
     @api.depends("product_tmpl_id", "product_attribute_value_ids", "product_id")
     def _compute_product_definition_precision(self):
