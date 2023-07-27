@@ -226,10 +226,11 @@ class MigrationMixin(models.AbstractModel):
         single_company,
         all_fields,
     ):
+        orig_record_data = record_data.copy()
         for field_name, options in self.mapped_fields.items():
             if options.get("migration_method"):
                 new_val = getattr(self, options["migration_method"])(
-                    record_data[field_name], record_data
+                    record_data[field_name], orig_record_data
                 )
                 record_data[field_name] = new_val
             if field_name not in all_fields and options.get("ignore"):
