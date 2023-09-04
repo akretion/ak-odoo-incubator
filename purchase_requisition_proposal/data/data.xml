@@ -30,9 +30,7 @@
        <field
            name="subject"
        >${object.company_id.name} Call for Proposals (Ref ${object.name or 'n/a' })</field>
-       <field
-           name="partner_to"
-       >${','.join([str(partner.id) for partner in object.company_to_call_ids.partner_id]}</field>
+       <field name="use_default_to" eval="True" />
        <field name="body_html" type="xml">
            <div style="margin: 0px; padding: 0px;">
                <p style="margin: 0px; padding: 0px; font-size: 13px;">
@@ -106,9 +104,7 @@
         <field
             name="subject"
         >${object.company_id.name} Closed Call for Proposals (Ref ${object.name or 'n/a' })</field>
-        <field
-            name="partner_to"
-        >${','.join([str(partner.id) for partner in object.company_to_call_ids.partner_id]}</field>
+        <field name="use_default_to" eval="True" />
         <field name="body_html" type="xml">
             <div style="margin: 0px; padding: 0px;">
                 <p style="margin: 0px; padding: 0px; font-size: 13px;">

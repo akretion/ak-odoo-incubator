@@ -39,7 +39,7 @@ class PurchaseRequisition(models.Model):
         string="Qty",
     )
 
-    @api.depends("exclusive")
+    @api.depends("exclusive", "multi_company_selection", "type_id.company_to_call_ids")
     def _compute_company_to_call_ids(self):
         for rec in self:
             if (
@@ -47,7 +47,7 @@ class PurchaseRequisition(models.Model):
                 and rec.type_id.multi_company_selection != "no"
             ):
                 if rec.type_id.multi_company_selection == "selected":
-                    rec.company_to_call_ids = rec.type_id.company_to_call_ids
+                    rec.company_to_call_ids = [(6, 0, rec.type_id.company_to_call_ids.ids)]
                 else:
                     rec.company_to_call_ids = rec.env["res.company"].search(
                         [("id", "!=", rec.company_id.id)]

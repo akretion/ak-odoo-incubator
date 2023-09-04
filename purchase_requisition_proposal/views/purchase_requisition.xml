@@ -55,7 +55,6 @@
                     name="action_create_quotations"
                     string="Create proposal Quotations"
                     type="object"
-                    states="open, done"
                     class="btn-primary"
                 />
                 <button
