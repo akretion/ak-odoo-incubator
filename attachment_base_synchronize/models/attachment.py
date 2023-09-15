@@ -78,6 +78,7 @@ class IrAttachmentMetadata(models.Model):
                         attach._run()
                     except Exception, e:
                         attach.env.cr.rollback()
+                        self.env.clear_recompute_old()
                         _logger.exception(unicode(e))
                         attach.write(
                             {
