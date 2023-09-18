@@ -9,12 +9,27 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="run" string="Launch Processor" type="object" />
+                        <button
+                        name="run_in_background"
+                        string="Launch Processor"
+                        type="object"
+                    />
+                        <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,processing,done"
+                    />
                     </header>
                     <sheet>
                         <group>
-                            <field name="in_data" />
-                            <field name="out_data" readonly="1" />
+                            <field name="in_filename" invisible="1" />
+                            <field name="out_filename" invisible="1" />
+                            <field name="in_data" filename="in_filename" />
+                            <field
+                            name="out_data"
+                            filename="out_filename"
+                            readonly="1"
+                        />
                             <field name="processor" />
                         </group>
                     </sheet>

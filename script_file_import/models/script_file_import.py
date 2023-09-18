@@ -9,6 +9,9 @@ class ScriptFileImport(models.Model):
     _name = "script.file.import"
     _description = "Script File Import"
 
+    in_filename = fields.Char()
+    out_filename = fields.Char(compute="_compute_out_filename")
+
     in_data = fields.Binary(string="Input CSV file", required=True)
 
     out_data = fields.Binary(string="Output CSV file", readonly=True)
@@ -16,12 +19,25 @@ class ScriptFileImport(models.Model):
     processor = fields.Selection(
         string="Processor", selection="_get_processor", required=True
     )
+    state = fields.Selection(
+        [
+            ("draft", "Draft"),
+            ("processing", "Processing"),
+            ("done", "Done"),
+        ],
+    )
 
     def _get_processor(self):
         return []
 
+    def run_in_background(self):
+        self.state = "processing"
+        self.with_delay().run()
+
     def run(self):
-        selected_processor = dict(
-            self._fields["processor"]._description_selection(self.env)
-        ).get(self.processor)
-        self.out_data = self.env[selected_processor].run(self.in_data)
+        self.out_data = self.env[self.processor].run(self.in_data)
+        self.state = "done"
+
+    def _compute_out_filename(self):
+        for record in self:
+            record.out_filename = "Result-" + record.in_filename
