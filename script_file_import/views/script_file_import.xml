@@ -36,4 +36,25 @@
                 </form>
             </field>
         </record>
-    </odoo>
+
+    <record id="script_file_import_view_tree" model="ir.ui.view">
+        <field name="model">script.file.import</field>
+        <field name="arch" type="xml">
+            <tree string="Script">
+                <field name="in_filename" />
+                <field name="create_date" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="script_file_import_view_search" model="ir.ui.view">
+        <field name="model">script.file.import</field>
+        <field name="arch" type="xml">
+            <search string="Script">
+                <field name="in_filename" />
+            </search>
+        </field>
+    </record>
+
+</odoo>
