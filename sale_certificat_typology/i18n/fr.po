@@ -1,0 +1,252 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_certificat_typology
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-05 08:44+0000\n"
+"PO-Revision-Date: 2023-10-05 08:44+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_certificat_typology
+#: model_terms:ir.ui.view,arch_db:sale_certificat_typology.view_order_form
+msgid ""
+"<i class=\"fa fa-info-circle\"/>\n"
+"                        &amp;nbsp;"
+msgstr ""
+
+#. module: sale_certificat_typology
+#: model_terms:ir.ui.view,arch_db:sale_certificat_typology.view_certificat_typology_form
+msgid ""
+"<span attrs=\"{'invisible': [('automatic_deletion', '=', 'none')]}\"> days "
+"</span>"
+msgstr ""
+"<span attrs=\"{'invisible': [('automatic_deletion', '=', 'none')]}\"> jours "
+"</span>"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__automatic_deletion
+msgid "Automatic deletion"
+msgstr "Suppression automatique"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__certificat
+msgid "Certificat"
+msgstr "Justificatifs"
+
+#. module: sale_certificat_typology
+#: model_terms:ir.ui.view,arch_db:sale_certificat_typology.view_order_form
+msgid "Certificat Items"
+msgstr "Justificatifs"
+
+#. module: sale_certificat_typology
+#: model:ir.model,name:sale_certificat_typology.model_sale_order_certificat_item
+msgid "Certificat Items in Sale Order"
+msgstr "Les justificatifs dans une commande de vente"
+
+#. module: sale_certificat_typology
+#: model:ir.model,name:sale_certificat_typology.model_certificat_typology
+msgid "Certificat Typology"
+msgstr "Types de justificatifs"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order__certificat_item_ids
+msgid "Certificat items"
+msgstr "Justificatifs"
+
+#. module: sale_certificat_typology
+#: model:ir.actions.act_window,name:sale_certificat_typology.action_certificat_typology_form
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__certificat_typology_id
+#: model:ir.ui.menu,name:sale_certificat_typology.menu_action_certificat_typology_form
+#: model_terms:ir.ui.view,arch_db:sale_certificat_typology.view_certificat_typology_form
+#: model_terms:ir.ui.view,arch_db:sale_certificat_typology.view_certificat_typology_tree
+msgid "Certificat typology"
+msgstr "Types de justificatifs"
+
+#. module: sale_certificat_typology
+#: model:ir.actions.server,name:sale_certificat_typology.certificat_items_delete_documents_stored_ir_actions_server
+#: model:ir.cron,cron_name:sale_certificat_typology.certificat_items_delete_documents_stored
+#: model:ir.cron,name:sale_certificat_typology.certificat_items_delete_documents_stored
+msgid "Certificats: Deleted the documents that are stored"
+msgstr "Justificatifs: Supprimer les documents stockés"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__company_id
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__company_id
+msgid "Company"
+msgstr "Société"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__product_ids
+msgid "Concerned products"
+msgstr "Produits concernés"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__create_uid
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__create_date
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: sale_certificat_typology
+#: model_terms:ir.actions.act_window,help:sale_certificat_typology.action_certificat_typology_form
+msgid "Define new certificat typology"
+msgstr "Définir un nouveau type de justificatif"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__description
+msgid "Description"
+msgstr ""
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__display_name
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_product__display_name
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_template__display_name
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order__display_name
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__display_name
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_line__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,help:sale_certificat_typology.field_certificat_typology__storage_duration
+msgid "Enter the number of days to keep the document."
+msgstr "Saisir le nombre de jours durant lesquels on doit stocker le document"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__id
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_product__id
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_template__id
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order__id
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__id
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_line__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__certificat_is_ok
+msgid "Is valid ?"
+msgstr "Est valide ?"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology____last_update
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_product____last_update
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_template____last_update
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order____last_update
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item____last_update
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_line____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__write_uid
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__write_date
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_line__certificat_item_ids
+msgid "Linked certificat items"
+msgstr "Justificatifs liés"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__order_id
+msgid "Linked order"
+msgstr "Commande liée"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order_certificat_item__order_line_ids
+msgid "Linked order lines"
+msgstr "Lignes de commande liées"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__name
+#: model_terms:ir.ui.view,arch_db:sale_certificat_typology.view_certificat_typology_form
+msgid "Name"
+msgstr "Nom"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields.selection,name:sale_certificat_typology.selection__certificat_typology__automatic_deletion__none
+msgid "None"
+msgstr "Non"
+
+#. module: sale_certificat_typology
+#: model:ir.model,name:sale_certificat_typology.model_product_product
+msgid "Product"
+msgstr "Article"
+
+#. module: sale_certificat_typology
+#: model:ir.model,name:sale_certificat_typology.model_product_template
+msgid "Product Template (Multi-Company)"
+msgstr "Modèle de produit (Multi-Sociétés)"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_product__required_certificat_ids
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_product_template__required_certificat_ids
+msgid "Requested certificats"
+msgstr "Justificatifs demandés"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_sale_order__sale_warn_msg
+msgid "Sale Warn Msg"
+msgstr ""
+
+#. module: sale_certificat_typology
+#: model:ir.model,name:sale_certificat_typology.model_sale_order
+msgid "Sales Order"
+msgstr "Bon de commande"
+
+#. module: sale_certificat_typology
+#: model:ir.model,name:sale_certificat_typology.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de bons de commande"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields,field_description:sale_certificat_typology.field_certificat_typology__storage_duration
+msgid "Storage duration"
+msgstr "Durée de stockage"
+
+#. module: sale_certificat_typology
+#: code:addons/sale_certificat_typology/models/sale_order.py:0
+#, python-format
+msgid "Warning: in this order, some products require certificates !"
+msgstr ""
+"Alerte: dans cette commande, il y a des produits qui nécessitent des "
+"justificatifs !"
+
+#. module: sale_certificat_typology
+#: code:addons/sale_certificat_typology/models/sale_order.py:0
+#, python-format
+msgid ""
+"You cannot validate your order because some products require certificates !"
+msgstr ""
+"Vous ne pouvez pas confirmer la commande car des produits nécessitent des "
+"justificatifs !"
+
+#. module: sale_certificat_typology
+#: model:ir.model.fields.selection,name:sale_certificat_typology.selection__certificat_typology__automatic_deletion__x_day_after_so_confirm
+msgid "after SO confirmation"
+msgstr "après confirmation de la commande"
+
+#. module: sale_certificat_typology
+#: model_terms:ir.ui.view,arch_db:sale_certificat_typology.view_certificat_typology_form
+msgid "e.g. ID card"
+msgstr "ex. Carte d'identité"
