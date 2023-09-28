@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="ir_exports_form_view" model="ir.ui.view">
+        <field name="model">ir.exports</field>
+        <field name="inherit_id" ref="base_export_manager.ir_exports_form_view" />
+        <field name="arch" type="xml">
+            <field name="label" position="after">
+                <field name="field_description" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
