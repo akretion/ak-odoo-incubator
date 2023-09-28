@@ -14,7 +14,6 @@ class EdiTransportConfig(models.Model):
             ("external_location", "SFTP/FTP"),
             ("manual", "Manual"),
         ],
-        string="Edi Transfer Method",
     )
     edi_storage_backend_id = fields.Many2one(
         "storage.backend", string="FTP/SFTP Location"
