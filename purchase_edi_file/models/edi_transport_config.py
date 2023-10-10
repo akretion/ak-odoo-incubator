@@ -15,9 +15,7 @@ class EdiTransportConfig(models.Model):
             ("manual", "Manual"),
         ],
     )
-    edi_storage_backend_id = fields.Many2one(
-        "storage.backend", string="FTP/SFTP Location"
-    )
+    edi_storage_backend_id = fields.Many2one("fs.storage", string="FTP/SFTP Location")
     edi_mail_template_id = fields.Many2one(
         "mail.template",
         domain=[("model_id.model", "in", ("purchase.order", "res.partner"))],

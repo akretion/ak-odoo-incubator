@@ -4,10 +4,7 @@
     <record id="supplier_12_config" model="edi.transport.config">
         <field name="name">Demo config</field>
         <field name="edi_transfer_method">external_location</field>
-        <field
-            name="edi_storage_backend_id"
-            ref="storage_backend.default_storage_backend"
-        />
+        <field name="edi_storage_backend_id" ref="fs_storage.default_fs_storage" />
     </record>
 
 </odoo>
