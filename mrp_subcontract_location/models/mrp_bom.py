@@ -88,44 +88,55 @@ class MrpBom(models.Model):
             supplied_wh = bom.get_supplied_wh()
             if not supplied_wh:
                 continue
-            for line in bom.bom_line_ids:
-                product = line.product_id
-                product_routes = product.route_ids
-                if manuf_route_id not in product_routes.ids:
-                    # Product must be bought, ignore it
-                    continue
-                line_bom = product.bom_ids and product.bom_ids[0] or False
-                # Config error, raise something?
-                if not line_bom:
-                    _logger.warning(
-                        "error : no bom found for component %s from "
-                        "bom %s" % (product.default_code, bom.id,)
-                    )
-                    continue
-                supply_wh = line_bom.get_supplied_wh()
+            
+            manuf_products = bom.bom_line_ids.mapped("product_id").filtered(lambda p: manuf_route_id in p.route_ids.ids)     
+            if not manuf_products:
+                product = bom.product_tmpl_id
+                supply_wh = self.env["stock.warehouse"].search([("partner_id", "=", product.main_supplierinfo_id.name.id)], limit=1)
                 if not supply_wh:
                     continue
-                # Product and raw material are manufactured in the same wh
-                # no need for inter wh routes.
                 if self._check_same_wh(supply_wh, supplied_wh):
-                    continue
-
-                route = self._get_supply_route(supplied_wh, supply_wh)
-                if route.id not in product_routes.ids:
-                    # Check if there is already an interwh route bringing the
-                    # product to the same wh. If this is the case, we erase
-                    # it from the product. Indeed we can't have 2 routes
-                    # bringing the product to the same wh, as Odoo won't know
-                    # which to choose.
-                    prod_vals = {
-                        'route_ids': []
-                    }
-                    same_supplied_wh_routes = product_routes.filtered(
-                        lambda r: r.supplied_wh_id == supplied_wh)
-                    if same_supplied_wh_routes:
-                        remove_routes = [
-                            (3, x.id, 0) for x in same_supplied_wh_routes
-                        ]
-                        prod_vals['route_ids'] += remove_routes
-                    prod_vals['route_ids'].append((4, route.id, 0))
-                    product.write(prod_vals)
+                        continue
+                self._set_product_routes(product=product, supply_wh=supply_wh, supplied_wh=supplied_wh)
+            else:
+                for line in bom.bom_line_ids:
+                    product = line.product_id
+                    if manuf_route_id not in product.route_ids.ids:
+                        # Product must be bought, ignore it
+                        continue
+                    line_bom = product.bom_ids and product.bom_ids[0] or False
+                    # Config error, raise something?
+                    if not line_bom:
+                        _logger.warning(
+                            "error : no bom found for component %s from "
+                            "bom %s" % (product.default_code, bom.id,)
+                        )
+                        continue
+                    supply_wh = line_bom.get_supplied_wh() 
+                    if not supply_wh:
+                            continue
+                    if self._check_same_wh(supply_wh, supplied_wh):
+                            continue
+                    self._set_product_routes(product=product, supply_wh=supply_wh, supplied_wh=supplied_wh)
+    
+    def _set_product_routes(self, product, supply_wh, supplied_wh):
+        product_routes = product.route_ids
+        route = self._get_supply_route(supplied_wh, supply_wh)
+        if route.id not in product_routes.ids:
+            # Check if there is already an interwh route bringing the
+            # product to the same wh. If this is the case, we erase
+            # it from the product. Indeed we can't have 2 routes
+            # bringing the product to the same wh, as Odoo won't know
+            # which to choose.
+            prod_vals = {
+                'route_ids': []
+            }
+            same_supplied_wh_routes = product_routes.filtered(
+                lambda r: r.supplied_wh_id == supplied_wh)
+            if same_supplied_wh_routes:
+                remove_routes = [
+                    (3, x.id, 0) for x in same_supplied_wh_routes
+                ]
+                prod_vals['route_ids'] += remove_routes
+            prod_vals['route_ids'].append((4, route.id, 0))
+            product.write(prod_vals)
