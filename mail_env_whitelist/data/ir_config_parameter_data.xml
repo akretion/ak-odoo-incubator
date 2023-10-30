@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="test_env_email_to_whitelist" model="ir.config_parameter">
+        <field name="key">mail_env_whitelist.test_env_email_to_whitelist</field>
+        <field name="value" />
+    </record>
+</odoo>
