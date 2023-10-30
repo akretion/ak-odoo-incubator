@@ -8,8 +8,15 @@ class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
 
     @api.model
-    def _get_unique_layout_ref(self):
+    def _get_default_unique_layout_ref(self):
         return "mail_unique_layout.general_mail_layout"
+
+    @api.model
+    def _get_unique_layout_ref(self):
+        if self._context.get("force_mail_uniq_layout_id"):
+            return self._context["force_mail_uniq_layout_id"]
+        else:
+            return self._get_default_unique_layout_ref()
 
     @api.returns("mail.message", lambda value: value.id)
     def message_post(self, *kw, **kwargs):
