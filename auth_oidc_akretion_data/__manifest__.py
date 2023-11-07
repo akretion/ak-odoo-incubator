@@ -1,8 +1,8 @@
-# Copyright 2023 ACSONE SA/NV
+# Copyright 2023 AKretion
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Auth Oidc Environment",
+    "name": "Auth Oidc akretion data",
     "summary": """
         This module allows to add auth oidc data for akretion""",
     "version": "14.0.1.0.0",
@@ -12,6 +12,6 @@
     "depends": [
         "auth_oidc",
     ],
-    "data": ["data/ir_config_parameter_data.xml"],
+    "data": ["data/ir_auth_oauth_provide_data.xml"],
     "demo": [],
 }
