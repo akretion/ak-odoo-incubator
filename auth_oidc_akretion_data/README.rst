@@ -1,6 +1,6 @@
-====================
-Auth Oidc Environment
-=====================
+=======================
+Auth Oidc Akretion DATA
+=======================
 
 ..
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -28,7 +28,7 @@ Auth Oidc Environment
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-this module allows to use server env for OIDC configuration
+this module Add Akretion data for OIDC configuration
 
 **Table of contents**
 
@@ -38,17 +38,7 @@ this module allows to use server env for OIDC configuration
 Configuration
 =============
 
-To configure this module, you need to:
-
-Create a module server_environment_file with a cfg file or set the environment variable SERVER_ENV_CONFIG with the following section:
-
-[auth_oauth_provider.<name>]
-
-Where <name> is optional and must be equal to the name field you defined in Odoo for the IDP.
-
-Example of configuration
-
-[auth_oauth_provider.azure]
+To configure this module, you need to define:
 
 client_id=...
 client_secret=...
@@ -74,25 +64,18 @@ Credits
 Authors
 ~~~~~~~
 
-* ACSONE SA/NV
+* Akretion
 
 Contributors
 ~~~~~~~~~~~~
 
-* Adrien PEIFFER <adrien.peiffer@acsone.eu> (ACSONE SA/NV)
+* Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
 
 Maintainers
 ~~~~~~~~~~~
 
-This module is maintained by the OCA.
+This module is maintained by Akretion.
 
-.. image:: https://odoo-community.org/logo.png
-   :alt: Odoo Community Association
-   :target: https://odoo-community.org
-
-OCA, or the Odoo Community Association, is a nonprofit organization whose
-mission is to support the collaborative development of Odoo features and
-promote its widespread use.
 
 This module is part of the `OCA/server-auth <https://github.com/OCA/server-auth/tree/16.0/auth_oidc_environment>`_ project on GitHub.
 
