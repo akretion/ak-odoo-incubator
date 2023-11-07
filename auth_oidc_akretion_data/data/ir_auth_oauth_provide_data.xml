@@ -1,13 +1,9 @@
-<!--
-    (c) 2015 ACSONE SA/NV, Dhinesh D
-    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
--->
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
-
     <record id="auth_oauth_provider_akretion_data" model="auth.oauth.provider">
         <field name="name">Akretion</field>
         <field name="flow">id_token_code</field>
-        <field token_map="token_map">email:user_id</field>
+        <field name="token_map">email:user_id</field>
         <field name="enabled">True</field>
         <field name="body">Akretion</field>
         <field name="css_class">fa fa-fw fa-sign-in text-primary</field>
@@ -16,5 +12,4 @@
         <field name="token_endpoint">https://auth.akretion.com/realms/master/protocol/openid-connect/token</field>
         <field name="jwks_uri">https://auth.akretion.com/realms/master/protocol/openid-connect/certs</field>
     </record>
-
 </odoo>
