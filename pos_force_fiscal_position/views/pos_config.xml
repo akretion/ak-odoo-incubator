@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+<record id="pos_config_view_form" model="ir.ui.view">
+    <field name="model">pos.config</field>
+    <field name="inherit_id" ref="pos_sale_order_auto_config.pos_config_view_form" />
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='anonymous_partner_id']" position="after">
+            <field name="force_fiscal_position_id" />
+        </xpath>
+    </field>
+</record>
+
+</odoo>
