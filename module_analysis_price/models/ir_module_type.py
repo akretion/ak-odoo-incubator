@@ -19,7 +19,13 @@ class IrModuleType(models.Model):
     page_qty = fields.Integer(
         string="Page Qty", compute="_compute_code_qty", store=True
     )
-    community = fields.Boolean()
+    source = fields.Selection(
+        [
+            ("standard", "Standard"),
+            ("community", "Community"),
+            ("custom", "Custom"),
+        ]
+    )
     migration_price_unit = fields.Float()
     maintenance_price_unit = fields.Float()
     migration_monthly_price = fields.Float(compute="_compute_migration_price")
@@ -42,8 +48,12 @@ class IrModuleType(models.Model):
             )
             record[f"{case}_year_price"] = record[f"{case}_monthly_price"] * 12
 
-    @api.depends("installed_module_ids.code_qty")
+    @api.depends("module_ids.code_qty")
     def _compute_code_qty(self):
         for record in self:
-            record.code_qty = sum(record.installed_module_ids.mapped("code_qty"))
+            record.code_qty = sum(
+                record.module_ids.filtered(lambda l: l.state == "installed").mapped(
+                    "code_qty"
+                )
+            )
             record.page_qty = record.code_qty / QTY_PER_PAGE

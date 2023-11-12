@@ -22,17 +22,22 @@ class IrModuleAuthor(models.Model):
     )
 
     @api.depends(
-        "installed_module_ids.code_qty",
-        "installed_module_ids.module_type_id.community",
+        "module_ids.code_qty",
+        "module_ids.module_type_id.source",
     )
     def _compute_community_rate(self):
-        type_community = self.env["ir.module.type"].search([("community", "=", True)])
+        type_community = self.env["ir.module.type"].search(
+            [("source", "=", "community")]
+        )
         total_code_qty = sum(type_community.mapped("code_qty"))
-        if total_code_qty:
-            total_module_qty = len(type_community.installed_module_ids)
+        total_module_qty = sum(type_community.mapped("installed_module_qty"))
+        if total_module_qty:
             for record in self:
-                modules = record.installed_module_ids.filtered(
-                    "module_type_id.community"
+                installed_module_ids = record.module_ids.filtered(
+                    lambda l: l.state == "installed"
+                )
+                modules = installed_module_ids.filtered(
+                    lambda m: m.module_type_id.source == "comunity"
                 )
                 record.community_installed_code_qty = sum(modules.mapped("code_qty"))
                 record.community_installed_code_rate = (
