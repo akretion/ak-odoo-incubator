@@ -78,12 +78,12 @@ class LabelFromRecord(models.TransientModel):
             self.env["ir.config_parameter"]
             .sudo()
             .get_param("label_printer_poc.printer_host")
-        )
+        ) or "https://localhost:443"
         printer_name = (
             self.env["ir.config_parameter"]
             .sudo()
             .get_param("label_printer_poc.product_label_printer_name")
-        )
+        ) or "zebra_large"
         for rec in self:
             if rec.content:
                 printed_product_list = []
