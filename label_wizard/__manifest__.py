@@ -8,7 +8,6 @@
     "summary": "Wizard for choosing how many labels to print",
     "depends": [
         "proxy_action",
-        'label_printer_poc',
     ],
     "data": [
         "wizard/wizard_view.xml",
