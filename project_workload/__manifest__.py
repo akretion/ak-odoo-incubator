@@ -20,10 +20,13 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "views/project_task_workload_view.xml",
         "views/project_capacity_unit_view.xml",
         "views/project_task_view.xml",
         "views/project_project_view.xml",
         "views/project_user_capacity_view.xml",
+        "views/project_load_report_line_view.xml",
+        "views/project_load_report_view.xml",
         "views/menu_view.xml",
     ],
     "demo": [],

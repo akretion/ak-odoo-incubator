@@ -27,12 +27,12 @@ class ProjectUserCapacity(models.Model):
         return records
 
     def _cron_generate_week_report(self, nbr_week=52):
-        self.env["project.capacity"].search([])._generate_capacity_unit()
+        self.search([])._generate_capacity_unit(nbr_week=nbr_week)
 
     def _generate_capacity_unit(self, nbr_week=52):
         now = datetime.now()
         items = self.env["project.capacity.unit"].search(
-            [("week", ">", week_name(now))]
+            [("week", ">=", week_name(now))]
         )
         weeks_per_capacity = defaultdict(set)
         for item in items:

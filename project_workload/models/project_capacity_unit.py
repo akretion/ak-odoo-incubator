@@ -25,7 +25,9 @@ class ProjectCapacityUnit(models.Model):
     week = fields.Char()
     capacity_id = fields.Many2one("project.user.capacity", "Capacity")
     hours = fields.Float(compute="_compute_capacity", store=True)
-
+    user_id = fields.Many2one(
+        "res.users", "User", related="capacity_id.user_id", store=True
+    )
     _sql_constraints = [
         (
             "week_capacity_uniq",
@@ -53,7 +55,9 @@ class ProjectCapacityUnit(models.Model):
                                 datetime.strptime(
                                     record.week + "-1", WEEK_FORMAT + "-%w"
                                 ).date()
-                                - line.date_start
+                                - datetime.strptime(
+                                    start + "-1", WEEK_FORMAT + "-%w"
+                                ).date()
                             ).days
                             / 7
                         )

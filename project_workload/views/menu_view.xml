@@ -15,4 +15,11 @@
         action="project_user_capacity_action"
     />
 
+    <menuitem
+        id="project_load_report_menu"
+        parent="project_workload_menu"
+        sequence="40"
+        action="project_load_report_action"
+    />
+
 </odoo>

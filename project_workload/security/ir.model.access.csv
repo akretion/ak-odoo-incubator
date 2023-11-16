@@ -3,3 +3,6 @@ access_edit_project_user_capacity,edit project user capacity,model_project_user_
 access_edit_project_user_capacity_line,edit project user capacity line,model_project_user_capacity_line,project.group_project_user,1,1,1,1
 access_edit_project_capacity_unit,edit project capacity unit,model_project_capacity_unit,project.group_project_user,1,1,1,1
 access_edit_project_task_workload,edit project task workload,model_project_task_workload,project.group_project_user,1,1,1,1
+access_edit_project_workload_unit,edit project workload unit,model_project_workload_unit,project.group_project_user,1,1,1,1
+access_edit_project_load_report,edit project load report,model_project_load_report,project.group_project_user,1,1,1,1
+access_edit_project_load_report_line,edit project load report line,model_project_load_report_line,project.group_project_user,1,1,1,1
