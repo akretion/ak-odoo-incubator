@@ -36,12 +36,16 @@ class MigrationMixin(models.AbstractModel):
 
     @property
     def mapped_fields(self):
-        default = self.mapped_fields_default()
-        default.update({"old_odoo_id": {"old_name": "id"}})
-        return default
+        return self.construct_mapped_fields()
 
     def mapped_fields_default(self):
         return {}
+
+    def construct_mapped_fields(self):
+        # override this method if you don't need old_odoo_id
+        default = self.mapped_fields_default()
+        default.update({"old_odoo_id": {"old_name": "id"}})
+        return default
 
     def migrate_data(self, batch=0, domain=None):
         _logger.info("Start migration of %s", self._name)
@@ -113,12 +117,14 @@ class MigrationMixin(models.AbstractModel):
                     options.get("inherits")
                     and self._inherits[options["inherits"]]
                     or options.get("join_col")
+                    or "id"
                 )
+                inverse_col = options.get("inverse_join_col") or "id"
                 alias = query.join(
                     table_name,
                     col,
                     field_table_name,
-                    "id",
+                    inverse_col,
                     col,
                 )
             else:
@@ -360,7 +366,7 @@ class MigrationMixin(models.AbstractModel):
                 # if condition and make sure to pass the context only during the
                 # database initialization phase...
                 if do_commit:
-                    self.env.cr.commit()
+                    self.env.cr.commit()  # pylint: disable=invalid-commit
         created_records = self.browse(created_record_ids)
         if company_dep_data and not self._is_single_company():
             # TODO loop on fields, old_id and company to write each company_dep data
