@@ -13,9 +13,41 @@ class SaleOrder(models.Model):
     certificat_item_ids = fields.One2many(
         comodel_name="sale.order.certificat.item",
         inverse_name="order_id",
+        compute="_compute_certificat_item_ids",
         string="Certificat items",
+        store=True,
     )
     sale_warn_msg = fields.Text(compute="_compute_sale_warn_msg")
+
+    @api.depends("order_line.product_id")
+    def _compute_certificat_item_ids(self):
+        for record in self:
+            required_certificats = record.order_line.product_id.required_certificat_ids
+            items = record.certificat_item_ids.filtered(
+                lambda s: s.certificat_typology_id in required_certificats
+            )
+            for certificat in required_certificats:
+                if certificat not in items.certificat_typology_id:
+                    items |= self.env["sale.order.certificat.item"].create(
+                        {
+                            "order_id": record.id,
+                            "certificat_typology_id": certificat.id,
+                            "company_id": record.company_id.id,
+                        }
+                    )
+            record.certificat_item_ids = [(6, 0, items.ids)]
+
+    @api.depends("certificat_item_ids")
+    def _compute_sale_warn_msg(self):
+        for sale in self:
+            sale_warn_msg = False
+            if sale.state in ["draft", "sent"] and sale.certificat_item_ids.filtered(
+                lambda ci: not ci.certificat_is_ok
+            ):
+                sale_warn_msg = _(
+                    "Warning: in this order, some products require valid certificates !"
+                )
+            sale.sale_warn_msg = sale_warn_msg
 
     def action_confirm(self):
         for sale in self:
@@ -28,97 +60,23 @@ class SaleOrder(models.Model):
                 )
         return super().action_confirm()
 
-    @api.depends("certificat_item_ids")
-    def _compute_sale_warn_msg(self):
-        for sale in self:
-            sale_warn_msg = False
-            if sale.state in ["draft", "sent"] and sale.certificat_item_ids.filtered(
-                lambda ci: not ci.certificat_is_ok
-            ):
-                sale_warn_msg = _(
-                    "Warning: in this order, some products require certificates !"
-                )
-            sale.sale_warn_msg = sale_warn_msg
-
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    certificat_item_ids = fields.Many2many(
-        comodel_name="sale.order.certificat.item", string="Linked certificat items"
+    required_certificat_ids = fields.Many2many(
+        comodel_name="certificat.typology",
+        related="product_id.required_certificat_ids",
+        string="Requested certificats",
+        readonly=True,
     )
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        lines = super().create(vals_list)
-        for line, vals in zip(lines, vals_list):
-            if "order_id" in vals and "product_id" in vals:
-                self._add_certificat_items(line, vals.get("product_id"))
-        return lines
-
-    def write(self, values):
-        for line in self:
-            if "product_id" in values:
-                # remove certificat item for old product
-                self._remove_certificat_items(line)
-                # add certificat item for new product
-                self._add_certificat_items(line, values.get("product_id"))
-        return super().write(values)
-
-    def unlink(self):
-        for line in self:
-            self._remove_certificat_items(line)
-        return super().unlink()
-
-    def _add_certificat_items(self, line, product_id):
-        product = self.env["product.product"].browse(product_id)
-        for certificat in product.required_certificat_ids:
-            certificat_item = self.env["sale.order.certificat.item"].search(
-                [
-                    ("order_id", "=", line.order_id.id),
-                    ("certificat_typology_id", "=", certificat.id),
-                ],
-                limit=1,
-            )
-            if certificat_item:
-                certificat_item.write({"order_line_ids": [(4, line.id, 0)]})
-            else:
-                self.env["sale.order.certificat.item"].create(
-                    {
-                        "order_id": line.order_id.id,
-                        "order_line_ids": [(6, 0, line.ids)],
-                        "certificat_typology_id": certificat.id,
-                        "company_id": line.company_id.id,
-                    }
-                )
-
-    def _remove_certificat_items(self, line):
-        certificat_items = self.env["sale.order.certificat.item"].search(
-            [("order_id", "=", line.order_id.id), ("order_line_ids", "in", line.id)]
-        )
-        for item in certificat_items:
-            if len(item.order_line_ids) == 1:
-                item.unlink()
-            else:
-                item.write({"order_line_ids": [(3, line.id, 0)]})
 
 
 class SaleOrderCertificatItem(models.Model):
     _name = "sale.order.certificat.item"
     _description = "Certificat Items in Sale Order"
 
-    order_id = fields.Many2one(
-        comodel_name="sale.order", string="Linked order", required=True
-    )
-    order_line_ids = fields.Many2many(
-        comodel_name="sale.order.line", string="Linked order lines", required=True
-    )
-    product_ids = fields.Many2many(
-        comodel_name="product.product",
-        string="Concerned products",
-        compute="_compute_product_ids",
-        readonly=False,
-    )
+    order_id = fields.Many2one(comodel_name="sale.order", string="Linked order")
     certificat_typology_id = fields.Many2one(
         comodel_name="certificat.typology", string="Certificat typology", required=True
     )
@@ -143,8 +101,3 @@ class SaleOrderCertificatItem(models.Model):
                 date.today() - item.order_id.date_order.date()
             ).days >= item.certificat_typology_id.storage_duration:
                 item.write({"certificat": False})
-
-    @api.depends("order_line_ids")
-    def _compute_product_ids(self):
-        for rec in self:
-            rec.product_ids = [(6, 0, rec.order_line_ids.mapped("product_id").ids)]

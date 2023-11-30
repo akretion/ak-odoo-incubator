@@ -21,11 +21,6 @@
                             delete="false"
                             create="false"
                         >
-                            <field
-                                name="product_ids"
-                                widget="many2many_tags"
-                                readonly="True"
-                            />
                             <field name="certificat_typology_id" readonly="True" />
                             <field name="certificat" />
                             <field
@@ -39,6 +34,16 @@
                         </tree>
                     </field>
                 </page>
+            </xpath>
+            <xpath
+                expr="//notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='company_id']"
+                position="after"
+            >
+                <field
+                    name="required_certificat_ids"
+                    widget="many2many_tags"
+                    optional="hide"
+                />
             </xpath>
             <header position="after">
                 <div
