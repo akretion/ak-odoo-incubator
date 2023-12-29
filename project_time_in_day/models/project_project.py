@@ -10,11 +10,16 @@ class ProjectProject(models.Model):
     _inherit = "project.project"
 
     def _get_hour_domain(self):
-        return [("category_id", "=", self.env.ref("uom.uom_categ_wtime").id), ("uom_type", "=", "smaller")]
+        return [
+            ("category_id", "=", self.env.ref("uom.uom_categ_wtime").id),
+            ("uom_type", "=", "smaller"),
+        ]
 
     hour_uom_id = fields.Many2one(
-        "uom.uom", "Hour Uom", help="Used for conversion between day and hours",
-        domain=_get_hour_domain
+        "uom.uom",
+        "Hour Uom",
+        help="Used for conversion between day and hours",
+        domain=_get_hour_domain,
     )
 
     def _get_hour_uom(self):
