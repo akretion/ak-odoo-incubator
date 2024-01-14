@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field
+            name="inherit_id"
+            ref="account_invoice_inter_company.res_config_settings_view_form"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='inter_company_so_from_po']" position="after">
+                <div>
+                    <label
+                        for="requisition_intercompany_partner_ids"
+                        class="o_light_label"
+                    />
+                    <field
+                        name="requisition_intercompany_partner_ids"
+                        widget="many2many_tags"
+                        options="{'no_create': True}"
+                        class="o_light_label"
+                        can_write="true"
+                        domain="[('company_id', '=', company_id)]"
+                    />
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
