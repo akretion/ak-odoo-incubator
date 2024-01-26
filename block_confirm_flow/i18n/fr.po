@@ -1,0 +1,61 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* block_confirm_flow
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-26 09:27+0000\n"
+"PO-Revision-Date: 2024-01-26 09:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: block_confirm_flow
+#. odoo-python
+#: code:addons/block_confirm_flow/models/account_move.py:0
+#, python-format
+msgid ""
+"Unable to validate Account move, (blocked by module block_confirm_flow before "
+"production release)"
+msgstr "Impossible de valider les écriture comptable, blocage temporaire avant mise en production"
+
+#. module: block_confirm_flow
+#. odoo-python
+#: code:addons/block_confirm_flow/models/mrp_production.py:0
+#, python-format
+msgid ""
+"Unable to validate Manufacturing Orders, (blocked by module block_confirm_flow "
+"before production release)"
+msgstr "Impossible de créer les Ordres de travail, blocage temporaire avant mise en production"
+
+#. module: block_confirm_flow
+#. odoo-python
+#: code:addons/block_confirm_flow/models/purchase_order.py:0
+#, python-format
+msgid ""
+"Unable to validate Purchase Order, (blocked by module block_confirm_flow before"
+" production release)"
+msgstr "Impossible de valider la commande d'achat, blocage temporaire avant mise en production"
+
+#. module: block_confirm_flow
+#. odoo-python
+#: code:addons/block_confirm_flow/models/sale_order.py:0
+#, python-format
+msgid ""
+"Unable to validate Sale Order, (blocked by module block_confirm_flow before "
+"production release)"
+msgstr "Impossible de valider la commande, blocage temporaire avant mise en production"
+
+#. module: block_confirm_flow
+#. odoo-python
+#: code:addons/block_confirm_flow/models/mrp_production.py:0
+#, python-format
+msgid ""
+"Unable to validate Work Order, (blocked by module block_confirm_flow before "
+"production release)"
+msgstr "Impossible de créer les Ordres de travail, blocage temporaire avant mise en production"
