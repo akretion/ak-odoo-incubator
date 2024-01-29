@@ -14,6 +14,12 @@
                     </div>
                     <group>
                         <group>
+                            <label for="code" />
+                            <div>
+                                <field name="code" />
+                            </div>
+                        </group>
+                        <group>
                             <label for="description" />
                             <div>
                                 <field name="description" />
@@ -49,8 +55,9 @@
         <field name="name">certificat.typology.tree</field>
         <field name="model">certificat.typology</field>
         <field name="arch" type="xml">
-            <tree string="Certificat typology">
+            <tree>
                 <field name="name" />
+                <field name="code" />
                 <field name="description" />
                 <field name="storage_duration" optional="hide" />
                 <field name="automatic_deletion" optional="hide" />

@@ -9,6 +9,7 @@ class CertificatTypology(models.Model):
     _description = "Certificat Typology"
 
     name = fields.Char(string="Name", required=True, translate=True)
+    code = fields.Char(string="Code")
     description = fields.Char(string="Description", translate=True)
     storage_duration = fields.Integer(
         string="Storage duration", help="Enter the number of days to keep the document."
