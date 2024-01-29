@@ -1,0 +1,18 @@
+<odoo noupdate="1">
+    <record
+        forcecreate="True"
+        id="certificat_items_delete_documents_stored"
+        model="ir.cron"
+    >
+        <field name="name">Certificats: Deleted the documents that are stored</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">0</field>
+        <field name="numbercall">-1</field>
+        <field name="doall">1</field>
+        <field name="model_id" ref="model_sale_order_certificat_item" />
+        <field name="state">code</field>
+        <field name="code">model._delete_documents_stored()</field>
+    </record>
+</odoo>

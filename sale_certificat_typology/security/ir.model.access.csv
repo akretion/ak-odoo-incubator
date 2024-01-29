@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_certificat_typology,certificat.typology,model_certificat_typology,sales_team.group_sale_salesman,1,1,1,1
+access_sale_order_certificat_item,sale.order.certificat.item,model_sale_order_certificat_item,sales_team.group_sale_salesman,1,1,1,1
