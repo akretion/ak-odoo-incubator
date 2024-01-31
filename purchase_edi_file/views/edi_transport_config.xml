@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="edi_transport_config_view_form" model="ir.ui.view">
+        <field name="name">edi.transport.config.form</field>
+        <field name="model">edi.transport.config</field>
+        <field name="arch" type="xml">
+            <form string="Edi Transport">
+                <group name="base" col="2">
+                    <field name="name" />
+                    <field name="edi_transfer_method" required="1" />
+                    <field
+                        name="edi_storage_backend_id"
+                        attrs="{'invisible': [('edi_transfer_method', '!=', 'external_location')]}"
+                    />
+                    <field
+                        name="edi_mail_template_id"
+                        attrs="{'invisible': [('edi_transfer_method', '!=', 'mail')]}"
+                    />
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>

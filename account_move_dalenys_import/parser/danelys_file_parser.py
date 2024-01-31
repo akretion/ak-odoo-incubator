@@ -1,9 +1,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import codecs
-from csv import Dialect
-
-from _csv import QUOTE_MINIMAL, register_dialect
+from csv import QUOTE_MINIMAL, Dialect, register_dialect
 
 from odoo.addons.account_move_base_import.parser.file_parser import (
     FileParser,

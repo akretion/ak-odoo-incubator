@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="export_po_product" model="ir.exports">
+         <field name="name">Test Export po line product</field>
+         <field name="model_id" ref="purchase.model_purchase_order_line" />
+    </record>
+
+    <record id="export_po_product_line1" model="ir.exports.line">
+         <field name="name">product_id/name</field>
+         <field name="field_description">Product</field>
+         <field name="export_id" ref="purchase_edi_file.export_po_product" />
+    </record>
+
+    <record id="export_po_product_config" model="ir.exports.config">
+         <field name="name">Test Export po line product</field>
+         <field name="file_format">csv</field>
+         <field name="export_id" ref="export_po_product" />
+    </record>
+
+    <record id="export_po_quantity" model="ir.exports">
+         <field name="name">Test Export po line Quantity</field>
+         <field name="model_id" ref="purchase.model_purchase_order_line" />
+    </record>
+
+    <record id="export_po_quantity_line1" model="ir.exports.line">
+         <field name="name">product_qty</field>
+         <field name="field_description">Quantity</field>
+         <field name="export_id" ref="purchase_edi_file.export_po_quantity" />
+    </record>
+
+    <record id="export_po_quantity_config" model="ir.exports.config">
+         <field name="name">Test Export po line Quantity</field>
+         <field name="export_id" ref="export_po_quantity" />
+         <field name="file_format">csv</field>
+    </record>
+
+    <record id="export_po_quantity_and_product" model="ir.exports">
+         <field name="name">Test Export po line Product and Quantity</field>
+         <field name="model_id" ref="purchase.model_purchase_order_line" />
+    </record>
+
+    <record id="export_po_quantity_and_product_line1" model="ir.exports.line">
+        <field name="name">product_id/name</field>
+         <field name="field_description">Product</field>
+         <field name="export_id" ref="export_po_quantity_and_product" />
+    </record>
+
+    <record id="export_po_quantity_and_product_line2" model="ir.exports.line">
+         <field name="name">product_qty</field>
+         <field name="field_description">Quantity</field>
+         <field name="export_id" ref="export_po_quantity_and_product" />
+    </record>
+
+    <record id="export_po_quantity_and_product_config" model="ir.exports.config">
+         <field name="name">Test Export po line Product and Quantity</field>
+         <field name="export_id" ref="export_po_quantity_and_product" />
+         <field name="file_format">csv</field>
+    </record>
+
+</odoo>
