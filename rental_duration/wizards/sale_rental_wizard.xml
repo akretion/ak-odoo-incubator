@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2023 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="sale_rental_line_wizard_view" model="ir.ui.view">
+        <field name="model">sale.rental.line.wizard</field>
+        <field name="inherit_id" ref="rental_variant.sale_rental_line_wizard_view" />
+        <field name="arch" type="xml">
+            <field name="rental_qty" position="after">
+                <div class="d-flex flex-row align-items-start">
+                    <field name="must_have_duration" invisible="1" />
+                    <label for="rental_duration"  />
+                    <field name="rental_duration" class="oe_inline" attrs="{'required': [('must_have_duration', '=', True)], 'invisible': [('must_have_duration', '=', False)]}"  />
+                    <field name="rental_uom_id" class="oe_inline flex-grow-1"/>
+                </div>
+            </field>
+            <field name="end_date" position="attributes" >
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{'required': [('must_have_duration', '=', False)], 'invisible': [('must_have_duration', '=', True)]}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

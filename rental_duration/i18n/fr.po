@@ -1,0 +1,138 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* rental_duration
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-21 12:58+0000\n"
+"PO-Revision-Date: 2023-12-21 14:04+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4.1\n"
+
+#. module: rental_duration
+#: model_terms:ir.ui.view,arch_db:rental_duration.res_config_settings_view_form
+msgid "Activate Rental Duration (Month, year, etc.)"
+msgstr "Activer la durée de location (Mois, année, etc.)"
+
+#. module: rental_duration
+#: model:ir.model,name:rental_duration.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: rental_duration
+#: model:ir.model,name:rental_duration.model_res_config_settings
+msgid "Config Settings"
+msgstr "Paramètres de config"
+
+#. module: rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_sale_order_line__end_date
+msgid "End Date"
+msgstr "Date de fin"
+
+#. module: rental_duration
+#: model:uom.uom,name:rental_duration.product_uom_month
+msgid "Months"
+msgstr "Mois"
+
+#. module: rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_product_product__must_have_duration
+#: model:ir.model.fields,field_description:rental_duration.field_product_template__must_have_duration
+#: model:ir.model.fields,field_description:rental_duration.field_sale_order_line__must_have_duration
+#: model:ir.model.fields,field_description:rental_duration.field_sale_rental_line_wizard__must_have_duration
+msgid "Must Have Duration"
+msgstr "Doit avoir une Durée (Mois, année, etc.)"
+
+#. module: rental_duration
+#: model:ir.model,name:rental_duration.model_product_product
+msgid "Product"
+msgstr ""
+
+#. module: rental_duration
+#: model:ir.model,name:rental_duration.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_sale_rental__rental_duration
+msgid "Quantity"
+msgstr ""
+
+#. module: rental_duration
+#: model:ir.model,name:rental_duration.model_sale_rental
+msgid "Rental"
+msgstr "Location"
+
+#. module: rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_res_company__rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_res_config_settings__rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_sale_rental_line_wizard__rental_duration
+#: model_terms:ir.ui.view,arch_db:rental_duration.res_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:rental_duration.sale_rental_form
+msgid "Rental Duration"
+msgstr "Durée de Location"
+
+#. module: rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_sale_rental__rental_duration_uom_id
+msgid "Rental Duration UoM"
+msgstr "UdM de la location"
+
+#. module: rental_duration
+#: model_terms:ir.ui.view,arch_db:rental_duration.res_config_settings_view_form
+msgid "Rental UoM"
+msgstr "Unité de mesure Location"
+
+#. module: rental_duration
+#: model:ir.model.fields,field_description:rental_duration.field_res_company__rental_uom_id
+#: model:ir.model.fields,field_description:rental_duration.field_res_config_settings__rental_uom_id
+#: model:ir.model.fields,field_description:rental_duration.field_sale_rental_line_wizard__rental_uom_id
+msgid "Rental Uom"
+msgstr "UdM location"
+
+#. module: rental_duration
+#: model_terms:ir.ui.view,arch_db:rental_duration.res_config_settings_view_form
+msgid "Sale Rental"
+msgstr ""
+
+#. module: rental_duration
+#: model:ir.model,name:rental_duration.model_sale_rental_line_wizard
+msgid "Sale Rental Line Wizard"
+msgstr ""
+
+#. module: rental_duration
+#: model:ir.model,name:rental_duration.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de bons de commande"
+
+#. module: rental_duration
+#: code:addons/rental_duration/models/product_product.py:0
+#, python-format
+msgid "The rental product '{}' must be of type 'Service'."
+msgstr "L'article de location '{}' doit être de type 'service'."
+
+#. module: rental_duration
+#: code:addons/rental_duration/models/product_product.py:0
+#, python-format
+msgid ""
+"The rental product '{}' must have the option 'Must Have Start and End "
+"Dates' checked."
+msgstr ""
+"L'article de location '{}' doit avoir l'option 'Doit avoir une date de "
+"début et de fin activée."
+
+#. module: rental_duration
+#: model:uom.category,name:rental_duration.uom_categ_time
+msgid "Time"
+msgstr "Temps"
+
+#. module: rental_duration
+#: model:uom.uom,name:rental_duration.product_uom_year
+msgid "Years"
+msgstr "Années"

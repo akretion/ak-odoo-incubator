@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <!-- Copyright (C) 2023 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+    <odoo>
+        <record id="sale_rental_form" model="ir.ui.view">
+            <field name="name">sale.rental.form</field>
+            <field name="model">sale.rental</field>
+            <field name="inherit_id" ref="sale_rental.sale_rental_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='rental_qty']" position="after">
+                    <label for="rental_duration" string="Rental Duration"/>
+                    <div name="rental_duration" >
+                    <field name="rental_duration" class="oe_inline"/>
+                    <span>  </span>
+                    <span>
+                        <field name="rental_duration_uom_id" class="oe_inline" readonly="1"/>
+                    </span>
+                </div>
+
+                </xpath>
+            </field>
+        </record>
+
+    </odoo>
+    

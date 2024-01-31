@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2023 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="uom_categ_time" model="uom.category">
+        <field name="name">Time</field>
+    </record>
+    <record id="product_uom_month" model="uom.uom">
+        <field name="name">Months</field>
+        <field name="category_id" ref="uom_categ_time"/>
+        <field name="factor" eval="1.0"/>
+        <field name="uom_type">reference</field>
+    </record>
+    <record id="product_uom_year" model="uom.uom">
+        <field name="name">Years</field>
+        <field name="category_id" ref="uom_categ_time"/>
+        <field name="factor_inv" eval="12.0"/>
+        <field name="uom_type">bigger</field>
+    </record>
+</odoo>
