@@ -187,10 +187,14 @@ class MigrationMixin(models.AbstractModel):
         return old_property_data
 
     # helper
-    def _execute_external_query(self, query):
+    def _execute_external_query(self, query, commit=False):
         old_cr = get_external_cursor()
         old_cr.execute(query)
-        data = old_cr.fetchall()
+        if commit:
+            old_cr.commit()
+            data = False
+        else:
+            data = old_cr.fetchall()
         old_cr.close()
         return data
 
