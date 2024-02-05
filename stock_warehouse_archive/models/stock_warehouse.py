@@ -133,6 +133,9 @@ class StockWarehouse(models.Model):
     def _action_purge_with_inventory(self, locations):
         for location in locations:
             if location.usage == "internal":
+                if not location.active:
+                    location.active = True
+
                 inventory = self.env["stock.inventory"].create(
                     {
                         "name": _("Archive %(warehouse)s %(location)s")
@@ -142,11 +145,14 @@ class StockWarehouse(models.Model):
                     }
                 )
                 inventory.action_start()
-
-                # Compatibility with stock_inventory_location_state
-                if "sub_location_ids" in inventory._fields:
-                    inventory.sub_location_ids.state = "done"
-                inventory._action_done()
+                if inventory.line_ids:
+                    # Compatibility with stock_inventory_location_state
+                    if "sub_location_ids" in inventory._fields:
+                        inventory.sub_location_ids.state = "done"
+                    inventory._action_done()
+                else:
+                    inventory.action_cancel_draft()
+                    inventory.unlink()
 
     def force_archive(self):
 
