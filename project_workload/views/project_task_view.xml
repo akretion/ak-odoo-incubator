@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page
+                    name="workload"
+                    string="Workload Details"
+                    attrs="{'invisible': [('use_workload', '=', False)]}"
+                >
+                    <group>
+                        <group>
+                            <field name="use_workload" invisible="1" />
+                            <field name="config_workload_manually" />
+                        </group>
+                    </group>
+                    <field
+                        name="workload_ids"
+                        attrs="{'readonly': [('config_workload_manually', '=', False)]}"
+                    >
+                        <tree editable="bottom">
+                            <field name="date_start" />
+                            <field name="date_end" />
+                            <field name="user_id" />
+                            <field name="hours" />
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>
