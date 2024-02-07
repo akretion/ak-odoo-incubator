@@ -103,9 +103,9 @@ class ProjectTaskWorkload(models.Model):
         for task in self:
             if not task.date_start or not task.date_end:
                 continue
-            week_start = f"Load {week_name(task.date_start)}"
+            week_start = week_name(task.date_start)
             week_end = week_name(task.date_end - timedelta(days=7))
-            name = f"{week_start}"
+            name = f"{_('Load')} {week_start}"
             if week_end > week_start:
                 name += f" - {week_end}"
             name += f": {task.hours}h"

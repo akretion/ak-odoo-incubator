@@ -17,26 +17,26 @@
                             <field name="use_workload" invisible="1" />
                             <field name="config_workload_manually" />
                         </group>
+                        <field
+                            name="workload_ids"
+                            attrs="{'readonly': [('config_workload_manually', '=', False)]}"
+                        >
+                            <tree editable="bottom">
+                                <field name="date_start" />
+                                <field name="date_end" />
+                                <field name="user_id" />
+                                <field name="hours" />
+                            </tree>
+                        </field>
+                        <field name="workload_unit_ids" groups="base.group_no_one">
+                            <tree>
+                                <field name="week" />
+                                <field name="workload_id" />
+                                <field name="user_id" />
+                                <field name="hours" />
+                            </tree>
+                        </field>
                     </group>
-                    <field
-                        name="workload_ids"
-                        attrs="{'readonly': [('config_workload_manually', '=', False)]}"
-                    >
-                        <tree editable="bottom">
-                            <field name="date_start" />
-                            <field name="date_end" />
-                            <field name="user_id" />
-                            <field name="hours" />
-                        </tree>
-                    </field>
-                    <field name="workload_unit_ids" groups="base.group_no_one">
-                        <tree>
-                            <field name="week" />
-                            <field name="workload_id" />
-                            <field name="user_id" />
-                            <field name="hours" />
-                        </tree>
-                    </field>
                 </page>
             </notebook>
         </field>
