@@ -46,25 +46,48 @@ class ProjectTask(models.Model):
             ):
                 continue
 
-            vals = record._prepare_workload()
-            # Handle only one workload in automatic
-            if record.workload_ids:
-                # Remove other workloads and update the first workload values
-                record.workload_ids = [
-                    (1, record.workload_ids[0].id, vals),
-                    *[(2, workload_id.id) for workload_id in record.workload_ids[1:]],
-                ]
-            else:
-                # Create the workload
-                record.workload_ids = [(0, 0, vals)]
+            record.workload_ids = record._get_workload_sync()
 
-    def _prepare_workload(self):
+    def _prepare_workload(self, **extra):
         return {
             "date_start": self.date_start,
             "date_end": self.date_end,
             "hours": self.planned_hours,
             "user_id": self.user_id.id,
+            **extra,
         }
+
+    def _get_workload_sync(self):
+        self.ensure_one()
+        return [
+            *[(0, 0, vals) for vals in self._get_new_workloads()],
+            *[
+                (1, workload_id.id, vals)
+                for workload_id, vals in self._get_updated_workloads()
+            ],
+            *[(2, workload_id.id) for workload_id in self._get_obsolete_workloads()],
+        ]
+
+    def _get_new_workloads(self):
+        self.ensure_one()
+        # Handle only one workload in automatic
+        if not self.workload_ids:
+            return [self._prepare_workload()]
+        return []
+
+    def _get_updated_workloads(self):
+        self.ensure_one()
+        # Remove other workloads and update the first workload values
+        if self.workload_ids:
+            return [(self.workload_ids[0], self._prepare_workload())]
+        return []
+
+    def _get_obsolete_workloads(self):
+        self.ensure_one()
+        # Remove other workloads and update the first workload values
+        if len(self.workload_ids) > 1:
+            return self.workload_ids[1:]
+        return []
 
     @api.depends("workload_ids.unit_ids")
     def _compute_workload_unit_ids(self):
