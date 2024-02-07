@@ -6,11 +6,11 @@
         <field name="inherit_id" ref="project.edit_project" />
         <field name="arch" type="xml">
             <div name="options_active" position="inside">
-               <div>
-                   <field name="use_workload" class="oe_inline" />
-                   <label for="use_workload" />
-               </div>
-             </div>
+                <div groups="project_workload.group_project_workload">
+                    <field name="use_workload" class="oe_inline" />
+                    <label for="use_workload" />
+                </div>
+            </div>
         </field>
     </record>
 
