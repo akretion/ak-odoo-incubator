@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2023 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="action_script_file_import" model="ir.actions.act_window">
+        <field name="name">Script File Import</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">script.file.import</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="script_file_import_menu"
+        name="Script File Import"
+        parent="pattern_import_export.import_export_menu_root"
+        sequence="10"
+        groups="base.group_user"
+        action="action_script_file_import"
+    />
+</odoo>
