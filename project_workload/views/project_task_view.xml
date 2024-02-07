@@ -9,6 +9,7 @@
                 <page
                     name="workload"
                     string="Workload Details"
+                    groups="project_workload.group_project_workload"
                     attrs="{'invisible': [('use_workload', '=', False)]}"
                 >
                     <group>
@@ -24,6 +25,14 @@
                         <tree editable="bottom">
                             <field name="date_start" />
                             <field name="date_end" />
+                            <field name="user_id" />
+                            <field name="hours" />
+                        </tree>
+                    </field>
+                    <field name="workload_unit_ids" groups="base.group_no_one">
+                        <tree>
+                            <field name="week" />
+                            <field name="workload_id" />
                             <field name="user_id" />
                             <field name="hours" />
                         </tree>

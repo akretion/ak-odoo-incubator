@@ -1,5 +1,6 @@
-# Copyright 2023 Akretion (https://www.akretion.com).
+# Copyright 2024 Akretion (https://www.akretion.com).
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
+# @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
@@ -16,6 +17,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "security/project_workload_security.xml",
         "views/project_task_workload_view.xml",
         "views/project_task_view.xml",
         "views/project_project_view.xml",
