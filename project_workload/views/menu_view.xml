@@ -6,6 +6,7 @@
         parent="project.menu_main_pm"
         sequence="20"
         name="Workload"
+        groups="project_workload.group_project_workload"
     />
 
 </odoo>
