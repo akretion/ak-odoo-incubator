@@ -16,6 +16,4 @@ class ProjectWorkloadUnit(models.Model):
     user_id = fields.Many2one(
         "res.users", "User", related="workload_id.user_id", store=True
     )
-    project_id = fields.Many2one(
-        "project.project", "Project", related="workload_id.project_id", store=True
-    )
+    task_id = fields.Many2one("project.task", "Task", related="workload_id.task_id")
