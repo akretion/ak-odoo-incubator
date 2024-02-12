@@ -34,9 +34,6 @@ class ProjectTask(models.Model):
     )
     def _compute_workload_ids(self):
         for record in self:
-            record.workload_ids = self.env["project.task.workload"].search(
-                [("task_id", "=", record.id)]
-            )
             if not record.use_workload:
                 continue
 
@@ -45,7 +42,6 @@ class ProjectTask(models.Model):
                 record.date_start and record.date_end and record.planned_hours
             ):
                 continue
-
             record.workload_ids = record._get_workload_sync()
 
     def _prepare_workload(self, **extra):
