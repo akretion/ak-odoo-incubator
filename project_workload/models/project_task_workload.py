@@ -32,7 +32,7 @@ class ProjectTaskWorkload(models.Model):
     unit_ids = fields.One2many(
         "project.workload.unit",
         "workload_id",
-        "Units",
+        string="Units",
         compute="_compute_unit_ids",
         store=True,
     )
@@ -48,11 +48,6 @@ class ProjectTaskWorkload(models.Model):
     @api.depends("date_start", "date_end", "hours")
     def _compute_unit_ids(self):
         for record in self:
-            record.unit_ids = self.env["project.workload.unit"].search(
-                [
-                    ("workload_id", "=", record.id),
-                ]
-            )
             # We need to have the data to compute the unit (this happens at create)
             if not record.date_start or not record.date_end or not record.hours:
                 continue
@@ -104,7 +99,10 @@ class ProjectTaskWorkload(models.Model):
             if not task.date_start or not task.date_end:
                 continue
             week_start = week_name(task.date_start)
-            week_end = week_name(task.date_end - timedelta(days=7))
+            end = task.date_end
+            if task.date_start.weekday() > task.date_end.weekday():
+                end -= timedelta(days=7)
+            week_end = week_name(end)
             name = f"{_('Load')} {week_start}"
             if week_end > week_start:
                 name += f" - {week_end}"
