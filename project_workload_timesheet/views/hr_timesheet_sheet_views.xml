@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="hr_timesheet_sheet_form_my" model="ir.ui.view">
+        <field name="model">hr_timesheet.sheet</field>
+        <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form_my" />
+        <field name="arch" type="xml">
+            <div class="oe_title" position="before">
+                <div class="oe_button_box" name="button_box" groups="project_workload.group_project_workload">
+                    <button name="button_open_next_week" type="object" class="oe_stat_button" icon="fa-tasks" attrs="{'invisible': [('next_week_load','=', 0)]}">
+                        <label>Next:
+                            <field class="font-weight-bold" style="font-size: 1.25em" name="next_week_load" widget="integer" decoration-success="next_week_load &lt; 10" decoration-info="next_week_load &gt;= 10 and next_week_load &lt; 30" decoration-warning="next_week_load &gt;= 30 and next_week_load &lt; 40" decoration-danger="next_week_load &gt;= 40" />
+h
+                        </label>
+                    </button>
+                </div>
+            </div>
+            <sheet position="inside">
+                <div groups="project_workload.group_project_workload">
+                    <h2 class="mb-4">Todo</h2>
+                    <field name="workload_unit_ids">
+                        <tree>
+                            <field name="priority" widget="priority"/>
+                            <field name="task_id" />
+                            <field name="workload_id" />
+                            <field name="hours" decoration-bf="1" sum="Total" />
+                            <button name="action_add" icon="fa-plus-circle" title="Add to timesheet" type="object" context="{'current_sheet_id': parent.id}" />
+                        </tree>
+                    </field>
+                </div>
+            </sheet>
+        </field>
+    </record>
+</odoo>
