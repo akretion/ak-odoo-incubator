@@ -12,3 +12,7 @@ class ProjectTaskWorkload(models.Model):
     additional_workload_id = fields.Many2one(
         "project.task.workload.addition", string="Additional Workload Reference"
     )
+
+    additional_workload_task_id = fields.Many2one(
+        related="additional_workload_id.task_id", string="Additional Workload Task"
+    )
