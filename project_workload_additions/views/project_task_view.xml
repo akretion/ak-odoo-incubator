@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='workload_ids']/tree" position="inside">
                 <field name="additional_workload_id" />
+                <field name="additional_workload_task_id" optional="hide" />
             </xpath>
         </field>
     </record>
