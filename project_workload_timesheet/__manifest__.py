@@ -14,7 +14,9 @@
     "license": "AGPL-3",
     "depends": [
         "project_workload",
-        "hr_timesheet",
+        "hr_timesheet_sheet",
     ],
-    "data": [],
+    "data": [
+        "views/hr_timesheet_sheet_views.xml",
+    ],
 }

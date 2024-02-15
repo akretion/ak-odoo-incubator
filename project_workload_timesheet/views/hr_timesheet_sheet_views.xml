@@ -5,25 +5,137 @@
         <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form_my" />
         <field name="arch" type="xml">
             <div class="oe_title" position="before">
-                <div class="oe_button_box" name="button_box" groups="project_workload.group_project_workload">
-                    <button name="button_open_next_week" type="object" class="oe_stat_button" icon="fa-tasks" attrs="{'invisible': [('next_week_load','=', 0)]}">
-                        <label>Next:
-                            <field class="font-weight-bold" style="font-size: 1.25em" name="next_week_load" widget="integer" decoration-success="next_week_load &lt; 10" decoration-info="next_week_load &gt;= 10 and next_week_load &lt; 30" decoration-warning="next_week_load &gt;= 30 and next_week_load &lt; 40" decoration-danger="next_week_load &gt;= 40" />
-h
-                        </label>
+                <div
+                    class="oe_button_box"
+                    name="button_box"
+                    groups="project_workload.group_project_workload"
+                >
+                    <button
+                        name="button_open_next_week"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-tasks"
+                        attrs="{'invisible': [('next_week_units_count','=', 0)]}"
+                    >
+                        <field name="next_week_units_count" invisible="1" />
+                        <span>Next:
+                            <field
+                                class="font-weight-bold"
+                                style="font-size: 1.25em"
+                                name="next_week_load"
+                                widget="integer"
+                                decoration-success="next_week_load &lt; 10"
+                                decoration-info="next_week_load &gt;= 10 and next_week_load &lt; 30"
+                                decoration-warning="next_week_load &gt;= 30 and next_week_load &lt; 40"
+                                decoration-danger="next_week_load &gt;= 40"
+                            />
+                        </span>
                     </button>
                 </div>
             </div>
+
+            <xpath
+                expr="//field[@name='timesheet_ids']/tree/field[@name='task_id']"
+                position="after"
+            >
+                <field name="week" invisible="1" />
+                <field name="workload_unit_id" optional="show" />
+            </xpath>
+
             <sheet position="inside">
+                <field name="current" invisible="1" />
                 <div groups="project_workload.group_project_workload">
                     <h2 class="mb-4">Todo</h2>
                     <field name="workload_unit_ids">
-                        <tree>
-                            <field name="priority" widget="priority"/>
-                            <field name="task_id" />
-                            <field name="workload_id" />
-                            <field name="hours" decoration-bf="1" sum="Total" />
-                            <button name="action_add" icon="fa-plus-circle" title="Add to timesheet" type="object" context="{'current_sheet_id': parent.id}" />
+                        <tree
+                            editable="bottom"
+                            create="false"
+                            decoration-success="done"
+                            decoration-warning="not done and parent.state == 'done'"
+                            decoration-danger="remaining_hours &lt;= 0 and not done and parent.state != 'done'"
+                        >
+                            <field name="done" invisible="1" />
+                            <field name="timesheet_ids" invisible="1" />
+                            <button
+                                name="action_add_to_timesheet"
+                                class="btn btn-secondary text-primary"
+                                icon="fa-angle-double-up"
+                                title="Add to timesheet"
+                                type="object"
+                                context="{'current_sheet_id': parent.id}"
+                                attrs="{'invisible': [('timesheet_ids', '!=', [])]}"
+                            />
+                            <field name="priority" widget="priority" optional="show" />
+                            <field name="project_id" optional="show" />
+                            <field name="task_id" optional="show" />
+                            <field name="workload_id" optional="hide" />
+                            <field
+                                name="progress"
+                                widget="progressbar"
+                                optional="show"
+                            />
+                            
+                            <field
+                                name="timesheeted_hours"
+                                string="Timesheeted"
+                                decoration-bf="1"
+                                sum="Total Timesheeted"
+                                optional="show"
+                            />
+                            <field
+                                name="hours"
+                                string="Load"
+                                readonly="1"
+                                decoration-bf="1"
+                                sum="Total Load"
+                                optional="show"
+                            />
+                            <field
+                                name="remaining_hours"
+                                string="Remaining"
+                                decoration-bf="1"
+                                sum="Total Remaining"
+                                optional="hide"
+                            />
+                            <field name="task_stage_id" optional="show" />
+                            <button
+                                name="action_timesheet_time"
+                                decoration-muted="done"
+                                class="btn btn-secondary text-primary"
+                                title="Add 1 hour to timesheet"
+                                type="object"
+                                context="{'current_sheet_id': parent.id, 'time': 60}"
+                                attrs="{'column_invisible': [('parent.current', '=', False)]}"
+                                string="+1"
+                            />
+                            <button
+                                name="action_timesheet_time"
+                                decoration-muted="done"
+                                class="btn btn-secondary text-primary"
+                                title="Add 30 min to timesheet"
+                                type="object"
+                                context="{'current_sheet_id': parent.id, 'time': 30}"
+                                attrs="{'column_invisible': [('parent.current', '=', False)]}"
+                                string="+½"
+                            />
+                            <button
+                                name="action_timesheet_time"
+                                decoration-muted="done"
+                                class="btn btn-secondary text-primary"
+                                title="Add 15 min to timesheet"
+                                type="object"
+                                context="{'current_sheet_id': parent.id, 'time': 15}"
+                                attrs="{'column_invisible': [('parent.current', '=', False)]}"
+                                string="+¼"
+                            />
+                            <button
+                                name="action_timesheet_done"
+                                class="btn btn-secondary text-primary"
+                                icon="fa-check"
+                                title="This week's load is done for this workload"
+                                type="object"
+                                attrs="{'column_invisible': [('parent.current', '=', False)], 'invisible': [('done', '=', True)]}"
+                            />
                         </tree>
                     </field>
                 </div>
