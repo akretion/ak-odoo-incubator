@@ -2,7 +2,7 @@
 # @author Sébastien BEAU <sebastien.beau@akretion.com>
 # @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-
+import re
 from datetime import timedelta
 
 from odoo import _, api, fields, models
@@ -15,6 +15,9 @@ def week_name(value):
     if value:
         return value.strftime(WEEK_FORMAT)
     return None
+
+
+week_merge_re = re.compile((r"(\d{4})-(\d{2}) - (\1)-(\d{2})"))
 
 
 class ProjectTaskWorkload(models.Model):
@@ -95,17 +98,17 @@ class ProjectTaskWorkload(models.Model):
 
     def name_get(self):
         result = []
-        for task in self:
-            if not task.date_start or not task.date_end:
+        for load in self:
+            if not load.date_start or not load.date_end:
                 continue
-            week_start = week_name(task.date_start)
-            end = task.date_end
-            if task.date_start.weekday() > task.date_end.weekday():
+            week_start = week_name(load.date_start)
+            end = load.date_end
+            if load.date_start.weekday() > load.date_end.weekday():
                 end -= timedelta(days=7)
             week_end = week_name(end)
-            name = f"{_('Load')} {week_start}"
+            name = f"{load.task_id.name}: {week_start}"
             if week_end > week_start:
                 name += f" - {week_end}"
-            name += f": {task.hours}h"
-            result.append((task.id, name))
+                name = week_merge_re.sub(r"\1-\2->\4", name)
+            result.append((load.id, name))
         return result
