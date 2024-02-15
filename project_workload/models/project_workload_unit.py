@@ -17,3 +17,17 @@ class ProjectWorkloadUnit(models.Model):
         "res.users", "User", related="workload_id.user_id", store=True
     )
     task_id = fields.Many2one("project.task", "Task", related="workload_id.task_id")
+    project_id = fields.Many2one(
+        "project.project", "Project", related="workload_id.project_id"
+    )
+
+    def name_get(self):
+        result = []
+        for unit in self:
+            result.append(
+                (
+                    unit.id,
+                    "%s: %s" % (unit.task_id.name, unit.week),
+                )
+            )
+        return result
