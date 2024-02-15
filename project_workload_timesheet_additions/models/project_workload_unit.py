@@ -11,11 +11,13 @@ class ProjectWorkloadUnit(models.Model):
         "project.task.workload.addition",
         "Additional Task Workload",
         related="workload_id.additional_workload_id",
+        store=True,
     )
     additional_task_id = fields.Many2one(
         "project.task",
         "Additional Task",
         related="workload_id.additional_workload_task_id",
+        store=True,
     )
 
     def _get_timesheeting_task(self):
