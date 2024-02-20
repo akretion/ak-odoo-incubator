@@ -1,0 +1,6 @@
+Company Account,Merchant Account,Psp Reference,Merchant Reference,Payment Method,Creation Date,TimeZone,Type,Modification Reference,Gross Currency,Gross Debit (GC),Gross Credit (GC),Exchange Rate,Net Currency,Net Debit (NC),Net Credit (NC),Commission (NC),Markup (NC),Scheme Fees (NC),Interchange (NC),Payment Method Variant,Modification Merchant Reference,Batch Number,Reserved4,Reserved5,Reserved6,Reserved7,Reserved8,Reserved9,Reserved10
+HunterDouglas,HunterDouglas_ECOM_FR,BN8LCP8XVV5X8N82,DEV-C262188,facilypay_4x,2024-01-31 04:51:52,PST,Settled,SVXNFZ7MJMQ7C782,EUR,,258.53,1.000000000000000,EUR,,253.36,5.17,,,,facilypay_4x,<auto>,16,,,,,,,
+HunterDouglas,HunterDouglas_ECOM_FR,MQXN2RQ3NVTFWR82,DEV-C262189,cartebancaire,2024-01-31 05:07:26,PST,Settled,CV3STJTDZ7K8K782,EUR,,26.39,1.000000000000000,EUR,,26.16,,0.16,0.01,0.06,cartebancaire,<auto>,16,,,,,,,
+HunterDouglas,HunterDouglas_ECOM_FR,,,,2024-02-01 17:15:08,PST,Fee,Transaction Fees January 29 2024,,,,,EUR,0.19,,,,,,,,16,,,,,,,
+HunterDouglas,HunterDouglas_ECOM_FR,,,,2024-02-01 17:15:08,PST,Fee,Transaction Fees January 30 2024,,,,,EUR,1.11,,,,,,,,16,,,,,,,
+HunterDouglas,HunterDouglas_ECOM_FR,,,,2024-02-01 17:15:08,PST,MerchantPayout,"TX10907361101XT batch 16, HunterDouglas_ECOM_FR",,,,,EUR,278.22,,,,,,,,16,,,,,,,
