@@ -75,16 +75,24 @@ class TestAdyenImportCardRemitance(TransactionCase):
             [("journal_id", "=", self.adyen_journal.id)]
         )
         self.assertEqual(len(move), 1)
-        self.assertEqual(len(move.line_ids), 4)
-        payment_aml1 = move.line_ids.filtered(lambda line: line.name == "DEV-C262188")
-        self.assertAlmostEqual(payment_aml1.credit, 258.53)
-        payment_aml2 = move.line_ids.filtered(lambda line: line.name == "DEV-C262189")
-        self.assertAlmostEqual(payment_aml2.credit, 26.39)
+        self.assertEqual(len(move.line_ids), 6)
+        payment_aml1 = move.line_ids.filtered(
+            lambda line: line.name == "DEV-C262678" and line.credit > 0
+        )
+        self.assertAlmostEqual(payment_aml1.credit, 1817.20)
+        refund_aml1 = move.line_ids.filtered(
+            lambda line: line.name == "DEV-C262678" and line.debit > 0
+        )
+        self.assertAlmostEqual(refund_aml1.debit, 100.00)
+        payment_aml2 = move.line_ids.filtered(lambda line: line.name == "DEV-C262679")
+        self.assertAlmostEqual(payment_aml2.credit, 90.19)
+        payment_aml3 = move.line_ids.filtered(lambda line: line.name == "DEV-C262681")
+        self.assertAlmostEqual(payment_aml3.credit, 67.88)
         commission_aml = move.line_ids.filtered(
             lambda line: line.account_id == self.expense_account_id
         )
-        self.assertEqual(commission_aml.debit, 6.7)
+        self.assertEqual(commission_aml.debit, 20.12)
         counterpart_aml = move.line_ids.filtered(
             lambda line: line.account_id == self.bank_adyen_account
         )
-        self.assertEqual(counterpart_aml.debit, 278.22)
+        self.assertEqual(counterpart_aml.debit, 1855.15)
