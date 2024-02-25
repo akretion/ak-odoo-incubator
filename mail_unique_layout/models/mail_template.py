@@ -17,10 +17,11 @@ class MailTemplate(models.Model):
         email_values=None,
         notif_layout=False,
     ):
+        record = self.env[self.model].browse(res_id)
         return super().send_mail(
             res_id,
             force_send=force_send,
             raise_exception=raise_exception,
             email_values=email_values,
-            notif_layout=self.env["mail.thread"]._get_unique_layout_ref(),
+            notif_layout=record._get_mail_layout(),
         )
