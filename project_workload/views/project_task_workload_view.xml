@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="project_task_workload_view_form" model="ir.ui.view">
+        <field name="model">project.task.workload</field>
+        <field name="name">project.task.workload.form</field>
+        <field name="arch" type="xml">
+            <form string="Workload">
+                <group>
+                    <group>
+                        <field name="date_start" />
+                        <field name="date_end" />
+                        <field name="user_id" />
+                    </group>
+                    <field name="unit_ids">
+                        <tree>
+                            <field name="week" />
+                            <field name="hours" />
+                        </tree>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>
