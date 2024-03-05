@@ -46,4 +46,5 @@ class ProjectMilestone(models.Model):
                 limit=1,
             )
             # The start date will be the end date of the previous milestone
-            record.start_date = previous_milestones.target_date + timedelta(days=1)
+            if previous_milestones.target_date:
+                record.start_date = previous_milestones.target_date + timedelta(days=1)

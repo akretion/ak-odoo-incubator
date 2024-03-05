@@ -15,7 +15,8 @@ class ProjectWorkloadUnit(models.Model):
         for unit_id, name in result:
             unit = self.browse(unit_id)
             if unit.workload_id.additional_workload_id:
-                name = f"{unit.workload_id.additional_workload_id.task_id.name} {_('of')} {name}"
+                name = f"{unit.workload_id.additional_workload_id.task_id.name} "
+                f"{_('of')} {name}"
                 units_names[unit_id] = name
 
         return list(units_names.items())
