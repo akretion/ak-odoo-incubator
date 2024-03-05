@@ -23,4 +23,5 @@
         "views/project_load_capacity_report_view.xml",
         "views/menu_view.xml",
     ],
+    "installable": False,
 }

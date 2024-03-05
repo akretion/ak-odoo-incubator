@@ -31,7 +31,8 @@ class ProjectTask(models.Model):
         return rv
 
     def _get_updated_workloads(self):
-        # We sort the workloads by additional_workload_id to ensure that the first workload is the main one
+        # We sort the workloads by additional_workload_id to ensure that the
+        # first workload is the main one
         self.workload_ids = self.workload_ids.sorted(
             key=lambda w: w.additional_workload_id
         )

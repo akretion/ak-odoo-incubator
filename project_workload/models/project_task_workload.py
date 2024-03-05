@@ -17,7 +17,7 @@ def week_name(value):
     return None
 
 
-week_merge_re = re.compile((r"(\d{4})-(\d{2}) - (\1)-(\d{2})"))
+week_merge_re = re.compile(r"(\d{4})-(\d{2}) - (\1)-(\d{2})")
 
 
 class ProjectTaskWorkload(models.Model):

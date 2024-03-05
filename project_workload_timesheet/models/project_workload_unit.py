@@ -83,7 +83,6 @@ class ProjectWorkloadUnit(models.Model):
 
     def action_timesheet_done(self):
         self.done = True
-        pass
 
     def _get_timesheeting_task(self):
         # For overrides
