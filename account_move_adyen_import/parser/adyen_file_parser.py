@@ -81,7 +81,7 @@ class AdyenFileParser(FileParser):
                     + row["Scheme Fees (NC)"]
                     + row["Interchange (NC)"]
                 )
-            if row.get("Type") in ("Settled", "Refunded"):
+            if row.get("Type") in ("Settled", "Refunded", "SentForSettle"):
                 final_rows.append(row)
             elif row["Type"] == "Fee":
                 self.extra_commission += row["Net Debit (NC)"]
@@ -90,3 +90,17 @@ class AdyenFileParser(FileParser):
                 self.move_date = create_date
         self.result_row_list = final_rows
         return res
+
+
+class AdyenPaypalParser(AdyenFileParser):
+    def __init__(self, journal, ftype="csv", **kwargs):
+        super().__init__(journal, ftype=ftype, **kwargs)
+        self.support_multi_moves = True
+
+    @classmethod
+    def parser_for(cls, parser_name):
+        """
+        Used by the new_bank_statement_parser class factory. Return true if
+        the providen name is generic_csvxls_so
+        """
+        return parser_name == "adyen_multi_move_csvparser"

@@ -7,7 +7,8 @@ class AccountJournal(models.Model):
 
     import_type = fields.Selection(
         selection_add=[
-            ("adyen_cb_csvparser", "Adyen CB .csv"),
+            ("adyen_cb_csvparser", "Adyen Credit Card .csv"),
+            ("adyen_multi_move_csvparser", "Adyen Multiple Entries .csv"),
         ]
     )
 
