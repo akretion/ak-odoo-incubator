@@ -1,0 +1,99 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* code_tracker
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-02 20:26+0000\n"
+"PO-Revision-Date: 2023-06-02 22:28+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: code_tracker
+#: model_terms:ir.ui.view,arch_db:code_tracker.tracker_code_info_tree
+msgid "Code tracker info"
+msgstr "Information code tracker"
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__function_name
+msgid "Function name"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__id
+msgid "ID"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__trace
+msgid "Logger"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__model_name
+msgid "Model name"
+msgstr ""
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__running_time
+msgid "Running time"
+msgstr "Date et heure"
+
+#. module: code_tracker
+#: model:ir.actions.act_window,name:code_tracker.tracker_code_info_action
+#: model:ir.ui.menu,name:code_tracker.menu_tracker_code
+msgid "Tracker code information"
+msgstr "Information code tracker"
+
+#. module: code_tracker
+#: model:ir.ui.menu,name:code_tracker.menu_tracker_code_info
+msgid "Tracker trace"
+msgstr "Trace tracker"
+
+#. module: code_tracker
+#: model:ir.model.fields,field_description:code_tracker.field_tracker_code_info__user
+msgid "User"
+msgstr "Utilisateur"
+
+#. module: code_tracker
+#: model:ir.model,name:code_tracker.model_tracker_code_info
+msgid "see if a function is used"
+msgstr "voir si une fonction est utilisée"
