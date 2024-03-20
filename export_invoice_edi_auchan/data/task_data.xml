@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <record id="auchan_fs_storage" model="fs.storage">
+        <field name="name">@gp Auchan</field>
+        <field name="protocol">ftp</field>
+        <field name="code">ftpgp</field>
+    </record>
+
+    <record id="export_to_auchan_ftp" model="attachment.synchronize.task">
+        <field name="name">Export EDI Auchan</field>
+        <field name="backend_id" ref="auchan_fs_storage" />
+        <field name="method_type">export</field>
+        <field name="filepath">factures</field>
+    </record>
+
+</odoo>
