@@ -149,11 +149,28 @@ class MigrationMixin(models.AbstractModel):
         old_m2m_data = {}
         for new_field, options in self.mapped_fields.items():
             if not options.get("ignore") and all_fields[new_field].type == "many2many":
-                query = sql.SQL("SELECT {col1}, {col2} FROM {table}").format(
-                    col1=sql.Identifier(options["old_col1"]),
-                    col2=sql.Identifier(options["old_col2"]),
-                    table=sql.Identifier(options["old_table"]),
-                )
+                if options.get("inherits"):
+                    options.get("inherits")
+                    col = self._inherits[options["inherits"]]
+
+                    query = sql.SQL(
+                        "SELECT {main_table}.{main_primary}, {rel}.{col2}"
+                        "FROM {rel} JOIN {main_table}"
+                        "ON {main_table}.{main_col} = {rel}.{col1}"
+                    ).format(
+                        main_primary=sql.Identifier("id"),
+                        col2=sql.Identifier(options["old_col2"]),
+                        rel=sql.Identifier(options["old_table"]),
+                        main_table=sql.Identifier(self._table),
+                        main_col=sql.Identifier(col),
+                        col1=sql.Identifier(options["old_col1"]),
+                    )
+                else:
+                    query = sql.SQL("SELECT {col1}, {col2} FROM {table}").format(
+                        col1=sql.Identifier(options["old_col1"]),
+                        col2=sql.Identifier(options["old_col2"]),
+                        table=sql.Identifier(options["old_table"]),
+                    )
                 old_cr.execute(query)
                 old_m2m_data[new_field] = old_cr.fetchall()
         return old_m2m_data
@@ -187,9 +204,12 @@ class MigrationMixin(models.AbstractModel):
         return old_property_data
 
     # helper
-    def _execute_external_query(self, query, commit=False):
+    def _execute_external_query(self, query, params=False, commit=False):
         old_cr = get_external_cursor()
-        old_cr.execute(query)
+        if params:
+            old_cr.execute(query, params)
+        else:
+            old_cr.execute(query)
         if commit:
             old_cr.commit()
             data = False
