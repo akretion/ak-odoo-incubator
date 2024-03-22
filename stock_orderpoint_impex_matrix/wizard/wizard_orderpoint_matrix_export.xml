@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2020 Akretion
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+
+<odoo>
+    <record id="wizard_orderpoint_matrix_export_view_form" model="ir.ui.view">
+        <field name="model">wizard.orderpoint.matrix.export</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="dummy_export_done" invisible="1"/>
+                <group attrs="{'invisible': [('dummy_export_done', '=', True)]}">
+                    <field name="warehouse_ids" widget="many2many_checkboxes">
+                        <tree>
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                    <field name="product_ids" invisible="1">
+                        <tree>
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                </group>
+                <group attrs="{'invisible': [('dummy_export_done', '=', False)]}">
+                    <field name="file" filename="filename" readonly="1"/>
+                    <field name="filename" invisible="1"/>
+                </group>
+                <footer attrs="{'invisible': [('dummy_export_done', '=', True)]}">
+                    <button string="Export" type="object" name="button_export_refresh_result" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_export_orderpoint_matrix" model="ir.actions.act_window">
+        <field name="name">Export Orderpoint matrix</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.orderpoint.matrix.export</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_export_orderpoint_matrix" name="Export Orderpoint Matrix"
+              parent="stock.menu_stock_inventory_control"
+              action="stock_orderpoint_impex_matrix.action_export_orderpoint_matrix"/>
+</odoo>
