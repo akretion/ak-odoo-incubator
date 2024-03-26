@@ -81,7 +81,12 @@ class AdyenFileParser(FileParser):
                     + row["Scheme Fees (NC)"]
                     + row["Interchange (NC)"]
                 )
-            if row.get("Type") in ("Settled", "Refunded", "SentForSettle"):
+            if row.get("Type") in (
+                "Settled",
+                "Refunded",
+                "SentForSettle",
+                "SentForRefund",
+            ):
                 final_rows.append(row)
             elif row["Type"] == "Fee":
                 self.extra_commission += row["Net Debit (NC)"]
