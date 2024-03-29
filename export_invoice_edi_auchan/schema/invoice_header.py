@@ -56,7 +56,7 @@ class ENTSegment(SegmentInterface):
             (3, ""),  # Nb de jour de l'escompte opt
             (6, ""),  # Pourcentage de pénalité opt
             (3, ""),  # Nb de jour de pénalité opt
-            (1, "1"),  # Document de test (1/0)
+            (1, "0"),  # Document de test (1/0)
             (
                 3,
                 "42",
