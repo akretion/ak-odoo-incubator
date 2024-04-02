@@ -9,10 +9,8 @@
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='ref']" position="after">
-            <group>
                 <field name="barcode" />
                 <field name="is_edi_exportable" />
-            </group>
             </xpath>
         </field>
     </record>
