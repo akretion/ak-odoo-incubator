@@ -36,6 +36,7 @@ class ENTSegment(SegmentInterface):
                 16,
                 self.invoice.invoice_date,
             ),  # Date/heure facture ou avoir (document) JJ/MM/AAAA HH:MN
+            (10, self.invoice.date_due),  # Date d'échéance JJ/MM/AAAA
             (
                 7,
                 self.invoice.move_type == "out_invoice"

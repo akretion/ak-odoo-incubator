@@ -10,7 +10,7 @@ class TVASegment(SegmentInterface):
 
         return [
             (3, "TVA"),  # Étiquette de segment "TVA"
-            (5, self.tax_line.tax_line_id.amount),  # Heure de commande HH:MN opt
-            (10, self.tax_line.tax_base_amount),  # Heure de commande HH:MN opt
-            (10, self.tax_line.price_subtotal),  # Heure de commande HH:MN opt
+            (5, self.tax_line.tax_line_id.amount or 0.0),
+            (10, self.tax_line.tax_base_amount or 0.0),
+            (10, self.tax_line.price_subtotal or 0.0),
         ]

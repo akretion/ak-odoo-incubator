@@ -3,7 +3,7 @@
     "version": "16.0.0.0.0",
     "author": "Akretion",
     "category": "EDI",
-    "website": "https://akretion.com",
+    "website": "https://github.com/akretion/ak-odoo-incubator",
     "license": "AGPL-3",
     "depends": [
         "account",

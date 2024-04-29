@@ -29,39 +29,49 @@ class AccountMove(models.Model):
         res = []
         source_orders = self.line_ids.sale_line_ids.order_id
         # Segment Entete facture
-        args = {
-            "invoice": self,
-            "source_orders": source_orders,
-        }
-        ent_segment = ENTSegment(**args).render()
-        res.append(ent_segment)
+        res.append(
+            ENTSegment(
+                **{
+                    "invoice": self,
+                    "source_orders": source_orders,
+                }
+            ).render()
+        )
         # segment partner
-        args = {
-            "invoice": self,
-        }
-        par_segment = PARSegment(**args).render()
-        res.append(par_segment)
+        res.append(
+            PARSegment(
+                **{
+                    "invoice": self,
+                }
+            ).render()
+        )
         # segment ligne de fatcure
-        line_num = 0
-        for line in self.invoice_line_ids:
-            line_num += 1
-            args = {
-                "line": line,
-                "line_num": line_num,
-            }
-            res.append(LIGSegment(**args).render())
+        for idx, line in enumerate(self.invoice_line_ids, start=0):
+            res.append(
+                LIGSegment(
+                    **{
+                        "line": line,
+                        "line_num": idx,
+                    }
+                ).render()
+            )
         # Segment pied facture
-        args = {
-            "invoice": self,
-        }
-        pie_segment = PIESegment(**args).render()
-        res.append(pie_segment)
+        res.append(
+            PIESegment(
+                **{
+                    "invoice": self,
+                }
+            ).render()
+        )
         # segment ligne de TVA (détail des TVA)
         for tax_line in self.line_ids.filtered(lambda x: x.tax_line_id):
-            args = {
-                "tax_line": tax_line,
-            }
-            res.append(TVASegment(**args).render())
+            res.append(
+                TVASegment(
+                    **{
+                        "tax_line": tax_line,
+                    }
+                ).render()
+            )
         # Segment END
         res.append("END")
         return res
