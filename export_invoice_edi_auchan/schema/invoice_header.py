@@ -36,7 +36,7 @@ class ENTSegment(SegmentInterface):
                 16,
                 self.invoice.invoice_date,
             ),  # Date/heure facture ou avoir (document) JJ/MM/AAAA HH:MN
-            (10, self.invoice.date_due),  # Date d'échéance JJ/MM/AAAA
+            (10, self.invoice.invoice_date_due),  # Date d'échéance JJ/MM/AAAA
             (
                 7,
                 self.invoice.move_type == "out_invoice"
@@ -57,7 +57,10 @@ class ENTSegment(SegmentInterface):
             (3, ""),  # Nb de jour de l'escompte opt
             (6, ""),  # Pourcentage de pénalité opt
             (3, ""),  # Nb de jour de pénalité opt
-            (1, "0"),  # Document de test (1/0)
+            (
+                1,
+                self.invoice.env.context.get("test_mode") and "1" or "0",
+            ),  # Document de test (1/0)
             (
                 3,
                 "42",
