@@ -7,6 +7,7 @@ from os import linesep
 
 from odoo import fields, models
 
+from ..schema.base import SegmentInterfaceExc
 from ..schema.invoice_footer import PIESegment
 from ..schema.invoice_header import ENTSegment
 from ..schema.invoice_line import LIGSegment
@@ -24,56 +25,84 @@ class AccountMove(models.Model):
         related="partner_id.is_edi_exportable",
     )
 
+    def _find_bl_info(self):
+        """Find entête "Numéro de BL" and date"""
+        raise NotImplementedError
+
+    def _render_segment(self, segment, vals):
+        try:
+            res = segment(**vals).render()
+        except SegmentInterfaceExc as e:
+            self.env.context["export_auchan_errors"].append(str(e))
+        else:
+            return res
+
     def _prepare_export_data(self, idx):
         self.ensure_one()
+        _logger.info(f"Exporting {self.name}")
         res = []
         source_orders = self.line_ids.sale_line_ids.order_id
+        bl_nbr, bl_date = self._find_bl_info()
+        self = self.with_context(export_auchan_errors=[])
         # Segment Entete facture
         res.append(
-            ENTSegment(
-                **{
+            self._render_segment(
+                ENTSegment,
+                {
                     "invoice": self,
                     "source_orders": source_orders,
-                }
-            ).render()
+                    "bl_nbr": bl_nbr,
+                    "bl_date": bl_date,
+                },
+            )
         )
         # segment partner
         res.append(
-            PARSegment(
-                **{
+            self._render_segment(
+                PARSegment,
+                {
                     "invoice": self,
-                }
-            ).render()
+                },
+            )
         )
         # segment ligne de fatcure
         for idx, line in enumerate(self.invoice_line_ids, start=0):
             res.append(
-                LIGSegment(
-                    **{
+                self._render_segment(
+                    LIGSegment,
+                    {
                         "line": line,
                         "line_num": idx,
-                    }
-                ).render()
+                    },
+                )
             )
         # Segment pied facture
         res.append(
-            PIESegment(
-                **{
+            self._render_segment(
+                PIESegment,
+                {
                     "invoice": self,
-                }
-            ).render()
+                },
+            )
         )
         # segment ligne de TVA (détail des TVA)
         for tax_line in self.line_ids.filtered(lambda x: x.tax_line_id):
             res.append(
-                TVASegment(
-                    **{
+                self._render_segment(
+                    TVASegment,
+                    {
                         "tax_line": tax_line,
-                    }
-                ).render()
+                    },
+                )
             )
         # Segment END
         res.append("END")
+        errs = self.env.context.get("export_auchan_errors")
+        if errs:
+            errstr = "Erreur lors de la génération du fichier Auchan: \n"
+            errstr += "\n".join(errs)
+            _logger.error(errstr)
+            raise ValueError(errstr)
         return res
 
     def _get_export_task(self):

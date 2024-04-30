@@ -7,11 +7,10 @@ from .base import SegmentInterface
 
 class PARSegment(SegmentInterface):
     def get_values(self):
-
         return [
             (3, "PAR"),
             (13, self.invoice.partner_id.barcode),  # Code EAN client
-            (35, self.invoice.partner_id.name),  # Libellé client
+            (35, self.invoice.partner_id.name, False),  # Libellé client
             (
                 13,
                 self.invoice.company_id.partner_id.barcode,
@@ -19,13 +18,14 @@ class PARSegment(SegmentInterface):
             (
                 35,
                 self.invoice.company_id.partner_id.name,
+                False,
             ),  # Libellé Fournisseur (vendeur)
             (13, self.invoice.partner_shipping_id.barcode),  # Code EAN client livré
-            (35, self.invoice.partner_shipping_id.name),  # Libellé client livré
+            (35, self.invoice.partner_shipping_id.name, False),  # Libellé client livré
             (13, self.invoice.partner_id.barcode),  # Code EAN client facturé à
-            (35, self.invoice.partner_id.name),  # Libellé client facturé à
-            (10,),  # Code EAN factor (obligatoire si factor)
-            (10,),  # Libellé alias factor (obligatoire si factor)
+            (35, self.invoice.partner_id.name, False),  # Libellé client facturé à
+            (10, "", False),  # Code EAN factor (obligatoire si factor)
+            (10, "", False),  # Libellé alias factor (obligatoire si factor)
             (13, self.invoice.company_id.partner_id.barcode),  # Code EAN régler à
-            (35, self.invoice.company_id.partner_id.name),  # Libellé régler à
+            (35, self.invoice.company_id.partner_id.name, False),  # Libellé régler à
         ]

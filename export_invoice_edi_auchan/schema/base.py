@@ -8,11 +8,17 @@ from unidecode import unidecode
 from odoo.tools import float_compare
 
 
+class SegmentInterfaceExc(Exception):
+    pass
+
+
 class SegmentInterface:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-    def _format_values(self, size, value="", ctx=False):
+    def _format_values(self, size, value="", required=True, ctx=False):
+        if required and (value is False or value is None or value == ""):
+            raise ValueError()
         if not ctx:
             ctx = {}
         if not value:
@@ -49,9 +55,18 @@ class SegmentInterface:
 
     def render(self):
         res = ""
-        for fmt_data in self.get_values():
-            fmt_val = self._format_values(*fmt_data)
-            res += fmt_val + ";"
+        errors = []
+        for idx, fmt_data in enumerate(self.get_values(), start=1):
+            try:
+                fmt_val = self._format_values(*fmt_data)
+                res += fmt_val + ";"
+            except ValueError:
+                errors += [(self.__class__.__name__, idx)]
+        if errors:
+            errstr = ""
+            for el in errors:
+                errstr += f"Segment {el[0]}: missing value on line {el[1]}\n"
+            raise SegmentInterfaceExc(errstr)
         return res[:-1]
 
     def get_values(self):
