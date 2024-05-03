@@ -124,4 +124,4 @@ class AccountMove(models.Model):
         return txt_file.getvalue().encode("utf-8")
 
     def _get_export_name(self):
-        return self.name
+        return self.name.replace("/", "-")
