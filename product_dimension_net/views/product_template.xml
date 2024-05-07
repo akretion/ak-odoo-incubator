@@ -3,22 +3,6 @@
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
 
-    <record model="ir.ui.view" id="product_template_form_view">
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_form_view" />
-        <field name="arch" type="xml">
-            <page name="inventory" position="inside">
-                <field name="noel_jardin" />
-            </page>
-            <field name="categ_id" position="after">
-                <field
-                    name="segment"
-                    attrs="{'invisible': [('company_id', '!=', 3)]}"
-                />
-            </field>
-        </field>
-    </record>
-
     <record model="ir.ui.view" id="product_template_form_view_dimensions">
         <field name="model">product.template</field>
         <field
