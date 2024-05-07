@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Akretion
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="product_template_form_view">
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <page name="inventory" position="inside">
+                <field name="noel_jardin" />
+            </page>
+            <field name="categ_id" position="after">
+                <field
+                    name="segment"
+                    attrs="{'invisible': [('company_id', '!=', 3)]}"
+                />
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_template_form_view_dimensions">
+        <field name="model">product.template</field>
+        <field
+            name="inherit_id"
+            ref="product_dimension.product_template_only_form_view"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='description']" position="inside">
+                <group
+                    string="Dimensions (net = sans packaging)"
+                    name="dimensions_net"
+                    colspan="2"
+                    attrs="{'invisible': [('product_variant_count', '&gt;', 1)]}"
+                >
+                    <field name="product_length_net" />
+                    <field name="product_height_net" />
+                    <field name="product_width_net" />
+                    <field name="volume_net" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
