@@ -66,13 +66,13 @@ class AccountMove(models.Model):
             )
         )
         # segment ligne de fatcure
-        for idx, line in enumerate(self.invoice_line_ids, start=0):
+        for idx, line in enumerate(self.invoice_line_ids, start=1):
             res.append(
                 self._render_segment(
                     LIGSegment,
                     {
                         "line": line,
-                        "line_num": idx,
+                        "line_num": str(idx),
                     },
                 )
             )
