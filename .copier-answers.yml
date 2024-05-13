@@ -1,8 +1,8 @@
 # Do NOT update manually; changes here will be overwritten by Copier
-_commit: v1.21.1
+_commit: v1.14.2
 _src_path: https://github.com/OCA/oca-addons-repo-template.git
 ci: GitHub
-convert_readme_fragments_to_markdown: false
+dependency_installation_mode: PIP
 generate_requirements_txt: true
 github_check_license: true
 github_ci_extra_env: {}
@@ -11,7 +11,6 @@ github_enable_makepot: true
 github_enable_stale_action: false
 github_enforce_dev_status_compatibility: false
 include_wkhtmltopdf: false
-odoo_test_flavor: Both
 odoo_version: 14.0
 org_name: Akretion
 org_slug: akretion
@@ -21,6 +20,6 @@ repo_description: The modules present in this repo should go to OCA on the long 
 repo_name: Generic Odoo module in incubation
 repo_slug: ak-odoo-incubator
 repo_website: https://github.com/akretion/ak-odoo-incubator
-use_pyproject_toml: true
-use_ruff: false
+travis_apt_packages: []
+travis_apt_sources: []
 
