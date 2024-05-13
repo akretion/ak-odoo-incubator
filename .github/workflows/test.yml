@@ -19,10 +19,10 @@ jobs:
       matrix:
         include:
           - container: ghcr.io/oca/oca-ci/py3.6-odoo14.0:latest
-            makepot: "true"
             name: test with Odoo
           - container: ghcr.io/oca/oca-ci/py3.6-ocb14.0:latest
             name: test with OCB
+            makepot: "true"
     services:
       postgres:
         image: postgres:9.6
@@ -35,7 +35,7 @@ jobs:
     env:
       PIP_EXTRA_INDEX_URL: "https://wheelhouse.shopinvader.com/simple/"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           persist-credentials: false
       - name: Patch odoo version
@@ -51,7 +51,9 @@ jobs:
         run: oca_init_test_database
       - name: Run tests
         run: oca_run_tests
-      - uses: codecov/codecov-action@v1
-        #      - name: Update .pot files
-        #        run: oca_export_and_push_pot https://x-access-token:${{ secrets.GIT_PUSH_TOKEN }}@github.com/${{ github.repository }}
-        #        if: ${{ matrix.makepot == 'true' && github.event_name == 'push' && github.repository_owner == 'akretion' }}
+      - uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Update .pot files
+        run: oca_export_and_push_pot https://x-access-token:${{ secrets.GIT_PUSH_TOKEN }}@github.com/${{ github.repository }}
+        if: ${{ matrix.makepot == 'true' && github.event_name == 'push' && github.repository_owner == 'akretion' }}

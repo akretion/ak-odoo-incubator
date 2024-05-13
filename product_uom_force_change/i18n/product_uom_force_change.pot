@@ -14,11 +14,6 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_uom_force_change
-#: model:res.groups,name:product_uom_force_change.group_product_change_uom
-msgid "Allow to change the Uom of a product already used"
-msgstr ""
-
-#. module: product_uom_force_change
 #: model:ir.actions.act_window,name:product_uom_force_change.act_open_procut_change_uom_action
 #: model_terms:ir.ui.view,arch_db:product_uom_force_change.product_change_uom_view_form
 msgid "Change UOM"
