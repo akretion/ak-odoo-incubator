@@ -2,3 +2,4 @@
 sale-workflow
 stock-logistics-workflow
 account-reconcile
+storage
