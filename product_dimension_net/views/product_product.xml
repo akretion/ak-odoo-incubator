@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Akretion
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="product_normal_form_view">
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='dimensions']" position="after">
+                <group string="Dimensions (net)" name="dimensions_net" colspan="2">
+                    <field name="product_length_net" />
+                    <field name="product_height_net" />
+                    <field name="product_width_net" />
+                    <field name="volume_net" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
