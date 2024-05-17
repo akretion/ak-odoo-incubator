@@ -9,8 +9,8 @@ class PARSegment(SegmentInterface):
     def get_values(self):
         return [
             (3, "PAR"),
-            (13, self.invoice.partner_id.barcode),  # Code EAN client
-            (35, self.invoice.partner_id.name, False),  # Libellé client
+            (13, self.invoice.partner_shipping_id.barcode),  # Code EAN client
+            (35, self.invoice.partner_shipping_id.name, False),  # Libellé client
             (
                 13,
                 self.invoice.company_id.partner_id.barcode,
