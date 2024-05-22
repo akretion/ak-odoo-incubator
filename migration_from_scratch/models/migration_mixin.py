@@ -20,6 +20,7 @@ _logger = logging.getLogger(__name__)
 # "join": table + "join_col": column => Same as inherit but have to specify field
 # ignore : True => remove this data in the create_or_update method. Used to retrieve a
 # data for custom treatment in after_import for example.
+# import_dependencies for m2O then missing id of relation will be imported.
 
 
 class MigrationMixin(models.AbstractModel):
@@ -234,7 +235,7 @@ class MigrationMixin(models.AbstractModel):
         single_company = self._is_single_company()
         m2m_id_mapping = self._m2m_id_mapping(m2m_data)
         all_fields = self._fields
-        m2o_id_mapping = self._m2o_id_mapping(all_fields)
+        m2o_id_mapping = self._m2o_id_mapping(all_fields, data)
         # loop on data to transform it with new version data
         for record_data in data:
             self._transform_single_data(
@@ -301,7 +302,7 @@ class MigrationMixin(models.AbstractModel):
     def _is_single_company(self):
         return len(self.env["res.company"].search([])) == 1
 
-    def _m2o_id_mapping(self, all_fields):
+    def _m2o_id_mapping(self, all_fields, data):
         # Create all m2x mapping dict (to avoid search on each row of the loop
         m2o_id_mapping = {}
         # company_id_mapping = self.env["res.company"]._id_mapping()
@@ -313,6 +314,20 @@ class MigrationMixin(models.AbstractModel):
                 m2o_id_mapping[field_name] = self.env[
                     myfield.comodel_name
                 ]._id_mapping()
+                if options.get("import_dependencies"):
+                    # check all old_id we try to import that do not have mapping yet
+                    old_ids = [x[field_name] for x in data]
+                    missing_ids = list(
+                        set(old_ids) - set(m2o_id_mapping[field_name].keys())
+                    )
+                    if missing_ids:
+                        self.env[myfield.comodel_name].migrate_data(
+                            domain=[("id", "in", missing_ids)]
+                        )
+                        m2o_id_mapping[field_name] = self.env[
+                            myfield.comodel_name
+                        ]._id_mapping()
+
         return m2o_id_mapping
 
     def _m2m_id_mapping(self, m2m_data):
