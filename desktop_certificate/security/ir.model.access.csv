@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_desktop_manager,desktop.manager,model_desktop,desktop_certificate.group_certificat_manager,1,1,1,0
+access_desktop,desktop.user,model_desktop,base.group_user,1,0,0,0
+access_desktop_certificate_manager,desktop.certificate.manager,model_desktop_certificate,desktop_certificate.group_certificat_manager,1,1,1,0
+access_desktop_certificate,desktop.certificate.user,model_desktop_certificate,base.group_user,1,0,0,0
