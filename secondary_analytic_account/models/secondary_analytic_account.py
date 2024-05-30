@@ -7,7 +7,7 @@ class SecondaryAccountAnalyticAccount(models.Model):
     name = fields.Char(
         string="Secondary Analytic Account", index=True, required=True, tracking=True
     )
-    code = fields.Char(string="Reference", index=True, tracking=True, size=10)
+    code = fields.Char(string="Reference", index=True, tracking=True, size=15)
     company_id = fields.Many2one(
         "res.company", string="Company", default=lambda self: self.env.company
     )
