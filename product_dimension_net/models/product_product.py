@@ -19,9 +19,12 @@ class ProductProduct(models.Model):
     volume_net = fields.Float(
         string="Volume (net)",
         help="Volume de l'article en dehors de son emballage",
-        compute="_compute_volume_net",
+        compute="_compute_net_dimensions",
         readonly=False,
         store=True,
+    )
+    net_dimension = fields.Char(
+        compute="_compute_net_dimensions", help="String representing dimensions"
     )
 
     @api.depends(
@@ -30,7 +33,7 @@ class ProductProduct(models.Model):
         "product_width_net",
         "dimensional_uom_id",
     )
-    def _compute_volume_net(self):
+    def _compute_net_dimensions(self):
         template_obj = self.env["product.template"]
         for product in self:
             product.volume = template_obj._calc_volume(
@@ -38,4 +41,9 @@ class ProductProduct(models.Model):
                 product.product_height_net,
                 product.product_width_net,
                 product.dimensional_uom_id,
+            )
+            product.net_dimension = (
+                f"L{round(product.product_length_net)} "
+                f"x l{round(product.product_width_net)} "
+                f"x H{round(product.product_height_net)}"
             )
