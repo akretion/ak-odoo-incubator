@@ -24,7 +24,10 @@ class ProductProduct(models.Model):
         store=True,
     )
     net_dimension = fields.Char(
-        compute="_compute_net_dimensions", help="String representing dimensions"
+        compute="_compute_net_dimensions",
+        store=True,
+        readonly=True,
+        help="String representing dimensions",
     )
 
     @api.depends(
