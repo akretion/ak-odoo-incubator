@@ -1,0 +1,7 @@
+Company Account,Merchant Account,Psp Reference,Merchant Reference,Payment Method,Creation Date,TimeZone,Type,Modification Reference,Gross Currency,Gross Debit (GC),Gross Credit (GC),Exchange Rate,Net Currency,Net Debit (NC),Net Credit (NC),Commission (NC),Markup (NC),Scheme Fees (NC),Interchange (NC),Payment Method Variant,Modification Merchant Reference,Batch Number,Reserved4,Reserved5,Reserved6,Reserved7,Reserved8,Reserved9,Reserved10
+TestCompany,TestCompany_ECOM_FR,KGNTFLXTQS9JFH65,DEV-C262678,cartebancaire,2024-02-20 06:21:21,PST,Settled,DKW2RK79KMQ7C782,EUR,,1817.20,1.000000000000000,EUR,,1802.11,,10.90,0.01,4.18,cartebancaire,<auto>,18,,,,,,,
+TestCompany,TestCompany_ECOM_FR,KGNTFLXTQS9JFH65,DEV-C262678,cartebancaire,2024-02-20 07:20:11,PST,Refunded,R467VCDH5HNG5S82,EUR,100.00,,1.000000000000000,EUR,102.00,,2.00,,,,cartebancaire,DEV-C262678,18,,,,,,,
+TestCompany,TestCompany_ECOM_FR,Q3F5GDDH5HNG5S82,DEV-C262679,cartebancaire,2024-02-20 07:20:46,PST,Settled,WBZ2RL89KMQ7C782,EUR,,90.19,1.000000000000000,EUR,,89.44,,0.54,0.00,0.21,cartebancaire,<auto>,18,,,,,,,
+TestCompany,TestCompany_ECOM_FR,W5SQMRZTQS9JFH65,DEV-C262681,bcmc,2024-02-20 07:29:28,PST,Settled,W5SQMRZTQS9JFH65,EUR,,67.88,1.000000000000000,EUR,,66.52,1.36,,,,bcmc,DEV-C262681,18,,,,,,,
+TestCompany,TestCompany_ECOM_FR,,,,2024-02-21 17:15:00,PST,Fee,Transaction Fees February 19 2024,,,,,EUR,0.92,,,,,,,,18,,,,,,,
+TestCompany,TestCompany_ECOM_FR,,,,2024-02-21 17:15:00,PST,MerchantPayout,"TX10911002001XT batch 18, TestCompany_ECOM_FR",,,,,EUR,1855.15,,,,,,,,18,,,,,,,
