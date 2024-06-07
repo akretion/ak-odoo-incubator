@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2024 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="group_certificat_manager" model="res.groups">
+        <field name="name">Gestionnaire des certificats utilisateurs</field>
+        <field name="comment">Permet de générer/révoquer les certificats</field>
+        <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin')) ]"
+        />
+    </record>
+</odoo>
