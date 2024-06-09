@@ -16,8 +16,8 @@ class Desktop(models.Model):
     _description = "Desktop"
 
     name = fields.Char(string="Nom")
-    location_id = fields.Many2one(
-        comodel_name="stock.warehouse", string="Lieu", required=True
+    address_id = fields.Many2one(
+        comodel_name="res.partner", string="Lieu", required=True
     )
     company_id = fields.Many2one(
         comodel_name="res.company",
@@ -134,7 +134,7 @@ class Desktop(models.Model):
                 raise UserError(_("L'email du destinataire est vide"))
             if not partner.mobile:
                 raise UserError(_("Le mobile du destinataire est vide"))
-            location = record.location_id.partner_id
+            address = record.address_id
             params = {
                 "certificate": {
                     "name": record.name,
@@ -145,11 +145,11 @@ class Desktop(models.Model):
                     "email": partner.email,
                 },
                 "location": {
-                    "name": location.name,
-                    "company": location.company_id.name,
-                    "city": location.city,
-                    "zipcode": location.zip,
-                    "country": location.country_id.name,
+                    "name": address.name,
+                    "company": self.company_id.name,
+                    "city": address.city,
+                    "zipcode": address.zip,
+                    "country": address.country_id.code,
                 },
             }
             res = requests.post(
@@ -177,11 +177,6 @@ class Desktop(models.Model):
                 except ValueError:
                     raise UserError(res.text)
         return None
-
-    @api.onchange("location_id")
-    def _onchange_location(self):
-        if self.location_id:
-            self.company_id = self.location_id.company_id.id or False
 
     def unlink(self):
         desktops = self.mapped("desktop_id")

@@ -15,6 +15,7 @@ except ImportError:
 class TestCertificateApi(TransactionCase, VCRMixin):
     def setUp(self):
         super().setUp()
+        # TODO FIXME use address
         warehouse = self.env.ref("stock.warehouse0")
         contact = self.env["res.partner"].create(
             {
