@@ -41,7 +41,9 @@ class AccountMove(models.Model):
         self.ensure_one()
         _logger.info(f"Exporting {self.name}")
         res = []
-        source_orders = self.line_ids.sale_line_ids.order_id
+        source_orders = self.line_ids.sale_line_ids.order_id or self.env[
+            "sale.order"
+        ].search([("name", "=", self.invoice_origin)])
         bl_nbr, bl_date = self._find_bl_info()
         self = self.with_context(export_auchan_errors=[])
         # Segment Entete facture
