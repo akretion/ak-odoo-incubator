@@ -59,33 +59,38 @@ class DesktopCertificate(models.Model):
             else:
                 rec.state = "long"
 
-    def action_archive(self):
-        mpki_api = self[0].equipment_id._get_mpki_api()
-        usable = self.filtered(
-            lambda c: c.expiration_date > datetime.now() and not c.revoked
-        )
-        for record in usable:
-            res = requests.delete(
-                mpki_api["url"],
-                auth=(mpki_api["user"], mpki_api["password"]),
-                params={"serial": record.serial},
-            )
-            # Archive if certificate is revoked or not found (already revoked)
-            if res.status_code == requests.codes.ok or res.status_code == 404:
-                record.revoked = True
-                super(DesktopCertificate, record).action_archive()
-            else:
-                try:
-                    raise UserError(json.dumps(res.json(), indent=4))
-                except ValueError:
-                    raise UserError(res.text)
-        # standard archive process for unusable certificates
-        return super(DesktopCertificate, self - usable).action_archive()
 
-    def action_unarchive(self):
-        raise UserError(
-            _(
-                "Vous ne pouvez pas désarchiver un certificat, "
-                "veuillez en générer un nouveau."
-            )
-        )
+    def write(self, vals):
+        if "active" in vals:
+            if vals["active"] and self.expiration_date > datetime.now() and not self.revoked:
+                mpki_api = self.desktop_id._get_mpki_api()
+                res = requests.delete(
+                    mpki_api["url"],
+                    auth=(mpki_api["user"], mpki_api["password"]),
+                    params={"serial": self.serial},
+                )
+                # Archive if certificate is revoked or not found (already revoked)
+                if res.status_code == requests.codes.ok or res.status_code == 404:
+                    self.revoked = True
+                else:
+                    try:
+                        raise UserError(json.dumps(res.json(), indent=4))
+                    except ValueError:
+                        raise UserError(res.text)
+            elif not vals["active"]:
+                raise UserError(
+                    _(
+                        "Vous ne pouvez pas désarchiver un certificat, "
+                        "veuillez en générer un nouveau."
+                    )
+                )
+            else:
+                raise UserError(
+                    _(
+                        "Vous ne pouvez pas activer un certificat déjà révoqué"
+                        " ou obsolète."
+                    )
+                )
+        return super().write()
+
+
