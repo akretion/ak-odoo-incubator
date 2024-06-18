@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="module_tree" model="ir.ui.view">
+        <field name="model">ir.module.module</field>
+        <field name="inherit_id" ref="base.module_tree" />
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="module_type_id" />
+                <field name="python_code_qty" sum="Total Python Code Qty" />
+                <field name="xml_code_qty" sum="Total XML Code Qty" />
+                <field name="js_code_qty" sum="Total JS Code Qty" />
+                <field name="code_qty" sum="Total Code Qty" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_module_filter" model="ir.ui.view">
+        <field name="model">ir.module.module</field>
+        <field name="inherit_id" ref="base.view_module_filter" />
+        <field name="arch" type="xml">
+            <filter name="author" position="after">
+                <filter
+                    name="module_type_id"
+                    string="Type"
+                    domain="[]"
+                    context="{'group_by':'module_type_id'}"
+                />
+            </filter>
+       </field>
+    </record>
+
+</odoo>
