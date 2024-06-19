@@ -1,3 +1,6 @@
+from odoo.tools.float_utils import float_repr, float_round
+
+
 def json_float_round(value, precision_digits, rounding_method="HALF-UP"):
     """Not suitable for float calculations! Similar to float_repr except that it
     returns a float suitable for json dump
