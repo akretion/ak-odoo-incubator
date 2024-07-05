@@ -21,7 +21,7 @@ class ProjectMilestone(models.Model):
     @api.constrains("start_date", "target_date")
     def _check_start_date(self):
         for milestone in self:
-            if milestone.target_date < milestone.start_date:
+            if milestone.start_date and milestone.target_date < milestone.start_date:
                 raise ValidationError(
                     _("The end date cannot be earlier than the start date.")
                 )
