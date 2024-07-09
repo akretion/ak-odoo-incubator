@@ -12,9 +12,9 @@
                     attrs="{'invisible': [('use_workload', '=', False)]}"
                 >
                     <group>
-                        <field name="additional_workload_ids">
+                        <field name="additional_workload_ids" nolabel="1">
                             <tree editable="bottom">
-                                <field name="type" />
+                                <field name="type_id" />
                                 <field name="percentage" />
                                 <field name="user_id" />
                                 <field

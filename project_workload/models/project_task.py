@@ -64,25 +64,35 @@ class ProjectTask(models.Model):
             *[(2, workload_id.id) for workload_id in self._get_obsolete_workloads()],
         ]
 
+    def _get_main_workloads(self):
+        return self.workload_ids
+
     def _get_new_workloads(self):
         self.ensure_one()
-        # Handle only one workload in automatic
-        if not self.workload_ids:
+        workloads = self._get_main_workloads()
+        # Do not create load if user_id is not set
+        if self.user_id and not workloads:
+            # Handle only one workload in automatic
             return [self._prepare_workload()]
         return []
 
     def _get_updated_workloads(self):
         self.ensure_one()
+        workloads = self._get_main_workloads()
         # Remove other workloads and update the first workload values
-        if self.workload_ids:
-            return [(self.workload_ids[0], self._prepare_workload())]
+        if self.user_id and workloads:
+            return [(workloads[0], self._prepare_workload())]
         return []
 
     def _get_obsolete_workloads(self):
         self.ensure_one()
+        workloads = self._get_main_workloads()
+        # All workload are removed if user_id is removed
+        if not self.user_id:
+            return workloads
         # Remove other workloads and update the first workload values
-        if len(self.workload_ids) > 1:
-            return self.workload_ids[1:]
+        if len(workloads) > 1:
+            return workloads[1:]
         return []
 
     @api.depends("workload_ids.unit_ids")
