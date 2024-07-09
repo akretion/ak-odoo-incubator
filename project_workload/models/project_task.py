@@ -60,18 +60,22 @@ class ProjectTask(models.Model):
         return [
             *[(0, 0, vals) for vals in self._get_new_workloads()],
             *[
-                (1, workload_id.id, vals)
-                for workload_id, vals in self._get_updated_workloads()
+                (1, workload.id, vals)
+                for workload, vals in self._get_updated_workloads()
             ],
-            *[(2, workload_id.id) for workload_id in self._get_obsolete_workloads()],
+            *[(2, workload.id) for workload in self._get_obsolete_workloads()],
         ]
+
+    def _get_main_workloads(self):
+        return self.workload_ids
 
     def _get_new_workloads(self):
         self.ensure_one()
+        workloads = self._get_main_workloads()
         # Handle only one workload per user in automatic
         new_vals = []
         for user in self.user_ids:
-            user_workload = self.workload_ids.filtered(lambda w: w.user_id == user)
+            user_workload = workloads.filtered(lambda w: w.user_id == user)
             if not user_workload:
                 new_vals.append(self._prepare_workload(user))
 
@@ -79,15 +83,19 @@ class ProjectTask(models.Model):
 
     def _get_updated_workloads(self):
         self.ensure_one()
+        workloads = self._get_main_workloads()
+        vals = []
         # Update the users workload values
-        for workload in self.workload_ids:
+        for workload in workloads:
             if workload.user_id in self.user_ids:
-                yield workload, self._prepare_workload(workload.user_id)
+                vals.append((workload, self._prepare_workload(workload.user_id)))
+        return vals
 
     def _get_obsolete_workloads(self):
         self.ensure_one()
-        # Remove other workloads
-        return self.workload_ids.filtered(lambda w: w.user_id not in self.user_ids)
+        workloads = self._get_main_workloads()
+        # Remove other workloads, dedup for users?
+        return workloads.filtered(lambda w: w.user_id not in self.user_ids)
 
     @api.depends("workload_ids.unit_ids")
     def _compute_workload_unit_ids(self):

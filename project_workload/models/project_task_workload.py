@@ -48,7 +48,7 @@ class ProjectTaskWorkload(models.Model):
                     _("The end date cannot be earlier than the start date.")
                 )
 
-    @api.depends("date_start", "date_end", "hours")
+    @api.depends("date_start", "date_end", "hours", "user_id")
     def _compute_unit_ids(self):
         for record in self:
             # We need to have the data to compute the unit (this happens at create)
@@ -71,6 +71,13 @@ class ProjectTaskWorkload(models.Model):
                             0,
                             0,
                             {
+                                # We have to set here the value of user_id
+                                # as related field user_id will be not computed
+                                # The "project.workload" are created from the computed
+                                # field "workload_ids" and odoo do not play the compute
+                                # field when there are trigered inside a create
+                                # that come from a compute
+                                "user_id": record.user_id.id,
                                 "hours": hours,
                                 "week": week,
                             },

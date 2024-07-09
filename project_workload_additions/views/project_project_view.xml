@@ -15,7 +15,7 @@
                     attrs="{'invisible': [('use_workload', '=', False)]}"
                 >
                     <tree editable="bottom">
-                        <field name="type" />
+                        <field name="type_id" />
                         <field name="percentage" />
                         <field name="user_id" />
                         <field

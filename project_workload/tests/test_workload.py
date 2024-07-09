@@ -5,7 +5,7 @@
 
 from datetime import datetime, timedelta
 
-from .common import TestWorkloadCommon
+from odoo.addons.project_workload.tests.common import TestWorkloadCommon
 
 
 class TestWorkload(TestWorkloadCommon):
@@ -50,6 +50,11 @@ class TestWorkload(TestWorkloadCommon):
         self.assertEqual(
             self.task.workload_ids.unit_ids.mapped("user_id"), self.user_1 + self.user_2
         )
+
+    def test_remove_user(self):
+        self._create_task()
+        self.task.user_ids = [(5, 0, 0)]
+        self.assertFalse(self.task.workload_ids)
 
     def test_change_date(self):
         self._create_task()
