@@ -8,15 +8,9 @@ from odoo import api, fields, models
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
-    planned_days = fields.Float(
-        "Planned Days", compute="_compute_planned_days", store=True
-    )
-    remaining_days = fields.Float(
-        "Remaining Days", compute="_compute_remaining_days", store=True
-    )
-    effective_days = fields.Float(
-        "Effective Days", compute="_compute_effective_days", store=True
-    )
+    planned_days = fields.Float(compute="_compute_planned_days", store=True)
+    remaining_days = fields.Float(compute="_compute_remaining_days", store=True)
+    effective_days = fields.Float(compute="_compute_effective_days", store=True)
 
     @api.depends("planned_hours", "project_id.hour_uom_id")
     def _compute_planned_days(self):
