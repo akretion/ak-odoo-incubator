@@ -5,8 +5,8 @@
 {
     "name": "Project Estimate Step",
     "summary": "Add step estimation for project",
-    "version": "14.0.1.0.0",
-    "development_status": "Alpha",
+    "version": "16.0.1.0.0",
+    "development_status": "Beta",
     "category": "Project",
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": " Akretion",
