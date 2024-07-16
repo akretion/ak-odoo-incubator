@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Akretion
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="sale_order_form_view">
+        <field name="name">sale.order.form (stock_pallet_filling)</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <field name="delivery_status" position="after">
+                <field name="pallet_estimation" />
+                <field
+                    name="pallet_estimation_warning"
+                    attrs="{'invisible': [('pallet_estimation_warning', '=', False)]}"
+                />
+            </field>
+        </field>
+    </record>
+
+</odoo>

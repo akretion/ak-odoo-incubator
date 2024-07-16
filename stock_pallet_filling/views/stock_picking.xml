@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Akretion
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form (stock_pallet_filling)</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="pallet_estimation" />
+                <field
+                    name="pallet_estimation_warning"
+                    attrs="{'invisible': [('pallet_estimation_warning', '=', False)]}"
+                />
+            </field>
+        </field>
+    </record>
+
+
+
+</odoo>
