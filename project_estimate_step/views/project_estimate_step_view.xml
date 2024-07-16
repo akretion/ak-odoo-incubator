@@ -4,7 +4,7 @@
     <record id="project_estimate_step_view_tree" model="ir.ui.view">
         <field name="model">project.estimate.step</field>
         <field name="arch" type="xml">
-            <tree string="Estimate Step">
+            <tree>
                 <field name="name" />
                 <field name="days" />
             </tree>
