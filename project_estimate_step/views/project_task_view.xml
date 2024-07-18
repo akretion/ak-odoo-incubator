@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="after">
+                <field name="allowed_estimate_step_ids" invisible="True" />
+                <field
+                    name="estimate_step_id"
+                    domain="[('id', 'in', allowed_estimate_step_ids)]"
+                    attrs="{'invisible': [('allowed_estimate_step_ids', '=', False)]}"
+                    widget="radio"
+                />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_task_search_form" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form" />
+        <field name="arch" type="xml">
+            <filter name="stage" position="after">
+                <filter
+                    string="To estimate"
+                    name="to_estimate"
+                    context="{'group_by':'estimate_step_id'}"
+                    domain="[('stage_id.to_estimate', '=', True)]"
+                />
+                <filter
+                    string="Current Sprint"
+                    name="current_sprint"
+                    context="{'group_by':'stage_id', 'no_empty_stage': True}"
+                    domain="[('stage_id.current_sprint', '=', True)]"
+                />
+            </filter>
+        </field>
+    </record>
+
+</odoo>
