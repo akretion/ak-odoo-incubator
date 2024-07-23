@@ -8,11 +8,11 @@ from odoo.tools.convert import xml_import
 ori_tag_record = xml_import._tag_record
 
 
-def _tag_record(self, rec):
+def _tag_record(self, rec, extra_vals=None):
     noupdate = self._noupdate
     if rec.get("model") == "ir.rule":
         self._noupdate = [False]
-    ori_tag_record(self, rec)
+    ori_tag_record(self, rec, extra_vals)
     if rec.get("model") == "ir.rule":
         self._noupdate = noupdate
 
