@@ -103,6 +103,10 @@ def get_request(self, httprequest):
         # so we enforce its loading here.
         odoo.registry(db)
         if FastapiRootPaths.is_fastapi_path(db, httprequest.path):
+            if "/payment/providers/monetico/webhook" in httprequest.path:
+                # TODO FIXME
+                # /!\ we read the values here so after the values are not empty
+                _logger.info("webhook with values %s", httprequest.values)
             return FastapiRequest(httprequest)
     return ori_get_request(self, httprequest)
 
