@@ -76,21 +76,57 @@ class ResCompany(models.Model):
         # de nombres de produits que d'entrepots dans l'excel
         product_qties = self.env["stock.quant"].read_group(
             [("location_id", "child_of", location_ids)],
-            ["product_id", "quantity"],
-            ["product_id"],
+            ["product_id", "warehouse_id", "quantity"],
+            ["product_id", "warehouse_id"],
+            lazy=False,
         )
-        product_ids = [x["product_id"][0] for x in product_qties]
+
+        product_ids = list({x["product_id"][0] for x in product_qties})
+
         products = self.env["product.product"].browse(product_ids)
         prices = {
             x: x.variant_seller_ids and x.variant_seller_ids[0] or 0 for x in products
         }
         vals = defaultdict(list)
-        for prd_q in product_qties:
-            product = products.filtered(lambda s: s.id == prd_q["product_id"][0])
+
+        product_dict = {}
+        for product in product_qties:
+            if not product["product_id"][0] in product_dict:
+                product_dict[product["product_id"][0]] = [
+                    product["warehouse_id"][0],
+                    product["quantity"],
+                ]
+            else:
+                product_dict[product["product_id"][0]] += [
+                    product["warehouse_id"][0],
+                    product["quantity"],
+                ]
+
+        for product_id, warehouse_quantities in product_dict.items():
+            product = products.filtered(lambda s: s.id == product_id)
+            vals["lien"].append(
+                f"{base_url}/web#id={product_id}&cids={self.id}&action="
+                f"{self.env.ref('product.product_normal_action_sell').id}&model="
+                "product.product&view_type=form"
+            )
             vals["code"].append(product.default_code)
             vals["designation"].append(product.name)
-            # TODO mettre une colonne qté par entrepot (x colonnes)
-            vals["qté"].append(round(prd_q["quantity"]))
+            for i in range(0, len(warehouse_quantities), 2):
+                warehouse_id = warehouse_quantities[i]
+                quantity = warehouse_quantities[i + 1]
+                warehouse_id = self.env["stock.warehouse"].browse(warehouse_id)
+                vals[f"qté_{warehouse_id.name}"].append(round(quantity))
+            if len(warehouse_quantities) / 2 < len(self.valued_warehouse_ids):
+                warehouse_without_qty = self.valued_warehouse_ids.filtered(
+                    lambda r: r.id
+                    not in [
+                        warehouse_quantities[i]
+                        for i in range(0, len(warehouse_quantities), 2)
+                    ]
+                )
+                for warehouse in warehouse_without_qty:
+                    vals[f"qté_{warehouse.name}"].append(0)
+
             # TODO quand la valeur est < cost_vs_purchase_threshold % de ce seuil
             # mettre une colonne 'check' à la valeur 1
             vals["valeur"].append(
@@ -99,14 +135,8 @@ class ResCompany(models.Model):
                         product.standard_price,
                         prices[product] and prices[product].price or 0 * coef / 100,
                     )
-                    * prd_q["quantity"]
+                    * product["quantity"]
                 )
-            )
-            # TODO mettre l'url en first column
-            vals["lien"].append(
-                f"{base_url}/web#id={prd_q['product_id'][0]}&cids={self.id}&action="
-                f"{self.env.ref('product.product_normal_action_sell').id}&model="
-                "product.product&view_type=form"
             )
         df = pl.from_dict(vals)
         mfile = io.BytesIO()
