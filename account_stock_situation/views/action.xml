@@ -2,7 +2,7 @@
 <odoo noupdate="1">
 
     <record id="stock_account_valuation_main_company" model="ir.cron">
-        <field name="name">Stock Valorisation</field>
+        <field name="name">Stock Situation</field>
         <field name="model_id" ref="base.model_res_company" />
         <field name="state">code</field>
         <field
