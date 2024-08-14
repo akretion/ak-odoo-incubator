@@ -29,9 +29,7 @@ class ZipProductImage(models.TransientModel):
                     name = ""
                     for field in self._product_field_names():
                         name = name or prd[field]
-                    zip_file.writestr(
-                        f"{name}{extension}", img_data
-                    )
+                    zip_file.writestr(f"{name}.{extension}", img_data)
                 else:
                     logger.warning(f"Product {prd.display_name} has no image")
         if zip_file.filelist:

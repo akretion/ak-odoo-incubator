@@ -22,7 +22,9 @@ Zip Product Images
 
 |badge1| |badge2| |badge3|
 
-Wizard to generate a zip images of selected products
+Wizard to generate a zip images file of selected variant products.
+
+This module is compatible with fs_product_multi_image module (from OCA/storage) but doesn't depends on it.
 
 **Table of contents**
 

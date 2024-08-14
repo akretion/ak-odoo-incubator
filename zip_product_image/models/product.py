@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import base64
+import imghdr
+
 from odoo import api, models
 
 LIMIT = 500
@@ -29,4 +31,6 @@ class ProductProduct(models.Model):
             if self.image:
                 return (base64.b64encode(self.image.getvalue()), self.image.extension)
             return (False, False)
-        return (self.image_1920 or False, '.jpg')
+        image_data = base64.b64decode(self.image_1920)
+        image_type = imghdr.what(None, h=image_data)
+        return (self.image_1920 or False, f".{image_type}")
