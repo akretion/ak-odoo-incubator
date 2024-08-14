@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Akretion
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="account_invoice_form_view" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <header position="inside">
+                <field name="is_edi_exportable" invisible="True" />
+                <button
+                    name="button_trigger_export"
+                    type="object"
+                    string="Export Format EDI Auchan"
+                    attrs="{'invisible': [
+                        '|',
+                        '|',
+                        ('export_date', '!=', False),
+                        ('is_edi_exportable', '=', False),
+                        ('state', 'in', ('cancel', 'draft')),
+                    ]}"
+                />
+            </header>
+            <field name="fiscal_position_id" position="after">
+                <field name="export_date" />
+                <field name="export_attachment_id" />
+                <field name="export_error" />
+            </field>
+        </field>
+    </record>
+</odoo>
