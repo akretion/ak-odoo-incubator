@@ -118,7 +118,7 @@ class ResCompany(models.Model):
                 for warehouse in warehouse_without_qty:
                     vals[f"qty_{warehouse.code}"].append(0)
 
-            vals["value"].append(round(product.standard_price))
+            vals["value"].append(round(product.standard_price, 2))
         df = pl.from_dict(vals)
         mfile = io.BytesIO()
         df.write_excel(workbook=mfile)
