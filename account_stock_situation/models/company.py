@@ -71,13 +71,11 @@ class ResCompany(models.Model):
         if tools.config.get("running_env") == "dev":
             base_url = "http://anothercorp.localhost/"
         location_ids = [x.lot_stock_id.id for x in self.valued_warehouse_ids]
-
         stock_quant_ids = self.env["stock.quant"].search(
             [("location_id", "child_of", location_ids)],
         )
         products = self.env["product.product"].browse(stock_quant_ids.product_id.ids)
         vals = defaultdict(list)
-
         product_dict = {}
         for stock_quant in stock_quant_ids:
             if stock_quant.product_id.id not in product_dict:
@@ -86,14 +84,16 @@ class ResCompany(models.Model):
                     stock_quant.quantity,
                 ]
             else:
-                if stock_quant.warehouse_id in product_dict[stock_quant.product_id.id]:
+                if (
+                    stock_quant.warehouse_id
+                    in product_dict.get(stock_quant.product_id.id)[0]
+                ):
                     product_dict[stock_quant.product_id.id][1] += stock_quant.quantity
                 else:
                     product_dict[stock_quant.product_id.id] += [
                         stock_quant.warehouse_id,
                         stock_quant.quantity,
                     ]
-
         for product_id, warehouse_quantities in product_dict.items():
             product = products.filtered(lambda s: s.id == product_id)
             vals["link"].append(
@@ -103,7 +103,6 @@ class ResCompany(models.Model):
             )
             vals["code"].append(product.default_code)
             vals["designation"].append(product.name)
-
             for i in range(0, len(warehouse_quantities), 2):
                 warehouse_id = warehouse_quantities[i]
                 quantity = warehouse_quantities[i + 1]
@@ -120,7 +119,6 @@ class ResCompany(models.Model):
                     vals[f"qty_{warehouse.code}"].append(0)
 
             vals["value"].append(round(product.standard_price))
-
         df = pl.from_dict(vals)
         mfile = io.BytesIO()
         df.write_excel(workbook=mfile)
@@ -132,4 +130,4 @@ class ResCompany(models.Model):
                 "datas": base64.b64encode(mfile.getvalue()),
             }
         )
-        return sum(vals["valeur"]), attach
+        return sum(vals["value"]), attach
