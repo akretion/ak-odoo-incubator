@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record
+                id="group_multicompany_submittals_state_viewer"
+                model="res.groups"
+        >
+            <field name="name">Multicompany submittals state viewer</field>
+            <field
+                    name="comment"
+            >The user can view multicompany submittal states
+            </field>
+        </record>
+    </data>
+</odoo>
