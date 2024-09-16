@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="replace_component_view_form" model="ir.ui.view">
+        <field name="model">replace.component.transient</field>
+        <field name="active" eval="True" />
+        <field name="arch" type="xml">
+            <form string="Replace component">
+                <sheet>
+                    <group>
+                        <field name="production_id" readonly="1"/>
+                    </group>
+                    <group colspan="4" string="Raw materials to remove">
+                        <field name="remove_product_ids" widget="many2many_tags" domain="[('id', 'in', remove_product_domain_ids)]"
+                               options="{'no_create_edit': True, 'no_create': True}"/>
+                    </group>
+                    <group col="2">
+                        <separator string="Raw materials to append" colspan="2"/>
+                        <field name="product_id" 
+                               options="{'no_create_edit': True, 'no_create': True}"/>
+                        <field name="product_uom_qty"/>
+                        <field name="product_uom_id"/>
+                        <field name="remove_product_domain_ids" invisible="1"/>
+                    </group>
+                </sheet>
+            <footer>
+                <button name="apply_replacement" string="Apply"
+                        type="object" class="oe_highlight"/>
+                <button special="cancel" string="Cancel" class="oe_link"/>
+            </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="replace_component_transient_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Replace component</field>
+        <field name="res_model">replace.component.transient</field>
+        <field name="src_model">mrp.production</field>
+        <field name="view_mode">form,tree</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
