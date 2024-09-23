@@ -34,6 +34,9 @@ class ProjectWorkloadUnit(models.Model):
     )
 
     @api.depends("force_done")
+    def _compute_done(self):
+        return super()._compute_done()
+
     def is_done(self):
         return super().is_done() or self.force_done
 
