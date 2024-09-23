@@ -31,12 +31,16 @@ class ProjectWorkloadUnit(models.Model):
         compute="_compute_progress",
         help="The progress of the task",
     )
-    done = fields.Boolean(
-        "Done",
+    force_done = fields.Boolean(
+        "Force Done",
     )
     task_stage_id = fields.Many2one(
         related="task_id.stage_id", string="Task Stage", readonly=False
     )
+
+    @api.depends("force_done")
+    def is_done(self):
+        return super().is_done() or self.force_done
 
     @api.depends("timesheet_ids.unit_amount")
     def _compute_timesheeted_hours(self):
@@ -87,7 +91,7 @@ class ProjectWorkloadUnit(models.Model):
         return True
 
     def action_timesheet_done(self):
-        self.done = True
+        self.force_done = True
 
     def _get_timesheeting_task(self):
         # For overrides

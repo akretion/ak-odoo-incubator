@@ -9,4 +9,12 @@
         groups="project_workload.group_project_workload"
     />
 
+    <menuitem
+        id="project_task_workload_menu"
+        name="Workload"
+        parent="project_workload.project_workload_menu"
+        sequence="10"
+        action="project_workload_unit_action"
+    />
+
 </odoo>

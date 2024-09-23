@@ -3,7 +3,7 @@
 # @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class ProjectWorkloadUnit(models.Model):
@@ -18,8 +18,21 @@ class ProjectWorkloadUnit(models.Model):
     )
     task_id = fields.Many2one("project.task", "Task", related="workload_id.task_id")
     project_id = fields.Many2one(
-        "project.project", "Project", related="workload_id.project_id"
+        "project.project",
+        "Project",
+        related="workload_id.project_id",
+        store=True,
     )
+    done = fields.Boolean(compute="_compute_done", store=True)
+
+    def is_done(self):
+        self.ensure_one()
+        return self.task_id.stage_id.is_closed
+
+    @api.depends("task_id.stage_id.is_closed")
+    def _compute_done(self):
+        for record in self:
+            record.done = record.is_done()
 
     def name_get(self):
         result = []
