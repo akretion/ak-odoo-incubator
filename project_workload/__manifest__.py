@@ -21,6 +21,7 @@
         "views/project_task_workload_view.xml",
         "views/project_task_view.xml",
         "views/project_project_view.xml",
+        "views/project_task_workload_unit_view.xml",
         "views/menu_view.xml",
     ],
 }
