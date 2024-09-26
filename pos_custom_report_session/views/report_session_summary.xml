@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<template
+        id="report_session_summary"
+        inherit_id="pos_report_session_summary.report_session_summary"
+    >
+    <xpath expr="//div/t/table" position="replace">
+        <table class="table table-sm o_main_table" t-if="statement.line_ids">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Reference</th>
+                    <th>Partner</th>
+                    <th class="text-right">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-foreach="statement.line_ids" t-as="line">
+                    <t t-if="line.pos_payment_ids">
+                        <tr t-foreach="line.pos_payment_ids" t-as="payment">
+
+                            <td><span t-field="payment.payment_date" /></td>
+                            <td><span t-field="line.name" /></td>
+                            <td>
+                                <span t-field="payment.name" />
+                                <span t-field="payment.pos_sale_order_id.name" />
+                            </td>
+                            <td><span t-field="payment.partner_id" /></td>
+                            <td class="text-right">
+                                <span
+                                        t-field="payment.amount"
+                                        t-field-options='{"widget": "monetary", "display_currency": "statement.currency_id"}'
+                                    />
+                            </td>
+                        </tr>
+                    </t>
+                    <tr t-else="">
+                        <td><span t-field="line.date" /></td>
+                        <td><span t-field="line.name" /></td>
+                        <td><span t-field="line.payment_ref" /></td>
+                        <td><span t-field="line.partner_id" /></td>
+                        <td class="text-right">
+                            <span
+                                    t-field="line.amount"
+                                    t-field-options='{"widget": "monetary", "display_currency": "statement.currency_id"}'
+                                />
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+    </xpath>
+</template>
+</odoo>
