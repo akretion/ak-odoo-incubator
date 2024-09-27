@@ -17,10 +17,6 @@
     ],
     "data": [
         "security/ir.model.access.csv",
-        "views/project_project_view.xml",
-        "views/project_task_view.xml",
         "views/project_task_workload_addition_type_views.xml",
-        "views/project_task_workload_view.xml",
-        "views/menu_view.xml",
     ],
 }

@@ -28,7 +28,7 @@ class ProjectTask(models.Model):
         "date_start",
         "date_end",
         "planned_hours",
-        "user_id",
+        "user_ids",
         "config_workload_manually",
         "use_workload",
     )
