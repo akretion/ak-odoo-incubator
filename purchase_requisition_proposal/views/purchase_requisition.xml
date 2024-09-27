@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2023 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="purchase_requisition_view_form">
+        <field name="name">purchase.requisition.form</field>
+        <field name="model">purchase.requisition</field>
+        <field
+            name="inherit_id"
+            ref="purchase_requisition.view_purchase_requisition_form"
+        />
+        <field name="arch" type="xml">
+            <sheet position="before">
+                <div
+                    class="alert alert-danger alert-dismissable"
+                    role="alert"
+                    style="margin-bottom:0px;"
+                    attrs="{'invisible':[('missing_procurment_contacts','=', False)]}"
+                >
+                    <field name="missing_procurment_contacts" />
+                </div>
+            </sheet>
+            <xpath expr="//field[@name='state_blanket_order']" position="attributes">
+                <attribute name="statusbar_visible">draft,open,done</attribute>
+            </xpath>
+            <field name="line_ids" position="attributes">
+                <attribute
+                    name="context"
+                >{'requisitions_from': context.get('requisitions_from')}</attribute>
+            </field>
+            <xpath
+                expr="//button[@name='%(purchase_requisition.action_purchase_requisition_to_so)d'][1]"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible': ['|', ('state', '!=', 'open'), ('exclusive', '=', 'proposals')]}</attribute>
+            </xpath>
+            <xpath
+                expr="//button[@name='%(purchase_requisition.action_purchase_requisition_to_so)d'][2]"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible': ['|', ('state', 'not in', ('in_progress', 'ongoing')), ('exclusive', '=', 'proposals')]}</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_open']" position="attributes">
+                <attribute
+                    name="invisible"
+                >context.get('requisitions_from') != 'other'</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_done']" position="before">
+                <button
+                    name="action_create_quotations"
+                    string="Create proposal Quotations"
+                    type="object"
+                    class="btn-primary"
+                />
+                <button
+                    name="action_call_for_proposal_send"
+                    string="Send Mails"
+                    type="object"
+                    states="open"
+                    class="btn-secondary"
+                />
+                <button
+                    name="action_send_result_email"
+                    string="Send closure email"
+                    type="object"
+                    states="done"
+                    class="btn-secondary"
+                />
+            </xpath>
+
+            <xpath expr="//field[@name='vendor_id']" position="after">
+                <field name="exclusive" invisible="1" />
+                <field name="multi_company_selection" readonly="1" />
+                <field
+                    name="company_to_call_ids"
+                    widget="many2many_tags"
+                    attrs="{'invisible': ['|', ('exclusive', '!=', 'proposals'), ('multi_company_selection','!=', 'selected')]}"
+                    domain="[('id', '!=', company_id)]"
+                />
+            </xpath>
+            <xpath expr="//field[@name='vendor_id']" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'required': [('is_quantity_copy', '=', 'none'), ('exclusive', '!=', 'proposals')], 'readonly': [('state', 'in', ['ongoing','done'])], 'invisible': [('exclusive', '=', 'proposals')]}</attribute>
+            </xpath>
+            <field
+                name="vendor_id"
+                context="{'res_partner_search_mode': 'supplier'}"
+                attrs="{'required': [('is_quantity_copy', '=', 'none')], 'readonly': [('state', 'in', ['ongoing','done'])]}"
+            />
+
+            <xpath expr="//tree/field[@name='qty_ordered']" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'column_invisible': [('parent.state', '!=', 'done')]}</attribute>
+                <attribute name="decoration-bf">1</attribute>
+
+            </xpath>
+
+            <xpath expr="//tree/field[@name='schedule_date']" position="attributes">
+                <attribute name="decoration-info">1</attribute>
+            </xpath>
+
+            <xpath expr="//tree/field[@name='product_qty']" position="attributes">
+                <attribute name="decoration-info">1</attribute>
+            </xpath>
+            <xpath expr="//tree/field[@name='price_unit']" position="attributes">
+                <attribute name="decoration-info">1</attribute>
+            </xpath>
+
+            <xpath expr="//tree/field[@name='qty_ordered']" position="before">
+                <field
+                    name="qty_planned"
+                    string="Planned Quantities"
+                    decoration-bf="1"
+                    attrs="{'column_invisible': [('parent.state', '=', 'done')]}"
+                />
+            </xpath>
+            <xpath expr="//tree/field[@name='qty_ordered']" position="after">
+                <field
+                    name="qty_check"
+                    widget="badge"
+                    decoration-success="qty_check == 'enough'"
+                    decoration-warning="qty_check == 'not_enough'"
+                    invisible="context.get('requisitions_from') != 'me'"
+                />
+            </xpath>
+            <xpath expr="//tree/field[@name='schedule_date']" position="after">
+                <field name="date_planned" string="Planned Date" decoration-bf="1" />
+                <field
+                    name="date_check"
+                    widget="badge"
+                    decoration-success="date_check == 'respected'"
+                    decoration-warning="date_check == 'not_respected'"
+                    invisible="context.get('requisitions_from') != 'me'"
+                />
+            </xpath>
+            <xpath expr="//tree/field[@name='price_unit']" position="after">
+                <field
+                    name="proposal_line_count"
+                    string="proposals"
+                    decoration-bf="1"
+                />
+                <button
+                    string="Proposals"
+                    name="show_requisition_proposal_line"
+                    type="object"
+                    attrs="{'invisible': [('proposal_line_count', '=', 0)]}"
+                    class="btn btn-info"
+                />
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-success">qty_planned != 0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_purchase_requisition_no_edit_form">
+        <field name="name">purchase.requisition.form</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition_view_form" />
+        <field name="priority">1000</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='missing_procurment_contacts']/parent::div" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath
+                expr="//button[@name='%(purchase_requisition.action_purchase_requisition_list)d']"
+                position="attributes"
+            >
+                <attribute name="invisible">1</attribute>
+
+            </xpath>
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="edit">0</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_done']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath
+                expr="//button[@name='action_create_quotations']"
+                position="attributes"
+            >
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath
+                expr="//button[@name='action_call_for_proposal_send']"
+                position="attributes"
+            >
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_in_progress']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath
+                expr="//tree/button[@name='show_requisition_proposal_line']"
+                position="before"
+            >
+
+                <button
+                    string="Accept"
+                    name="proposal_validation"
+                    class="btn btn-success"
+                    type="object"
+                    attrs="{'invisible': [('proposal_line_count', '!=', 0)]}"
+                />
+            </xpath>
+            <xpath
+                expr="//tree/button[@name='show_requisition_proposal_line']"
+                position="after"
+            >
+                <field name="state" invisible="1"/>
+
+                <button
+                    string="See all proposals"
+                    name="show_all_requisition_proposal_line"
+                    type="object"
+                    class="btn btn-link"
+                    attrs="{'invisible': [('state', '!=', 'done')]}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="purchase_requisition_form_action">
+        <field name="name">Purchase requisitions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.requisition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('company_id', '=', allowed_company_ids[0])]</field>
+        <field
+            name="context"
+        >{"search_default_group_by_state":1, "requisitions_from": "me"}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="purchase_requisition_no_edit_form_action">
+        <field name="name">Purchase requisitions</field>
+        <field name="res_model">purchase.requisition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('company_id', '!=', allowed_company_ids[0])]</field>
+        <field
+            name="view_ids"
+            eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('purchase_requisition.view_purchase_requisition_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_purchase_requisition_no_edit_form')})]"
+        />
+        <field
+            name="context"
+        >{"search_default_group_by_state":1, "requisitions_from": "others"}</field>
+    </record>
+
+    <menuitem
+        id="parent_menu_purchase_requisition_proposal"
+        name="Purchase requisitions"
+        sequence="15"
+        web_icon="purchase_requisition_proposal,static/description/icon.png"
+    />
+    <menuitem
+        id="menu_my_purchase_requisition"
+        sequence="2"
+        name="My Requisitions"
+        parent="parent_menu_purchase_requisition_proposal"
+        action="purchase_requisition_form_action"
+    />
+    <menuitem
+        id="menu_others_purchase_requisition"
+        name="Others Requisitions"
+        sequence="3"
+        parent="parent_menu_purchase_requisition_proposal"
+        action="purchase_requisition_no_edit_form_action"
+    />
+    <menuitem
+        id="menu_purchase_requisition_type"
+        sequence="4"
+        parent="parent_menu_purchase_requisition_proposal"
+        action="purchase_requisition.tender_type_action"
+    />
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2023 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+        <record model="ir.ui.view" id="purchase_order_proposal_view_form">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='analytic_tag_ids']" position="after">
+                    <field
+                    name="requirement_proposal_id"
+                    string="Proposal"
+                    attrs="{'column_invisible': [('parent.requisition_id', '=', False)]}"
+                />
+                </xpath>
+            </field>
+        </record>
+    </odoo>
