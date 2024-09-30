@@ -13,10 +13,12 @@ class ProjectTask(models.Model):
         # super creates a new workload if there are none
         # but here we can have only additional workloads
         # so we also need to check if the existing workloads are additional
-        if not rv and all(
-            workload.additional_workload_id for workload in self.workload_ids
-        ):
-            rv.append(self._prepare_workload())
+        for user in self.user_ids:
+            if not [vals for vals in rv if vals["user_id"] == user.id] and all(
+                workload.additional_workload_id
+                for workload in self.workload_ids.filtered(lambda w: w.user_id == user)
+            ):
+                rv.append(self._prepare_workload(user))
 
         additional_workloads = {
             workload.additional_workload_id: workload
@@ -37,8 +39,12 @@ class ProjectTask(models.Model):
             key=lambda w: w.additional_workload_id
         )
         rv = super()._get_updated_workloads()
-        if rv and rv[0][0].additional_workload_id:
-            rv = []
+        # Remove additional workloads from the list
+        rv = [
+            (workload, vals)
+            for workload, vals in rv
+            if not workload.additional_workload_id
+        ]
 
         additional_workloads = {
             workload.additional_workload_id: workload
@@ -72,14 +78,17 @@ class ProjectTask(models.Model):
             if workload.additional_workload_id
         }
         for additional_workload in additional_workloads:
-            if additional_workload not in self.project_id.additional_workload_ids:
+            if (
+                additional_workload not in self.project_id.additional_workload_ids
+                or additional_workload.user_id not in self.user_ids
+            ):
                 rv.append(additional_workload)
         return rv
 
     def _prepare_additional_workload(self, additional_workload, **extra):
         return self._prepare_workload(
+            additional_workload.user_id,
             additional_workload_id=additional_workload.id,
             hours=additional_workload._compute_hours_from_task(self),
-            user_id=additional_workload.user_id.id,
             **extra,
         )

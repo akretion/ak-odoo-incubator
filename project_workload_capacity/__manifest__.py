@@ -6,7 +6,7 @@
 {
     "name": "Project Workload Capacity",
     "summary": "Ressource Workload Capacity Management",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/akretion/ak-odoo-incubator",

@@ -75,9 +75,14 @@ class ProjectWorkloadUnit(models.Model):
             return
         time = self.env.context.get("time", 0) / 60
 
+        # Add only on lines without names
         timesheet = self.timesheet_ids.filtered(
-            lambda t: t.date == fields.Date.today()
-        ) or sheet._add_line_from_unit(self)
+            lambda t: t.date == fields.Date.today() and t.name == "/"
+        )
+        if len(timesheet) > 1:
+            timesheet = timesheet[0]
+        if not timesheet:
+            timesheet = sheet._add_line_from_unit(self)
         timesheet.unit_amount += time
         return True
 

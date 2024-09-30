@@ -18,20 +18,24 @@ class ProjectMilestone(models.Model):
         readonly=False,
     )
 
-    @api.constrains("start_date", "target_date")
+    @api.constrains("start_date", "deadline")
     def _check_start_date(self):
         for milestone in self:
-            if milestone.target_date < milestone.start_date:
+            if (
+                milestone.deadline
+                and milestone.start_date
+                and milestone.deadline < milestone.start_date
+            ):
                 raise ValidationError(
                     _("The end date cannot be earlier than the start date.")
                 )
 
-    @api.depends("target_date", "project_id")
+    @api.depends("deadline", "project_id")
     def _compute_milestone_start_date(self):
         for record in self:
             if record.start_date:
                 continue
-            if not record.target_date:
+            if not record.deadline:
                 record.start_date = False
                 continue
 
@@ -40,11 +44,11 @@ class ProjectMilestone(models.Model):
             previous_milestones = self.search(
                 [
                     ("project_id", "=", record.project_id.id),
-                    ("target_date", "<", record.target_date),
+                    ("deadline", "<", record.deadline),
                 ],
-                order="target_date desc",
+                order="deadline desc",
                 limit=1,
             )
             # The start date will be the end date of the previous milestone
-            if previous_milestones.target_date:
-                record.start_date = previous_milestones.target_date + timedelta(days=1)
+            if previous_milestones.deadline:
+                record.start_date = previous_milestones.deadline + timedelta(days=1)

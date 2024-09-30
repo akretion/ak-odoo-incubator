@@ -28,7 +28,7 @@ class ProjectTask(models.Model):
         "date_start",
         "date_end",
         "planned_hours",
-        "user_id",
+        "user_ids",
         "config_workload_manually",
         "use_workload",
     )
@@ -44,12 +44,12 @@ class ProjectTask(models.Model):
                 continue
             record.workload_ids = record._get_workload_sync()
 
-    def _prepare_workload(self, **extra):
+    def _prepare_workload(self, user, **extra):
         return {
             "date_start": self.date_start,
             "date_end": self.date_end,
             "hours": self.planned_hours,
-            "user_id": self.user_id.id,
+            "user_id": user.id,
             **extra,
         }
 
@@ -66,24 +66,26 @@ class ProjectTask(models.Model):
 
     def _get_new_workloads(self):
         self.ensure_one()
-        # Handle only one workload in automatic
-        if not self.workload_ids:
-            return [self._prepare_workload()]
-        return []
+        # Handle only one workload per user in automatic
+        new_vals = []
+        for user in self.user_ids:
+            user_workload = self.workload_ids.filtered(lambda w: w.user_id == user)
+            if not user_workload:
+                new_vals.append(self._prepare_workload(user))
+
+        return new_vals
 
     def _get_updated_workloads(self):
         self.ensure_one()
-        # Remove other workloads and update the first workload values
-        if self.workload_ids:
-            return [(self.workload_ids[0], self._prepare_workload())]
-        return []
+        # Update the users workload values
+        for workload in self.workload_ids:
+            if workload.user_id in self.user_ids:
+                yield workload, self._prepare_workload(workload.user_id)
 
     def _get_obsolete_workloads(self):
         self.ensure_one()
-        # Remove other workloads and update the first workload values
-        if len(self.workload_ids) > 1:
-            return self.workload_ids[1:]
-        return []
+        # Remove other workloads
+        return self.workload_ids.filtered(lambda w: w.user_id not in self.user_ids)
 
     @api.depends("workload_ids.unit_ids")
     def _compute_workload_unit_ids(self):

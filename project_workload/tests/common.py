@@ -3,15 +3,14 @@
 # @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from datetime import datetime, timedelta
 
 from freezegun import freeze_time
 
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 
 @freeze_time("2023-07-24")
-class TestWorkloadCommon(SavepointCase):
+class TestWorkloadCommon(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -28,16 +27,5 @@ class TestWorkloadCommon(SavepointCase):
                 "name": "Project Filter 1",
                 "domain": [("id", "=", cls.project.id)],
                 "model_id": "project.project",
-            }
-        )
-        now = datetime.now()
-        cls.task = cls.env["project.task"].create(
-            {
-                "name": "Task 1",
-                "project_id": cls.project.id,
-                "user_id": cls.user_1.id,
-                "date_start": now,
-                "date_end": now + timedelta(days=20),
-                "planned_hours": 21,
             }
         )
