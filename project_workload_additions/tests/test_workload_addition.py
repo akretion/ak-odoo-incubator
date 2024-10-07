@@ -101,6 +101,11 @@ class TestWorkload(TestWorkloadCommon):
         task.user_ids = [(5, 0, 0)]
         self._assert_only_additionnal_workload(task.workload_ids)
 
+    def test_remove_users(self):
+        task = self._create_task(self.user_1 | self.user_2)
+        task.user_ids = [(5, 0, 0)]
+        self._assert_only_additionnal_workload(task.workload_ids)
+
     def test_update_hours(self):
         task = self._create_task(self.user_1)
         task.planned_hours = 42

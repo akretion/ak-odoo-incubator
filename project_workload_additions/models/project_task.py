@@ -17,7 +17,6 @@ class ProjectTask(models.Model):
 
     def _get_new_workloads(self):
         rv = super()._get_new_workloads()
-        # We need to create a new workload for each additional workload
         for additional_workload in self.project_id.additional_workload_ids:
             if additional_workload not in self.workload_ids.additional_workload_id:
                 rv.append(self._prepare_additional_workload(additional_workload))
@@ -39,9 +38,8 @@ class ProjectTask(models.Model):
             additional_workload = workload.additional_workload_id
             if additional_workload and (
                 additional_workload not in self.project_id.additional_workload_ids
-                or additional_workload.user_id not in self.user_ids
             ):
-                rv.append(additional_workload)
+                rv |= workload
         return rv
 
     def _prepare_additional_workload(self, additional_workload, **extra):
