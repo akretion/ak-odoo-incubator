@@ -19,22 +19,10 @@ class ProjectWorkloadAddition(models.Model):
         store=True,
         compute="_compute_percentage",
         readonly=False,
+        precompute=True,
     )
     user_id = fields.Many2one("res.users", string="User", required=True)
     task_id = fields.Many2one("project.task", string="Task", required=True)
-
-    @api.model_create_multi
-    def create(self, list_vals):
-        # TODO remove on next version when computed field are run before the create
-        # for now we have to do it manually as the field is required
-        for vals in list_vals:
-            if not vals.get("percentage") and vals.get("type_id"):
-                vals["percentage"] = (
-                    self.env["project.task.workload.addition.type"]
-                    .browse(vals["type_id"])
-                    .default_percentage
-                )
-        return super().create(list_vals)
 
     @api.depends("type_id")
     def _compute_percentage(self):
