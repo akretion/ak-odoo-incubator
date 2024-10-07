@@ -25,8 +25,8 @@ class ProjectTask(models.Model):
     config_workload_manually = fields.Boolean()
 
     @api.depends(
-        "date_start",
-        "date_end",
+        "planned_date_start",
+        "planned_date_end",
         "planned_hours",
         "user_ids",
         "config_workload_manually",
@@ -39,15 +39,17 @@ class ProjectTask(models.Model):
 
             # Handle only automatic config in planned task
             if record.config_workload_manually or not (
-                record.date_start and record.date_end and record.planned_hours
+                record.planned_date_start
+                and record.planned_date_end
+                and record.planned_hours
             ):
                 continue
             record.workload_ids = record._get_workload_sync()
 
     def _prepare_workload(self, user, **extra):
         return {
-            "date_start": self.date_start,
-            "date_end": self.date_end,
+            "date_start": self.planned_date_start,
+            "date_end": self.planned_date_end,
             "hours": self.planned_hours,
             "user_id": user.id,
             **extra,

@@ -42,8 +42,8 @@ class ProjectTaskWorkload(models.Model):
 
     @api.constrains("date_start", "date_end")
     def _check_end_date(self):
-        for task in self:
-            if task.date_end < task.date_start:
+        for load in self:
+            if load.date_end < load.date_start:
                 raise ValidationError(
                     _("The end date cannot be earlier than the start date.")
                 )

@@ -16,8 +16,8 @@ class TestWorkload(TestWorkloadCommon):
                 "name": "Task 1",
                 "project_id": self.project.id,
                 "user_ids": [(4, self.user_1.id)],
-                "date_start": now,
-                "date_end": now + timedelta(days=20),
+                "planned_date_start": now,
+                "planned_date_end": now + timedelta(days=20),
                 "planned_hours": 21,
             }
         )
@@ -26,8 +26,8 @@ class TestWorkload(TestWorkloadCommon):
         self._create_task()
         workload = self.task.workload_ids
         self.assertEqual(len(workload), 1)
-        self.assertEqual(workload.date_start, self.task.date_start.date())
-        self.assertEqual(workload.date_end, self.task.date_end.date())
+        self.assertEqual(workload.date_start, self.task.planned_date_start.date())
+        self.assertEqual(workload.date_end, self.task.planned_date_end.date())
         self.assertEqual(workload.hours, 21)
         load_unit = workload.unit_ids
         self.assertEqual(len(load_unit), 3)
@@ -53,11 +53,11 @@ class TestWorkload(TestWorkloadCommon):
 
     def test_change_date(self):
         self._create_task()
-        self.task.date_end = self.task.date_start + timedelta(days=13)
+        self.task.planned_date_end = self.task.planned_date_start + timedelta(days=13)
         workload = self.task.workload_ids
         self.assertEqual(len(workload), 1)
-        self.assertEqual(workload.date_start, self.task.date_start.date())
-        self.assertEqual(workload.date_end, self.task.date_end.date())
+        self.assertEqual(workload.date_start, self.task.planned_date_start.date())
+        self.assertEqual(workload.date_end, self.task.planned_date_end.date())
         self.assertEqual(workload.hours, 21)
         load_unit = workload.unit_ids
         self.assertEqual(len(load_unit), 2)
