@@ -19,8 +19,8 @@ class ProjectTask(models.Model):
         readonly=False,
     )
 
-    @api.depends("milestone_id.start_date", "milestone_id.target_date")
+    @api.depends("milestone_id.start_date", "milestone_id.deadline")
     def _compute_planned_date_start_end(self):
         for record in self:
-            record.planned_date_end = record.milestone_id.target_date
+            record.planned_date_end = record.milestone_id.deadline
             record.planned_date_start = record.milestone_id.start_date
