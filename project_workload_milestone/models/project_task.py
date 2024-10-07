@@ -15,8 +15,8 @@ class ProjectTask(models.Model):
         if "milestone_id" in vals:
             milestone = self.env["project.milestone"].browse(vals["milestone_id"])
             if milestone:
-                vals["date_end"] = milestone.deadline
-                vals["date_start"] = milestone.start_date
+                vals["planned_date_end"] = milestone.deadline
+                vals["planned_date_start"] = milestone.start_date
         return vals
 
     @api.model
