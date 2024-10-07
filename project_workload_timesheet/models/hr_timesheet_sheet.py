@@ -132,7 +132,7 @@ class Sheet(models.Model):
 
     @api.model
     def _prepare_new_line(self, line):
-        # We need to check if the new line is similar to a worload unit
+        # We need to check if the new line is similar to a workload unit
         # If it is, we need to link it to the workload unit
         vals = super()._prepare_new_line(line)
         # Yeah, using the same function for 2 different things leads to this :/
