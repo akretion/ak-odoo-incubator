@@ -27,9 +27,9 @@ class ProjectWorkloadUnit(models.Model):
 
     def is_done(self):
         self.ensure_one()
-        return self.task_id.stage_id.is_closed
+        return self.task_id.is_closed
 
-    @api.depends("task_id.stage_id.is_closed")
+    @api.depends("task_id.is_closed")
     def _compute_done(self):
         for record in self:
             record.done = record.is_done()
