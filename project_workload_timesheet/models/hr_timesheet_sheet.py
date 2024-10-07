@@ -20,18 +20,15 @@ class Sheet(models.Model):
     )
 
     next_week_load = fields.Float(
-        "Next Week Load",
         compute="_compute_next_week_load",
         help="The workload of the next week",
     )
     next_week_units_count = fields.Integer(
-        "Next Week Units Count",
         compute="_compute_next_week_load",
         help="The number of workload units of the next week",
     )
 
     current = fields.Boolean(
-        "Current",
         compute="_compute_current",
         help="Is this the current timesheet",
     )
@@ -153,7 +150,7 @@ class Sheet(models.Model):
 
     def action_timesheet_done(self):
         self.ensure_one()
-        super().action_timesheet_done()
+        rv = super().action_timesheet_done()
 
         next_week = week_name(self.date_start + timedelta(days=7))
         next_week_units = self.env["project.workload.unit"].search(
@@ -191,3 +188,5 @@ class Sheet(models.Model):
 
             # The unit are now done so the unit hours are the timesheeted hours
             unit.hours = unit.timesheeted_hours
+
+        return rv

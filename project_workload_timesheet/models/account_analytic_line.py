@@ -25,7 +25,6 @@ class AccountAnalyticLine(models.Model):
     )
 
     week = fields.Char(
-        string="Week",
         compute="_compute_week",
         help="Week number of the year",
     )

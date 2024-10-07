@@ -17,23 +17,18 @@ class ProjectWorkloadUnit(models.Model):
     priority = fields.Selection(related="task_id.priority")
 
     timesheeted_hours = fields.Float(
-        "Timesheeted Hours",
         compute="_compute_timesheeted_hours",
         help="The hours timesheeted on this workload",
     )
     remaining_hours = fields.Float(
-        "Remaining Hours",
         compute="_compute_remaining_hours",
         help="The remaining hours to timesheet on this workload (can be negative)",
     )
     progress = fields.Float(
-        "Progress",
         compute="_compute_progress",
         help="The progress of the task",
     )
-    force_done = fields.Boolean(
-        "Force Done",
-    )
+    force_done = fields.Boolean()
     task_stage_id = fields.Many2one(
         related="task_id.stage_id", string="Task Stage", readonly=False
     )

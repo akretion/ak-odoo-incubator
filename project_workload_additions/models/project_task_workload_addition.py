@@ -39,10 +39,11 @@ class ProjectWorkloadAddition(models.Model):
             result.append(
                 (
                     record.id,
-                    _(
-                        "%s additional workload (%d%%)"
-                        % (record.task_id.name, record.percentage)
-                    ),
+                    _("%(task)s additional workload (%(percentage)d%%)")
+                    % {
+                        "task": record.task_id.name,
+                        "percentage": record.percentage,
+                    },
                 )
             )
         return result

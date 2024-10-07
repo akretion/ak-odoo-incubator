@@ -11,7 +11,6 @@ class ProjectMilestone(models.Model):
     _inherit = "project.milestone"
 
     start_date = fields.Date(
-        string="Start Date",
         help="The date when the Milestone should start.",
         compute="_compute_milestone_start_date",
         store=True,
