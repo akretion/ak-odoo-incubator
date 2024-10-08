@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="project_task_workload_view_form" model="ir.ui.view">
+        <field name="model">project.task.workload</field>
+        <field
+            name="inherit_id"
+            ref="project_workload.project_task_workload_view_form"
+        />
+        <field name="arch" type="xml">
+            <field name="unit_ids" position="after">
+                <group>
+                    <field name="additional_workload_id" />
+                    <field name="additional_workload_task_id" />
+                </group>
+            </field>
+        </field>
+    </record>
+
+</odoo>
