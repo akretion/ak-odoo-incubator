@@ -1,3 +1,5 @@
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
 from odoo.tools.float_utils import float_repr, float_round
 
 
