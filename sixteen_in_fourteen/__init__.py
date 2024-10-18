@@ -1,6 +1,12 @@
+# Copyright 2024 Akretion (http://www.akretion.com).
+# @author Florian Mounier <florian.mounier@akretion.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 import sys
 import importlib
 from contextlib import contextmanager
+
+from . import models  # noqa: F401
 
 MOVED_MODULES = {
     "odoo.addons.sale.models.sale_order_line": "odoo.addons.sale.models.sale",
