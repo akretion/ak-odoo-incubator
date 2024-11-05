@@ -4,7 +4,11 @@ import {registry} from "@web/core/registry";
 
 async function executeProxyAction({env, action}) {
     action.action_list.map(function (act) {
-        env.services.notification.add(env._t("Your action is being executed"), {
+        let msg = "Your action is being executed";
+        if (act.params.args && act.params.args[2] !== undefined) {
+            msg = act.params.args[2];
+        }
+        env.services.notification.add(msg, {
             type: "info",
         });
         $.ajax({
