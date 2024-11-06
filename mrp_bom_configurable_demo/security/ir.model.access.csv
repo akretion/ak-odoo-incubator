@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+demo_mrp_config_support_type,Base demo mrp config support type,model_demo_mrp_config_support_type,base.group_user,1,1,1,1
+demo_mrp_config_screw_type,Base demo mrp config screw type,model_demo_mrp_config_screw_type,base.group_user,1,1,1,1
+demo_shelf_screw_support,Base demo shelf screw support,model_demo_shelf_screw_support,base.group_user,1,1,1,1

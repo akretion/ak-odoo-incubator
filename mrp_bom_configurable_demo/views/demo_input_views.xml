@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+<record id="demo_input_line_tree" model="ir.ui.view">
+    <field name="name">demo.input.line.tree</field>
+    <field name="model">input.line</field>
+    <field name="inherit_id" ref="mrp_bom_configurable.input_line_tree"/>
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <field name="alert" position="before">
+            <field name="should_show_finish" invisible="1"/>
+            <field name="support_domain" invisible="1"/>
+            <field name="screw_domain" invisible="1"/>
+            <field name="width" />
+            <field name="depth" />
+            <field name="support" domain="support_domain"/>
+            <field name="screw" domain="screw_domain"/>
+            <field name="finish" domain="[('categ_id.id', '=', %(mrp_bom_configurable_demo.product_category_mrp_finish)d)]" attrs="{'invisible': [('should_show_finish', '=', False)]}"/>
+        </field>
+    </field>
+</record>
+
+<record id="demo_input_line_form_window" model="ir.ui.view">
+    <field name="name">demo.input.line.form.window</field>
+    <field name="model">input.line</field>
+    <field name="inherit_id" ref="mrp_bom_configurable.input_line_form_window"/>
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <group name="main" position="inside">
+            <field name="should_show_finish" invisible="1"/>
+            <field name="should_show_joinery" invisible="1"/>
+            <field name="support_domain" invisible="1"/>
+            <field name="screw_domain" invisible="1"/>
+            <group name="left">
+                <field name="width" />
+                <field name="support" domain="support_domain"/>
+                <field
+                    name="finish"
+                    domain="[('categ_id.id', '=', %(mrp_bom_configurable_demo.product_category_mrp_finish)d)]"
+                    attrs="{'invisible': [('should_show_finish', '=', False)]}"/>
+            </group>
+            <group name="right">
+                <field name="depth" />
+                <field name="screw" domain="screw_domain"/>
+                <field
+                    name="joinery"
+                    domain="[('categ_id.id', '=', %(mrp_bom_configurable_demo.product_category_mrp_joinery)d)]"
+                    attrs="{'invisible': [('should_show_joinery', '=', False)]}"/>
+            </group>
+        </group>
+    </field>
+</record>
+
+<record id="demo_shelf_support_screw_constraint" model="ir.ui.view">
+    <field name="name">demo.shelf.support.screw.constraint</field>
+    <field name="model">demo.shelf.screw.support</field>
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="shelf" />
+            <field name="support" />
+            <field name="screw" widget="many2many_tags" />
+        </tree>
+    </field>
+</record>
+
+<record id="shelf_support_screw_action" model="ir.actions.act_window">
+    <field name="name">Shelf/Support/Screw</field>
+    <field name="res_model">demo.shelf.screw.support</field>
+    <field name="view_mode">tree</field>
+</record>
+<menuitem
+    id="shelf_support_screw_config"
+    parent="mrp_bom_configurable.configurator_menu"
+    action="shelf_support_screw_action"
+/>
+
+</odoo>
