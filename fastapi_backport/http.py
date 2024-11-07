@@ -41,7 +41,7 @@ class FastapiRequest(http.WebRequest):
     def __init__(self, *args):
         super().__init__(*args)
         self.params = {}
-        self._dispatcher = FastApiDispatcher(self)
+        self._dispatcher = http._dispatchers.get("fastapi", FastApiDispatcher)(self)
 
     def make_response(self, data, headers=None, cookies=None, status=200):
         """Helper for non-HTML responses, or HTML responses with custom
