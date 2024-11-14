@@ -21,7 +21,7 @@ class ProxyActionHelper(models.AbstractModel):
         to_encode64=False,
         copies=1,
         host="https://localhost",
-        msg="Your action is being executed",
+        msg="",
     ):
         """Prepare a PyWebdriver. print action"""
         if to_encode64:
