@@ -4,7 +4,7 @@ import {registry} from "@web/core/registry";
 
 async function executeProxyAction({env, action}) {
     action.action_list.map(function (act) {
-        let msg = "Your action is being executed";
+        let msg = env._t("Your action is being executed");
         if (act.params.args && act.params.args[2] !== undefined) {
             msg = act.params.args[2];
         }
