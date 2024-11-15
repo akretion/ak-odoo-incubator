@@ -6,6 +6,7 @@
         <field name="inherit_id" ref="project.edit_project" />
         <field name="arch" type="xml">
             <xpath expr="//group[@name='extra_settings']" position="inside">
+                <separator string="Estimate steps" />
                 <field name="estimate_step_ids" widget="many2many_tags" />
             </xpath>
         </field>
