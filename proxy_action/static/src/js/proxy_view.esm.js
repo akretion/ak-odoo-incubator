@@ -5,7 +5,14 @@ import {registry} from "@web/core/registry";
 async function executeProxyAction({env, action}) {
     action.action_list.map(function (act) {
         let msg = env._t("Your action is being executed");
-        if (act.params.args && act.params.args[2] !== undefined) {
+        // The arg act.params.args[2] can contain a custom message to display for user
+        // (ex used printer name)
+        if (
+            act.params.args &&
+            act.params.args.length >= 2 &&
+            act.params.args[2] &&
+            act.params.args[2].length
+        ) {
             msg = act.params.args[2];
         }
         env.services.notification.add(msg, {
