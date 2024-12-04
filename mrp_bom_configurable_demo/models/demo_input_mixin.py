@@ -5,6 +5,7 @@ CONFIG_ELEMENTS = ["width", "depth", "screw", "support", "finish", "joinery"]
 
 class SupportType(models.Model):
     _name = "demo.mrp.config.support.type"
+    _description = "demo.mrp.config.support.type"
 
     name = fields.Char()
     value = fields.Char()
@@ -12,6 +13,7 @@ class SupportType(models.Model):
 
 class ScrewType(models.Model):
     _name = "demo.mrp.config.screw.type"
+    _description = "demo.mrp.config.screw.type"
 
     name = fields.Char()
     value = fields.Char()
@@ -19,6 +21,7 @@ class ScrewType(models.Model):
 
 class ShelfSupportScrewConstraint(models.Model):
     _name = "demo.shelf.screw.support"
+    _description = "demo.shelf.screw.support"
 
     shelf = fields.Many2one(comodel_name="product.template")
     support = fields.Many2one(comodel_name="demo.mrp.config.support.type")

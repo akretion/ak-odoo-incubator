@@ -3,7 +3,7 @@
     "summary": "Skip components lines in bom according to conditions",
     "version": "16.0.1.0.0",
     "category": "Manufacture",
-    "website": "https://github.com/OCA/manufacture",
+    "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": "Akretion, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "depends": ["mrp_bom_configurable", "sale_mrp_bom_configurable"],
@@ -15,7 +15,6 @@
         "views/demo_input_views.xml",
         "security/ir.model.access.csv",
     ],
-    "demo": [
-    ],
+    "demo": [],
     "installable": True,
 }

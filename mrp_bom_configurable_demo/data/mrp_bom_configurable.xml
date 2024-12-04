@@ -41,7 +41,10 @@
         <field name="uom_po_id" ref="uom.product_uom_unit" />
         <field name="lst_price">20</field>
     </record>
-    <record id="demo_mrp_bom_configurable_finish_tongue_and_groove" model="product.product">
+    <record
+        id="demo_mrp_bom_configurable_finish_tongue_and_groove"
+        model="product.product"
+    >
         <field name="name">Tongue and groove</field>
         <field name="categ_id" ref="product_category_mrp_joinery" />
         <field name="type">service</field>
@@ -106,44 +109,77 @@
     </record>
 
     <!-- contrainte vis -->
-    <record id="demo_mrp_bom_configurable_constraint_screw_A" model="demo.mrp.config.screw.type">
+    <record
+        id="demo_mrp_bom_configurable_constraint_screw_A"
+        model="demo.mrp.config.screw.type"
+    >
         <field name="name">Screw A</field>
         <field name="value">screw_a</field>
     </record>
-    <record id="demo_mrp_bom_configurable_constraint_screw_B" model="demo.mrp.config.screw.type">
+    <record
+        id="demo_mrp_bom_configurable_constraint_screw_B"
+        model="demo.mrp.config.screw.type"
+    >
         <field name="name">Screw B</field>
         <field name="value">screw_b</field>
     </record>
-    <record id="demo_mrp_bom_configurable_constraint_screw_C" model="demo.mrp.config.screw.type">
+    <record
+        id="demo_mrp_bom_configurable_constraint_screw_C"
+        model="demo.mrp.config.screw.type"
+    >
         <field name="name">Screw C</field>
         <field name="value">screw_c</field>
     </record>
 
     <!-- contrainte support -->
-    <record id="demo_mrp_bom_configurable_constraint_support_1" model="demo.mrp.config.support.type">
+    <record
+        id="demo_mrp_bom_configurable_constraint_support_1"
+        model="demo.mrp.config.support.type"
+    >
         <field name="name">Filled bracket</field>
         <field name="value">filled_bracket</field>
     </record>
-    <record id="demo_mrp_bom_configurable_constraint_support_2" model="demo.mrp.config.support.type">
+    <record
+        id="demo_mrp_bom_configurable_constraint_support_2"
+        model="demo.mrp.config.support.type"
+    >
         <field name="name">Hollow bracket</field>
         <field name="value">hollow_bracket</field>
     </record>
 
     <!-- contrainte combinaison -->
-    <record id="demo_mrp_bom_configurable_constraint_combination_1" model="demo.shelf.screw.support">
-        <field name="shelf" ref="demo_mrp_bom_configurable_shelf_plastic"/>
-        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1"/>
-        <field name="screw" eval="[(6,0, [ref('demo_mrp_bom_configurable_constraint_screw_A'), ref('demo_mrp_bom_configurable_constraint_screw_B')])]"/>
+    <record
+        id="demo_mrp_bom_configurable_constraint_combination_1"
+        model="demo.shelf.screw.support"
+    >
+        <field name="shelf" ref="demo_mrp_bom_configurable_shelf_plastic" />
+        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1" />
+        <field
+            name="screw"
+            eval="[(6,0, [ref('demo_mrp_bom_configurable_constraint_screw_A'), ref('demo_mrp_bom_configurable_constraint_screw_B')])]"
+        />
     </record>
-    <record id="demo_mrp_bom_configurable_constraint_combination_2" model="demo.shelf.screw.support">
-        <field name="shelf" ref="demo_mrp_bom_configurable_shelf_plastic"/>
-        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_2"/>
-        <field name="screw" eval="[(6,0, [ref('demo_mrp_bom_configurable_constraint_screw_A'), ref('demo_mrp_bom_configurable_constraint_screw_C')])]"/>
+    <record
+        id="demo_mrp_bom_configurable_constraint_combination_2"
+        model="demo.shelf.screw.support"
+    >
+        <field name="shelf" ref="demo_mrp_bom_configurable_shelf_plastic" />
+        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_2" />
+        <field
+            name="screw"
+            eval="[(6,0, [ref('demo_mrp_bom_configurable_constraint_screw_A'), ref('demo_mrp_bom_configurable_constraint_screw_C')])]"
+        />
     </record>
-    <record id="demo_mrp_bom_configurable_constraint_combination_3" model="demo.shelf.screw.support">
-        <field name="shelf" ref="demo_mrp_bom_configurable_shelf_wood"/>
-        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1"/>
-        <field name="screw" eval="[(6,0, [ref('demo_mrp_bom_configurable_constraint_screw_A'), ref('demo_mrp_bom_configurable_constraint_screw_B'), ref('demo_mrp_bom_configurable_constraint_screw_C')])]"/>
+    <record
+        id="demo_mrp_bom_configurable_constraint_combination_3"
+        model="demo.shelf.screw.support"
+    >
+        <field name="shelf" ref="demo_mrp_bom_configurable_shelf_wood" />
+        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1" />
+        <field
+            name="screw"
+            eval="[(6,0, [ref('demo_mrp_bom_configurable_constraint_screw_A'), ref('demo_mrp_bom_configurable_constraint_screw_B'), ref('demo_mrp_bom_configurable_constraint_screw_C')])]"
+        />
     </record>
 
     <!-- first bom for shelf plastic-->
@@ -161,7 +197,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_1" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'" />
     </record>
     <record id="mrp_bom_configurable_1_line_2" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_screws_B" />
@@ -170,7 +206,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_1" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'" />
     </record>
     <record id="mrp_bom_configurable_1_line_3" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_screws_C" />
@@ -179,7 +215,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_1" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'" />
     </record>
     <record id="mrp_bom_configurable_1_line_4" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_support_1" />
@@ -188,7 +224,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_1" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200)'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200)'" />
     </record>
     <record id="mrp_bom_configurable_1_line_5" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_support_2" />
@@ -197,7 +233,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_1" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200)'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200)'" />
     </record>
 
     <!-- first bom for shelf wood-->
@@ -215,7 +251,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_2" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'" />
     </record>
     <record id="mrp_bom_configurable_2_line_2" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_screws_B" />
@@ -224,7 +260,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_2" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'" />
     </record>
     <record id="mrp_bom_configurable_2_line_3" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_screws_C" />
@@ -233,7 +269,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_2" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200) * 4'" />
     </record>
     <record id="mrp_bom_configurable_2_line_4" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_support_1" />
@@ -242,7 +278,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_2" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200)'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200)'" />
     </record>
     <record id="mrp_bom_configurable_2_line_5" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_support_2" />
@@ -251,7 +287,7 @@
         <field name="product_uom_id" ref="uom.product_uom_unit" />
         <field name="bom_id" ref="mrp_bom_configurable_2" />
         <field name="use_formula_compute_qty">True</field>
-        <field name="qty_formula" eval="'result = math.floor(width / 200)'"/>
+        <field name="qty_formula" eval="'result = math.floor(width / 200)'" />
     </record>
     <record id="mrp_bom_configurable_2_line_6" model="mrp.bom.line">
         <field name="product_id" ref="demo_mrp_bom_configurable_finish_acrylic" />
@@ -282,16 +318,16 @@
         <field name="config_id" ref="input_config_1" />
         <field name="depth">300</field>
         <field name="width">800</field>
-        <field name="screw" ref="demo_mrp_bom_configurable_constraint_screw_A"></field>
-        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1"></field>
+        <field name="screw" ref="demo_mrp_bom_configurable_constraint_screw_A" />
+        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1" />
     </record>
     <record id="input_config_line_2" model="input.line">
         <field name="name">shelf 2</field>
         <field name="config_id" ref="input_config_1" />
         <field name="depth">300</field>
         <field name="width">950</field>
-        <field name="screw" ref="demo_mrp_bom_configurable_constraint_screw_C"></field>
-        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_2"></field>
+        <field name="screw" ref="demo_mrp_bom_configurable_constraint_screw_C" />
+        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_2" />
     </record>
 
     <!-- input config wood -->
@@ -304,40 +340,48 @@
         <field name="config_id" ref="input_config_2" />
         <field name="depth">150</field>
         <field name="width">760</field>
-        <field name="screw" ref="demo_mrp_bom_configurable_constraint_screw_B"></field>
-        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1"></field>
-        <field name="finish" ref="demo_mrp_bom_configurable_finish_linseed"></field>
+        <field name="screw" ref="demo_mrp_bom_configurable_constraint_screw_B" />
+        <field name="support" ref="demo_mrp_bom_configurable_constraint_support_1" />
+        <field name="finish" ref="demo_mrp_bom_configurable_finish_linseed" />
     </record>
 
     <!-- sale price config plastic -->
     <record id="demo_sale_price_config_plastic" model="sale.price.config">
-        <field name="product_id" ref="demo_mrp_bom_configurable_shelf_plastic"/>
+        <field name="product_id" ref="demo_mrp_bom_configurable_shelf_plastic" />
+        <field
+            name="start_date"
+            eval="(datetime.today() + relativedelta(days=-32)).strftime('%Y-%m-%d')"
+        />
     </record>
 
     <record id="demo_sale_price_config_plastic_line_1" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic" />
         <field name="line_type">base</field>
         <field name="amount">100</field>
     </record>
     <record id="demo_sale_price_config_plastic_line_2" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic" />
         <field name="line_type">factor</field>
+        <field
+            name="target_field"
+            ref="mrp_bom_configurable_demo.field_input_line__depth"
+        />
         <field name="amount">50</field>
     </record>
     <record id="demo_sale_price_config_plastic_line_3" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic" />
         <field name="line_type">base</field>
         <field name="domain">[('screw.value', '=', 'screw_a')]</field>
         <field name="amount">4</field>
     </record>
     <record id="demo_sale_price_config_plastic_line_4" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic" />
         <field name="line_type">base</field>
         <field name="domain">[('screw.value', '=', 'screw_b')]</field>
         <field name="amount">5</field>
     </record>
     <record id="demo_sale_price_config_plastic_line_5" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_plastic" />
         <field name="line_type">base</field>
         <field name="domain">[('screw.value', '=', 'screw_c')]</field>
         <field name="amount">2</field>
@@ -345,40 +389,51 @@
 
     <!-- sale price config wood -->
     <record id="demo_sale_price_config_wood" model="sale.price.config">
-        <field name="product_id" ref="demo_mrp_bom_configurable_shelf_wood"/>
+        <field name="product_id" ref="demo_mrp_bom_configurable_shelf_wood" />
+        <field
+            name="start_date"
+            eval="(datetime.today() + relativedelta(days=-8)).strftime('%Y-%m-%d')"
+        />
     </record>
 
     <record id="demo_sale_price_config_wood_line_1" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_wood"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_wood" />
         <field name="line_type">base</field>
         <field name="amount">100</field>
     </record>
     <record id="demo_sale_price_config_wood_line_2" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_wood"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_wood" />
         <field name="line_type">factor</field>
+        <field
+            name="target_field"
+            ref="mrp_bom_configurable_demo.field_input_line__depth"
+        />
         <field name="amount">70</field>
     </record>
     <record id="demo_sale_price_config_wood_line_3" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_wood"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_wood" />
         <field name="line_type">base</field>
         <field name="domain">[('screw.value', '=', 'screw_a')]</field>
         <field name="amount">4</field>
     </record>
     <record id="demo_sale_price_config_wood_line_4" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_wood"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_wood" />
         <field name="line_type">base</field>
         <field name="domain">[('screw.value', '=', 'screw_b')]</field>
         <field name="amount">5</field>
     </record>
     <record id="demo_sale_price_config_wood_line_5" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_wood"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_wood" />
         <field name="line_type">base</field>
         <field name="domain">[('screw.value', '=', 'screw_c')]</field>
         <field name="amount">2</field>
     </record>
     <record id="demo_sale_price_config_wood_line_6" model="sale.price.config.line">
-        <field name="sale_price_config_id" ref="demo_sale_price_config_wood"/>
+        <field name="sale_price_config_id" ref="demo_sale_price_config_wood" />
         <field name="line_type">include_product_or_category</field>
-        <field name="included_product_or_category" eval='"product.category, {}".format(ref("product_category_mrp_joinery"))'/>
+        <field
+            name="included_product_or_category"
+            eval='"product.category, {}".format(ref("product_category_mrp_joinery"))'
+        />
     </record>
 </odoo>
