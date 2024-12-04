@@ -1,0 +1,238 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mrp_bom_configurable_demo
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_finish_acrylic_product_template
+msgid "Acrylic"
+msgstr "Acrylique"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__area
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__area
+msgid "Area"
+msgstr "Zone"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__create_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__create_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__create_uid
+msgid "Created by"
+msgstr "Created by"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__create_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__create_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__create_date
+msgid "Created on"
+msgstr "Created on"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__depth
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__depth
+msgid "Depth"
+msgstr "Profondeur"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__display_name
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__display_name
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__display_name
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_finish_dove_tail_product_template
+msgid "Dove tail"
+msgstr "Queue d'aronde"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_support_1_product_template
+msgid "Filled bracket"
+msgstr "Support plein"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__finish
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__finish
+msgid "Finish"
+msgstr "Finition"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_support_2_product_template
+msgid "Hollow bracket"
+msgstr "Support creux"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__id
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__id
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__id
+msgid "ID"
+msgstr "ID"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__joinery
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__joinery
+msgid "Joinery"
+msgstr "Menuiserie"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type____last_update
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type____last_update
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__write_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__write_uid
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__write_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__write_date
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__write_date
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model,name:mrp_bom_configurable_demo.model_input_line
+msgid "Line configuration scenari"
+msgstr "Line configuration scenari"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_finish_linseed_product_template
+msgid "Linseed oil"
+msgstr "Huile de lin"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__name
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model,name:mrp_bom_configurable_demo.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de vente"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__screw
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__screw
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__screw
+msgid "Screw"
+msgstr "Vis"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__screw_domain
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__screw_domain
+msgid "Screw Domain"
+msgstr "Visserie Domaine"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_screws_A_product_template
+msgid "Screws A"
+msgstr "Vis A"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_screws_B_product_template
+msgid "Screws B"
+msgstr "Vis B"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_screws_C_product_template
+msgid "Screws C"
+msgstr "Vis C"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__shelf
+msgid "Shelf"
+msgstr "Etagère"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_shelf_plastic
+msgid "Shelf plastic"
+msgstr "Etagère plastique"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_shelf_wood
+msgid "Shelf wood"
+msgstr "Etagère bois"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.actions.act_window,name:mrp_bom_configurable_demo.shelf_support_screw_action
+#: model:ir.ui.menu,name:mrp_bom_configurable_demo.shelf_support_screw_config
+msgid "Shelf/Support/Screw"
+msgstr "Etagère/Support/Vis"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__should_show_finish
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__should_show_finish
+msgid "Should Show Finish"
+msgstr ""
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__should_show_joinery
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__should_show_joinery
+msgid "Should Show Joinery"
+msgstr ""
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_shelf_screw_support__support
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__support
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__support
+msgid "Support"
+msgstr ""
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__support_domain
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__support_domain
+msgid "Support Domain"
+msgstr "Domain du support"
+
+#. module: mrp_bom_configurable_demo
+#: model:product.template,name:mrp_bom_configurable_demo.demo_mrp_bom_configurable_finish_tongue_and_groove_product_template
+msgid "Tongue and groove"
+msgstr "Languette et rainure"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_screw_type__value
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_demo_mrp_config_support_type__value
+msgid "Value"
+msgstr "Valeur"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line__width
+#: model:ir.model.fields,field_description:mrp_bom_configurable_demo.field_input_line_wizard__width
+msgid "Width"
+msgstr "Largeur"
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model,name:mrp_bom_configurable_demo.model_demo_mrp_config_screw_type
+msgid "demo.mrp.config.screw.type"
+msgstr ""
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model,name:mrp_bom_configurable_demo.model_demo_mrp_config_support_type
+msgid "demo.mrp.config.support.type"
+msgstr ""
+
+#. module: mrp_bom_configurable_demo
+#: model:ir.model,name:mrp_bom_configurable_demo.model_demo_shelf_screw_support
+msgid "demo.shelf.screw.support"
+msgstr ""
