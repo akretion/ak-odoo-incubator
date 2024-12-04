@@ -364,7 +364,7 @@
         <field name="line_type">factor</field>
         <field
             name="target_field"
-            ref="mrp_bom_configurable_demo.field_input_line__depth"
+            ref="mrp_bom_configurable_demo.field_input_line__width"
         />
         <field name="amount">50</field>
     </record>
@@ -406,7 +406,7 @@
         <field name="line_type">factor</field>
         <field
             name="target_field"
-            ref="mrp_bom_configurable_demo.field_input_line__depth"
+            ref="mrp_bom_configurable_demo.field_input_line__width"
         />
         <field name="amount">70</field>
     </record>

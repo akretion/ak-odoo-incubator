@@ -61,7 +61,7 @@ class InputLine(models.Model):
     def _compute_support_domain(self):
         for rec in self:
             constraints = self.env["demo.shelf.screw.support"].search(
-                [("shelf.id", "=", self.bom_id.product_tmpl_id.id)]
+                [("shelf.id", "=", rec.bom_id.product_tmpl_id.id)]
             )
             available_support_ids = constraints.support.mapped("id")
             rec.support_domain = [("id", "=", available_support_ids)]
@@ -74,8 +74,8 @@ class InputLine(models.Model):
         for rec in self:
             constraints = self.env["demo.shelf.screw.support"].search(
                 [
-                    ("shelf.id", "=", self.bom_id.product_tmpl_id.id),
-                    ("support.id", "=", self.support.id),
+                    ("shelf.id", "=", rec.bom_id.product_tmpl_id.id),
+                    ("support.id", "=", rec.support.id),
                 ]
             )
             available_screw_ids = constraints.screw.mapped("id")
