@@ -17,32 +17,18 @@ class SaleOrderLine(models.Model):
         for line in self:
             price_per_date = []
             if line.order_id.partner_id and line.product_id:
-                sale_lines = self.search(
+                history_lines = self.env["sale.price.customer.history"].search(
                     [
-                        ("order_id.state", "=", "sale"),
                         ("product_id", "=", line.product_id.id),
-                        ("order_id.partner_id", "=", line.order_id.partner_id.id),
+                        ("partner_id", "=", line.order_id.partner_id.id),
                     ],
-                    order="id desc",
+                    order="date desc",
                     limit=3,
                 )
                 price_per_date = [
-                    (sol.order_id.date_order, sol.order_id.name, sol.price_unit)
-                    for sol in sale_lines
+                    (history.date, history.document_ref, history.price)
+                    for history in history_lines
                 ]
-                if not price_per_date:
-                    history_lines = self.env["sale.price.customer.history"].search(
-                        [
-                            ("product_id", "=", line.product_id.id),
-                            ("partner_id", "=", line.order_id.partner_id.id),
-                        ],
-                        order="date desc",
-                        limit=3,
-                    )
-                    price_per_date = [
-                        (history.date, history.document_ref, history.price)
-                        for history in history_lines
-                    ]
             last_price_unit = ""
             for i, (date, ref, price) in enumerate(price_per_date):
                 if i != 0:
