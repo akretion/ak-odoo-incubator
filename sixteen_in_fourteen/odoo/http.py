@@ -1,5 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+from odoo.http import HttpRequest, Response, root, urls
+
 import collections.abc
 from abc import ABC, abstractmethod
 
@@ -83,3 +85,17 @@ class Dispatcher(ABC):
         Transform the exception into a valid HTTP response. Called upon
         any exception while serving a request.
         """
+
+
+def redirect16(self, location, code=303, local=True):
+    # compatibility, Werkzeug support URL as location
+    if isinstance(location, urls.URL):
+        location = location.to_url()
+    if local:
+        location = "/" + urls.url_parse(location).replace(
+            scheme="", netloc=""
+        ).to_url().lstrip("/")
+    return werkzeug.utils.redirect(location, code, Response=Response)
+
+
+HttpRequest.redirect = redirect16
