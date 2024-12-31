@@ -17,7 +17,7 @@ class ProductProduct(models.Model):
 
     def write(self, vals):
         res = super().write(vals)
-        if "main_seller_id" in vals:
+        if "main_seller_id" in vals and "standard_price" not in vals:
             for product in self:
                 update_cost_from_main_price(product.main_seller_id, product)
         return res

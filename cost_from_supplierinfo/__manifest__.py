@@ -8,7 +8,6 @@
     "depends": [
         "product_main_supplierinfo",
     ],
-    "demo": [
-    ],
+    "demo": [],
     "installable": True,
 }
