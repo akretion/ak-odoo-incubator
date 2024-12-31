@@ -55,7 +55,8 @@ Authors
 Contributors
 ------------
 
-- Florian da Costa <florian.dacosta@akretion.com>
+-  Florian da Costa <florian.dacosta@akretion.com>
+-  David Beal <david.beal@akretion.com>
 
 Maintainers
 -----------
