@@ -1,4 +1,8 @@
-from odoo import models
+import logging
+
+from odoo import fields, models
+
+logger = logging.getLogger(__name__)
 
 
 class ProductSupplierinfo(models.Model):
@@ -11,15 +15,33 @@ class ProductSupplierinfo(models.Model):
                 update_cost_from_main_price(rec)
         return res
 
+    def _update_standard_price(self):
+        """Only called from shell
+        env['product.supplierinfo']._update_standard_price()
+        """
+        for prd in self.search([]).mapped("product_id"):
+            if prd.standard_price != prd.main_seller_id.price * (
+                1 - prd.main_seller_id.discount / 100
+            ):
+                previous = prd.standard_price
+                update_cost_from_main_price(prd.main_seller_id)
+                logger.info(
+                    "> %s %s std price, previous %s"
+                    % (prd.standard_price, prd.default_code, previous)
+                )
+
 
 class ProductProduct(models.Model):
     _inherit = "product.product"
+
+    standard_price = fields.Float(tracking=10)
 
     def write(self, vals):
         res = super().write(vals)
         if "main_seller_id" in vals and "standard_price" not in vals:
             for product in self:
-                update_cost_from_main_price(product.main_seller_id, product)
+                if product.main_seller_id:
+                    update_cost_from_main_price(product.main_seller_id, product)
         return res
 
 
