@@ -44,6 +44,23 @@ class ProductProduct(models.Model):
                     update_cost_from_main_price(product.main_seller_id, product)
         return res
 
+    def _update_snjb_standard_price(self):
+        "env['product.product']._update_snjb_standard_price()"
+        def get_products_with_zero_standard_price():
+            prd_ids = []
+            for prd in self.search([("standard_price", "=", 0)]):
+                sell = prd.main_seller_id
+                if sell and sell.price > 0:
+                    prd_ids.append(prd.id)
+            return self.browse(prd_ids)
+
+        for prd in get_products_with_zero_standard_price():
+            update_cost_from_main_price(prd.main_seller_id, prd)
+            logger.info(f"\n > Updated price {prd.standard_price} from {prd.name}")
+        missing = get_products_with_zero_standard_price()
+        if missing:
+            logger.info(f"\n>> Missing {missing}")
+
 
 def update_cost_from_main_price(suppinfo, product=None):
     if not product:
