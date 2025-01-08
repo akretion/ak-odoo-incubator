@@ -1,6 +1,6 @@
 import logging
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +36,17 @@ class ProductProduct(models.Model):
 
     standard_price = fields.Float(tracking=10)
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        created = super().create(vals_list)
+        for prd in created:
+            if prd.seller_ids:
+                update_cost_from_main_price(prd.main_seller_id, prd)
+        return created
+
     def write(self, vals):
         res = super().write(vals)
-        if "main_seller_id" in vals and "standard_price" not in vals:
+        if "seller_ids" in vals and "standard_price" not in vals:
             for product in self:
                 if product.main_seller_id:
                     update_cost_from_main_price(product.main_seller_id, product)
@@ -46,6 +54,7 @@ class ProductProduct(models.Model):
 
     def _update_snjb_standard_price(self):
         "env['product.product']._update_snjb_standard_price()"
+
         def get_products_with_zero_standard_price():
             prd_ids = []
             for prd in self.search([("standard_price", "=", 0)]):
