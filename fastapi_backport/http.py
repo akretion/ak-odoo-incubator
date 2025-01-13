@@ -42,6 +42,9 @@ class FastapiRequest(http.WebRequest):
         super().__init__(*args)
         self.params = {}
         self._dispatcher = http._dispatchers.get("fastapi", FastApiDispatcher)(self)
+        # Ensure inner_exception exists on dispatcher since the flow on error
+        # is quite different
+        self._dispatcher.inner_exception = None
 
     def make_response(self, data, headers=None, cookies=None, status=200):
         """Helper for non-HTML responses, or HTML responses with custom
