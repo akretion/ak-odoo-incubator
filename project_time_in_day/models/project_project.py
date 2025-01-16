@@ -41,6 +41,6 @@ class ProjectProject(models.Model):
         uom_day = self.env.ref("uom.product_uom_day")
         uom_hour = self._get_hour_uom()
         if conversion == "days2hours":
-            return uom_day._compute_quantity(value, uom_hour)
+            return uom_day._compute_quantity(value, uom_hour, rounding_method="HALF-UP")
         elif conversion == "hours2days":
-            return uom_hour._compute_quantity(value, uom_day)
+            return uom_hour._compute_quantity(value, uom_day, rounding_method="HALF-UP")
