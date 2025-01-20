@@ -4,7 +4,8 @@
 import base64
 import imghdr
 
-from odoo import api, models
+from odoo import _, api, models
+from odoo.exceptions import UserError
 
 LIMIT = 500
 
@@ -17,7 +18,12 @@ class ProductProduct(models.Model):
         prd_ids = self.env.context["active_ids"]
         if prd_ids:
             if len(prd_ids) > LIMIT:
-                raise ValueError(f"Too many selected products : limit = {LIMIT}")
+                raise UserError(
+                    _(
+                        "You have selected too many products to export."
+                        "The maximum possible is {LIMIT}"
+                    ).format(LIMIT=LIMIT)
+                )
             return (
                 self.env["zip.product.image"]
                 .create({})
