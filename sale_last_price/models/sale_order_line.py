@@ -17,18 +17,39 @@ class SaleOrderLine(models.Model):
         for line in self:
             price_per_date = []
             if line.order_id.partner_id and line.product_id:
-                history_lines = self.env["sale.price.customer.history"].search(
+                history_sol = self.env["sale.order.line"].search(
                     [
+                        ("order_id.partner_id", "=", line.order_id.partner_id.id),
+                        ("state", "in", ("sale", "done")),
+                        ("order_id", "!=", line.order_id.id),
                         ("product_id", "=", line.product_id.id),
-                        ("partner_id", "=", line.order_id.partner_id.id),
+                        ("product_uom_qty", ">", 0.0),
                     ],
-                    order="date desc",
+                    order="id desc",
                     limit=3,
                 )
                 price_per_date = [
-                    (history.date, history.document_ref, history.price)
-                    for history in history_lines
+                    (
+                        sol.order_id.date_order,
+                        sol.order_id.name,
+                        sol.price_subtotal / sol.product_uom_qty,
+                    )
+                    for sol in history_sol
                 ]
+                if len(history_sol) < 3:
+                    limit = 3 - len(history_sol)
+                    history_lines = self.env["sale.price.customer.history"].search(
+                        [
+                            ("product_id", "=", line.product_id.id),
+                            ("partner_id", "=", line.order_id.partner_id.id),
+                        ],
+                        order="date desc",
+                        limit=limit,
+                    )
+                    price_per_date += [
+                        (history.date, history.document_ref, history.price)
+                        for history in history_lines
+                    ]
             last_price_unit = ""
             for i, (date, ref, price) in enumerate(price_per_date):
                 if i != 0:
