@@ -6,7 +6,7 @@
         Display on sale order lines the last sale price coming from an old system
         for control during a migration
     """,
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "license": "AGPL-3",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/akretion/ak-odoo-incubator",
