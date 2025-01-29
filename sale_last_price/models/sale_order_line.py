@@ -17,9 +17,10 @@ class SaleOrderLine(models.Model):
         for line in self:
             price_per_date = []
             if line.order_id.partner_id and line.product_id:
+                partner = line.order_id.partner_id.commercial_partner_id
                 history_sol = self.env["sale.order.line"].search(
                     [
-                        ("order_id.partner_id", "=", line.order_id.partner_id.id),
+                        ("order_id.commercial_partner_id", "=", partner.id),
                         ("state", "in", ("sale", "done")),
                         ("order_id", "!=", line.order_id.id),
                         ("product_id", "=", line.product_id.id),
@@ -41,7 +42,7 @@ class SaleOrderLine(models.Model):
                     history_lines = self.env["sale.price.customer.history"].search(
                         [
                             ("product_id", "=", line.product_id.id),
-                            ("partner_id", "=", line.order_id.partner_id.id),
+                            ("partner_id", "=", partner.id),
                         ],
                         order="date desc",
                         limit=limit,

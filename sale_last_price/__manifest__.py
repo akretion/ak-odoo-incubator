@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/akretion/ak-odoo-incubator",
-    "depends": ["sale"],
+    "depends": ["sale", "sale_commercial_partner"],
     "data": [
         "security/ir.model.access.csv",
         "views/sale_order.xml",
