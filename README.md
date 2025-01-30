@@ -29,9 +29,14 @@ addon | version | maintainers | summary
 [forbid_record_creation](forbid_record_creation/) | 14.0.2.0.0 |  | Avoid to create test data in sale, purchase, etc.
 [intercompany_shared_contact](intercompany_shared_contact/) | 14.0.1.0.0 |  | User of each company are contact of a company partner. All child address of a company are automatically shared
 [label_wizard](label_wizard/) | 14.0.1.0.0 |  | Wizard for choosing how many labels to print
-[mail_unique_layout](mail_unique_layout/) | 14.0.1.0.0 |  | Use unique layout for most common emails
+[mail_env_whitelist](mail_env_whitelist/) | 14.0.1.0.0 |  | send email on stagging env when the receiver is in the whitelist
+[mail_preview_send](mail_preview_send/) | 14.0.1.0.0 |  | Send preview email
+[mail_unique_layout](mail_unique_layout/) | 14.0.1.0.1 |  | Use unique layout for most common emails
 [module_analysis_price](module_analysis_price/) | 14.0.1.0.0 |  | Module Analysis Price
 [product_pricelist_per_attribute_value](product_pricelist_per_attribute_value/) | 14.0.1.0.0 |  | Allows to have pricelist rule by product attribute value.
+[product_supplierinfo_group_per_attribute_value](product_supplierinfo_group_per_attribute_value/) | 14.0.1.0.0 |  | Product supplier group per attribute value
+[product_supplierinfo_per_attribute_value](product_supplierinfo_per_attribute_value/) | 14.0.1.0.0 |  | Product Supplier per attribute value
+[product_supplierinfo_per_attribute_value_intercompany](product_supplierinfo_per_attribute_value_intercompany/) | 14.0.1.0.0 |  | Product supplierinfo per attribute value intercompany
 [product_uom_force_change](product_uom_force_change/) | 14.0.1.0.0 |  | Allow to force a uom change an already used product
 [project_estimate_step](project_estimate_step/) | 14.0.1.0.0 |  | Add step estimation for project
 [project_time_in_day](project_time_in_day/) | 14.0.1.0.0 |  | Compute time in days
