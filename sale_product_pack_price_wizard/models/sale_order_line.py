@@ -8,6 +8,10 @@ class SaleOrderLine(models.Model):
 
     is_pack_line = fields.Boolean(compute="_compute_is_pack_line")
 
+    price_unit = fields.Float(
+        digits="Line Item Price",
+    )
+
     @api.depends("product_id")
     def _compute_is_pack_line(self):
         for line in self:

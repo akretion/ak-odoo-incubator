@@ -15,6 +15,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "data/price_data.xml",
         "views/sale_order_line_pack_price.xml",
     ],
     "demo": [],
