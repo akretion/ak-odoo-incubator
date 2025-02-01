@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class SaleOrderLinePackPrice(models.Model):
@@ -16,14 +17,19 @@ class SaleOrderLinePackPrice(models.Model):
         return self._get_pack_price_catalog(order_line)
 
     def _get_pack_price_catalog(self, order_line):
+        if (
+            order_line.pack_parent_line_id.product_id.pack_component_price
+            == "totalized"
+        ):
+            raise UserError("Remise interdite pour cet type de pack!")
+
         if order_line.pack_parent_line_id:
             order_lines = order_line.pack_parent_line_id.pack_child_line_ids
         else:
             order_lines = order_line.pack_child_line_ids
 
         total = sum(
-            line.product_id.list_price * line.product_uom_qty
-            for line in order_lines
+            line.product_id.list_price * line.product_uom_qty for line in order_lines
         )
         return total
 
@@ -45,8 +51,7 @@ class SaleOrderLinePackPrice(models.Model):
         default=_default_pack_price_edit,
     )
     computed_discount = fields.Float(
-        string="Taux de remise",
-        digits=(2, 14), compute="_compute_computed_discount"
+        string="Taux de remise", digits=(2, 14), compute="_compute_computed_discount"
     )
 
     @api.depends("sale_order_line_id")
