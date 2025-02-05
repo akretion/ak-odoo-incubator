@@ -44,8 +44,8 @@ class LIGSegment(SegmentInterface):
             (10, self.line.quantity),  # Quantité facturée
             (15, self.line.price_unit),  # Prix unitaire net
             (3, self.line.move_id.currency_id.name),  # Code monnaie (EUR = euro)
-            (1, "", False),
-            (1, "", False),
+            (1, "", {"required": False}),
+            (1, "", {"required": False}),
             (5, self.line.tax_ids and self.line.tax_ids[0].amount or 0),
             (
                 15,
@@ -53,7 +53,7 @@ class LIGSegment(SegmentInterface):
                 and (self.line.price_total / self.line.quantity)
                 or 0.0,
             ),  # Prix unitaire brut
-            (1, "", False),
+            (1, "", {"required": False}),
             (70, self.line.name, {"truncate_silent": True}),
             (17, self.line.price_subtotal),  # Montant Net Ht de la ligne
         ]

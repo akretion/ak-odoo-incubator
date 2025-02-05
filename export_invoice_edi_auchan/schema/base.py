@@ -16,7 +16,12 @@ class SegmentInterface:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-    def _format_values(self, size, value="", required=True, ctx=False):
+    def _format_values(self, size, value="", ctx={}):
+        required = True
+        if not ctx:
+            ctx = {}  # Fix bug bool value
+        if "required" in ctx.keys():
+            required = ctx.get("required")
         if required and (value is False or value is None or value == ""):
             raise ValueError()
         if not ctx:
