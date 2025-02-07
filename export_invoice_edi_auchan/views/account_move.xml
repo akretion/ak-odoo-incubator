@@ -15,11 +15,10 @@
                     attrs="{'invisible': [
                         '|',
                         '|',
-                        '|',
                         ('export_date', '!=', False),
                         ('is_edi_exportable', '=', False),
                         ('state', 'in', ('cancel', 'draft')),
-                        ('regenerate_edi', '!=', False),
+                        ('regenerate_edi', '=', False),
                     ]}"
                 />
             </header>
