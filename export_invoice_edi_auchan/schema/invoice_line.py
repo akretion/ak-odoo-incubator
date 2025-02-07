@@ -54,6 +54,10 @@ class LIGSegment(SegmentInterface):
                 or 0.0,
             ),  # Prix unitaire brut
             (1, "", {"required": False}),
-            (70, self.line.name, {"truncate_silent": True}),
+            (
+                70,
+                self.line.name and self.line.name.replace("\n", " ") or "",
+                {"truncate_silent": True},
+            ),
             (17, self.line.price_subtotal),  # Montant Net Ht de la ligne
         ]

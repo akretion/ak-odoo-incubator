@@ -24,6 +24,7 @@ class AccountMove(models.Model):
     is_edi_exportable = fields.Boolean(
         related="partner_id.is_edi_exportable",
     )
+    regenerate_edi = fields.Boolean()
 
     def _find_bl_info(self):
         """Find entête "Numéro de BL" and date"""

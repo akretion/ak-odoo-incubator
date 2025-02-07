@@ -15,14 +15,17 @@
                     attrs="{'invisible': [
                         '|',
                         '|',
+                        '|',
                         ('export_date', '!=', False),
                         ('is_edi_exportable', '=', False),
                         ('state', 'in', ('cancel', 'draft')),
+                        ('regenerate_edi', '!=', False),
                     ]}"
                 />
             </header>
             <field name="fiscal_position_id" position="after">
                 <field name="export_date" />
+                <field name="regenerate_edi" />
                 <field name="export_attachment_id" />
                 <field name="export_error" />
             </field>
