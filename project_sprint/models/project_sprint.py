@@ -6,6 +6,7 @@ from datetime import date, timedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools import format_date
 
 MAX_SPRINT_DEPTH = 4
 
@@ -22,13 +23,12 @@ class ProjectSprint(models.Model):
     _description = "Project Sprint"
     _parent_name = "parent_id"
     _parent_store = True
-    _rec_name = "display_name"
+    _rec_name = "full_name"
     _order = "date_start, level"
 
     active = fields.Boolean(default=True)
     name = fields.Char(required=True)
     full_name = fields.Char(compute="_compute_full_name", store=True)
-    display_name = fields.Char(compute="_compute_display_name")
 
     parent_id = fields.Many2one("project.sprint", string="Parent Sprint", index=True)
     parent_path = fields.Char(index=True)
@@ -73,13 +73,6 @@ class ProjectSprint(models.Model):
                 else record.name
             )
 
-    @api.depends_context("short_name")
-    def _compute_display_name(self):
-        for record in self:
-            record.display_name = (
-                record.name if self.env.context.get("short_name") else record.full_name
-            )
-
     @api.depends("child_ids")
     def _compute_child_count(self):
         data = self.read_group(
@@ -108,7 +101,8 @@ class ProjectSprint(models.Model):
                 except ValueError:  # pylint: disable=except-pass
                     pass
 
-            sprint_name = f"Q{quarter + 1}"
+            prefix = _("Q")
+            sprint_name = f"{prefix}{quarter + 1}"
             quarter += 1
             if quarter == 4:
                 quarter = 0
@@ -141,7 +135,9 @@ class ProjectSprint(models.Model):
         while True:
             start = self._get_dow_from_date(date(year, month, 5), SOW)
             end = self._get_dow_from_date(date(year, month, 28), EOW)
-            sprint_name = middle_date(start, end).strftime("%B")
+            sprint_name = format_date(
+                self.env, middle_date(start, end), date_format="MMMM"
+            ).title()
 
             month += 1
             if month > 12:
@@ -182,7 +178,8 @@ class ProjectSprint(models.Model):
                 except ValueError:  # pylint: disable=except-pass
                     pass
             month_fortnight = middle_date(start, end).day // 15
-            sprint_name = f"F{month_fortnight + 1}"
+            prefix = _("F")
+            sprint_name = f"{prefix}{month_fortnight + 1}"
 
             week += 2
             if week > 51:

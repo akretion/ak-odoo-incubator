@@ -71,34 +71,9 @@ class ProjectTask(models.Model):
             for level in range(sprint_level + 1, MAX_SPRINT_DEPTH + 1):
                 setattr(task, f"sprint_level_{level}_id", False)
 
-    # The following methods are used to update the sprint_id field when the user
-    # changes the sprint_level_X_id fields.
-    # I couldn't do it with only computes, if someone has a better idea, I'm all ears.
-    @api.onchange("sprint_level_1_id")
-    def _onchange_sprint_level_1(self):
-        self.sprint_id = self.sprint_level_1_id
-
-    @api.onchange("sprint_level_2_id")
-    def _onchange_sprint_level_2(self):
-        self.sprint_id = self.sprint_level_2_id
-
-    @api.onchange("sprint_level_3_id")
-    def _onchange_sprint_level_3(self):
-        self.sprint_id = self.sprint_level_3_id
-
-    @api.onchange("sprint_level_4_id")
-    def _onchange_sprint_level_4(self):
-        self.sprint_id = self.sprint_level_4_id
-
     @api.depends("sprint_id.date_start", "sprint_id.date_end")
     def _compute_planned_date_start_end_from_sprint(self):
         for record in self:
             if record.sprint_id:
                 record.planned_date_end = record.sprint_id.date_end
                 record.planned_date_start = record.sprint_id.date_start
-
-    def read(self, fields, load="_classic_read"):
-        return super(
-            ProjectTask,
-            self.with_context(short_name=True),
-        ).read(fields, load)

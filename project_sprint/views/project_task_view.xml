@@ -12,31 +12,10 @@
         <field name="arch" type="xml">
             <field name="partner_phone" position="after">
                 <field name="use_sprint" invisible="1" />
-                <label
-                    for="sprint_level_1_id"
+                <field
+                    name="sprint_id"
                     attrs="{'invisible': [('use_sprint', '=', False)]}"
-                >Sprint</label>
-                <div class="o_row" attrs="{'invisible': [('use_sprint', '=', False)]}">
-                    <field
-                        name="sprint_level_1_id"
-                        context="{'recursive_onchanges': False, 'short_name': True}"
-                    />
-                    <field
-                        name="sprint_level_2_id"
-                        attrs="{'readonly': [('sprint_level_1_id', '=', False)]}"
-                        context="{'recursive_onchanges': False, 'short_name': True}"
-                    />
-                    <field
-                        name="sprint_level_3_id"
-                        attrs="{'readonly': [('sprint_level_2_id', '=', False)]}"
-                        context="{'recursive_onchanges': False, 'short_name': True}"
-                    />
-                    <field
-                        name="sprint_level_4_id"
-                        attrs="{'readonly': [('sprint_level_3_id', '=', False)]}"
-                        context="{'recursive_onchanges': False, 'short_name': True}"
-                    />
-                </div>
+                />
             </field>
         </field>
     </record>
@@ -83,7 +62,7 @@
                     domain="[('sprint_level_4_id.date_start', '&lt;=', datetime.datetime.now()), ('sprint_level_4_id.date_end', '&gt;=', datetime.datetime.now())]"
                 />
             </filter>
-             <filter name="group_create_date" position="after">
+            <filter name="group_create_date" position="after">
                 <filter
                     name="group_sprint_level_1"
                     string="Sprint Level 1"
@@ -107,28 +86,5 @@
             </filter>
         </field>
     </record>
-    <record id="action_view_task_sprints" model="ir.actions.act_window">
-        <field name="name">Sprints</field>
-        <field name="res_model">project.task</field>
-        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
-        <field name="context">{
-            'search_default_open_tasks': 1,
-            'all_task': 0,
-            'default_user_ids': [(4, uid)],
-            'search_default_current_sprint_level_2': 1,
-            'search_default_group_sprint_level_3': 1,
-        }</field>
-        <field name="domain">[('use_sprint', '=', True)]</field>
-        <field name="search_view_id" ref="project.view_task_search_form_extended" />
-    </record>
-
-    <menuitem
-        id="project_task_sprints_menu"
-        name="Sprints"
-        parent="project.menu_main_pm"
-        action="action_view_task_sprints"
-        sequence="3"
-        groups="project_sprint.group_project_sprint"
-    />
 
 </odoo>
