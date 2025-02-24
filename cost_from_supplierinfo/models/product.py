@@ -17,10 +17,10 @@ class ProductSupplierinfo(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        res = super().create(vals_list)
-        for rec in self:
+        records = super().create(vals_list)
+        for rec in records:
             update_cost_from_main_price(rec)
-        return res
+        return records
 
     def _update_standard_price(self):
         """Only called from shell
