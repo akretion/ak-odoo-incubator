@@ -15,6 +15,13 @@ class ProductSupplierinfo(models.Model):
                 update_cost_from_main_price(rec)
         return res
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super().create(vals_list)
+        for rec in self:
+            update_cost_from_main_price(rec)
+        return res
+
     def _update_standard_price(self):
         """Only called from shell
         env['product.supplierinfo']._update_standard_price()
