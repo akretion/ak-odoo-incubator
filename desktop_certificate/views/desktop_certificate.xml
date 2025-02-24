@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2024 Akretion (<http://www.akretion.com>).
+@author Kévin Roche <kevin.roche@akretion.com>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="desktop_certificate_form" model="ir.ui.view">
+    <field name="model">desktop.certificate</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="name" />
+                    <field name="desktop_id" readonly="1" />
+                    <field name="expiration_date" />
+                    <field name="state" />
+                </group>
+                <group string="Utilisateur">
+                    <field name="sent_to_email" readonly="1" />
+                    <field name="sent_to_phone" readonly="1" />
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+<record id="desktop_certificate_tree" model="ir.ui.view">
+    <field name="model">desktop.certificate</field>
+    <field name="arch" type="xml">
+        <tree
+                string="Certificats"
+                create="0"
+                edit="0"
+                delete="0"
+                duplicate="0"
+                decoration-muted="active == False"
+            >
+            <field name="name" />
+            <field name="desktop_id" readonly="1" />
+            <field name="state" />
+            <field name="expiration_date" />
+            <field name="active" />
+            <field name="sent_to_email" />
+            <field name="sent_to_phone" />
+        </tree>
+    </field>
+</record>
+</odoo>
