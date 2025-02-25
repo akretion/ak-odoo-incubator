@@ -12,7 +12,12 @@ MOVED_MODULES = {
     "odoo.addons.sale.models.sale_order_line": "odoo.addons.sale.models.sale",
     "odoo.addons.sale.models.sale_order": "odoo.addons.sale.models.sale",
 }
-EXTENDED_MODULES = ["odoo.tools.float_utils", "odoo.tests.common", "odoo.http"]
+EXTENDED_MODULES = [
+    "odoo.tools.float_utils",
+    "odoo.tests.common",
+    "odoo.http",
+    "odoo.fields",
+]
 
 
 def extend(module, name):
