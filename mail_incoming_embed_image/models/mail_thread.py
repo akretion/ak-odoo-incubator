@@ -18,6 +18,7 @@ class MailThread(models.AbstractModel):
         # That is why we try to convert it right before creation to avoid all issues
         # of undisplayed images.
         # mandatory fields for _message_post_process_attachments
+        attachment_ids = []
         if msg_dict.get("attachments", []):
             msg_dict["model"] = self._name
             msg_dict["res_id"] = 0
@@ -54,5 +55,6 @@ class MailThread(models.AbstractModel):
         # fix the res_id as it was set to 0, before creation as we could not have
         # the id, because _message_post_process_attachments is designed to be called
         # on message_post, with is designed to be called on already created record
-        self.env["ir.attachment"].browse(attachment_ids).write({"res_id": res.id})
+        if attachment_ids:
+            self.env["ir.attachment"].browse(attachment_ids).write({"res_id": res.id})
         return res
