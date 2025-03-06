@@ -70,7 +70,7 @@ class ProductPricelistItem(models.Model):
                     )
                 else:
                     info = ""
-                if seller.price:
+                if seller.price and record.fixed_price:
                     margin = (record.fixed_price - seller.price) / record.fixed_price
                 else:
                     margin = 0
