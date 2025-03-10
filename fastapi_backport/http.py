@@ -95,7 +95,17 @@ class FastapiRequest(http.WebRequest):
         return self._dispatcher.handle_error(exception)
 
 
-ori_get_request = http.root.__class__.get_request
+RootClass = http.Root
+
+# Hack for some module patches
+if not hasattr(RootClass, "get_request"):
+    if hasattr(RootClass, "app"):
+        RootClass = RootClass.app
+    elif hasattr(RootClass, "wsgi"):
+        RootClass = RootClass.wsgi
+
+
+ori_get_request = RootClass.get_request
 
 
 def get_request(self, httprequest):
@@ -110,4 +120,4 @@ def get_request(self, httprequest):
     return ori_get_request(self, httprequest)
 
 
-http.root.__class__.get_request = get_request
+RootClass.get_request = get_request
