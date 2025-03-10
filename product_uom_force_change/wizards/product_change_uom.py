@@ -17,6 +17,7 @@ SKIP_TABLE = [
     "stock_quant_package",
     "rma_split_wizard",
     "stock_location_storage_type",
+    "intrastat_unit",
 ]
 
 
