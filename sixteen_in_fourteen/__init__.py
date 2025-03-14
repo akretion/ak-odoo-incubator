@@ -13,6 +13,7 @@ MOVED_MODULES = {
     "odoo.addons.sale.models.sale_order": "odoo.addons.sale.models.sale",
 }
 EXTENDED_MODULES = [
+    "odoo.service.server",
     "odoo.tools.float_utils",
     "odoo.tests.common",
     "odoo.http",
