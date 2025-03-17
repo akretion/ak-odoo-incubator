@@ -11,11 +11,12 @@
         <field name="inherit_id" ref="project.edit_project" />
         <field name="arch" type="xml">
             <group name="extra_settings" position="inside">
-                <group name="sprint" string="Sprints">
-                    <field
-                        name="use_sprint"
-                        groups="project_sprint.group_project_sprint"
-                    />
+                <group
+                    name="sprint"
+                    string="Sprints"
+                    groups="project_sprint.group_project_sprint"
+                >
+                    <field name="use_sprint" />
                 </group>
             </group>
         </field>
