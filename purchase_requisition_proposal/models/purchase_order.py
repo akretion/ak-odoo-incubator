@@ -12,7 +12,8 @@ class PurchaseOrder(models.Model):
         res = super()._prepare_sale_order_line_data(
             purchase_line, dest_company, sale_order
         )
-        res["price_unit"] = purchase_line.price_unit
+        if purchase_line.requirement_proposal_id:
+            res["price_unit"] = purchase_line.price_unit
         return res
 
 

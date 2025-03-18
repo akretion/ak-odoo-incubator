@@ -15,7 +15,7 @@
                 />
                 </xpath>
                 <xpath expr="//tree/field[@name='name']" position="after">
-                    <field name="requirement_proposal_id" string="Proposal" />
+                    <field name="requirement_proposal_id" string="Proposal" optional="hide" />
                 </xpath>
             </field>
         </record>
