@@ -15,7 +15,7 @@ class ProjectTask(models.Model):
     sprint_id = fields.Many2one("project.sprint")
     sprint_level_1_id = fields.Many2one(
         "project.sprint",
-        string="Sprint Top Level",
+        string="Sprint By Year",
         compute="_compute_sprint_levels",
         domain="[('level', '=', 1)]",
         store=True,
@@ -23,7 +23,7 @@ class ProjectTask(models.Model):
     )
     sprint_level_2_id = fields.Many2one(
         "project.sprint",
-        string="Sprint Second Level",
+        string="Sprint By Quarter",
         compute="_compute_sprint_levels",
         domain="[('level', '=', 2), ('parent_id', '=', sprint_level_1_id)]",
         store=True,
@@ -31,7 +31,7 @@ class ProjectTask(models.Model):
     )
     sprint_level_3_id = fields.Many2one(
         "project.sprint",
-        string="Sprint Third Level",
+        string="Sprint By Month",
         compute="_compute_sprint_levels",
         domain="[('level', '=', 3), ('parent_id', '=', sprint_level_2_id)]",
         store=True,
@@ -39,7 +39,7 @@ class ProjectTask(models.Model):
     )
     sprint_level_4_id = fields.Many2one(
         "project.sprint",
-        string="Sprint Fourth Level",
+        string="Sprint By Fortnight",
         compute="_compute_sprint_levels",
         domain="[('level', '=', 4), ('parent_id', '=', sprint_level_3_id)]",
         store=True,

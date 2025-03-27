@@ -40,22 +40,22 @@ msgstr ""
 
 #. module: project_sprint
 #: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Current Sprint Level 1"
+msgid "Current Sprint By Fortnight"
 msgstr ""
 
 #. module: project_sprint
 #: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Current Sprint Level 2"
+msgid "Current Sprint By Month"
 msgstr ""
 
 #. module: project_sprint
 #: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Current Sprint Level 3"
+msgid "Current Sprint By Quarter"
 msgstr ""
 
 #. module: project_sprint
 #: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Current Sprint Level 4"
+msgid "Current Sprint By Year"
 msgstr ""
 
 #. module: project_sprint
@@ -163,48 +163,32 @@ msgid "Sprint"
 msgstr ""
 
 #. module: project_sprint
-#: model_terms:ir.ui.view,arch_db:project_sprint.project_sprint_view_form
-msgid "Sprint Children"
-msgstr ""
-
-#. module: project_sprint
 #: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_4_id
-msgid "Sprint Fourth Level"
-msgstr ""
-
-#. module: project_sprint
 #: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Sprint Level 1"
-msgstr ""
-
-#. module: project_sprint
-#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Sprint Level 2"
-msgstr ""
-
-#. module: project_sprint
-#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Sprint Level 3"
-msgstr ""
-
-#. module: project_sprint
-#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
-msgid "Sprint Level 4"
-msgstr ""
-
-#. module: project_sprint
-#: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_2_id
-msgid "Sprint Second Level"
+msgid "Sprint By Fortnight"
 msgstr ""
 
 #. module: project_sprint
 #: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_3_id
-msgid "Sprint Third Level"
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Sprint By Month"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_2_id
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Sprint By Quarter"
 msgstr ""
 
 #. module: project_sprint
 #: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_1_id
-msgid "Sprint Top Level"
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Sprint By Year"
+msgstr ""
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.project_sprint_view_form
+msgid "Sprint Children"
 msgstr ""
 
 #. module: project_sprint
