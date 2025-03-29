@@ -1,0 +1,2 @@
+- manage operation_id in created stock move
+- allow to use this feature on several manufacturing orders at one time
