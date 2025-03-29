@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="group_multicompany_product_submit" model="res.groups">
+            <field name="name">Multicompany product submittal</field>
+            <field
+                    name="comment"
+            >The user can submit products for multicompany approval
+            </field>
+            <field
+                    name="implied_ids"
+                    eval="[(6, 0, [ref('base_multicompany_submit.group_multicompany_submittals_state_viewer')])]"
+            />
+        </record>
+        <record id="group_multicompany_product_approve" model="res.groups">
+            <field name="name">Multicompany product approval</field>
+            <field
+                    name="comment"
+            >The user can approve submitted multicompany products
+            </field>
+            <field
+                    name="implied_ids"
+                    eval="[(6, 0, [ref('base_multicompany_submit.group_multicompany_submittals_state_viewer')])]"
+            />
+        </record>
+    </data>
+</odoo>
