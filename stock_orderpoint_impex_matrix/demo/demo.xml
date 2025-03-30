@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- We set up a 3*2 matrix for product and warehouses -->
+    <!-- Products: Conference Chair(11), Drawer(27), Cabinet with Doors(10) -->
+    <!-- Warehouses: YourCompany (stock.warehouse0), Demo OP WH (demo_op_wh) -->
+    <record id="demo_op_wh" model="stock.warehouse">
+        <field name="name">Demo OP WH</field>
+        <field name="code">OPWH</field>
+    </record>
+
+    <record id="orderpoint_wh1_product11" model="stock.warehouse.orderpoint">
+        <field name="product_min_qty">1.11</field>
+        <field name="product_max_qty">2.22</field>
+        <field name="product_uom" ref="uom.product_uom_unit"/>
+        <field name="warehouse_id" ref="stock.warehouse0"/>
+        <field name="product_id" ref="product.product_product_11"/>
+        <field name="location_id" model="stock.location"
+               eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
+    </record>
+    <record id="orderpoint_wh1_product27" model="stock.warehouse.orderpoint">
+        <field name="product_min_qty">3.33</field>
+        <field name="product_max_qty">4.44</field>
+        <field name="product_uom" ref="uom.product_uom_unit"/>
+        <field name="warehouse_id" ref="stock.warehouse0"/>
+        <field name="product_id" ref="product.product_product_27"/>
+        <field name="location_id" model="stock.location"
+               eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
+    </record>
+    <record id="orderpoint_wh1_product10" model="stock.warehouse.orderpoint">
+        <field name="product_min_qty">5.55</field>
+        <field name="product_max_qty">6.66</field>
+        <field name="product_uom" ref="uom.product_uom_unit"/>
+        <field name="warehouse_id" ref="stock.warehouse0"/>
+        <field name="product_id" ref="product.product_product_10"/>
+        <field name="location_id" model="stock.location"
+               eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
+    </record>
+
+    <record id="orderpoint_wh2_product27" model="stock.warehouse.orderpoint">
+        <field name="product_min_qty">9.99</field>
+        <field name="product_max_qty">10.10</field>
+        <field name="product_uom" ref="uom.product_uom_unit"/>
+        <field name="warehouse_id" ref="demo_op_wh"/>
+        <field name="product_id" ref="product.product_product_27"/>
+        <field name="location_id" model="stock.location"
+               eval="obj().env.ref('stock_orderpoint_impex_matrix.demo_op_wh').lot_stock_id.id"/>
+    </record>
+    <record id="orderpoint_wh2_product10" model="stock.warehouse.orderpoint">
+        <field name="product_min_qty">11.11</field>
+        <field name="product_max_qty">12.12</field>
+        <field name="product_uom" ref="uom.product_uom_unit"/>
+        <field name="warehouse_id" ref="demo_op_wh"/>
+        <field name="product_id" ref="product.product_product_10"/>
+        <field name="location_id" model="stock.location"
+               eval="obj().env.ref('stock_orderpoint_impex_matrix.demo_op_wh').lot_stock_id.id"/>
+    </record>
+
+</odoo>
