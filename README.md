@@ -31,7 +31,7 @@ addon | version | maintainers | summary
 [product_dimension_net](product_dimension_net/) | 16.0.1.0.0 |  | Net product dimensions
 [project_estimate_step](project_estimate_step/) | 16.0.1.0.0 |  | Add step estimation for project
 [project_time_in_day](project_time_in_day/) | 16.0.1.0.0 |  | Compute time in days
-[proxy_action](proxy_action/) | 16.0.1.0.1 |  | Proxy Action
+[proxy_action](proxy_action/) | 16.0.2.0.0 |  | Proxy Action
 [purchase_edi_file](purchase_edi_file/) | 16.0.1.0.0 |  | Purchase EDI file
 [sale_delivery_no_invoice_free_shipping](sale_delivery_no_invoice_free_shipping/) | 16.0.1.0.0 |  | Avoid invoicing free Shipping Sale Order line
 [sale_lot_config](sale_lot_config/) | 16.0.1.0.0 |  | Sale Lot Config
