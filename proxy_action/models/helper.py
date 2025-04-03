@@ -21,8 +21,9 @@ class ProxyActionHelper(models.AbstractModel):
         to_encode64=False,
         copies=1,
         host="https://localhost",
+        msg="",
     ):
-        """Prepare a PyWebdriver.print action"""
+        """Prepare a PyWebdriver. print action"""
         if to_encode64:
             data = base64.b64encode(data)
         kwargs = {"options": {}}
@@ -32,12 +33,12 @@ class ProxyActionHelper(models.AbstractModel):
             kwargs["options"]["raw"] = True
         return {
             "url": "%s/cups/printData" % host,
-            "params": {"args": [printer_name, data], "kwargs": kwargs},
+            "params": {"args": [printer_name, data, msg], "kwargs": kwargs},
         }
 
     @api.model
     def get_print_xml_receipt_action(self, receipt, host="https://localhost"):
-        """Prepare a PyWebdriver.print action"""
+        """Prepare a PyWebdriver. print action"""
 
         return {
             "url": "%s/hw_proxy/print_xml_receipt" % host,
