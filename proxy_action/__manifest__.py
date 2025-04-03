@@ -4,7 +4,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
     "name": "Proxy Action",
-    "version": "16.0.1.0.1",
+    "version": "16.0.2.0.0",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "license": "AGPL-3",
