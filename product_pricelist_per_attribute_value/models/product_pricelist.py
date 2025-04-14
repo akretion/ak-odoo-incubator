@@ -23,12 +23,12 @@ class ProductPricelist(models.Model):
 class PricelistItem(models.Model):
     _inherit = "product.pricelist.item"
     _order = (
-        "applied_on, attribute_value_restricted desc, min_quantity desc,"
+        "applied_on, attribute_value_restricted_number desc, min_quantity desc,"
         "categ_id desc, id desc"
     )
 
-    attribute_value_restricted = fields.Boolean(
-        compute="_compute_attribute_value_restricted", store=True
+    attribute_value_restricted_number = fields.Integer(
+        compute="_compute_attribute_value_restricted_number", store=True
     )
     product_attribute_value_ids = fields.Many2many(
         "product.attribute.value",
@@ -44,9 +44,11 @@ class PricelistItem(models.Model):
     )
 
     @api.depends("product_attribute_value_ids")
-    def _compute_attribute_value_restricted(self):
+    def _compute_attribute_value_restricted_number(self):
         for record in self:
-            record.attribute_value_restricted = bool(record.product_attribute_value_ids)
+            record.attribute_value_restricted_number = len(
+                record.product_attribute_value_ids.attribute_id
+            )
 
     @api.depends("applied_on", "product_tmpl_id", "categ_id")
     def _compute_product_attribute_value_domain(self):
