@@ -24,15 +24,13 @@ class PurchaseOrder(models.Model):
                 continue
             partner = purchase.partner_id
             profiles_lines = purchase.order_line._get_lines_by_profiles(partner)
-            attachments = self.env["ir.attachment"]
             attachment_profiles = {}
             for profile, records in profiles_lines.items():
                 if not records:
                     continue
-                attachments |= profile.get_attachment(
+                attachment_profiles[profile] = profile.get_attachment(
                     records, res_id=purchase.id, res_model=self._name
                 )
-                attachment_profiles[profile] = attachments
             if not attachment_profiles:
                 continue
             attachment_by_transfer = {}
