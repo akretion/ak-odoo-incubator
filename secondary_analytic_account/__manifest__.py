@@ -11,6 +11,8 @@
     "data": [
         "views/account_move_view.xml",
         "views/secondary_analytic_view.xml",
+        "views/account_asset_profile.xml",
+        "views/account_asset.xml",
         "security/ir.model.access.csv",
         "security/analytic_security.xml",
     ],

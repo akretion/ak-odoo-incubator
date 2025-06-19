@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="account_asset_view_form" model="ir.ui.view">
+        <field name="model">account.asset</field>
+        <field
+            name="inherit_id"
+            ref="account_asset_management.account_asset_view_form"
+        />
+        <field name="arch" type="xml">
+            <!-- alignement des champs sur la meme colonne -->
+            <field name="partner_id" position="before">
+                <xpath expr="//field[@name='account_analytic_id']" position="move" />
+            </field>
+            <field name="partner_id" position="after">
+                <field
+                    name="second_analytic_account_id"
+                    groups="analytic.group_analytic_accounting"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>
