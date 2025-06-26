@@ -17,7 +17,7 @@ Proxy Action
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-akretion%2Fak--odoo--incubator-lightgray.png?logo=github
-    :target: https://github.com/akretion/ak-odoo-incubator/tree/16.0/proxy_action
+    :target: https://github.com/akretion/ak-odoo-incubator/tree/18.0/proxy_action
     :alt: akretion/ak-odoo-incubator
 
 |badge1| |badge2| |badge3|
@@ -26,9 +26,10 @@ Communicate from Odoo (js client-side) to a localhost http server.
 
 Common use cases:
 
- - print a receipt or a label from Odoo's backend or POS directly to user's printer.
- - drive your heavy robot from Odoo
- - Forward to pywebdriver odoo's actions.
+   - print a receipt or a label from Odoo's backend or POS directly to
+     user's printer.
+   - drive your heavy robot from Odoo
+   - Forward to pywebdriver odoo's actions.
 
 **Table of contents**
 
@@ -49,7 +50,8 @@ Known issues / Roadmap
 ======================
 
 - Give some feedback to user when pywebdriver is unreachable
-- Check for https issues when self-signed certificates are in use (default)
+- Check for https issues when self-signed certificates are in use
+  (default)
 
 Bug Tracker
 ===========
@@ -57,7 +59,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/akretion/ak-odoo-incubator/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/akretion/ak-odoo-incubator/issues/new?body=module:%20proxy_action%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/akretion/ak-odoo-incubator/issues/new?body=module:%20proxy_action%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -65,21 +67,21 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Akretion
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Sébastien Beau <sebastien.beau@akretion.com>
-* Sylvain Calador <sylvain.calador@akretion.com>
-* Raphaël Reverdy <raphael.reverdy@akretion.com>
-* Kevin Khao <kevin.khao@akretion.com>
+- Sébastien Beau <sebastien.beau@akretion.com>
+- Sylvain Calador <sylvain.calador@akretion.com>
+- Raphaël Reverdy <raphael.reverdy@akretion.com>
+- Kevin Khao <kevin.khao@akretion.com>
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
-This module is part of the `akretion/ak-odoo-incubator <https://github.com/akretion/ak-odoo-incubator/tree/16.0/proxy_action>`_ project on GitHub.
+This module is part of the `akretion/ak-odoo-incubator <https://github.com/akretion/ak-odoo-incubator/tree/18.0/proxy_action>`_ project on GitHub.
 
 You are welcome to contribute.
