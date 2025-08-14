@@ -89,7 +89,18 @@ class LabelFromRecord(models.TransientModel):
                 if data4print:
                     model = data4print[0][0].browse(False)
                     content_params = {"with_price": rec.with_price}
-                    return model._get_zebra_labels(data4print, content_params)
+                    method = model._get_zebra_labels
+                    if method:
+                        return method(data4print, content_params)
+                    else:
+                        raise UserError(
+                            _(
+                                f"Model {model._name} has no attribute"
+                                "_get_zebra_labels.\nConsider to install "
+                                "'label_helper' module or implements your own "
+                                "behavior in your custom module"
+                            )
+                        )
         return {"type": "ir.actions.act_window_close"}
 
     @api.model

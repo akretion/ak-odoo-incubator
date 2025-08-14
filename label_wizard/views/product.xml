@@ -1,11 +1,10 @@
 <odoo>
-
     <record id="action_label_from_record_wizard" model="ir.actions.act_window">
         <field name="name">🏷 Imprimer étiquettes produits</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">label.from.record</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="label_from_record_wizard_view"/>
+        <field name="view_id" ref="label_from_record_wizard_view" />
         <field name="target">new</field>
     </record>
 
@@ -14,9 +13,12 @@
         <field name="inherit_id" ref="product.product_normal_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//header/button" position="before">
-                <button string="🖨" name="%(action_label_from_record_wizard)d" type="action"/>
+                <button
+                    string="🖨"
+                    name="%(action_label_from_record_wizard)d"
+                    type="action"
+                />
             </xpath>
         </field>
     </record>
-
 </odoo>
