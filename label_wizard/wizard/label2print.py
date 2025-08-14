@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import _, api, fields, models
-from odoo.exceptions import Warning as UserError
+from odoo.exceptions import UserError
 
 # Attention: gros refactoring a prévoir
 # on veux imprimer des étiquettes produits avec
@@ -22,7 +22,10 @@ class LabelFromRecord(models.TransientModel):
         return self._get_label_content()
 
     content = fields.Text(string="Label's content", default=__get_label_content)
-    with_price = fields.Boolean(string="Print price", help="Print price on labels")
+    with_price = fields.Boolean(
+        string="Print price",
+        help="Print price on labels if defined on your label template",
+    )
 
     @api.model
     def _get_label_content(self):
@@ -35,12 +38,8 @@ class LabelFromRecord(models.TransientModel):
                     [("picking_id", "=", self._context["active_id"])]
                 )
                 infos = [
-                    "%s ; %s ; %s"
-                    % (
-                        x.product_id.default_code or "_",
-                        int(x.product_uom_qty),
-                        x.product_id.id,
-                    )
+                    f"{x.product_id.default_code or '_'} ; {int(x.product_uom_qty)} ; "
+                    f"{x.product_id.id}"
                     for x in moves
                     if x.product_id
                 ]
@@ -60,13 +59,8 @@ class LabelFromRecord(models.TransientModel):
 
             records = self.env[model].browse(self._context["active_ids"])
             infos = [
-                "%s ; %s ; %s ; %s"
-                % (
-                    x.product_id.default_code or "_",
-                    find_qty(x),
-                    x.product_id.id,
-                    x.id,
-                )
+                f"{x.product_id.default_code or '_'} ; {find_qty(x)} ; "
+                f"{x.product_id.id} ; {x.id}"
                 for x in records
                 if x.product_id
             ]
@@ -94,7 +88,8 @@ class LabelFromRecord(models.TransientModel):
                         data4print.append((product, quantity))
                 if data4print:
                     model = data4print[0][0].browse(False)
-                    return model.get_labels_zebra(data4print, with_price=rec.with_price)
+                    content_params = {"with_price": rec.with_price}
+                    return model._get_zebra_labels(data4print, content_params)
         return {"type": "ir.actions.act_window_close"}
 
     @api.model
