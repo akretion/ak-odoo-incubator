@@ -16,6 +16,7 @@ EXTENDED_MODULES = [
     "odoo.service.server",
     "odoo.tools.float_utils",
     "odoo.tests.common",
+    "odoo.api",
     "odoo.http",
     "odoo.fields",
 ]
