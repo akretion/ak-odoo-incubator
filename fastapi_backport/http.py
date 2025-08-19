@@ -92,6 +92,9 @@ class FastapiRequest(http.WebRequest):
         _logger.exception(
             "Exception during fastapi request handling", exc_info=exception
         )
+        # Really important in 14.0 to rollback odoo transaction on error
+        # If _failed is not set the transaction will be committed
+        self._failed = exception
         return self._dispatcher.handle_error(exception)
 
 
