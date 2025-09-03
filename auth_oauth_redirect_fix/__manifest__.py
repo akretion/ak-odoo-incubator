@@ -4,13 +4,13 @@
 
 {
     "name": "Auth Oauth Redirect Fix",
-    "version": "16.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Akretion, Odoo Community Association (OCA)",
     "summary": "Fix OAuth login redirection",
     "category": "Tools",
     "depends": ["auth_oauth"],
     "website": "https://github.com/akretion/ak-odoo-incubator",
-    "data": [],
+    "data": ["views/assets.xml"],
     "assets": {
         "web.assets_frontend": [
             "auth_oauth_redirect_fix/static/src/js/auth_oauth_redirect_fix.js",
