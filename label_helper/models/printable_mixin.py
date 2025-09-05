@@ -59,7 +59,7 @@ class PrintableMixin(models.AbstractModel):
     @api.model
     def _print_labels(self, label_params, usage, local=True):
         if local:
-            printer = {"location": "https://localhost:8069", "name": f"{usage}"}
+            printer = {"location": "https://localhost", "name": f"{usage}"}
         else:
             printer = self._get_network_printer_by_usage().get(usage)
         if not printer:
