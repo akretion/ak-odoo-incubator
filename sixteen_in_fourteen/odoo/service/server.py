@@ -1,11 +1,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo.service.server import (
-    _logger,
     CommonServer,
-    ThreadedServer,
     GeventServer,
     PreforkServer,
+    ThreadedServer,
+    _logger,
 )
 
 CommonServer._on_stop_funcs = []

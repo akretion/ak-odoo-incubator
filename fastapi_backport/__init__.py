@@ -29,7 +29,6 @@ class TestModeSavepointCase(SavepointCase):
     @classmethod
     def _patch_app_to_handle_exception(cls, app):
         def handle_error(request, exc):
-
             def make_json_response(body, status, headers):
                 response = JSONResponse(body, status_code=status)
                 if status == 500:

@@ -1,11 +1,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo.http import HttpRequest, Response, root, urls
-
 import collections.abc
 from abc import ABC, abstractmethod
 
 import werkzeug.exceptions
+
+from odoo.http import HttpRequest, Response, root, urls
 
 _dispatchers = {}
 CORS_MAX_AGE = 60 * 60 * 24

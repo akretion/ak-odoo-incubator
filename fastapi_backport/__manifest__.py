@@ -8,6 +8,7 @@
     "version": "14.0.1.0.0",
     "author": " Akretion",
     "license": "AGPL-3",
+    "website": "https://github.com/akretion/ak-odoo-incubator",
     "depends": [
         "sixteen_in_fourteen",
         "base_contextvars",
