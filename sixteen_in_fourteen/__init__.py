@@ -19,6 +19,7 @@ EXTENDED_MODULES = [
     "odoo.api",
     "odoo.http",
     "odoo.fields",
+    "odoo.addons.base.models.ir_model",
     "odoo.addons.sale.models.sale_order",
 ]
 
