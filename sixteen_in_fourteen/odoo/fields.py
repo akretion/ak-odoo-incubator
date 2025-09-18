@@ -1,17 +1,21 @@
+# pylint: disable=method-required-super,redefined-builtin
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 
 import copy
 import enum
 import json
-from odoo.fields import Field
+
 from psycopg2.extras import Json as PsycopgJson
+
+from odoo.fields import Field
 
 
 class Json(Field):
     """JSON Field that contain unstructured information in jsonb PostgreSQL column.
     This field is still in beta
-    Some features have not been implemented and won't be implemented in stable versions, including:
+    Some features have not been implemented and won't be implemented in
+    stable versions, including:
     * searching
     * indexing
     * mutating the values.
@@ -158,6 +162,6 @@ class Command(enum.IntEnum):
 
 
 # Global namespace it
-import odoo
+import odoo  # noqa: E402
 
 odoo.Command = Command
