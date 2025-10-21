@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="gitlab_integration.MergeRequestsList" owl="1">
+        <t t-foreach="mrs" t-as="mr" t-key="mr.id">
+            <span
+                t-attf-class="{{`o_merge_request_${ mr.state }${mr.draft ? ' o_merge_request_draft' : ''}`}} badge rounded-pill o_mr d-inline-flex align-items-center mw-100"
+                tabindex="-1"
+                t-att-title="mr.text"
+                t-on-click="(ev) => mr.onClick and mr.onClick(ev)"
+                t-on-keydown="mr.onKeydown"
+            >
+                <i class="fa fa-gitlab" />
+                <div class="o_mr_badge_text" t-esc="mr.text" />
+                <a
+                    tabIndex="-1"
+                    t-if="mr.onDelete"
+                    t-on-click.stop.prevent="(ev) => mr.onDelete and mr.onDelete(ev)"
+                    href="#"
+                    class="fa fa-times o_delete"
+                    title="Delete"
+                    aria-label="Delete"
+                />
+            </span>
+        </t>
+    </t>
+
+    <t t-name="gitlab_integration.MergeRequestsList.Tooltip" owl="1">
+        <t t-foreach="mrs" t-as="mr" t-key="mr.id">
+            <div t-esc="mr.text" />
+        </t>
+    </t>
+
+</templates>

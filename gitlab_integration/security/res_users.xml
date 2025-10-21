@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2025 Akretion (http://www.akretion.com).
+  @author Florian Mounier <florian.mounier@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record
+        id="gitlab_api_user"
+        model="res.users"
+        context="{'no_reset_password': True}"
+    >
+        <field name="name">Gitlab API</field>
+        <field name="login">gitlab-api</field>
+        <field name="company_id" ref="base.main_company" />
+        <field name="company_ids" eval="[(4, ref('base.main_company'))]" />
+        <field
+            name="groups_id"
+            eval="[
+              (4, ref('gitlab_integration.group_gitlab_manager')),
+              (4, ref('fastapi.group_fastapi_endpoint_runner'))
+              ]"
+        />
+    </record>
+</odoo>

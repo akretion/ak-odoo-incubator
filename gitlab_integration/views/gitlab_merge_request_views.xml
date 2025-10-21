@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2025 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="gitlab_merge_request_action" model="ir.actions.act_window">
+        <field name="name">Gitlab Merge Requests</field>
+        <field name="res_model">gitlab.merge.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="gitlab_merge_request_view_form" model="ir.ui.view">
+        <field name="name">gitlab.merge.request.form</field>
+        <field name="model">gitlab.merge.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        options="{'clickable': '1'}"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title" attrs="{'invisible': [('name', '=', False)]}">
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group name="main">
+                        <group>
+                            <field name="name" />
+                            <field name="description" />
+                            <field name="project_path" />
+                            <field name="web_url" widget="url" />
+                        </group>
+                        <group>
+                            <field name="draft" />
+                            <field name="gitlab_iid" />
+                            <field name="project_namespace" />
+                            <field name="project_name" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Related Tasks">
+                            <field name="task_ids">
+                                <tree editable="bottom">
+                                    <field name="company_id" invisible="True" />
+                                    <field name="name" />
+                                    <field name="description" />
+                                    <field name="project_id" />
+                                    <field name="stage_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="gitlab_merge_request_view_tree" model="ir.ui.view">
+        <field name="name">gitlab.merge.request.tree</field>
+        <field name="model">gitlab.merge.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="gitlab_iid" />
+                <field name="state" />
+                <field name="web_url" widget="url" />
+                <field name="project_name" />
+            </tree>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_gitlab_merge_request"
+        name="Gitlab Merge Requests"
+        sequence="500"
+        parent="project.menu_project_config"
+        action="gitlab_merge_request_action"
+        groups="base.group_no_one"
+    />
+</odoo>
