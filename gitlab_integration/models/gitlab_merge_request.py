@@ -1,9 +1,12 @@
 # Copyright 2025 Akretion (http://www.akretion.com).
 # @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import logging
 import re
 
 from odoo import api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 # Tasks ids are handled as [id] [id2] in the beginning of the merge request title
 TASK_REFS_REGEX = re.compile(r"^(?:\s*Draft:\s*)?(?:\s*\[[0-9,]+\]\s*)+")
@@ -54,7 +57,7 @@ class GitlabMergeRequest(models.Model):
     task_ids = fields.Many2many(
         comodel_name="project.task",
         string="Related Tasks",
-        help="Tasks associated with this Gitlab Merge Request.",
+        help="Odoo Tasks associated with this Gitlab Merge Request.",
     )
 
     def _get_tasks_from_merge_request_title(self, title: str):
@@ -79,6 +82,7 @@ class GitlabMergeRequest(models.Model):
         mr_data = payload.get("object_attributes", {})
         gitlab_iid = mr_data.get("iid")
         if not gitlab_iid:
+            _logger.warning(f"No IID found in merge request data. Payload: {payload}")
             return
 
         merge_request = self.search([("gitlab_iid", "=", gitlab_iid)], limit=1)
