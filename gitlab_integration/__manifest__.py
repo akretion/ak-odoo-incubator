@@ -12,8 +12,7 @@
         "project",
         "mail",
         "fastapi",
-        "extendable",
-        "extendable_fastapi",
+        "queue_job",
     ],
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "data": [
@@ -23,6 +22,7 @@
         "views/gitlab_merge_request_views.xml",
         "views/project_task_views.xml",
         "views/fastapi_endpoint_views.xml",
+        "wizards/gitlab_sync_wizard_views.xml",
     ],
     "assets": {
         "web.assets_backend": [
