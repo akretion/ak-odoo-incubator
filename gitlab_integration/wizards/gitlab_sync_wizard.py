@@ -17,7 +17,7 @@ class GitlabSyncWizard(models.TransientModel):
 
     gitlab_url = fields.Char(required=True)
     private_token = fields.Char(required=True)
-    set_up_webhooks = fields.Boolean(default=True)
+    set_up_webhooks = fields.Boolean(default=False)
     webhook_url = fields.Char()
     webhook_secret_token = fields.Char()
 
@@ -25,31 +25,36 @@ class GitlabSyncWizard(models.TransientModel):
     def gitlab_api_url(self):
         return f"{self.gitlab_url.rstrip('/')}/api/v4"
 
+    def _unroll_pagination(self, api_url, params=None):
+        headers = {"Private-Token": self.private_token}
+        results = []
+        page = 1
+        while True:
+            paginated_params = params.copy() if params else {}
+            paginated_params.update({"page": page})
+            response = requests.get(
+                api_url, headers=headers, params=paginated_params, timeout=10
+            )
+            if response.status_code == 200:
+                data = response.json()
+                if not data:
+                    break
+                results.extend(data)
+                page += 1
+            else:
+                raise UserError(
+                    f"Failed to connect to Gitlab: [{response.status_code}] {response.text}"
+                )
+        return results
+
     def _get_gitlab_projects(self):
         api_url = f"{self.gitlab_api_url}/projects"
-        headers = {"Private-Token": self.private_token}
-        response = requests.get(api_url, headers=headers, timeout=10)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            raise UserError(
-                _("Failed to connect to Gitlab: [%(status_code)s] %(response_text)s")
-                % {"status_code": response.status_code, "response_text": response.text}
-            )
+        return self._unroll_pagination(api_url)
 
     def _get_merge_requests_for_project(self, project):
         project_id = project["id"]
         api_url = f"{self.gitlab_api_url}/projects/{project_id}/merge_requests"
-        headers = {"Private-Token": self.private_token}
-        response = requests.get(api_url, headers=headers, timeout=10)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            _logger.warning(
-                f"Failed to fetch MRs for project {project['name']}: "
-                f"[{response.status_code}] {response.text}"
-            )
-            return []
+        return self._unroll_pagination(api_url)
 
     def _register_webhooks(self, projects):
         headers = {"Private-Token": self.private_token}
@@ -61,23 +66,11 @@ class GitlabSyncWizard(models.TransientModel):
         webhook_url = self.webhook_url.rstrip("/")
         for project in projects:
             project_id = project["id"]
-            current_hooks_url = f"{self.gitlab_api_url}/projects/{project_id}/hooks"
-            response = requests.get(current_hooks_url, headers=headers, timeout=10)
-            if response.status_code == 200:
-                existing_hooks = response.json()
-                if any(hook["url"] == webhook_url for hook in existing_hooks):
-                    _logger.info(
-                        f"Webhook already exists for project {project['name']}."
-                    )
-                    continue
-            else:
-                _logger.warning(
-                    f"Failed to fetch existing webhooks for project {project['name']}: "
-                    f"[{response.status_code}] {response.text}"
-                )
-                continue
-
             api_url = f"{self.gitlab_api_url}/projects/{project_id}/hooks"
+            existing_hooks = self._unroll_pagination(api_url)
+            if any(hook["url"] == webhook_url for hook in existing_hooks):
+                _logger.info(f"Webhook already exists for project {project['name']}.")
+                continue
             data = {
                 "url": webhook_url,
                 "merge_requests_events": True,
