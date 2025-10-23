@@ -18,7 +18,11 @@
                         name="webhook_url"
                         attrs="{'invisible': [('set_up_webhooks', '=', False)], 'required': [('set_up_webhooks', '=', True)]}"
                     />
-                    <field name="webhook_secret_token" password="True" />
+                    <field
+                        name="webhook_secret_token"
+                        password="True"
+                        attrs="{'invisible': [('set_up_webhooks', '=', False)], 'required': [('set_up_webhooks', '=', True)]}"
+                    />
 
                 </group>
 
