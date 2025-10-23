@@ -374,6 +374,9 @@ ul.auto-toc {
 <p>For now it supports:</p>
 <ul class="simple">
 <li>Listing related GitLab Merge Requests in Odoo Project Tasks</li>
+<li>Synchronizing from existing GitLab Projects</li>
+<li>Setting up webhooks for GitLab projects</li>
+<li>Automatic processing of Merge Request events from GitLab webhooks</li>
 </ul>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
@@ -397,6 +400,14 @@ and add the Odoo endpoint URL. Use the secret token you created in Odoo
 for authentication.</p>
 <p>For now, only the “Merge Request Events” are supported. Make sure to
 select this event when setting up the webhook in GitLab.</p>
+<p>When a merge request is created or updated in GitLab, the webhook will
+send the event to Odoo, which will then process it and link it to the
+corresponding project task.</p>
+<p>You can also synchronize existing GitLab projects with Odoo to ensure
+all relevant merge requests are linked to their respective tasks and
+automatically set up webhooks for them.</p>
+<p>In order to do that, in debug mode, go to Projects &gt; Configuration &gt;
+GitLab &gt; Synchronize Projects and follow the wizard instructions.</p>
 </div>
 <div class="section" id="bug-tracker">
 <h1><a class="toc-backref" href="#toc-entry-2">Bug Tracker</a></h1>

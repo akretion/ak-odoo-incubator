@@ -76,11 +76,18 @@
     </record>
 
     <menuitem
-        id="menu_gitlab_merge_request"
-        name="Gitlab Merge Requests"
+        id="menu_gitlab_integration"
+        name="Gitlab"
         sequence="500"
         parent="project.menu_project_config"
-        action="gitlab_merge_request_action"
         groups="base.group_no_one"
     />
+    <menuitem
+        id="menu_gitlab_merge_request"
+        name="Merge Requests"
+        sequence="510"
+        parent="menu_gitlab_integration"
+        action="gitlab_merge_request_action"
+    />
+
 </odoo>

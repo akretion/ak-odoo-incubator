@@ -101,3 +101,18 @@ class GitlabMergeRequest(models.Model):
         else:
             vals["gitlab_iid"] = gitlab_iid
             self.create(vals)
+
+    @api.model
+    def sync_merge_requests_for_project(
+        self, project: dict, merge_requests: list[dict]
+    ) -> None:
+        for mr in merge_requests:
+            payload = {
+                "project": project,
+                "object_attributes": mr,
+            }
+            self.process_webhook(payload)
+        return (
+            f"{len(merge_requests)} merge requests synced "
+            f"({', '.join(str(mr['iid']) for mr in merge_requests)})."
+        )
