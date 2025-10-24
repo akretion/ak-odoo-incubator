@@ -131,9 +131,11 @@ class GitlabMergeRequest(models.Model):
             "draft": mr_data.get("work_in_progress", False),
             "state": mr_data.get("state"),
             "project_path": project_data.get("path_with_namespace"),
-            "project_namespace": project_data.get("namespace"),
+            "project_namespace": project_data["namespace"]
+            if isinstance(project_data.get("namespace"), str)
+            else project_data.get("namespace", {}).get("name"),
             "project_name": project_data.get("name"),
-            "web_url": mr_data.get("url"),
+            "web_url": mr_data.get("web_url", mr_data.get("url")),
             "task_ids": [(6, 0, tasks.ids)],
         }
         if merge_request:
