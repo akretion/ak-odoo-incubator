@@ -8,7 +8,7 @@
     <record id="access_gitlab_merge_request_user" model="ir.model.access">
         <field name="name">Gitlab Merge Request: User RO access</field>
         <field name="model_id" ref="model_gitlab_merge_request" />
-        <field name="group_id" ref="group_gitlab_user" />
+        <field name="group_id" ref="base.group_user" />
         <field name="perm_read" eval="True" />
         <field name="perm_write" eval="False" />
         <field name="perm_create" eval="False" />
