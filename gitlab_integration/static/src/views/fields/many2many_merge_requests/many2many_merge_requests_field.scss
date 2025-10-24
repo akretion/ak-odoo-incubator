@@ -1,0 +1,130 @@
+// Copyright 2025 Akretion (http://www.akretion.com).
+// @author Florian Mounier <florian.mounier@akretion.com>
+// License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+.o_mr_popover {
+    max-width: 150px;
+}
+
+.o_mr_popover label {
+    line-height: $o-line-height-base;
+}
+
+.o_field_widget.o_field_many2many_merge_requests {
+    flex-flow: row wrap;
+
+    .o_mrs_input {
+        padding: 1px 0;
+
+        .o_mr {
+            padding-left: 0.6em;
+            padding-right: 0.6em;
+        }
+    }
+
+    .o_field_many2many_selection {
+        flex: 1 0 50px;
+
+        .o_input {
+            height: 100%;
+            border: none;
+        }
+    }
+
+    .badge {
+        cursor: pointer;
+        flex: 0 0 auto;
+        margin: 1px 2px 1px 0;
+        border: none;
+        font-size: 12px;
+        user-select: none;
+        display: flex;
+        max-width: 100%;
+        box-shadow: inset 0 0 0 1px;
+
+        &.dropdown {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .o_badge_text,
+        .o_mr_badge_text {
+            @include o-text-overflow(inline-block);
+            max-width: 200px;
+            color: inherit;
+            line-height: 1.1;
+        }
+
+        .o_delete {
+            color: inherit;
+            cursor: pointer;
+            padding-left: 4px;
+            line-height: 1;
+        }
+
+        .o_mr_badge_text {
+            padding-left: 2px;
+        }
+
+        &.o_merge_request_opened {
+            background-color: #c3e6cd;
+            color: #306440;
+            box-shadow: none;
+        }
+        &.o_merge_request_closed {
+            background-color: #fdd4cd;
+            color: #a32c12;
+            box-shadow: none;
+        }
+        &.o_merge_request_merged {
+            background-color: #cbe2f9;
+            color: #2f5ca0;
+            box-shadow: none;
+        }
+        &.o_merge_request_draft {
+            opacity: 0.6;
+        }
+    }
+}
+
+.o_list_view .o_field_widget.o_field_many2many_merge_requests {
+    .o_mrs_input {
+        border: 0;
+        padding: 0;
+    }
+
+    .o_field_many2many_selection {
+        flex-basis: 40px;
+    }
+}
+
+.o_form_view {
+    .o_group,
+    .o_inner_group {
+        .o_field_tags {
+            width: 100%;
+        }
+    }
+
+    &:not(.o_field_highlight) {
+        .o_field_many2many_selection {
+            .o_dropdown_button {
+                visibility: hidden;
+            }
+
+            &:hover,
+            &:focus-within {
+                .o_dropdown_button {
+                    visibility: visible;
+                }
+            }
+        }
+    }
+}
+
+.o_form_statusbar .o_field_tags {
+    align-self: center;
+}

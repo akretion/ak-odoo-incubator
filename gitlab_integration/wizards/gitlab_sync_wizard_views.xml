@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2025 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_gitlab_sync_wizard_form" model="ir.ui.view">
+        <field name="name">gitlab.sync.wizard.form</field>
+        <field name="model">gitlab.sync.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="gitlab_url" />
+                    <field name="private_token" password="True" />
+                    <field name="set_up_webhooks" />
+                    <field
+                        name="webhook_url"
+                        attrs="{'invisible': [('set_up_webhooks', '=', False)], 'required': [('set_up_webhooks', '=', True)]}"
+                    />
+                    <field
+                        name="webhook_secret_token"
+                        password="True"
+                        attrs="{'invisible': [('set_up_webhooks', '=', False)], 'required': [('set_up_webhooks', '=', True)]}"
+                    />
+
+                </group>
+
+                <em>
+                    This private token should be a Gitlab private token
+                    (project, group or personal).<br />
+                    A token with "Developer" role or higher is required for merge
+                    request synchronization.<br />
+                    A token with "Maintainer" role or higher is required to set up webhooks.
+                </em>
+                <footer>
+                    <button
+                        name="action_sync_gitlab"
+                        string="Sync"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="gitlab_sync_wizard_action" model="ir.actions.act_window">
+        <field name="name">Synchronize Projects</field>
+        <field name="res_model">gitlab.sync.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_gitlab_sync_wizard"
+        name="Synchronize Projects"
+        sequence="520"
+        parent="menu_gitlab_integration"
+        action="gitlab_sync_wizard_action"
+    />
+</odoo>
