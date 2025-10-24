@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo-addon-account_move_adyen_import>=16.0dev,<16.1dev',
         'odoo-addon-account_move_dalenys_import>=16.0dev,<16.1dev',
         'odoo-addon-account_refund_no_business_field>=16.0dev,<16.1dev',
+        'odoo-addon-auth_oauth_redirect_fix>=16.0dev,<16.1dev',
         'odoo-addon-base_custom_export>=16.0dev,<16.1dev',
         'odoo-addon-fs_product>=16.0dev,<16.1dev',
         'odoo-addon-module_analysis_price>=16.0dev,<16.1dev',
