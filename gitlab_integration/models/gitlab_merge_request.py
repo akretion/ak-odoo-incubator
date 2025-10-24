@@ -9,8 +9,8 @@ from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 
 # Tasks ids are handled as [id] [id2] in the beginning of the merge request title
-TASK_REFS_REGEX = re.compile(r"^(?:\s*Draft:\s*)?(?:\s*\[[0-9,]+\]\s*)+")
-TASK_REF_REGEX = re.compile(r"\[([0-9,]+)\]")
+TASK_REFS_REGEX = re.compile(r"^(?:\s*Draft:\s*)?(?:\s*\[[0-9, ]+\]\s*)+")
+TASK_REF_REGEX = re.compile(r"\[([0-9, ]+)\]")
 
 
 def extract_task_ids_from_title(title: str) -> list[int]:
@@ -26,7 +26,9 @@ def extract_task_ids_from_title(title: str) -> list[int]:
         return []
 
     tasks = TASK_REF_REGEX.findall(match.group(0))
-    return [int(task.replace(",", "")) for task in tasks] if tasks else []
+    return (
+        [int(task.replace(",", "").replace(" ", "")) for task in tasks] if tasks else []
+    )
 
 
 class GitlabMergeRequest(models.Model):
