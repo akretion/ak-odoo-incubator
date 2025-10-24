@@ -14,6 +14,7 @@ setuptools.setup(
         'odoo-addon-auth_oauth_redirect_fix>=16.0dev,<16.1dev',
         'odoo-addon-base_custom_export>=16.0dev,<16.1dev',
         'odoo-addon-fs_product>=16.0dev,<16.1dev',
+        'odoo-addon-gitlab_integration>=16.0dev,<16.1dev',
         'odoo-addon-module_analysis_price>=16.0dev,<16.1dev',
         'odoo-addon-mrp_raw_material_from_config>=16.0dev,<16.1dev',
         'odoo-addon-product_dimension_net>=16.0dev,<16.1dev',

@@ -27,6 +27,7 @@ addon | version | maintainers | summary
 [auth_oauth_redirect_fix](auth_oauth_redirect_fix/) | 16.0.1.0.0 | [![paradoxxxzero](https://github.com/paradoxxxzero.png?size=30px)](https://github.com/paradoxxxzero) | Fix OAuth login redirection
 [base_custom_export](base_custom_export/) | 16.0.1.0.0 |  | Base Customer Export
 [fs_product](fs_product/) | 16.0.1.0.0 |  | File Storage Product
+[gitlab_integration](gitlab_integration/) | 16.0.1.0.0 | [![paradoxxxzero](https://github.com/paradoxxxzero.png?size=30px)](https://github.com/paradoxxxzero) | Integration with Gitlab for project management
 [module_analysis_price](module_analysis_price/) | 16.0.1.0.0 |  | Module Analysis Price
 [mrp_raw_material_from_config](mrp_raw_material_from_config/) | 16.0.1.0.0 |  | MRP Raw Material From Config
 [product_dimension_net](product_dimension_net/) | 16.0.1.0.0 |  | Net product dimensions
