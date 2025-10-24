@@ -20,6 +20,7 @@
         "security/res_users.xml",
         "security/ir_model_access.xml",
         "views/gitlab_merge_request_views.xml",
+        "views/project_project_views.xml",
         "views/project_task_views.xml",
         "views/fastapi_endpoint_views.xml",
         "wizards/gitlab_sync_wizard_views.xml",

@@ -22,7 +22,7 @@ Gitlab Integration
 
 |badge1| |badge2| |badge3|
 
-This modules adds GitLab integration to odoo.
+This module adds GitLab integration to odoo.
 
 For now it supports:
 
@@ -45,6 +45,12 @@ Usage
 
 In Odoo, setup a fastapi endpoint with gitlab as app, GitLab API as user
 and create a secret token.
+
+For each project in Odoo that you want to link with GitLab, set the
+allowed GitLab project IDs in the project settings. You can specify
+multiple project IDs separated by commas. The gitlab project ID can be
+found in the GitLab project under the top right three dots menu > Copy
+project ID.
 
 Then, in GitLab, go to your project settings, navigate to "Webhooks",
 and add the Odoo endpoint URL. Use the secret token you created in Odoo

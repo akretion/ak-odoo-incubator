@@ -30,6 +30,11 @@ class TestGitlabMergeRequest(FastAPITransactionCase):
         cls.default_fastapi_dependency_overrides = (
             cls.default_fastapi_app.dependency_overrides
         )
+        cls.project_1 = cls.env.ref("project.project_project_1")
+        cls.project_2 = cls.env.ref("project.project_project_2")
+        cls.project_1.allowed_gitlab_id_projects = "1,2"
+        cls.project_2.allowed_gitlab_id_projects = "1"
+
         cls.task_1 = cls.env.ref("project.project_1_task_1")
         cls.task_2 = cls.env.ref("project.project_1_task_2")
         cls.task_3 = cls.env.ref("project.project_2_task_3")
@@ -179,3 +184,72 @@ class TestGitlabMergeRequest(FastAPITransactionCase):
             )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(merge_request.state, "closed")
+
+    def test_gitlab_webhook_merge_request_multi_project(self):
+        self.assertFalse(self.task_1.gitlab_merge_request_ids)
+
+        with self._create_test_client() as test_client:
+            response = test_client.post(
+                "/webhook",
+                headers={"X-Gitlab-Token": "secure_token"},
+                json=create(
+                    f"[{self.task_1.id}] [{self.task_2.id}] [{self.task_3.id}] "
+                    "Implement feature X"
+                ),
+            )
+        self.assertEqual(response.status_code, 200)
+        merge_request = self.env["gitlab.merge.request"].search(
+            [("gitlab_iid", "=", 3)], limit=1
+        )
+        self.assertTrue(merge_request)
+        self.assertEqual(
+            merge_request.task_ids, self.task_1 | self.task_2 | self.task_3
+        )
+        self.assertEqual(self.task_1.gitlab_merge_request_ids, merge_request)
+        self.assertEqual(self.task_2.gitlab_merge_request_ids, merge_request)
+        self.assertEqual(self.task_3.gitlab_merge_request_ids, merge_request)
+
+    def test_gitlab_webhook_merge_request_no_project(self):
+        self.project_1.allowed_gitlab_id_projects = False
+        self.project_2.allowed_gitlab_id_projects = False
+
+        with self._create_test_client() as test_client:
+            response = test_client.post(
+                "/webhook",
+                headers={"X-Gitlab-Token": "secure_token"},
+                json=create(
+                    f"[{self.task_1.id}] [{self.task_2.id}] [{self.task_3.id}] "
+                    "Implement feature X",
+                ),
+            )
+        self.assertEqual(response.status_code, 200)
+        merge_request = self.env["gitlab.merge.request"].search(
+            [("gitlab_iid", "=", 3)], limit=1
+        )
+        self.assertFalse(merge_request)
+        self.assertFalse(self.task_1.gitlab_merge_request_ids)
+        self.assertFalse(self.task_2.gitlab_merge_request_ids)
+        self.assertFalse(self.task_3.gitlab_merge_request_ids)
+
+    def test_gitlab_webhook_merge_request_project_filtered(self):
+        self.assertFalse(self.task_1.gitlab_merge_request_ids)
+
+        with self._create_test_client() as test_client:
+            response = test_client.post(
+                "/webhook",
+                headers={"X-Gitlab-Token": "secure_token"},
+                json=create(
+                    f"[{self.task_1.id}] [{self.task_2.id}] [{self.task_3.id}] "
+                    "Implement feature X",
+                    pid=2,
+                ),
+            )
+        self.assertEqual(response.status_code, 200)
+        merge_request = self.env["gitlab.merge.request"].search(
+            [("gitlab_iid", "=", 3)], limit=1
+        )
+        self.assertTrue(merge_request)
+        self.assertEqual(merge_request.task_ids, self.task_1 | self.task_2)
+        self.assertEqual(self.task_1.gitlab_merge_request_ids, merge_request)
+        self.assertEqual(self.task_2.gitlab_merge_request_ids, merge_request)
+        self.assertFalse(self.task_3.gitlab_merge_request_ids)
