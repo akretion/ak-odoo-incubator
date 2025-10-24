@@ -9,8 +9,8 @@ from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 
 # Tasks ids are handled as [id] [id2] in the beginning of the merge request title
-TASK_REFS_REGEX = re.compile(r"^(?:\s*Draft:\s*)?(?:\s*\[[0-9,]+\]\s*)+")
-TASK_REF_REGEX = re.compile(r"\[([0-9,]+)\]")
+TASK_REFS_REGEX = re.compile(r"^(?:\s*Draft:\s*)?(?:\s*\[[0-9, ]+\]\s*)+")
+TASK_REF_REGEX = re.compile(r"\[([0-9, ]+)\]")
 
 
 def extract_task_ids_from_title(title: str) -> list[int]:
@@ -26,7 +26,9 @@ def extract_task_ids_from_title(title: str) -> list[int]:
         return []
 
     tasks = TASK_REF_REGEX.findall(match.group(0))
-    return [int(task.replace(",", "")) for task in tasks] if tasks else []
+    return (
+        [int(task.replace(",", "").replace(" ", "")) for task in tasks] if tasks else []
+    )
 
 
 class GitlabMergeRequest(models.Model):
@@ -129,9 +131,11 @@ class GitlabMergeRequest(models.Model):
             "draft": mr_data.get("work_in_progress", False),
             "state": mr_data.get("state"),
             "project_path": project_data.get("path_with_namespace"),
-            "project_namespace": project_data.get("namespace"),
+            "project_namespace": project_data["namespace"]
+            if isinstance(project_data.get("namespace"), str)
+            else project_data.get("namespace", {}).get("name"),
             "project_name": project_data.get("name"),
-            "web_url": mr_data.get("url"),
+            "web_url": mr_data.get("web_url", mr_data.get("url")),
             "task_ids": [(6, 0, tasks.ids)],
         }
         if merge_request:

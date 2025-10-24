@@ -34,6 +34,11 @@ class TestParsing(BaseCase):
         self.assertEqual(task_ids, [456])
 
     def test_extract_task_ids_from_title_6(self):
+        title = " [123 456 78,9] Implement feature X"
+        task_ids = extract_task_ids_from_title(title)
+        self.assertEqual(task_ids, [123456789])
+
+    def test_extract_task_ids_from_title_7(self):
         title_no_tasks = "Implement feature Y"
         task_ids_no_tasks = extract_task_ids_from_title(title_no_tasks)
         self.assertEqual(task_ids_no_tasks, [])
