@@ -71,6 +71,31 @@ class GitlabMergeRequest(models.Model):
         task_ids = extract_task_ids_from_title(title)
         return self.env["project.task"].browse(task_ids).exists()
 
+    def _filter_allowed_tasks(self, tasks, gitlab_project_id: int):
+        """Filter tasks based on allowed Gitlab project IDs in their projects.
+
+        Args:
+            tasks (recordset): A recordset of project.task records.
+            gitlab_project_id (int): The Gitlab project ID to check against.
+        Returns:
+            recordset: A filtered recordset of project.task records.
+        """
+        allowed_tasks = tasks.sudo().filtered(
+            lambda task: gitlab_project_id
+            in [
+                int(pid.strip())
+                for pid in (task.project_id.allowed_gitlab_id_projects or "").split(",")
+                if pid.strip().isdigit()
+            ]
+        )
+        disallowed_tasks = tasks - allowed_tasks
+        if disallowed_tasks:
+            _logger.info(
+                f"Tasks {disallowed_tasks.ids} are not linked to allowed "
+                f"Gitlab project ID {gitlab_project_id} and will be ignored."
+            )
+        return allowed_tasks.sudo(False)
+
     @api.model
     def process_webhook(self, payload: dict) -> None:
         """Process a Gitlab Merge Request webhook payload.
@@ -87,8 +112,17 @@ class GitlabMergeRequest(models.Model):
 
         merge_request = self.search([("gitlab_iid", "=", gitlab_iid)], limit=1)
         name = mr_data.get("title")
-        tasks = self._get_tasks_from_merge_request_title(name)
 
+        tasks = self._filter_allowed_tasks(
+            self._get_tasks_from_merge_request_title(name),
+            project_data.get("id"),
+        )
+        if not tasks:
+            _logger.info(
+                f"No valid tasks found in merge request IID {gitlab_iid} title. "
+                "Ignoring merge request."
+            )
+            return
         vals = {
             "name": name,
             "description": mr_data.get("description"),

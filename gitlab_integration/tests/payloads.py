@@ -4,7 +4,7 @@
 # flake8: noqa
 
 
-def create(title: str, iid=3) -> dict:
+def create(title: str, iid=3, pid=1) -> dict:
     return {
         "object_kind": "merge_request",
         "event_type": "merge_request",
@@ -16,7 +16,7 @@ def create(title: str, iid=3) -> dict:
             "email": "[REDACTED]",
         },
         "project": {
-            "id": 1,
+            "id": pid,
             "name": "Test project",
             "description": None,
             "web_url": "http://localhost:8929/root/test-project",
@@ -144,7 +144,7 @@ def create(title: str, iid=3) -> dict:
     }
 
 
-def update(title: str, iid=3, old_title="") -> dict:
+def update(title: str, iid=3, pid=1, old_title="") -> dict:
     return {
         "object_kind": "merge_request",
         "event_type": "merge_request",
@@ -156,7 +156,7 @@ def update(title: str, iid=3, old_title="") -> dict:
             "email": "[REDACTED]",
         },
         "project": {
-            "id": 1,
+            "id": pid,
             "name": "Test project",
             "description": None,
             "web_url": "http://localhost:8929/root/test-project",
@@ -293,7 +293,7 @@ def update(title: str, iid=3, old_title="") -> dict:
     }
 
 
-def close(title: str, iid=3) -> dict:
+def close(title: str, pid=1, iid=3) -> dict:
     return {
         "object_kind": "merge_request",
         "event_type": "merge_request",
@@ -305,7 +305,7 @@ def close(title: str, iid=3) -> dict:
             "email": "[REDACTED]",
         },
         "project": {
-            "id": 1,
+            "id": pid,
             "name": "Test project",
             "description": None,
             "web_url": "http://localhost:8929/root/test-project",
