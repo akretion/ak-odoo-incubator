@@ -32,6 +32,7 @@ setuptools.setup(
         'odoo14-addon-purchase_lot',
         'odoo14-addon-queue_job_cancel_dead_job',
         'odoo14-addon-queue_job_default_channel',
+        'odoo14-addon-secondary_analytic_account',
         'odoo14-addon-security_rule_not_editable',
         'odoo14-addon-stock_inventory_simple_valuation',
     ],
