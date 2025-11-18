@@ -45,6 +45,7 @@ addon | version | maintainers | summary
 [purchase_lot](purchase_lot/) | 14.0.1.0.0 |  | Purchase Lot
 [queue_job_cancel_dead_job](queue_job_cancel_dead_job/) | 14.0.1.0.1 |  | Cancel dead pending job
 [queue_job_default_channel](queue_job_default_channel/) | 14.0.1.0.1 |  | Default channel for queue job
+[secondary_analytic_account](secondary_analytic_account/) | 14.0.1.0.0 |  | Secondary Analytic Account
 [security_rule_not_editable](security_rule_not_editable/) | 14.0.1.0.0 |  | Forbid editing rule form UI force using code
 [stock_inventory_simple_valuation](stock_inventory_simple_valuation/) | 14.0.1.0.0 | [![bealdav](https://github.com/bealdav.png?size=30px)](https://github.com/bealdav) [![PierrickBrun](https://github.com/PierrickBrun.png?size=30px)](https://github.com/PierrickBrun) [![mourad-ehm](https://github.com/mourad-ehm.png?size=30px)](https://github.com/mourad-ehm) [![kevinkhao](https://github.com/kevinkhao.png?size=30px)](https://github.com/kevinkhao) | Valuation of inventories according to custom rules
 
