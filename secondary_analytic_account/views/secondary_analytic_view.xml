@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+        <record id="view_secondary_account_analytic_account_form" model="ir.ui.view">
+            <field name="model">secondary.account.analytic.account</field>
+            <field name="arch" type="xml">
+                <form string="Analytic Account">
+                    <sheet string="Analytic Account">
+
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field
+                                name="name"
+                                class="oe_inline"
+                                placeholder="e.g. Project XYZ"
+                            />
+                            </h1>
+                        </div>
+                        <div name="project" />
+                        <group name="main">
+                            <group>
+                                <field name="code" />
+                                <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
+                            </group>
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="view_secondary_account_analytic_account_list" model="ir.ui.view">
+            <field name="model">secondary.account.analytic.account</field>
+            <field eval="8" name="priority" />
+            <field name="arch" type="xml">
+                <tree string="Analytic Accounts">
+                    <field name="name" string="Name" />
+                    <field name="code" />
+                    <field name="company_id" groups="base.group_multi_company" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_secondary_analytic_account" model="ir.actions.act_window">
+            <field name="name">Secondary Analytic Account</field>
+            <field name="res_model">secondary.account.analytic.account</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem
+        id="menu_secondary_analytic_default_list"
+        action="action_secondary_analytic_account"
+        parent="account.menu_analytic_accounting"
+        groups="analytic.group_analytic_accounting"
+        sequence="4"
+    />
+</odoo>
