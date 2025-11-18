@@ -7,7 +7,7 @@
     "license": "AGPL-3",
     "author": "Akretion",
     "website": "https://github.com/akretion/ak-odoo-incubator",
-    "depends": ["account"],
+    "depends": ["account", "account_asset_management"],
     "data": [
         "views/account_move_view.xml",
         "views/secondary_analytic_view.xml",
