@@ -11,6 +11,8 @@ from . import models  # noqa: F401
 MOVED_MODULES = {
     "odoo.addons.sale.models.sale_order_line": "odoo.addons.sale.models.sale",
     "odoo.addons.sale.models.sale_order": "odoo.addons.sale.models.sale",
+    "odoo.addons.product.models.product_product": "odoo.addons.product.models.product",
+    "odoo.addons.product.models.product_category": "odoo.addons.product.models.product",
 }
 EXTENDED_MODULES = [
     "odoo.service.server",
