@@ -17,6 +17,7 @@ MOVED_MODULES = {
 EXTENDED_MODULES = [
     "odoo.service.server",
     "odoo.tools.float_utils",
+    "odoo.tools.convert",
     "odoo.tests.common",
     "odoo.api",
     "odoo.http",
