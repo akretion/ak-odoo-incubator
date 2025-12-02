@@ -1,7 +1,6 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 import odoo
-
 from odoo.tools import convert
 
 old_get_idref = convert._get_idref
