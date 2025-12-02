@@ -1,6 +1,6 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo.models import api, BaseModel
+from odoo.models import BaseModel, api
 
 
 # read_kwargs backport from Odoo 16
@@ -15,7 +15,8 @@ def search_read(
         Defaults to all fields.
     :param int offset: Number of records to skip, see ``offset`` parameter in :meth:`search`.
         Defaults to 0.
-    :param int limit: Maximum number of records to return, see ``limit`` parameter in :meth:`search`.
+    :param int limit: Maximum number of records to return, see ``limit`` parameter
+    in :meth:`search`.
         Defaults to no limit.
     :param order: Columns to sort result, see ``order`` parameter in :meth:`search`.
         Defaults to no sort.
@@ -52,3 +53,46 @@ def search_read(
 
 
 BaseModel.search_read = api.model(search_read)
+BaseModel._invalidate_cache = BaseModel.invalidate_cache
+
+# This is suboptimal, this forces a flush all when it's not necessary
+# but it's the safest way to backport this feature since a lot has changed in
+# the cache flushing mechanism since Odoo 14.
+BaseModel.flush_model = BaseModel.flush
+BaseModel.flush_recordset = BaseModel.flush
+
+
+def invalidate_model(self, fnames=None, flush=True):
+    """Invalidate the cache of all records of ``self``'s model, when the
+    cached values no longer correspond to the database values.  If the
+    parameter is given, only the given fields are invalidated from cache.
+
+    :param fnames: optional iterable of field names to invalidate
+    :param flush: whether pending updates should be flushed before invalidation.
+        It is ``True`` by default, which ensures cache consistency.
+        Do not use this parameter unless you know what you are doing.
+    """
+    if flush:
+        self.flush_model(fnames)
+    self._invalidate_cache(fnames)
+
+
+BaseModel.invalidate_model = invalidate_model
+
+
+def invalidate_recordset(self, fnames=None, flush=True):
+    """Invalidate the cache of the records in ``self``, when the cached
+    values no longer correspond to the database values.  If the parameter
+    is given, only the given fields on ``self`` are invalidated from cache.
+
+    :param fnames: optional iterable of field names to invalidate
+    :param flush: whether pending updates should be flushed before invalidation.
+        It is ``True`` by default, which ensures cache consistency.
+        Do not use this parameter unless you know what you are doing.
+    """
+    if flush:
+        self.flush_recordset(fnames)
+    self._invalidate_cache(fnames, self._ids)
+
+
+BaseModel.invalidate_recordset = invalidate_recordset
