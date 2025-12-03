@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='move_ids_without_package']/tree/field[@name='product_uom_qty']"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'readonly': [('is_initial_demand_editable', '=', False)]}</attribute>
+            </xpath>
+                  <xpath
+                expr="//form/group/field[@name='product_uom_qty']"
+                position="attributes"
+            >
+                      <attribute
+                    name="attrs"
+                >{'readonly': [('is_initial_demand_editable', '=', False)]}</attribute>
+                  </xpath>
+        </field>
+    </record>
+</odoo>
