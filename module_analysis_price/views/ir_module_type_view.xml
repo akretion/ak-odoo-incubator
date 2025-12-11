@@ -17,9 +17,9 @@
         </field>
     </record>
 
-    <record id="view_ir_module_type_tree" model="ir.ui.view">
+    <record id="view_ir_module_type_list" model="ir.ui.view">
         <field name="model">ir.module.type</field>
-        <field name="inherit_id" ref="module_analysis.view_ir_module_type_tree" />
+        <field name="inherit_id" ref="module_analysis.view_ir_module_type_list" />
         <field name="arch" type="xml">
             <field name="installed_module_qty" position="after">
                 <field name="code_qty" sum="Total Code Qty" />
@@ -44,9 +44,9 @@
             <field name="installed_module_qty" position="attributes">
                 <attribute name="sum">Total Module Qty</attribute>
             </field>
-            <tree position="attributes">
+            <list position="attributes">
                 <attribute name="editable">bottom</attribute>
-            </tree>
+            </list>
             <field name="name" position="before">
                 <field name="sequence" widget="handle" />
             </field>
