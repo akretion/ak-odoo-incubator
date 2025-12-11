@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="module_type_rule_odoo_framework" model="ir.module.type.rule">
         <field name="sequence">0</field>
         <field name="module_type_id" ref="module_type_odoo_framework" />
@@ -30,5 +29,4 @@
         <field name="module_type_id" ref="module_type_incubator" />
         <field name="module_domain">[('author_ids', '=', 'Akretion')]</field>
     </record>
-
 </odoo>

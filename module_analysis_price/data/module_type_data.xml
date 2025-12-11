@@ -29,5 +29,4 @@
         <field name="sequence">50</field>
         <field name="name">Custom</field>
     </record>
-
 </odoo>
