@@ -37,3 +37,8 @@ msgstr "Référence"
 msgid "Secondary Analytic Account"
 msgstr "Compte analytique secondaire"
 
+#. module: secondary_analytic_account
+#: model:ir.model.fields,field_description:secondary_analytic_account.field_account_asset__second_analytic_account_id
+#: model:ir.model.fields,field_description:secondary_analytic_account.field_account_asset_profile__second_account_analytic_id
+msgid "Second Analytic account"
+msgstr "Compte analytique secondaire"
