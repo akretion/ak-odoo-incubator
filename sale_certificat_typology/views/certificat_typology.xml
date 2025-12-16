@@ -1,0 +1,88 @@
+<odoo>
+
+    <record id="view_certificat_typology_form" model="ir.ui.view">
+        <field name="name">certificat.typology.form</field>
+        <field name="model">certificat.typology</field>
+        <field name="arch" type="xml">
+            <form string="Certificat typology">
+                <sheet>
+                    <div class="oe_title" name="title">
+                        <label for="name" string="Name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" placeholder="e.g. ID card" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <label for="code" />
+                            <div>
+                                <field name="code" />
+                            </div>
+                        </group>
+                        <group>
+                            <label for="description" />
+                            <div>
+                                <field name="description" />
+                            </div>
+                        </group>
+                        <group>
+                            <label for="automatic_deletion" />
+                            <div>
+                                <field
+                                    name="storage_duration"
+                                    attrs="{'invisible': [('automatic_deletion', '=', 'none')]}"
+                                    class="oe_inline"
+                                />
+                                <span
+                                    attrs="{'invisible': [('automatic_deletion', '=', 'none')]}"
+                                > days </span>
+                                <field name="automatic_deletion" class="oe_inline" />
+                            </div>
+                        </group>
+                        <group groups="base.group_multi_company">
+                            <label for="company_id" />
+                            <div>
+                                <field name="company_id" />
+                            </div>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_certificat_typology_tree" model="ir.ui.view">
+        <field name="name">certificat.typology.tree</field>
+        <field name="model">certificat.typology</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="code" />
+                <field name="description" />
+                <field name="storage_duration" optional="hide" />
+                <field name="automatic_deletion" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_certificat_typology_form" model="ir.actions.act_window">
+        <field name="name">Certificat typology</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certificat.typology</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Define new certificat typology
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        action="action_certificat_typology_form"
+        id="menu_action_certificat_typology_form"
+        parent="sale.menu_sale_config"
+        sequence="12"
+    />
+
+</odoo>
