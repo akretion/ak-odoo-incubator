@@ -24,10 +24,10 @@ addon | version | maintainers | summary
 [account_move_adyen_import](account_move_adyen_import/) | 16.0.1.0.0 |  | Journal Entry Adyen import
 [account_move_dalenys_import](account_move_dalenys_import/) | 16.0.1.0.0 |  | Journal Entry Danelys import
 [account_refund_no_business_field](account_refund_no_business_field/) | 16.0.1.0.0 |  | Account Refund No Business Field
-[auth_oauth_redirect_fix](auth_oauth_redirect_fix/) | 16.0.1.0.0 | [![paradoxxxzero](https://github.com/paradoxxxzero.png?size=30px)](https://github.com/paradoxxxzero) | Fix OAuth login redirection
+[auth_oauth_redirect_fix](auth_oauth_redirect_fix/) | 16.0.1.0.0 | <a href='https://github.com/paradoxxxzero'><img src='https://github.com/paradoxxxzero.png' width='32' height='32' style='border-radius:50%;' alt='paradoxxxzero'/></a> | Fix OAuth login redirection
 [base_custom_export](base_custom_export/) | 16.0.1.0.0 |  | Base Customer Export
 [fs_product](fs_product/) | 16.0.1.0.0 |  | File Storage Product
-[gitlab_integration](gitlab_integration/) | 16.0.1.0.0 | [![paradoxxxzero](https://github.com/paradoxxxzero.png?size=30px)](https://github.com/paradoxxxzero) | Integration with Gitlab for project management
+[gitlab_integration](gitlab_integration/) | 16.0.1.0.0 | <a href='https://github.com/paradoxxxzero'><img src='https://github.com/paradoxxxzero.png' width='32' height='32' style='border-radius:50%;' alt='paradoxxxzero'/></a> | Integration with Gitlab for project management
 [module_analysis_price](module_analysis_price/) | 16.0.1.0.0 |  | Module Analysis Price
 [mrp_raw_material_from_config](mrp_raw_material_from_config/) | 16.0.1.0.0 |  | MRP Raw Material From Config
 [product_dimension_net](product_dimension_net/) | 16.0.1.0.0 |  | Net product dimensions
