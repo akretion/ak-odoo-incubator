@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="project_workload_unit_view_tree" model="ir.ui.view">
+        <field name="model">project.workload.unit</field>
+        <field name="arch" type="xml">
+            <tree string="Workload">
+                <field name="week" />
+                <field name="user_id" />
+                <field name="hours" />
+                <field name="project_id" />
+                <field name="task_id" optional="hide" />
+                <field name="workload_id" optional="hide" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="project_workload_unit_view_search" model="ir.ui.view">
+        <field name="model">project.workload.unit</field>
+        <field name="arch" type="xml">
+            <search string="Workload">
+                <field name="week" />
+                <field name="user_id" />
+                <field name="project_id" />
+                <filter
+                    string="My load"
+                    name="my_load"
+                    domain="[('user_id', '=', uid), ('done', '=', False)]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Week"
+                        name="groupby_week"
+                        domain="[]"
+                        context="{'group_by': 'week'}"
+                    />
+                    <filter
+                        string="User"
+                        name="groupby_user"
+                        domain="[]"
+                        context="{'group_by': 'user_id'}"
+                    />
+                    <filter
+                        string="Project"
+                        name="groupby_project"
+                        domain="[]"
+                        context="{'group_by': 'project_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="project_workload_unit_action">
+        <field name="name">Workload</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">project.workload.unit</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="project_workload_unit_view_search" />
+        <field name="domain">[]</field>
+        <field
+            name="context"
+        >{'search_default_my_load': 1, 'search_default_groupby_week': 1}</field>
+    </record>
+
+</odoo>

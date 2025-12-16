@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <menuitem
+        id="project_workload_additions_menu"
+        name="Addition Types"
+        parent="project_workload.project_workload_menu"
+        sequence="10"
+        action="project_task_workload_addition_type_action"
+    />
+
+
+</odoo>
