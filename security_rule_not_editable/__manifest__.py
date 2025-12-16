@@ -19,6 +19,8 @@
     "depends": [
         "base",
     ],
-    "data": [],
+    "data": [
+        "security/ir_model_access.xml",
+    ],
     "demo": [],
 }
