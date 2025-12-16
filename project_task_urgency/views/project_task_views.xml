@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2025 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <sheet position="before">
+                <div
+                    class="alert alert-danger"
+                    role="alert"
+                    style="margin-bottom:0px;"
+                    attrs="{'invisible': [('is_urgent','=',False)]}"
+                >
+                    <p>
+                        <strong>This task has been marked as urgent.</strong>
+                        <br /> All other tasks
+                        will be put on hold until this task is completed in order to treat it with
+                        the highest priority. This will have an impact on the treatment delay of the
+                        other tasks. </p>
+                </div>
+            </sheet>
+            <field name="partner_phone" position="after">
+                <field
+                    name="is_urgent"
+                    widget="boolean_toggle"
+                    attrs="{'readonly': [('is_closed','=',True)]}"
+                />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_task_tree2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2" />
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="decoration-danger">
+                    is_urgent
+                </attribute>
+            </tree>
+            <field name="priority" position="before">
+                <field name="is_urgent" widget="boolean_toggle" />
+            </field>
+            <field name="stage_id" position="after">
+                <field name="urgency_start_date" optional="hide" />
+                <field name="urgency_end_date" optional="hide" />
+                <field name="urgency_duration" optional="hide" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_task_search_form" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form" />
+        <field name="arch" type="xml">
+            <filter name="unassigned" position="after">
+                <separator />
+                <filter
+                    name="is_urgent"
+                    string="Urgent Tasks"
+                    domain="[('is_urgent', '=', True)]"
+                />
+            </filter>
+        </field>
+    </record>
+
+
+    <record id="view_task_kanban" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban" />
+        <field name="arch" type="xml">
+            <field name="priority" position="after">
+                <field name="is_urgent" />
+            </field>
+
+            <xpath expr="//t[@t-name='kanban-box']/div" position="attributes">
+                <attribute name="t-attf-style">
+                    {{record.is_urgent.raw_value ? 'background-color: #f8d7da !important; border-color: #f5c2c7 !important' : ''}}
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
