@@ -2,23 +2,15 @@
 <odoo>
 
     <record id="module_type_rule_odoo_framework" model="ir.module.type.rule">
-        <field name="sequence">1</field>
+        <field name="sequence">10</field>
         <field name="module_type_id" ref="module_type_odoo_framework" />
         <field
             name="module_domain"
         >[('name', 'in', ('base', 'web', 'iap', 'iap_mail', 'mail', 'web_editor', 'web_kanban_gauge', 'web_tour', 'rating', 'portal', 'rating', 'utm', 'http_routing', 'digest', 'fetchmail', 'bus', 'board', 'base_automation', 'base_vat', 'base_import', 'base_iban', 'base_setup', 'base_sparse_field', 'auth_password_policy', 'auth_password_policy_signup', 'auth_signup'))]</field>
     </record>
 
-    <record id="module_type_rule_oca" model="ir.module.type.rule">
-        <field name="sequence">2</field>
-        <field name="module_type_id" ref="module_type_oca" />
-        <field
-            name="module_domain"
-        >[('author_ids', '=', 'Odoo Community Association (OCA)')]</field>
-    </record>
-
     <record id="module_type_rule_shopinvader" model="ir.module.type.rule">
-        <field name="sequence">3</field>
+        <field name="sequence">200</field>
         <field name="module_type_id" ref="module_type_shopinvader" />
         <field
             name="module_domain"
@@ -26,7 +18,7 @@
     </record>
 
     <record id="module_type_rule_custom" model="ir.module.type.rule">
-        <field name="sequence">4</field>
+        <field name="sequence">210</field>
         <field name="module_type_id" ref="module_type_custom" />
         <field
             name="module_domain"
@@ -34,17 +26,41 @@
     </record>
 
     <record id="module_type_rule_incubator" model="ir.module.type.rule">
-        <field name="sequence">5</field>
+        <field name="sequence">220</field>
         <field name="module_type_id" ref="module_type_incubator" />
         <field name="module_domain">[('author_ids', '=', 'Akretion')]</field>
     </record>
 
-    <record id="module_type_rule_odoo_module" model="ir.module.type.rule">
-        <field name="sequence">6</field>
-        <field name="module_type_id" ref="module_type_odoo_module" />
+    <record id="module_type_rule_oca_extra" model="ir.module.type.rule">
+        <field name="sequence">300</field>
         <field
             name="module_domain"
-        >[('author_ids.name', 'in', ['Odoo S.A.', 'OpenERP SA', 'Odoo SA'])]</field>
+        >[('author_ids.name', 'in', ['AvanzOSC', 'ForgeFlow'])]</field>
+        <field name="module_type_id" ref="module_type_oca_extra" />
     </record>
+
+    <record id="module_analysis.module_type_rule_odoo_a" model="ir.module.type.rule">
+        <field name="sequence">501</field>
+    </record>
+
+    <record id="module_analysis.module_type_rule_odoo_b" model="ir.module.type.rule">
+        <field name="sequence">502</field>
+    </record>
+
+    <record id="module_analysis.module_type_rule_odoo_c" model="ir.module.type.rule">
+        <field name="sequence">503</field>
+    </record>
+
+    <record id="module_analysis.module_type_rule_odoo_d" model="ir.module.type.rule">
+        <field name="sequence">504</field>
+    </record>
+
+    <!-- manage odoo module exception -->
+    <record id="module_type_rule_odoo_z" model="ir.module.type.rule">
+        <field name="sequence">550</field>
+        <field name="module_domain">[('name', 'in', ['payment_sips'])]</field>
+        <field name="module_type_id" ref="module_analysis.module_type_odoo" />
+    </record>
+
 
 </odoo>
