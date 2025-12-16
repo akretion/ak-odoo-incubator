@@ -24,7 +24,7 @@ addon | version | maintainers | summary
 [account_move_line_mass_edit_account](account_move_line_mass_edit_account/) | 14.0.1.0.0 |  | Give the possibility to edit in mass the account on move line
 [attachment_asset_in_db](attachment_asset_in_db/) | 14.0.1.0.0 |  | Always store odoo asset in database
 [base_custom_export](base_custom_export/) | 14.0.1.0.0 |  | Base Customer Export
-[dash_shared](dash_shared/) | 14.0.1.0.0 | [![Kev-Roche](https://github.com/Kev-Roche.png?size=30px)](https://github.com/Kev-Roche) | SUMMARY
+[dash_shared](dash_shared/) | 14.0.1.0.0 | <a href='https://github.com/Kev-Roche'><img src='https://github.com/Kev-Roche.png' width='32' height='32' style='border-radius:50%;' alt='Kev-Roche'/></a> | SUMMARY
 [database_age_cron](database_age_cron/) | 14.0.1.0.0 |  | Run a cron that determines database age
 [forbid_record_creation](forbid_record_creation/) | 14.0.2.0.0 |  | Avoid to create test data in sale, purchase, etc.
 [intercompany_shared_contact](intercompany_shared_contact/) | 14.0.1.0.0 |  | User of each company are contact of a company partner. All child address of a company are automatically shared
@@ -47,7 +47,7 @@ addon | version | maintainers | summary
 [queue_job_default_channel](queue_job_default_channel/) | 14.0.1.0.1 |  | Default channel for queue job
 [secondary_analytic_account](secondary_analytic_account/) | 14.0.1.0.0 |  | Secondary Analytic Account
 [security_rule_not_editable](security_rule_not_editable/) | 14.0.1.0.0 |  | Forbid editing rule form UI force using code
-[stock_inventory_simple_valuation](stock_inventory_simple_valuation/) | 14.0.1.0.0 | [![bealdav](https://github.com/bealdav.png?size=30px)](https://github.com/bealdav) [![PierrickBrun](https://github.com/PierrickBrun.png?size=30px)](https://github.com/PierrickBrun) [![mourad-ehm](https://github.com/mourad-ehm.png?size=30px)](https://github.com/mourad-ehm) [![kevinkhao](https://github.com/kevinkhao.png?size=30px)](https://github.com/kevinkhao) | Valuation of inventories according to custom rules
+[stock_inventory_simple_valuation](stock_inventory_simple_valuation/) | 14.0.1.0.0 | <a href='https://github.com/bealdav'><img src='https://github.com/bealdav.png' width='32' height='32' style='border-radius:50%;' alt='bealdav'/></a> <a href='https://github.com/PierrickBrun'><img src='https://github.com/PierrickBrun.png' width='32' height='32' style='border-radius:50%;' alt='PierrickBrun'/></a> <a href='https://github.com/mourad-ehm'><img src='https://github.com/mourad-ehm.png' width='32' height='32' style='border-radius:50%;' alt='mourad-ehm'/></a> <a href='https://github.com/kevinkhao'><img src='https://github.com/kevinkhao.png' width='32' height='32' style='border-radius:50%;' alt='kevinkhao'/></a> | Valuation of inventories according to custom rules
 
 [//]: # (end addons)
 
