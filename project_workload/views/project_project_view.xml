@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="edit_project" model="ir.ui.view">
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="arch" type="xml">
+            <group name="extra_settings" position="inside">
+                <group name="workload" string="Workloads">
+                    <field
+                        name="use_workload"
+                        groups="project_workload.group_project_workload"
+                    />
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>

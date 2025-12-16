@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="edit_project" model="ir.ui.view">
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project_workload.edit_project" />
+        <field name="arch" type="xml">
+            <group name="workload" position="attributes">
+                <attribute name="colspan">2</attribute>
+            </group>
+            <group name="workload" position="inside">
+                <field
+                    name="additional_workload_ids"
+                    groups="project_workload.group_project_workload"
+                    attrs="{'invisible': [('use_workload', '=', False)]}"
+                >
+                    <tree editable="bottom">
+                        <field name="type_id" />
+                        <field name="percentage" />
+                        <field name="user_id" />
+                        <field
+                            name="task_id"
+                            domain="[('project_id', '=', parent.id)]"
+                            context="{'default_project_id': parent.id}"
+                        />
+                    </tree>
+                </field>
+            </group>
+        </field>
+    </record>
+
+</odoo>
