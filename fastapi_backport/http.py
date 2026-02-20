@@ -41,10 +41,12 @@ class FastapiRequest(http.WebRequest):
     def __init__(self, *args):
         super().__init__(*args)
         self.params = {}
-        self._dispatcher = http._dispatchers.get("fastapi", FastApiDispatcher)(self)
+        self.dispatcher = http._dispatchers.get("fastapi", FastApiDispatcher)(self)
         # Ensure inner_exception exists on dispatcher since the flow on error
         # is quite different
-        self._dispatcher.inner_exception = None
+        self.dispatcher.inner_exception = None
+        # Legacy?
+        self._dispatcher = self.dispatcher
 
     def make_response(self, data, headers=None, cookies=None, status=200):
         """Helper for non-HTML responses, or HTML responses with custom
@@ -86,7 +88,7 @@ class FastapiRequest(http.WebRequest):
         return self.make_response(data, headers.to_wsgi_list(), cookies, status)
 
     def dispatch(self):
-        return self._dispatcher.dispatch(None, None)
+        return self.dispatcher.dispatch(None, None)
 
     def _handle_exception(self, exception):
         _logger.exception(
@@ -95,7 +97,7 @@ class FastapiRequest(http.WebRequest):
         # Really important in 14.0 to rollback odoo transaction on error
         # If _failed is not set the transaction will be committed
         self._failed = exception
-        return self._dispatcher.handle_error(exception)
+        return self.dispatcher.handle_error(exception)
 
 
 ori_get_request = http.root.__class__.get_request
