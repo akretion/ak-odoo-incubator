@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2026 Akretion (<http://www.akretion.com>).
+     @author Kévin Roche <kevin.roche@akretion.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="ir_cron_update_model_for_role_description" model="ir.cron">
+        <field name="name">Update Models for Role Description</field>
+        <field name="model_id" ref="base.model_ir_model" />
+        <field name="state">code</field>
+        <field name="code">model._cron_update_model_for_role_descr()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+    </record>
+
+</odoo>
