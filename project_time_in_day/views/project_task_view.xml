@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="view_task_tree2_inherited" model="ir.ui.view">
         <field name="model">project.task</field>
         <field name="inherit_id" ref="hr_timesheet.view_task_tree2_inherited" />
@@ -12,5 +11,4 @@
             </field>
         </field>
     </record>
-
 </odoo>
