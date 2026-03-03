@@ -8,15 +8,15 @@ from odoo import api, fields, models
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
-    planned_days = fields.Float(compute="_compute_planned_days", store=True)
+    allocated_days = fields.Float(compute="_compute_allocated_days", store=True)
     remaining_days = fields.Float(compute="_compute_remaining_days", store=True)
     effective_days = fields.Float(compute="_compute_effective_days", store=True)
 
-    @api.depends("planned_hours", "project_id.hour_uom_id")
-    def _compute_planned_days(self):
+    @api.depends("allocated_hours", "project_id.hour_uom_id")
+    def _compute_allocated_days(self):
         for record in self:
-            record.planned_days = record.project_id.convert_hours_to_days(
-                record.planned_hours
+            record.allocated_days = record.project_id.convert_hours_to_days(
+                record.allocated_hours
             )
 
     @api.depends("remaining_hours", "project_id.hour_uom_id")
