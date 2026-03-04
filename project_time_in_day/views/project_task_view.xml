@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_task_tree2_inherited" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="hr_timesheet.view_task_tree2_inherited" />
+        <field name="arch" type="xml">
+            <field name="allocated_hours" position="before">
+                <field
+                    name="allocated_days"
+                    sum="Initially Allocated Days"
+                    optional="show"
+                    column_invisible="not context.get('allow_timesheets', True)"
+                />
+                <field
+                    name="remaining_days"
+                    sum="Remaining Days"
+                    optional="show"
+                    column_invisible="not context.get('allow_timesheets', True)"
+                />
+                <field
+                    name="effective_days"
+                    sum="Spent Days"
+                    optional="show"
+                    column_invisible="not context.get('allow_timesheets', True)"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>
