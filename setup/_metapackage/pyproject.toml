@@ -1,0 +1,11 @@
+[project]
+name = "odoo-addons-akretion-ak-odoo-incubator"
+version = "18.0.20260304.0"
+dependencies = [
+    "odoo-addon-project_time_in_day==18.0.*",
+]
+classifiers=[
+    "Programming Language :: Python",
+    "Framework :: Odoo",
+    "Framework :: Odoo :: 18.0",
+]
