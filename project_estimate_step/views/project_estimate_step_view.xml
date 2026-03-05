@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="project_estimate_step_view_tree" model="ir.ui.view">
         <field name="model">project.estimate.step</field>
         <field name="arch" type="xml">
@@ -49,5 +48,4 @@
         sequence="20"
         action="project_estimate_step_action"
     />
-
 </odoo>
