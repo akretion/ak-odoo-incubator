@@ -33,7 +33,7 @@ class ProjectTask(models.Model):
 
     def _sync_estimate(self):
         for record in self:
-            record.planned_hours = record.project_id.convert_days_to_hours(
+            record.allocated_hours = record.project_id.convert_days_to_hours(
                 record.estimate_step_id.days
             )
 
@@ -51,8 +51,8 @@ class ProjectTask(models.Model):
         return records
 
     @api.model
-    def _read_group_stage_ids(self, stages, domain, order):
+    def _read_group_stage_ids(self, stages, domain):
         if self._context.get("no_empty_stage"):
             return stages
         else:
-            return super()._read_group_stage_ids(stages, domain, order)
+            return super()._read_group_stage_ids(stages, domain)

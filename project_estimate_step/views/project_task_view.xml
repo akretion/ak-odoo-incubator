@@ -9,7 +9,7 @@
                 <field
                     name="estimate_step_id"
                     domain="[('id', 'in', allowed_estimate_step_ids)]"
-                    attrs="{'invisible': [('allowed_estimate_step_ids', '=', False)]}"
+                    invisible="not allowed_estimate_step_ids"
                 />
             </field>
         </field>
@@ -26,12 +26,13 @@
                     context="{'group_by':'estimate_step_id'}"
                     domain="[('stage_id.to_estimate', '=', True)]"
                 />
+                <!-- does not seem used.
                 <filter
                     string="Current Sprint"
                     name="current_sprint"
                     context="{'group_by':'stage_id', 'no_empty_stage': True}"
                     domain="[('stage_id.current_sprint', '=', True)]"
-                />
+                />-->
             </filter>
         </field>
     </record>

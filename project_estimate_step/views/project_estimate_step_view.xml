@@ -3,10 +3,10 @@
     <record id="project_estimate_step_view_tree" model="ir.ui.view">
         <field name="model">project.estimate.step</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="days" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -36,7 +36,7 @@
         <field name="name">Estimate Step</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">project.estimate.step</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="project_estimate_step_view_search" />
         <field name="domain">[]</field>
         <field name="context">{}</field>
