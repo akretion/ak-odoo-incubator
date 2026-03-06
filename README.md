@@ -21,6 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
+[project_estimate_step](project_estimate_step/) | 18.0.1.0.0 |  | Add step estimation for project
 [project_time_in_day](project_time_in_day/) | 18.0.1.0.0 |  | Compute time in days
 
 [//]: # (end addons)
