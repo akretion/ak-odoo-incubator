@@ -105,7 +105,6 @@
                     string="Top Level"
                     domain="[('parent_id', '=', False)]"
                 />
-
             </search>
         </field>
     </record>
@@ -118,5 +117,4 @@
         groups="project_sprint.group_project_sprint"
         action="project_sprint_action"
     />
-
 </odoo>

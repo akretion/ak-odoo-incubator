@@ -1,0 +1,2 @@
+- [Akretion](https://www.akretion.com):
+  - Florian Mounier \<<florian.mounier@akretion.com>\>
