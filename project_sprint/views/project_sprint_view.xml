@@ -11,7 +11,7 @@
     >
         <field name="name">Project Sprint</field>
         <field name="res_model">project.sprint</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('parent_id', '=', active_id)]</field>
         <field name="context">{'default_parent_id': active_id}</field>
     </record>
@@ -19,7 +19,7 @@
     <record id="project_sprint_action" model="ir.actions.act_window">
         <field name="name">Project Sprint</field>
         <field name="res_model">project.sprint</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[]</field>
         <field name="context">{'search_default_top_level': 1}</field>
     </record>
@@ -35,7 +35,7 @@
                         string="Generate"
                         type="object"
                         class="oe_highlight"
-                        attrs="{'invisible': ['|', ('max_level', '=', True), ('id', '=', False)]}"
+                        invisible="max_level or not id"
                     />
                 </header>
                 <sheet>
@@ -44,7 +44,7 @@
                             type="action"
                             name="%(project_sprint.project_sprint_action_from_project_sprint)s"
                             icon="fa-book"
-                            attrs="{'invisible': [('max_level', '=', True)]}"
+                            invisible="max_level"
                         >
                             <field
                                 string="Sprint Children"
@@ -76,16 +76,16 @@
     </record>
 
     <record id="project_sprint_view_tree" model="ir.ui.view">
-        <field name="name">project.sprint.tree</field>
+        <field name="name">project.sprint.list</field>
         <field name="model">project.sprint</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="full_name" />
                 <field name="date_start" />
                 <field name="date_end" />
                 <field name="parent_id" />
                 <field name="level" />
-            </tree>
+            </list>
         </field>
     </record>
 
