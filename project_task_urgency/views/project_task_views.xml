@@ -14,7 +14,7 @@
                     class="alert alert-danger"
                     role="alert"
                     style="margin-bottom:0px;"
-                    attrs="{'invisible': [('is_urgent','=',False)]}"
+                    invisible="not is_urgent"
                 >
                     <p>
                         <strong>This task has been marked as urgent.</strong>
@@ -24,12 +24,8 @@
                         other tasks. </p>
                 </div>
             </sheet>
-            <field name="partner_phone" position="after">
-                <field
-                    name="is_urgent"
-                    widget="boolean_toggle"
-                    attrs="{'readonly': [('is_closed','=',True)]}"
-                />
+            <field name="partner_id" position="after">
+                <field name="is_urgent" widget="boolean_toggle" readonly="is_closed" />
             </field>
         </field>
     </record>
@@ -38,11 +34,11 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_tree2" />
         <field name="arch" type="xml">
-            <tree position="attributes">
+            <list position="attributes">
                 <attribute name="decoration-danger">
                     is_urgent
                 </attribute>
-            </tree>
+            </list>
             <field name="priority" position="before">
                 <field name="is_urgent" widget="boolean_toggle" />
             </field>

@@ -38,11 +38,11 @@ class ProjectTask(models.Model):
                     task.urgency_start_date = fields.Datetime.now()
                 task._notify_urgency()
 
-    @api.depends("is_urgent", "is_closed")
+    @api.depends("is_urgent", "state")
     def _compute_urgency_end_date(self):
         for task in self:
             if task.is_closed and task.is_urgent:
-                if task.urgency_end_date:
+                if not task.urgency_end_date:
                     task.urgency_end_date = fields.Datetime.now()
                 task._close_urgency()
 
