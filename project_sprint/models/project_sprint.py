@@ -4,7 +4,7 @@
 
 from datetime import date, timedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools import format_date
 
@@ -46,13 +46,13 @@ class ProjectSprint(models.Model):
             if record.date_start and record.date_end:
                 if record.date_start > record.date_end:
                     raise ValidationError(
-                        _("The start date must be before the end date.")
+                        self.env._("The start date must be before the end date.")
                     )
 
     @api.constrains("parent_id")
     def _check_parent_not_circular(self):
         if not self._check_recursion():
-            raise ValidationError(_("You cannot create recursive sprint."))
+            raise ValidationError(self.env._("You cannot create recursive sprint."))
 
     @api.depends("parent_id.level")
     def _compute_level(self):
@@ -101,7 +101,7 @@ class ProjectSprint(models.Model):
                 except ValueError:  # pylint: disable=except-pass
                     pass
 
-            prefix = _("Q")
+            prefix = self.env._("Q")
             sprint_name = f"{prefix}{quarter + 1}"
             quarter += 1
             if quarter == 4:
@@ -178,7 +178,7 @@ class ProjectSprint(models.Model):
                 except ValueError:  # pylint: disable=except-pass
                     pass
             month_fortnight = middle_date(start, end).day // 15
-            prefix = _("F")
+            prefix = self.env._("F")
             sprint_name = f"{prefix}{month_fortnight + 1}"
 
             week += 2
@@ -211,7 +211,7 @@ class ProjectSprint(models.Model):
         if self.level == 1:
             if not self.name.isdigit():
                 raise ValidationError(
-                    _("The name of the top level sprint must be a year.")
+                    self.env._("The name of the top level sprint must be a year.")
                 )
             if not self.date_start:
                 self.date_start = date.fromisocalendar(int(self.name), 1, SOW)
@@ -222,7 +222,7 @@ class ProjectSprint(models.Model):
                 ) - timedelta(weeks=1)
 
         if not self.date_start or not self.date_end:
-            raise ValidationError(_("The start and end date are required."))
+            raise ValidationError(self.env._("The start and end date are required."))
 
         if self.level == 4:
             return

@@ -5,8 +5,8 @@
 {
     "name": "Project Sprint",
     "summary": "Manage your projects tasks in a varying granularity",
-    "version": "16.0.1.0.0",
-    "development_status": "Alpha",
+    "version": "18.0.1.0.0",
+    "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "maintainers": ["paradoxxxzero"],

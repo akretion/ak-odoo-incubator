@@ -9,12 +9,9 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_form2" />
         <field name="arch" type="xml">
-            <field name="partner_phone" position="after">
+            <field name="partner_id" position="after">
                 <field name="use_sprint" invisible="1" />
-                <field
-                    name="sprint_id"
-                    attrs="{'invisible': [('use_sprint', '=', False)]}"
-                />
+                <field name="sprint_id" invisible="not use_sprint" />
             </field>
         </field>
     </record>
@@ -25,10 +22,7 @@
         <field name="arch" type="xml">
             <field name="milestone_id" position="after">
                 <field name="use_sprint" invisible="1" />
-                <field
-                    name="sprint_id"
-                    attrs="{'invisible': [('use_sprint', '=', False)]}"
-                />
+                <field name="sprint_id" invisible="not use_sprint" />
             </field>
         </field>
     </record>
@@ -60,7 +54,7 @@
                     domain="[('sprint_level_4_id.date_start', '&lt;=', datetime.datetime.now()), ('sprint_level_4_id.date_end', '&gt;=', datetime.datetime.now())]"
                 />
             </filter>
-            <filter name="group_create_date" position="after">
+            <filter name="last_stage_update" position="after">
                 <separator />
                 <filter
                     name="group_sprint_level_1"
