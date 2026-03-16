@@ -89,5 +89,4 @@
         parent="menu_gitlab_integration"
         action="gitlab_merge_request_action"
     />
-
 </odoo>

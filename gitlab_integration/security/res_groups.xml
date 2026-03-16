@@ -5,7 +5,6 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <record id="group_gitlab_manager" model="res.groups">
         <field name="name">Gitlab Manager</field>
         <field

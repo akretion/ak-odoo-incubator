@@ -23,7 +23,6 @@
                         password="True"
                         attrs="{'invisible': [('set_up_webhooks', '=', False)], 'required': [('set_up_webhooks', '=', True)]}"
                     />
-
                 </group>
 
                 <em>
