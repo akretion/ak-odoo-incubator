@@ -12,10 +12,8 @@
             <field name="save_http_session" position="after">
                 <field
                     name="gitlab_token"
-                    attrs="{
-                        'invisible': [('app', '!=', 'gitlab')],
-                        'required': [('app', '=', 'gitlab')]
-                    }"
+                    invisible="app != 'gitlab'"
+                    required="app == 'gitlab'"
                     password="True"
                 />
             </field>

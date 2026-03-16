@@ -83,12 +83,16 @@ class GitlabMergeRequest(models.Model):
             recordset: A filtered recordset of project.task records.
         """
         allowed_tasks = tasks.sudo().filtered(
-            lambda task: gitlab_project_id
-            in [
-                int(pid.strip())
-                for pid in (task.project_id.allowed_gitlab_id_projects or "").split(",")
-                if pid.strip().isdigit()
-            ]
+            lambda task: (
+                gitlab_project_id
+                in [
+                    int(pid.strip())
+                    for pid in (task.project_id.allowed_gitlab_id_projects or "").split(
+                        ","
+                    )
+                    if pid.strip().isdigit()
+                ]
+            )
         )
         disallowed_tasks = tasks - allowed_tasks
         if disallowed_tasks:
@@ -147,7 +151,7 @@ class GitlabMergeRequest(models.Model):
     @api.model
     def sync_merge_requests_for_project(
         self, project: dict, merge_requests: list[dict]
-    ) -> None:
+    ) -> str:
         for mr in merge_requests:
             payload = {
                 "project": project,

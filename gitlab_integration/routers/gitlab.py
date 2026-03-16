@@ -6,7 +6,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header
 
-from odoo import _, api
+from odoo import api
 from odoo.exceptions import AccessDenied
 
 from odoo.addons.fastapi.dependencies import fastapi_endpoint, odoo_env
@@ -23,7 +23,7 @@ def gitlab_webhook(
     payload: dict,
 ) -> dict:
     if x_gitlab_token != endpoint.gitlab_token:
-        raise AccessDenied(_("Invalid Gitlab token"))
+        raise AccessDenied(env._("Invalid Gitlab token"))
     if payload.get("object_kind") == "merge_request":
         env["gitlab.merge.request"].process_webhook(payload)
     return {"status": "ok"}

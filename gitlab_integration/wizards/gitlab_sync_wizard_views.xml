@@ -16,12 +16,14 @@
                     <field name="set_up_webhooks" />
                     <field
                         name="webhook_url"
-                        attrs="{'invisible': [('set_up_webhooks', '=', False)], 'required': [('set_up_webhooks', '=', True)]}"
+                        invisible="not set_up_webhooks"
+                        required="set_up_webhooks"
                     />
                     <field
                         name="webhook_secret_token"
                         password="True"
-                        attrs="{'invisible': [('set_up_webhooks', '=', False)], 'required': [('set_up_webhooks', '=', True)]}"
+                        invisible="not set_up_webhooks"
+                        required="set_up_webhooks"
                     />
                 </group>
 

@@ -4,7 +4,7 @@
 
 {
     "name": "Gitlab Integration",
-    "version": "16.0.1.0.0",
+    "version": "18.0.1.0.0",
     "author": "Akretion, Odoo Community Association (OCA)",
     "summary": "Integration with Gitlab for project management",
     "category": "Tools",
@@ -31,7 +31,6 @@
         ],
     },
     "maintainers": ["paradoxxxzero"],
-    "demo": [],
     "installable": True,
     "license": "AGPL-3",
 }

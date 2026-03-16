@@ -5,7 +5,7 @@ import logging
 
 import requests
 
-from odoo import _, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -36,14 +36,20 @@ class GitlabSyncWizard(models.TransientModel):
                 api_url, headers=headers, params=paginated_params, timeout=10
             )
             if response.status_code == 200:
-                data = response.json()
+                try:
+                    data = response.json()
+                except requests.exceptions.JSONDecodeError as e:
+                    raise UserError(
+                        f"Failed to parse Gitlab response as JSON. \n{response.text}"
+                    ) from e
                 if not data:
                     break
                 results.extend(data)
                 page += 1
             else:
                 raise UserError(
-                    f"Failed to connect to Gitlab: [{response.status_code}] {response.text}"
+                    f"Failed to connect to Gitlab: [{response.status_code}] "
+                    f"{response.text}"
                 )
         return results
 
@@ -60,9 +66,11 @@ class GitlabSyncWizard(models.TransientModel):
         headers = {"Private-Token": self.private_token}
         registered_count = 0
         if not self.webhook_url:
-            raise UserError(_("Webhook URL is required to set up webhooks."))
+            raise UserError(self.env._("Webhook URL is required to set up webhooks."))
         if not self.webhook_secret_token:
-            raise UserError(_("Webhook secret token is required to set up webhooks."))
+            raise UserError(
+                self.env._("Webhook secret token is required to set up webhooks.")
+            )
         webhook_url = self.webhook_url.rstrip("/")
         for project in projects:
             project_id = project["id"]
@@ -116,18 +124,15 @@ class GitlabSyncWizard(models.TransientModel):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": _("Gitlab Sync Queued"),
-                "message": _(
-                    "Queued sync of %(total_mrs)d merge requests for "
-                    "projects: %(project_names)s.\n"
-                    "%(total_webhooks)d webhooks registered."
-                    % {
-                        "total_mrs": total_mrs,
-                        "project_names": ", ".join(
-                            project["name"] for project in projects
-                        ),
-                        "total_webhooks": total_webhooks,
-                    }
+                "title": self.env._("Gitlab Sync Queued"),
+                "message": self.env._(
+                    "Queued sync of {total_mrs} merge requests for "
+                    "projects: {project_names}.\n"
+                    "{total_webhooks} webhooks registered."
+                ).format(
+                    total_mrs=total_mrs,
+                    project_names=", ".join(project["name"] for project in projects),
+                    total_webhooks=total_webhooks,
                 ),
                 "sticky": False,
                 "next": {"type": "ir.actions.act_window_close"},

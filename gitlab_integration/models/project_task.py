@@ -11,5 +11,4 @@ class ProjectTask(models.Model):
         comodel_name="gitlab.merge.request",
         string="Related Gitlab MRs",
         help="Gitlab Merge Requests associated with this task.",
-        # readonly=True,
     )

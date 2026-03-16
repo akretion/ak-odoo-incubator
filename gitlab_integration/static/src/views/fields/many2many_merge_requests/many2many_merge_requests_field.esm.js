@@ -1,14 +1,22 @@
-/** @odoo-module **/
 // Copyright 2025 Akretion (http://www.akretion.com).
 // @author Florian Mounier <florian.mounier@akretion.com>
 // License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import {Many2ManyTagsField} from "@web/views/fields/many2many_tags/many2many_tags_field";
+import {
+    Many2ManyTagsField,
+    many2ManyTagsField,
+} from "@web/views/fields/many2many_tags/many2many_tags_field";
 import {Many2XAutocomplete} from "@web/views/fields/relational_utils";
 import {MergeRequestsList} from "./merge_requests_list.esm";
 import {registry} from "@web/core/registry";
 
 export class Many2ManyMergeRequestsField extends Many2ManyTagsField {
+    static template = "gitlab_integration.Many2ManyMergeRequestsField";
+    static components = {
+        Many2XAutocomplete,
+        MergeRequestsList,
+    };
+
     getMergeRequestProps(record) {
         return {
             id: record.id,
@@ -36,28 +44,39 @@ ${record.data.description}`,
     }
 
     get mrs() {
-        return this.props.value.records.map((record) =>
+        return this.props.record.data[this.props.name].records.map((record) =>
             this.getMergeRequestProps(record)
         );
     }
 }
-Many2ManyMergeRequestsField.fieldsToFetch = {
-    project_path: {name: "project_path", type: "char"},
-    project_namespace: {name: "project_namespace", type: "char"},
-    project_name: {name: "project_name", type: "char"},
-    name: {name: "name", type: "char"},
-    description: {name: "description", type: "text"},
-    gitlab_iid: {name: "gitlab_iid", type: "integer"},
-    state: {name: "state", type: "selection"},
-    draft: {name: "draft", type: "boolean"},
-    web_url: {name: "web_url", type: "char"},
-};
-Many2ManyMergeRequestsField.template = "gitlab_integration.Many2ManyMergeRequestsField";
-Many2ManyMergeRequestsField.components = {
-    Many2XAutocomplete,
-    MergeRequestsList,
+
+export const many2ManyMergeRequestsField = {
+    ...many2ManyTagsField,
+    component: Many2ManyMergeRequestsField,
+    displayName: "MergeRequests",
+    supportedTypes: ["many2many"],
+    relatedFields: [
+        {name: "project_path", type: "char"},
+        {name: "project_namespace", type: "char"},
+        {name: "project_name", type: "char"},
+        {name: "name", type: "char"},
+        {name: "description", type: "text"},
+        {name: "gitlab_iid", type: "integer"},
+        {
+            name: "state",
+            type: "selection",
+            selection: [
+                ["opened", "Opened"],
+                ["closed", "Closed"],
+                ["merged", "Merged"],
+                ["locked", "Locked"],
+            ],
+        },
+        {name: "draft", type: "boolean"},
+        {name: "web_url", type: "char"},
+    ],
 };
 
 registry
     .category("fields")
-    .add("many2many_merge_requests", Many2ManyMergeRequestsField);
+    .add("many2many_merge_requests", many2ManyMergeRequestsField);

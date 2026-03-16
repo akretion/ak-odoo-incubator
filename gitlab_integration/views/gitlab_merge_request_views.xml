@@ -8,7 +8,7 @@
     <record id="gitlab_merge_request_action" model="ir.actions.act_window">
         <field name="name">Gitlab Merge Requests</field>
         <field name="res_model">gitlab.merge.request</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <record id="gitlab_merge_request_view_form" model="ir.ui.view">
@@ -24,7 +24,7 @@
                     />
                 </header>
                 <sheet>
-                    <div class="oe_title" attrs="{'invisible': [('name', '=', False)]}">
+                    <div class="oe_title" invisible="not name">
                         <h1>
                             <field name="name" />
                         </h1>
@@ -46,13 +46,12 @@
                     <notebook>
                         <page string="Related Tasks">
                             <field name="task_ids">
-                                <tree editable="bottom">
-                                    <field name="company_id" invisible="True" />
+                                <list editable="bottom">
                                     <field name="name" />
                                     <field name="description" />
                                     <field name="project_id" />
                                     <field name="stage_id" />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -62,16 +61,16 @@
     </record>
 
     <record id="gitlab_merge_request_view_tree" model="ir.ui.view">
-        <field name="name">gitlab.merge.request.tree</field>
+        <field name="name">gitlab.merge.request.list</field>
         <field name="model">gitlab.merge.request</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="gitlab_iid" />
                 <field name="state" />
                 <field name="web_url" widget="url" />
                 <field name="project_name" />
-            </tree>
+            </list>
         </field>
     </record>
 
