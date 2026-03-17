@@ -59,13 +59,19 @@ class ProjectTask(models.Model):
     def _sync_user_activities(self):
         if not self.user_ids:
             for user in self.project_id.urgency_user_ids:
-                self.activity_schedule(
-                    "project_task_urgency.mail_activity_data_urgency_to_assign",
-                    summary=_("Task marked as urgent to assign"),
-                    note=_("The task has been marked as urgent and must be assigned."),
+                if not self.activity_search(
+                    ["project_task_urgency.mail_activity_data_urgency_to_assign"],
                     user_id=user.id,
-                    date_deadline=fields.Date.context_today(self),
-                )
+                ):
+                    self.activity_schedule(
+                        "project_task_urgency.mail_activity_data_urgency_to_assign",
+                        summary=_("Task marked as urgent to assign"),
+                        note=_(
+                            "The task has been marked as urgent and must be assigned."
+                        ),
+                        user_id=user.id,
+                        date_deadline=fields.Date.context_today(self),
+                    )
             return
 
         self.activity_feedback(

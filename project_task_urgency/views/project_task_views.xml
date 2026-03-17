@@ -72,10 +72,9 @@
             <field name="priority" position="after">
                 <field name="is_urgent" />
             </field>
-
-            <xpath expr="//t[@t-name='kanban-box']/div" position="attributes">
+            <xpath expr="//t[@t-name='card']/main" position="attributes">
                 <attribute name="t-attf-style">
-                    {{record.is_urgent.raw_value ? 'background-color: #f8d7da !important; border-color: #f5c2c7 !important' : ''}}
+                    {{ record.is_urgent.raw_value ? 'background-color: #f8d7da !important; border-color: #f5c2c7 !important; border-radius: 8px;' : '' }}
                 </attribute>
             </xpath>
         </field>
