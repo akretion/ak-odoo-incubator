@@ -23,6 +23,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [gitlab_integration](gitlab_integration/) | 18.0.1.0.0 | <a href='https://github.com/paradoxxxzero'><img src='https://github.com/paradoxxxzero.png' width='32' height='32' style='border-radius:50%;' alt='paradoxxxzero'/></a> | Integration with Gitlab for project management
 [project_estimate_step](project_estimate_step/) | 18.0.1.0.0 |  | Add step estimation for project
+[project_task_urgency](project_task_urgency/) | 18.0.1.0.0 | <a href='https://github.com/paradoxxxzero'><img src='https://github.com/paradoxxxzero.png' width='32' height='32' style='border-radius:50%;' alt='paradoxxxzero'/></a> | Add urgency to project tasks
 [project_time_in_day](project_time_in_day/) | 18.0.1.0.0 |  | Compute time in days
 
 [//]: # (end addons)
