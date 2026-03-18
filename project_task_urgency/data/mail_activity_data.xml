@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2025 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="mail_activity_data_urgency_to_assign" model="mail.activity.type">
+        <field name="name">Urgency To Assign</field>
+        <field name="icon">fa-bell</field>
+    </record>
+    <record id="mail_activity_data_urgency_todo" model="mail.activity.type">
+        <field name="name">Urgency Todo</field>
+        <field name="icon">fa-exclamation-triangle</field>
+    </record>
+</odoo>
