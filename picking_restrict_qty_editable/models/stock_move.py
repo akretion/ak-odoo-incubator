@@ -25,11 +25,12 @@ class StockMove(models.Model):
                 move.is_initial_demand_editable = False
 
     def _quantity_done_set(self):
-        if self.state in ["done", "cancel"]:
-            raise UserError(
-                _(
-                    "You cannot modify the done quantity of a move that "
-                    "is done or cancelled."
+        for move in self:
+            if move.state in ["done", "cancel"]:
+                raise UserError(
+                    _(
+                        "You cannot modify the done quantity of a move that "
+                        "is done or cancelled."
+                    )
                 )
-            )
         return super()._quantity_done_set()
