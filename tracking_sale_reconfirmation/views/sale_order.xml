@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2026 Akretion (<http://www.akretion.com>).
+@author Kévin Roche <kevin.roche@akretion.com>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_sale_order_form_cancel_tracking" model="ir.ui.view">
+        <field name="name">sale.order.form.cancel.tracking</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="active_cancel_tracking_id" invisible="1" />
+                <field name="cancel_tracking_ids" invisible="1" />
+                <button
+                    name="action_view_cancel_trackings"
+                    type="object"
+                    class="oe_stat_button"
+                    groups="tracking_sale_reconfirmation.group_tracking_sale_reconfirmation"
+                    icon="fa-history"
+                    attrs="{'invisible': [('cancel_tracking_count', '=', 0)]}"
+                >
+                    <field
+                        name="cancel_tracking_count"
+                        widget="statinfo"
+                        string="Cancel Cycles"
+                    />
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
