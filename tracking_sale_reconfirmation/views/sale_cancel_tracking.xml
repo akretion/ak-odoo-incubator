@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2026 Akretion (<http://www.akretion.com>).
+@author Kévin Roche <kevin.roche@akretion.com>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_sale_cancel_tracking_tree" model="ir.ui.view">
+        <field name="name">sale.cancel.tracking.tree</field>
+        <field name="model">sale.cancel.tracking</field>
+        <field name="arch" type="xml">
+            <tree
+                string="Cancel / Reconfirm Cycles"
+                decoration-success="state == 'done'"
+                decoration-warning="state == 'draft'"
+                decoration-danger="state == 'cancelled'"
+            >
+                <field name="sale_order_id" />
+                <field name="partner_id" />
+                <field name="user_id" />
+                <field name="cancel_date" />
+                <field name="draft_date" />
+                <field name="confirm_date" />
+                <field name="change_count" string="# Changes" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-success="state == 'done'"
+                    decoration-warning="state == 'draft'"
+                    decoration-danger="state == 'cancelled'"
+                />
+            </tree>
+        </field>
+    </record>
+    <record id="view_sale_cancel_tracking_form" model="ir.ui.view">
+        <field name="name">sale.cancel.tracking.form</field>
+        <field name="model">sale.cancel.tracking</field>
+        <field name="arch" type="xml">
+            <form string="Cancel / Reconfirm Cycle" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Order">
+                            <field name="sale_order_id" />
+                            <field name="partner_id" />
+                            <field name="user_id" />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
+                        </group>
+                        <group string="Cycle">
+                            <field name="state" />
+                            <field name="cancel_date" />
+                            <field name="draft_date" />
+                            <field name="confirm_date" />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Changes" name="changes">
+                            <field name="change_line_ids" nolabel="1">
+                                <tree create="false" delete="false" editable="false">
+                                    <field name="change_date" />
+                                    <field name="source" />
+                                    <field name="field_label" string="Field" />
+                                    <field name="old_value" string="Before" />
+                                    <field name="new_value" string="After" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_cancel_tracking_search" model="ir.ui.view">
+        <field name="name">sale.cancel.tracking.search</field>
+        <field name="model">sale.cancel.tracking</field>
+        <field name="arch" type="xml">
+            <search string="Cancel Tracking">
+                <field name="sale_order_id" />
+                <field name="partner_id" />
+                <field name="user_id" />
+                <separator />
+                <filter
+                    string="Cancelled"
+                    name="cancelled"
+                    domain="[('state', '=', 'cancelled')]"
+                />
+                <filter
+                    string="In Draft"
+                    name="in_draft"
+                    domain="[('state', '=', 'draft')]"
+                />
+                <filter
+                    string="Reconfirmed"
+                    name="done"
+                    domain="[('state', '=', 'done')]"
+                />
+                <separator />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Customer"
+                        name="group_partner"
+                        context="{'group_by': 'partner_id'}"
+                    />
+                    <filter
+                        string="Salesperson"
+                        name="group_user"
+                        context="{'group_by': 'user_id'}"
+                    />
+                    <filter
+                        string="State"
+                        name="group_state"
+                        context="{'group_by': 'state'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sale_cancel_tracking_line_tree" model="ir.ui.view">
+        <field name="name">sale.cancel.tracking.line.tree</field>
+        <field name="model">sale.cancel.tracking.line</field>
+        <field name="arch" type="xml">
+            <tree string="Change Lines">
+                <field name="sale_order_id" />
+                <field name="tracking_id" />
+                <field name="change_date" />
+                <field name="source" />
+                <field name="field_label" string="Field" />
+                <field name="old_value" string="Before" />
+                <field name="new_value" string="After" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_cancel_tracking_line_search" model="ir.ui.view">
+        <field name="name">sale.cancel.tracking.line.search</field>
+        <field name="model">sale.cancel.tracking.line</field>
+        <field name="arch" type="xml">
+            <search string="Change Lines">
+                <field name="sale_order_id" />
+                <field name="source" />
+                <field name="field_label" string="Field" />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Field"
+                        name="group_field"
+                        context="{'group_by': 'field_label'}"
+                    />
+                    <filter
+                        string="Source"
+                        name="group_source"
+                        context="{'group_by': 'source'}"
+                    />
+                    <filter
+                        string="Sale Order"
+                        name="group_order"
+                        context="{'group_by': 'sale_order_id'}"
+                    />
+                    <filter
+                        string="Month"
+                        name="group_month"
+                        context="{'group_by': 'change_date:month'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_sale_cancel_tracking_line_pivot" model="ir.ui.view">
+        <field name="name">sale.cancel.tracking.line.pivot</field>
+        <field name="model">sale.cancel.tracking.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Change Line Statistics">
+                <field name="field_label" type="row" />
+                <field name="source" type="col" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_sale_cancel_tracking_line_graph" model="ir.ui.view">
+        <field name="name">sale.cancel.tracking.line.graph</field>
+        <field name="model">sale.cancel.tracking.line</field>
+        <field name="arch" type="xml">
+            <graph string="Change Line Statistics" type="bar">
+                <field name="field_label" type="row" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_sale_cancel_tracking_line" model="ir.actions.act_window">
+        <field name="name">Change Lines</field>
+        <field name="res_model">sale.cancel.tracking.line</field>
+        <field name="view_mode">tree,pivot,graph</field>
+        <field name="search_view_id" ref="view_sale_cancel_tracking_line_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No change lines recorded yet.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_sale_cancel_tracking_line"
+        name="Change Lines"
+        parent="sale.menu_sale_config"
+        action="action_sale_cancel_tracking_line"
+        groups="tracking_sale_reconfirmation.group_tracking_sale_reconfirmation"
+        sequence="6"
+    />
+</odoo>
