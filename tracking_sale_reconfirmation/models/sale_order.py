@@ -45,8 +45,11 @@ def _capture_snapshot(record, model_name):
     fnames = _get_tracked_fnames(record.env, model_name)
     snapshot = {}
     for fname in fnames:
-        if fname in record._fields and fname not in _blacklisted_fnames(
-            record.env, model_name
+        field = record._fields.get(fname)
+        if (
+            field
+            and field.type not in ("one2many", "many2many")
+            and fname not in _blacklisted_fnames(record.env, model_name)
         ):
             snapshot[fname] = _field_display(record, fname)
     return snapshot
@@ -55,7 +58,8 @@ def _capture_snapshot(record, model_name):
 def _diff_and_record(env, record, model_name, before, tracking, source):
     fnames = _get_tracked_fnames(env, model_name)
     for fname in fnames:
-        if fname not in record._fields:
+        field = record._fields.get(fname)
+        if not field or field.type in ("one2many", "many2many"):
             continue
         old = before.get(fname, "")
         new = _field_display(record, fname)
@@ -93,21 +97,20 @@ class SaleOrder(models.Model):
 
     def action_cancel(self):
         res = super().action_cancel()
-        for order in self.filtered(lambda o: o.state == "cancel"):
-            tracking = self.env["sale.cancel.tracking"].create(
-                {
-                    "sale_order_id": order.id,
-                    "cancel_date": fields.Datetime.now(),
-                    "state": "cancelled",
-                }
-            )
-            order.active_cancel_tracking_id = tracking
+        for order in self:
+            if not order.active_cancel_tracking_id:
+                tracking = self.env["sale.cancel.tracking"].create(
+                    {
+                        "sale_order_id": order.id,
+                        "cancel_date": fields.Datetime.now(),
+                        "state": "cancelled",
+                    }
+                )
+                order.active_cancel_tracking_id = tracking
         return res
 
     def action_draft(self):
-        orders_with_tracking = self.filtered(
-            lambda o: o.state == "cancel" and o.active_cancel_tracking_id
-        )
+        orders_with_tracking = self.filtered(lambda o: o.active_cancel_tracking_id)
         res = super().action_draft()
         for order in orders_with_tracking:
             order.active_cancel_tracking_id.write(
@@ -134,13 +137,19 @@ class SaleOrder(models.Model):
     def write(self, vals):
         snapshots_before = {}
         for order in self:
-            if order.active_cancel_tracking_id and order.state == "draft":
+            if (
+                order.active_cancel_tracking_id
+                and order.active_cancel_tracking_id.state == "draft"
+            ):
                 snapshots_before[order.id] = _capture_snapshot(order, "sale.order")
 
         res = super().write(vals)
 
         for order in self:
-            if not order.active_cancel_tracking_id or order.state != "draft":
+            if (
+                not order.active_cancel_tracking_id
+                or order.active_cancel_tracking_id.state != "draft"
+            ):
                 continue
             before = snapshots_before.get(order.id)
             if not before:
@@ -173,11 +182,18 @@ class SaleOrderLine(models.Model):
     def write(self, vals):
         snapshots_before = {}
         for line in self:
-            order = line.order_id
+            if (
+                line.order_id.active_cancel_tracking_id
+                and line.order_id.active_cancel_tracking_id.state == "draft"
+            ):
+                snapshots_before[line.id] = _capture_snapshot(line, "sale.order.line")
         res = super().write(vals)
         for line in self:
             order = line.order_id
-            if not order.active_cancel_tracking_id or order.state != "draft":
+            if (
+                not order.active_cancel_tracking_id
+                or order.active_cancel_tracking_id.state != "draft"
+            ):
                 continue
             before = snapshots_before.get(line.id)
             if not before:
@@ -197,7 +213,10 @@ class SaleOrderLine(models.Model):
         lines = super().create(vals_list)
         for line in lines:
             order = line.order_id
-            if order.active_cancel_tracking_id and order.state == "draft":
+            if (
+                order.active_cancel_tracking_id
+                and order.active_cancel_tracking_id.state == "draft"
+            ):
                 order.active_cancel_tracking_id._add_change(
                     source=f"line: {line.product_id.display_name or '?'}",
                     field_label="Line added",
@@ -205,25 +224,3 @@ class SaleOrderLine(models.Model):
                     new_value=line.display_name or line.name or "",
                 )
         return lines
-
-    def unlink(self):
-        to_track = []
-        for line in self:
-            order = line.order_id
-            if order.active_cancel_tracking_id and order.state == "draft":
-                to_track.append(
-                    (
-                        order.active_cancel_tracking_id,
-                        f"line: {line.product_id.display_name or '?'}",
-                        line.display_name or line.name or "",
-                    )
-                )
-        res = super().unlink()
-        for tracking, source, label in to_track:
-            tracking._add_change(
-                source=source,
-                field_label="Line removed",
-                old_value=label,
-                new_value="",
-            )
-        return res

@@ -9,6 +9,12 @@ class SaleCancelTracking(models.Model):
     _name = "sale.cancel.tracking"
     _description = "Sale Cancel/Reconfirm Tracking"
 
+    name = fields.Char(
+        compute="_compute_name",
+        string="Description",
+        store=True,
+    )
+
     sale_order_id = fields.Many2one(
         comodel_name="sale.order",
     )
@@ -73,8 +79,14 @@ class SaleCancelTracking(models.Model):
                 "old_value": str(old_value) if old_value is not None else "",
                 "new_value": str(new_value) if new_value is not None else "",
                 "change_date": fields.Datetime.now(),
+                "sale_order_id": self.sale_order_id.id,
             }
         )
+
+    @api.depends("sale_order_id")
+    def _compute_name(self):
+        for rec in self:
+            rec.name = f"{rec.sale_order_id.name}-{len(rec.sale_order_id.cancel_tracking_ids) or 1}"
 
 
 class SaleCancelTrackingLine(models.Model):
@@ -85,7 +97,7 @@ class SaleCancelTrackingLine(models.Model):
         comodel_name="sale.cancel.tracking",
     )
     sale_order_id = fields.Many2one(
-        related="tracking_id.sale_order_id",
+        comodel_name="sale.order",
     )
 
     change_date = fields.Datetime(

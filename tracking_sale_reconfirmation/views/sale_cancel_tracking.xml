@@ -206,6 +206,7 @@ License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
         name="Change Lines"
         parent="sale.menu_sale_config"
         action="action_sale_cancel_tracking_line"
+        groups="tracking_sale_reconfirmation.group_tracking_sale_reconfirmation"
         sequence="6"
     />
 </odoo>

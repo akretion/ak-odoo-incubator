@@ -22,19 +22,15 @@ class TestTrackingSaleReconfirmation(TransactionCase):
                     [("model_id", "=", ir_model.id), ("name", "=", fname)]
                 )
                 field.custom_tracking = True
-        cls.env["ir.model"].clear_caches()
-
-    def setUp(self):
-        super().setUp()
-        self.order = self.env["sale.order"].create(
+        cls.order = cls.env["sale.order"].create(
             {
-                "partner_id": self.partner.id,
+                "partner_id": cls.partner.id,
                 "order_line": [
                     (
                         0,
                         0,
                         {
-                            "product_id": self.product.id,
+                            "product_id": cls.product.id,
                             "product_uom_qty": 2,
                             "price_unit": 100,
                         },
@@ -42,10 +38,10 @@ class TestTrackingSaleReconfirmation(TransactionCase):
                 ],
             }
         )
-        self.order.action_confirm()
-        self.order.action_cancel()
-        self.order.action_draft()
-        self.tracking = self.order.active_cancel_tracking_id
+        cls.order.action_confirm()
+        cls.order.action_cancel()
+        cls.order.action_draft()
+        cls.tracking = cls.order.active_cancel_tracking_id
 
     def test_reset_to_draft_updates_tracking(self):
         self.assertEqual(self.tracking.state, "draft")
@@ -97,14 +93,6 @@ class TestTrackingSaleReconfirmation(TransactionCase):
         )
         change = self.tracking.change_line_ids.filtered(
             lambda l: l.field_label == "Line added"
-        )
-        self.assertTrue(change)
-
-    def test_line_removed_recorded(self):
-        line = self.order.order_line[0]
-        line.unlink()
-        change = self.tracking.change_line_ids.filtered(
-            lambda l: l.field_label == "Line removed"
         )
         self.assertTrue(change)
 
