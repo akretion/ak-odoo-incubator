@@ -29,6 +29,14 @@ class ProjectTask(models.Model):
         store=True,
         help="The duration of the task urgency in hours.",
     )
+    show_urgent = fields.Boolean(compute="_compute_show_urgent")
+
+    def _compute_show_urgent(self):
+        for task in self:
+            if task.project_id.urgency_user_ids:
+                task.show_urgent = True
+            else:
+                task.show_urgent = False
 
     @api.depends("is_urgent")
     def _compute_urgency_start_date(self):

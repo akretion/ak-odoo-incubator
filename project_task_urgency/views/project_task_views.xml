@@ -25,7 +25,12 @@
                 </div>
             </sheet>
             <field name="partner_id" position="after">
-                <field name="is_urgent" widget="boolean_toggle" readonly="is_closed" />
+                <field
+                    name="is_urgent"
+                    widget="boolean_toggle"
+                    readonly="is_closed"
+                    invisible="not show_urgent"
+                />
             </field>
         </field>
     </record>
@@ -40,7 +45,11 @@
                 </attribute>
             </list>
             <field name="priority" position="before">
-                <field name="is_urgent" widget="boolean_toggle" />
+                <field
+                    name="is_urgent"
+                    widget="boolean_toggle"
+                    invisible="not show_urgent"
+                />
             </field>
             <field name="stage_id" position="after">
                 <field name="urgency_start_date" optional="hide" />
