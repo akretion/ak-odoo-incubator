@@ -36,7 +36,16 @@ class ProjectTask(models.Model):
             if not task.is_closed and task.is_urgent:
                 if not task.urgency_start_date:
                     task.urgency_start_date = fields.Datetime.now()
-                task._notify_urgency()
+
+    def write(self, vals):
+        res = super().write(vals)
+        if "is_urgent" in vals:
+            for task in self:
+                if task.is_urgent:
+                    task._notify_urgency()
+                else:
+                    task._cancel_urgency()
+        return res
 
     @api.depends("is_urgent", "state")
     def _compute_urgency_end_date(self):
@@ -103,6 +112,20 @@ class ProjectTask(models.Model):
         self._sync_user_activities()
         self.message_post(
             body=_("The task has been marked as urgent."),
+            subtype_id=self.env.ref("mail.mt_note").id,
+        )
+
+    def _cancel_urgency(self):
+        self.ensure_one()
+        self.activity_feedback(
+            [
+                "project_task_urgency.mail_activity_data_urgency_to_assign",
+                "project_task_urgency.mail_activity_data_urgency_todo",
+            ],
+            feedback=_("Task is no longer urgent."),
+        )
+        self.message_post(
+            body=_("The task is no longer marked as urgent."),
             subtype_id=self.env.ref("mail.mt_note").id,
         )
 
