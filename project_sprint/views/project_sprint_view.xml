@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Copyright 2025 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record
+        id="project_sprint_action_from_project_sprint"
+        model="ir.actions.act_window"
+    >
+        <field name="name">Project Sprint</field>
+        <field name="res_model">project.sprint</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('parent_id', '=', active_id)]</field>
+        <field name="context">{'default_parent_id': active_id}</field>
+    </record>
+
+    <record id="project_sprint_action" model="ir.actions.act_window">
+        <field name="name">Project Sprint</field>
+        <field name="res_model">project.sprint</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_top_level': 1}</field>
+    </record>
+
+    <record id="project_sprint_view_form" model="ir.ui.view">
+        <field name="name">project.sprint.form</field>
+        <field name="model">project.sprint</field>
+        <field name="arch" type="xml">
+            <form string="Sprint">
+                <header>
+                    <button
+                        name="action_generate"
+                        string="Generate"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="max_level or not id"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            type="action"
+                            name="%(project_sprint.project_sprint_action_from_project_sprint)s"
+                            icon="fa-book"
+                            invisible="max_level"
+                        >
+                            <field
+                                string="Sprint Children"
+                                name="child_count"
+                                widget="statinfo"
+                            />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="parent_id" />
+                            <field name="max_level" invisible="1" />
+                            <field name="level" />
+                        </group>
+                        <group>
+                            <field name="date_start" />
+                            <field name="date_end" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="project_sprint_view_tree" model="ir.ui.view">
+        <field name="name">project.sprint.list</field>
+        <field name="model">project.sprint</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="full_name" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="parent_id" />
+                <field name="level" />
+            </list>
+        </field>
+    </record>
+
+    <record id="project_sprint_view_search" model="ir.ui.view">
+        <field name="name">project.sprint.search</field>
+        <field name="model">project.sprint</field>
+        <field name="arch" type="xml">
+            <search string="Sprints">
+                <field name="full_name" />
+                <field name="parent_id" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="level" />
+                <separator />
+                <filter
+                    name="top_level"
+                    string="Top Level"
+                    domain="[('parent_id', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <menuitem
+        id="project_sprint_menu"
+        parent="project.menu_project_config"
+        sequence="20"
+        name="Sprint"
+        groups="project_sprint.group_project_sprint"
+        action="project_sprint_action"
+    />
+</odoo>

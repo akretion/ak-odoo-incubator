@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Copyright 2025 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="use_sprint" invisible="1" />
+                <field name="sprint_id" invisible="not use_sprint" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_task_tree2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2" />
+        <field name="arch" type="xml">
+            <field name="milestone_id" position="after">
+                <field name="use_sprint" invisible="1" />
+                <field name="sprint_id" invisible="not use_sprint" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_task_search_form" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form" />
+        <field name="arch" type="xml">
+            <filter name="unassigned" position="after">
+                <separator />
+                <filter
+                    name="current_sprint_level_1"
+                    string="Current Sprint By Year"
+                    domain="[('sprint_level_1_id.date_start', '&lt;=', datetime.datetime.now()), ('sprint_level_1_id.date_end', '&gt;=', datetime.datetime.now())]"
+                />
+                <filter
+                    name="current_sprint_level_2"
+                    string="Current Sprint By Quarter"
+                    domain="[('sprint_level_2_id.date_start', '&lt;=', datetime.datetime.now()), ('sprint_level_2_id.date_end', '&gt;=', datetime.datetime.now())]"
+                />
+                <filter
+                    name="current_sprint_level_3"
+                    string="Current Sprint By Month"
+                    domain="[('sprint_level_3_id.date_start', '&lt;=', datetime.datetime.now()), ('sprint_level_3_id.date_end', '&gt;=', datetime.datetime.now())]"
+                />
+                <filter
+                    name="current_sprint_level_4"
+                    string="Current Sprint By Fortnight"
+                    domain="[('sprint_level_4_id.date_start', '&lt;=', datetime.datetime.now()), ('sprint_level_4_id.date_end', '&gt;=', datetime.datetime.now())]"
+                />
+            </filter>
+            <filter name="last_stage_update" position="after">
+                <separator />
+                <filter
+                    name="group_sprint_level_1"
+                    string="Sprint By Year"
+                    context="{'group_by': 'sprint_level_1_id'}"
+                />
+                <filter
+                    name="group_sprint_level_2"
+                    string="Sprint By Quarter"
+                    context="{'group_by': 'sprint_level_2_id'}"
+                />
+                <filter
+                    name="group_sprint_level_3"
+                    string="Sprint By Month"
+                    context="{'group_by': 'sprint_level_3_id'}"
+                />
+                <filter
+                    name="group_sprint_level_4"
+                    string="Sprint By Fortnight"
+                    context="{'group_by': 'sprint_level_4_id'}"
+                />
+            </filter>
+        </field>
+    </record>
+</odoo>
