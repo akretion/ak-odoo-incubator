@@ -1,0 +1,1 @@
+This module aimes to fix a strange behavior of the standard, where Odoo give a proforma PDF on posted invoices, if it has not been sent properly. (If the official pdf is not linked to the invoice in Odoo)

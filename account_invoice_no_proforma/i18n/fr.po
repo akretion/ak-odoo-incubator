@@ -1,0 +1,26 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* custom_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-28 10:10+0000\n"
+"PO-Revision-Date: 2026-02-28 10:10+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_report
+#: model_terms:ir.ui.view,arch_db:custom_report.report_invoice_document_inherit
+msgid "Option to pay tax on debits"
+msgstr "Option pour le paiement de la taxe d'après les débits"
+
+#. module: custom_report
+#: model_terms:ir.ui.view,arch_db:custom_report.report_invoice_document_inherit
+msgid "VAT on payment"
+msgstr "TVA sur encaissement"
