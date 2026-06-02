@@ -21,6 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
+[account_invoice_no_proforma](account_invoice_no_proforma/) | 18.0.1.0.0 |  | Avoid proforma invoice PDF when invoice is posted. If the pdf is not attached to the invoice because pdf was not properly sent by Odoo, then when you print the pdf, it is a PROFORMA invoice. This modules aims to avoid this proforma mention.
 [gitlab_integration](gitlab_integration/) | 18.0.1.0.0 | <a href='https://github.com/paradoxxxzero'><img src='https://github.com/paradoxxxzero.png' width='32' height='32' style='border-radius:50%;' alt='paradoxxxzero'/></a> | Integration with Gitlab for project management
 [project_estimate_step](project_estimate_step/) | 18.0.1.0.0 |  | Add step estimation for project
 [project_task_urgency](project_task_urgency/) | 18.0.1.0.0 | <a href='https://github.com/paradoxxxzero'><img src='https://github.com/paradoxxxzero.png' width='32' height='32' style='border-radius:50%;' alt='paradoxxxzero'/></a> | Add urgency to project tasks
