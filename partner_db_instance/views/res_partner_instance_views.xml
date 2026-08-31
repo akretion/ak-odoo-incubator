@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2026 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="res_partner_instance_form_view" model="ir.ui.view">
+        <field name="name">res.partner.instance.form</field>
+        <field name="model">res.partner.instance</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Partner Instance">
+                <header>
+                    <button
+                        name="action_deploy"
+                        type="object"
+                        string="Deploy"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+                    <button
+                        name="action_archive"
+                        type="object"
+                        string="Archive"
+                        class="btn-danger"
+                        invisible="state != 'live'"
+                    />
+                    <button
+                        name="action_unarchive"
+                        type="object"
+                        string="Redeploy"
+                        class="btn-primary"
+                        invisible="state != 'archived'"
+                    />
+                    <button
+                        name="action_delete"
+                        type="object"
+                        string="Delete"
+                        class="btn-danger"
+                        invisible="state != 'archived'"
+                        confirm="Are you really sure you want to delete this instance? ALL DATA FOR THIS INSTANCE WILL BE LOST"
+                    />
+                    <button
+                        name="action_connect"
+                        type="object"
+                        string="Connect"
+                        class="btn-info"
+                        invisible="state != 'live'"
+                    />
+
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" />
+                            <field name="url" widget="url" />
+                        </group>
+                        <group>
+                            <field name="subdomain" />
+                            <field name="db_name" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_instance_list_view" model="ir.ui.view">
+        <field name="name">res.partner.instance.list</field>
+        <field name="model">res.partner.instance</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string="Partner Instances">
+                <field name="partner_id" />
+                <field name="subdomain" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-info="state == 'draft'"
+                    decoration-success="state == 'live'"
+                    decoration-danger="state == 'archived'"
+                />
+                <field name="db_name" />
+            </list>
+        </field>
+    </record>
+
+    <record id="res_partner_instance_search_view" model="ir.ui.view">
+        <field name="name">res.partner.instance.search</field>
+        <field name="model">res.partner.instance</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Partner Instances">
+                <field name="partner_id" />
+                <field name="subdomain" />
+                <field name="state" />
+                <field name="db_name" />
+            </search>
+        </field>
+    </record>
+
+    <record id="action_res_partner_instance" model="ir.actions.act_window">
+        <field name="name">Partner Instances</field>
+        <field name="res_model">res.partner.instance</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="res_partner_instance_search_view" />
+    </record>
+
+    <menuitem
+        id="menu_res_partner_instance"
+        name="Partner Instances"
+        action="action_res_partner_instance"
+        parent="contacts.res_partner_menu_config"
+        sequence="99"
+    />
+</odoo>
