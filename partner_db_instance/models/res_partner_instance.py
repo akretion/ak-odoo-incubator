@@ -18,7 +18,6 @@ from odoo.service.db import (
     exp_rename,
     list_dbs,
 )
-from odoo.sql_db import close_db
 from odoo.tools import config
 
 _logger = getLogger(__name__)
@@ -64,7 +63,6 @@ class ResPartnerInstance(models.Model):
     _sql_constraints = (
         ("subdomain_unique", "UNIQUE(subdomain)", "Subdomain must be unique"),
         ("partner_unique", "UNIQUE(partner_id)", "Partner must be unique"),
-        ("db_name_unique", "UNIQUE(db_name)", "DB name must be unique"),
     )
 
     @api.constrains("subdomain")
@@ -90,6 +88,13 @@ class ResPartnerInstance(models.Model):
         if not instance_admin_password:
             raise ValueError("partner_db_instance_password is not configured")
         return instance_admin_password
+
+    @property
+    def clean_partner_name(self):
+        if not self.partner_id:
+            return ""
+        name = self.partner_id.name
+        return re.sub(r"[^a-zA-Z0-9-]", "-", name).lower()
 
     @property
     def db_name(self):
@@ -132,16 +137,10 @@ class ResPartnerInstance(models.Model):
                 url = url._replace(netloc=instance_netloc)
                 instance.url = url.geturl()
 
-    def _clean_partner_name(self):
-        if not self.partner_id:
-            return ""
-        name = self.partner_id.name
-        return re.sub(r"[^a-zA-Z0-9-]", "-", name).lower()
-
     @api.depends("partner_id")
     def _compute_subdomain(self):
         for record in self:
-            record.subdomain = record._clean_partner_name()
+            record.subdomain = record.clean_partner_name
 
     def _compute_state(self):
         dbs = list_dbs(True)
@@ -212,7 +211,6 @@ class ResPartnerInstance(models.Model):
             record.message_post(
                 body=self.env._("Archiving database %s", record.db_name)
             )
-            close_db(record.db_name)
             db_rename(record.db_name, record.archived_db_name)
         self._compute_state()
 
@@ -240,11 +238,9 @@ class ResPartnerInstance(models.Model):
             raise AccessDenied()
 
         with self.instance_env() as env:
-            user = env["res.users"].search([("login", "=", master_user.login)])
-            if not user:
-                user = env["res.users"].create(
-                    {"login": master_user.login, "name": master_user.name}
-                )
+            user = env["res.users"]._get_or_create_instance_user_from_master(
+                master_user
+            )
             token = user._get_instance_db_jwt_token()
             user_id = user.id
 
@@ -258,7 +254,8 @@ class ResPartnerInstance(models.Model):
         self._compute_state()
 
     def action_sync_state_all(self):
-        self.search([])._compute_state()
+        for record in self.search([]):
+            record.action_sync_state()
 
     def write(self, vals):
         state = self.state
@@ -275,7 +272,6 @@ class ResPartnerInstance(models.Model):
                     "Renamed database from %s to %s", old_db_name, new_db_name
                 )
             )
-            close_db(old_db_name)
             db_rename(old_db_name, new_db_name)
             self._compute_state()
 
@@ -292,6 +288,5 @@ class ResPartnerInstance(models.Model):
         res = super().unlink()
         # Close and drop the database if it exists
         if db_name:
-            close_db(db_name)
             db_drop(db_name)
         return res

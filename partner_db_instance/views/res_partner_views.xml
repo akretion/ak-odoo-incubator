@@ -32,6 +32,7 @@
                     decoration-info="instance_id.state == 'draft'"
                     decoration-danger="instance_id.state == 'archived'"
                     decoration-success="instance_id.state == 'live'"
+                    groups="partner_db_instance.group_partner_instance_manager"
                 />
             </div>
         </field>

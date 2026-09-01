@@ -1,6 +1,6 @@
 {
     "name": "DB Instance",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "summary": "Auto installed module on partner_db_instance instances",
     "depends": ["web"],
     "external_dependencies": {

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 
-from odoo import fields, models
+from odoo import Command, api, fields, models
 from odoo.exceptions import AccessDenied
 
 
@@ -14,6 +14,32 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     instance_db_jwt_secret_key = fields.Char()
+
+    def _get_master_user_instance_default_groups(self):
+        return self.env.ref("base.group_system")
+
+    @api.model
+    def _get_instance_user_from_master(self, master_user):
+        return self.search([("login", "=", master_user.login)])
+
+    @api.model
+    def _create_instance_user_from_master(self, master_user):
+        return self.create(
+            {
+                "login": master_user.login,
+                "name": master_user.name,
+                "groups_id": [
+                    Command.set(self._get_master_user_instance_default_groups().ids)
+                ],
+            }
+        )
+
+    @api.model
+    def _get_or_create_instance_user_from_master(self, master_user):
+        user = self._get_instance_user_from_master(master_user)
+        if user:
+            return user
+        return self._create_instance_user_from_master(master_user)
 
     def _get_instance_db_jwt_token(self):
         self.instance_db_jwt_secret_key = secrets.token_urlsafe(256)

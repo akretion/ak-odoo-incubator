@@ -25,4 +25,3 @@ You then need to `Deploy` the instance in the `Partner DB Instance` form.
 Finally, you can connect to the partner site using the 'Connect' button in the same form once the instance is deployed. This will create a user corresponding to the current user in the partner instance.
 
 Instances can be Archived and Redeployed without data loss.
-u
