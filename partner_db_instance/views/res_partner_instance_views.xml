@@ -48,21 +48,29 @@
                         class="btn-info"
                         invisible="state != 'live'"
                     />
+                    <button
+                        name="action_sync_state"
+                        type="object"
+                        title="Sync"
+                        help="Sync Instance State"
+                        icon="fa-refresh"
+                        display="always"
+                    />
 
                     <field name="state" widget="statusbar" />
                 </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="partner_id" />
+                            <field name="partner_id" readonly="id" />
                             <field name="url" widget="url" />
                         </group>
                         <group>
                             <field name="subdomain" />
-                            <field name="db_name" />
                         </group>
                     </group>
                 </sheet>
+                <chatter />
             </form>
         </field>
     </record>
@@ -73,6 +81,16 @@
         <field name="type">list</field>
         <field name="arch" type="xml">
             <list string="Partner Instances">
+                <header>
+                    <button
+                        name="action_sync_state_all"
+                        type="object"
+                        help="Sync Instance State"
+                        title="Sync"
+                        icon="fa-refresh"
+                        display="always"
+                    />
+                </header>
                 <field name="partner_id" />
                 <field name="subdomain" />
                 <field
@@ -82,7 +100,6 @@
                     decoration-success="state == 'live'"
                     decoration-danger="state == 'archived'"
                 />
-                <field name="db_name" />
             </list>
         </field>
     </record>
@@ -94,9 +111,32 @@
         <field name="arch" type="xml">
             <search string="Partner Instances">
                 <field name="partner_id" />
-                <field name="subdomain" />
                 <field name="state" />
-                <field name="db_name" />
+                <field name="subdomain" />
+                <separator />
+                <filter
+                    name="active"
+                    string="Active"
+                    domain="[('state', '=', 'live')]"
+                />
+                <filter
+                    name="archived"
+                    string="Archived"
+                    domain="[('state', '=', 'archived')]"
+                />
+                <filter
+                    name="in_draft"
+                    string="In Draft"
+                    domain="[('state', '=', 'draft')]"
+                />
+                <separator />
+                <group expand="0" name="group_by" string="Group By">
+                    <filter
+                        name="group_state"
+                        string="State"
+                        context="{'group_by': 'state'}"
+                    />
+                </group>
             </search>
         </field>
     </record>
@@ -106,6 +146,7 @@
         <field name="res_model">res.partner.instance</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="res_partner_instance_search_view" />
+        <field name="context">{'default_search': 'partner_id'}</field>
     </record>
 
     <menuitem
