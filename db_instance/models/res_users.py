@@ -63,5 +63,7 @@ class ResUsers(models.Model):
                 options={"require": ["exp", "aud", "id"]},
                 algorithms=["HS256"],
             )
+            # Make it one-time:
+            self.instance_db_jwt_secret_key = None
         except jwt.PyJWTError as e:
             raise AccessDenied(self.env._("Invalid Token")) from e
