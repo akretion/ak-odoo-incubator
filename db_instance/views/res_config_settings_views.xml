@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2026 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="db_instance_res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <app name="general_settings" position="inside">
+                <block
+                    title="Instance"
+                    id="db_instance"
+                    groups="base.group_system"
+                    name="db_instance"
+                >
+                    <setting
+                        help="Enabling this will prevent connection from the master instance"
+                    >
+                        <field name="block_master_connection" />
+                    </setting>
+                </block>
+            </app>
+        </field>
+    </record>
+</odoo>

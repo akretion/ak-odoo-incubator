@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2026 Akretion (http://www.akretion.com).
+    @author Florian Mounier <florian.mounier@akretion.com>
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="res_partner_instance_form_view" model="ir.ui.view">
+        <field name="name">res.partner.instance.form</field>
+        <field name="model">res.partner.instance</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Partner Instance">
+                <header>
+                    <button
+                        name="action_deploy"
+                        type="object"
+                        string="Deploy"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+                    <button
+                        name="action_archive"
+                        type="object"
+                        string="Archive"
+                        class="btn-danger"
+                        invisible="state != 'live'"
+                    />
+                    <button
+                        name="action_unarchive"
+                        type="object"
+                        string="Redeploy"
+                        class="btn-primary"
+                        invisible="state != 'archived'"
+                    />
+                    <button
+                        name="action_delete"
+                        type="object"
+                        string="Delete"
+                        class="btn-danger"
+                        invisible="state != 'archived'"
+                        confirm="Are you really sure you want to delete this instance? ALL DATA FOR THIS INSTANCE WILL BE LOST"
+                    />
+                    <button
+                        name="action_connect"
+                        type="object"
+                        string="Connect"
+                        class="btn-info"
+                        invisible="not connection_allowed"
+                    />
+                    <button
+                        name="action_sync_state"
+                        type="object"
+                        title="Sync"
+                        help="Sync Instance State"
+                        icon="fa-refresh"
+                        display="always"
+                    />
+
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="id" />
+                            <field name="url" widget="url" />
+                        </group>
+                        <group>
+                            <field name="subdomain" />
+                        </group>
+                    </group>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_instance_list_view" model="ir.ui.view">
+        <field name="name">res.partner.instance.list</field>
+        <field name="model">res.partner.instance</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string="Partner Instances">
+                <header>
+                    <button
+                        name="action_sync_state_all"
+                        type="object"
+                        help="Sync Instance State"
+                        title="Sync"
+                        icon="fa-refresh"
+                        display="always"
+                    />
+                </header>
+                <field name="partner_id" />
+                <field name="subdomain" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-info="state == 'draft'"
+                    decoration-success="state == 'live'"
+                    decoration-danger="state == 'archived'"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="res_partner_instance_search_view" model="ir.ui.view">
+        <field name="name">res.partner.instance.search</field>
+        <field name="model">res.partner.instance</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Partner Instances">
+                <field name="partner_id" />
+                <field name="state" />
+                <field name="subdomain" />
+                <separator />
+                <filter
+                    name="active"
+                    string="Active"
+                    domain="[('state', '=', 'live')]"
+                />
+                <filter
+                    name="archived"
+                    string="Archived"
+                    domain="[('state', '=', 'archived')]"
+                />
+                <filter
+                    name="in_draft"
+                    string="In Draft"
+                    domain="[('state', '=', 'draft')]"
+                />
+                <separator />
+                <group expand="0" name="group_by" string="Group By">
+                    <filter
+                        name="group_state"
+                        string="State"
+                        context="{'group_by': 'state'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_res_partner_instance" model="ir.actions.act_window">
+        <field name="name">Partner Instances</field>
+        <field name="res_model">res.partner.instance</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="res_partner_instance_search_view" />
+    </record>
+
+    <menuitem
+        id="menu_res_partner_instance"
+        name="Instances"
+        action="action_res_partner_instance"
+        parent="contacts.menu_contacts"
+        groups="partner_db_instance.group_partner_instance_manager"
+        sequence="99"
+    />
+</odoo>
