@@ -9,6 +9,6 @@
     "website": "https://github.com/akretion/ak-odoo-incubator",
     "author": " Akretion",
     "license": "AGPL-3",
-    "data": [],
+    "data": ["views/res_config_settings_views.xml"],
     "installable": True,
 }

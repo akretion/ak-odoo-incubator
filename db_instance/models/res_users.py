@@ -2,7 +2,7 @@
 # @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import secrets
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import jwt
 
@@ -36,16 +36,20 @@ class ResUsers(models.Model):
 
     @api.model
     def _get_or_create_instance_user_from_master(self, master_user):
+        if self.env.company.block_master_connection:
+            raise AccessDenied(self.env._("Connection to master instance is blocked."))
         user = self._get_instance_user_from_master(master_user)
         if user:
             return user
         return self._create_instance_user_from_master(master_user)
 
     def _get_instance_db_jwt_token(self):
+        if self.env.company.block_master_connection:
+            raise AccessDenied(self.env._("Connection to master instance is blocked."))
         self.instance_db_jwt_secret_key = secrets.token_urlsafe(256)
         token = jwt.encode(
             {
-                "exp": datetime.now(tz=timezone.utc) + timedelta(minutes=2),
+                "exp": datetime.now(tz=UTC) + timedelta(minutes=2),
                 "aud": self.login,
                 "id": self.id,
             },
@@ -55,6 +59,8 @@ class ResUsers(models.Model):
         return token
 
     def _check_instance_db_token(self, token):
+        if self.env.company.block_master_connection:
+            raise AccessDenied(self.env._("Connection to master instance is blocked."))
         try:
             jwt.decode(
                 token,
