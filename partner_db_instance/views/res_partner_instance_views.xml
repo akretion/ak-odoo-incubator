@@ -46,7 +46,7 @@
                         type="object"
                         string="Connect"
                         class="btn-info"
-                        invisible="state != 'live'"
+                        invisible="not connection_allowed"
                     />
                     <button
                         name="action_sync_state"

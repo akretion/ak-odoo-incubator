@@ -59,6 +59,10 @@ class ResPartnerInstance(models.Model):
         compute="_compute_url",
         readonly=True,
     )
+    connection_allowed = fields.Boolean(
+        compute="_compute_connection_allowed",
+        readonly=True,
+    )
 
     _sql_constraints = (
         ("subdomain_unique", "UNIQUE(subdomain)", "Subdomain must be unique"),
@@ -117,6 +121,14 @@ class ResPartnerInstance(models.Model):
                 raise
             else:
                 cr.commit()  # pylint: disable=invalid-commit
+
+    def _compute_connection_allowed(self):
+        for instance in self:
+            if instance.state != "live":
+                instance.connection_allowed = False
+                continue
+            with instance.instance_env() as env:
+                instance.connection_allowed = not env.company.block_master_connection
 
     @api.depends("subdomain")
     def _compute_url(self):
