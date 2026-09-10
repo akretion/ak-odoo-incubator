@@ -165,6 +165,21 @@ class ResPartnerInstance(models.Model):
             else:
                 record.state = "draft"
 
+    def _prepare_instance_company_vals(self):
+        return {
+            # lang and country are set by _initialize_db
+            "name": self.partner_id.name,
+            "website": self.partner_id.website,
+            "email": self.partner_id.email,
+            "phone": self.partner_id.phone,
+            "mobile": self.partner_id.mobile,
+            "street": self.partner_id.street,
+            "street2": self.partner_id.street2,
+            "zip": self.partner_id.zip,
+            "city": self.partner_id.city,
+            "vat": self.partner_id.vat,
+        }
+
     def _install_modules(self):
         modules_to_install = (
             config.get("partner_db_instance_modules") or "db_instance"
@@ -180,6 +195,11 @@ class ResPartnerInstance(models.Model):
                     f"{modules_to_install} -> {modules.mapped('name')}"
                 )
             modules.button_immediate_install()
+
+    def _setup_instance_company(self):
+        with self.instance_env() as env:
+            company = env["res.company"].browse(1)
+            company.write(self._prepare_instance_company_vals())
 
     def _setup_database(self):
         self.ensure_one()
@@ -202,12 +222,15 @@ class ResPartnerInstance(models.Model):
             None,
             db_name,
             False,
-            self.env.company.partner_id.lang,
+            self.partner_id.lang or self.env.company.lang,
             instance_admin_password,
             login,
-            self.env.company.country_id.code,
-            self.env.company.phone,
+            self.partner_id.country_id.code
+            if self.partner_id.country_id
+            else self.env.company.country_id.code,
         )
+
+        self._setup_instance_company()
 
         self._install_modules()
 
