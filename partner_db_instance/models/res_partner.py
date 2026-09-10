@@ -29,6 +29,14 @@ class ResPartner(models.Model):
                     self.env._("A partner can only have one active instance.")
                 )
 
+    @api.constrains("is_company", "instance_id")
+    def _check_company_instance(self):
+        for partner in self:
+            if not partner.is_company and partner.instance_id:
+                raise ValidationError(
+                    self.env._("Only companies can have an instance.")
+                )
+
     @api.depends("instance_ids")
     def _compute_instance_id(self):
         for partner in self:

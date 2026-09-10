@@ -16,7 +16,7 @@
                         type="object"
                         class="btn btn-primary"
                         string="Create Instance"
-                        invisible="instance_id"
+                        invisible="instance_id or not is_company"
                         groups="partner_db_instance.group_partner_instance_manager"
                     />
                 </header>
