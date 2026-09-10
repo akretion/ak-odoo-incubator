@@ -2,7 +2,7 @@
 # @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import secrets
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import jwt
 
@@ -49,7 +49,7 @@ class ResUsers(models.Model):
         self.instance_db_jwt_secret_key = secrets.token_urlsafe(256)
         token = jwt.encode(
             {
-                "exp": datetime.now(tz=UTC) + timedelta(minutes=2),
+                "exp": datetime.now(tz=timezone.utc) + timedelta(minutes=2),
                 "aud": self.login,
                 "id": self.id,
             },
