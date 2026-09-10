@@ -124,6 +124,7 @@ class ResPartnerInstance(models.Model):
 
     def _compute_connection_allowed(self):
         for instance in self:
+            instance._compute_state()
             if instance.state != "live":
                 instance.connection_allowed = False
                 continue
