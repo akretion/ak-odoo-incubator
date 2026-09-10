@@ -9,6 +9,13 @@ def pre_init_hook(env):
     from odoo.exceptions import AccessDenied
     from odoo.tools import config
 
+    if config.get("test_enable"):
+        if not config.get("partner_db_instance_master"):
+            config["partner_db_instance_master"] = "odoo_test"
+        if not config.get("partner_db_instance_password"):
+            config["partner_db_instance_password"] = "_test_mode_"
+        return
+
     if not config.get("partner_db_instance_master"):
         raise RuntimeError(env._("partner_db_instance_master not set in config"))
     if not config.get("partner_db_instance_password"):
