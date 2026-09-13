@@ -70,6 +70,20 @@ class LabelFromRecord(models.TransientModel):
                 for x in records
                 if x.product_id
             ]
+        elif model == "stock.inventory.line":
+            inventory_lines = self.env["stock.inventory.line"].browse(
+                self._context["active_ids"]
+            )
+            infos = [
+                "%s ; %s ; %s"
+                % (
+                    x.product_id.default_code or "_",
+                    int(x.product_qty),
+                    x.product_id.id,
+                )
+                for x in inventory_lines
+                if x.product_qty > 0
+            ]
         return "\n".join(infos)
 
     def generate_label(self):
