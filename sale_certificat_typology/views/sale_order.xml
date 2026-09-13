@@ -1,0 +1,65 @@
+<odoo>
+
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='other_information']" position="after">
+                <page
+                    string="Certificat Items"
+                    name="certificat_item_ids"
+                    attrs="{'invisible': [('certificat_item_ids', '=', [])]}"
+                >
+                    <field
+                        name="certificat_item_ids"
+                        mode="tree"
+                        attrs="{'readonly': [('state', 'in', ('sale','done','cancel'))]}"
+                    >
+                        <tree
+                            string="Certificat Items"
+                            editable="bottom"
+                            delete="false"
+                            create="false"
+                        >
+                            <field name="certificat_typology_id" readonly="True" />
+                            <field name="certificat" />
+                            <field
+                                name="certificat_is_ok"
+                                attrs="{'invisible': [('certificat', '=', False)]}"
+                            />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath
+                expr="//notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='company_id']"
+                position="after"
+            >
+                <field
+                    name="required_certificat_ids"
+                    widget="many2many_tags"
+                    optional="hide"
+                />
+            </xpath>
+            <header position="after">
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    attrs="{'invisible': [('sale_warn_msg', '=', False)]}"
+                    style="margin-bottom:0px;"
+                >
+                    <p>
+                        <i class="fa fa-info-circle" />
+                        &amp;nbsp;
+                        <field name="sale_warn_msg" class="oe_inline" />
+                    </p>
+                </div>
+            </header>
+        </field>
+    </record>
+
+</odoo>
