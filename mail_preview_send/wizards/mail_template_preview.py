@@ -19,7 +19,7 @@ class MailTemplatePreview(models.TransientModel):
     def send(self):
         xml_id = self.layout_id.get_external_id()[self.layout_id.id]
         self.mail_template_id.with_context(force_mail_uniq_layout_id=xml_id).send_mail(
-            self.model_id.id
+            self.resource_ref.id
         )
 
     def _get_layout_domain(self):
