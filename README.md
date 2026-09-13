@@ -1,4 +1,6 @@
 
+
+# Generic Odoo module in incubation
 <!-- /!\ Non OCA Context : Set here the badge of your runbot / runboat instance. -->
 [![Pre-commit Status](https://github.com/akretion/ak-odoo-incubator/actions/workflows/pre-commit.yml/badge.svg?branch=14.0)](https://github.com/akretion/ak-odoo-incubator/actions/workflows/pre-commit.yml?query=branch%3A14.0)
 [![Build Status](https://github.com/akretion/ak-odoo-incubator/actions/workflows/test.yml/badge.svg?branch=14.0)](https://github.com/akretion/ak-odoo-incubator/actions/workflows/test.yml?query=branch%3A14.0)
@@ -6,8 +8,6 @@
 <!-- /!\ Non OCA Context : Set here the badge of your translation instance. -->
 
 <!-- /!\ do not modify above this line -->
-
-# Generic Odoo module in incubation
 
 The modules present in this repo should go to OCA on the long run, they are still not used a lot and still need to prove themselves
 
