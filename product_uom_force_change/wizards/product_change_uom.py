@@ -68,7 +68,11 @@ class ProductChangeUom(models.TransientModel):
                     )
                     if records:
                         for record in records:
-                            if record[uom_field] != current_uom:
+                            if record[
+                                uom_field
+                            ] != current_uom and not self._context.get(
+                                "fix_uom_conflict"
+                            ):
                                 raise UserError(
                                     _(
                                         "Impossible to change the uom, because the "
