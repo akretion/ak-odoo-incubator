@@ -36,6 +36,14 @@ class ProductSupplierinfoAttributeMixin(models.AbstractModel):
 
     @api.depends("product_tmpl_id", "product_attribute_value_ids", "product_id")
     def _compute_product_definition_precision(self):
+        # Product definition have kind of the same behaviour as we have on
+        # the pricelist item take the price from
+        # specific rule (on the product)
+        # then based on the attribute
+        # and if nothing match use the generic rule of the supplier
+        # Native odoo just take the best price so if you define a price
+        # on a variant and on the template if the price on the template
+        # is the less expensive it will always take it
         for record in self:
             if record.product_id:
                 record.product_definition_precision = 9999
