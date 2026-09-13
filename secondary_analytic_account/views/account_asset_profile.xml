@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="account_asset_profile_view_form" model="ir.ui.view">
+        <field name="model">account.asset.profile</field>
+        <field
+            name="inherit_id"
+            ref="account_asset_management.account_asset_profile_view_form"
+        />
+        <field name="arch" type="xml">
+                <field name="account_analytic_id" position="after">
+                    <field name="second_account_analytic_id" />
+                </field>
+        </field>
+    </record>
+
+    <record id="account_asset_profile_view_tree" model="ir.ui.view">
+        <field name="model">account.asset.profile</field>
+        <field
+            name="inherit_id"
+            ref="account_asset_management.account_asset_profile_view_tree"
+        />
+        <field name="arch" type="xml">
+            <field name="account_analytic_id" position="after">
+                <field name="second_account_analytic_id" optional="show" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
