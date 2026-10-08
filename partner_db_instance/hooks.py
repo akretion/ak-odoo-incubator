@@ -2,14 +2,15 @@
 # @author Florian Mounier <florian.mounier@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import re
+
+from odoo.exceptions import AccessDenied
+from odoo.tools import config
+
 
 def pre_init_hook(env):
-    import re
-
-    from odoo.exceptions import AccessDenied
-    from odoo.tools import config
-
-    if config.get("test_enable"):
+    running_env = config.get("running_env")
+    if config.get("test_enable") or (running_env and running_env != "prod"):
         if not config.get("partner_db_instance_master"):
             config["partner_db_instance_master"] = "odoo_test"
         if not config.get("partner_db_instance_password"):

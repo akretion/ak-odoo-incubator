@@ -397,6 +397,18 @@ form.</p>
 in the same form once the instance is deployed. This will create a user
 corresponding to the current user in the partner instance.</p>
 <p>Instances can be Archived and Redeployed without data loss.</p>
+</div>
+<div class="section" id="non-production-environments">
+<h1>Non production environments</h1>
+<p>When <tt class="docutils literal">running_env</tt> is set to something else than <tt class="docutils literal">prod</tt> (dev, CI,
+review…), or in test mode:</p>
+<ul class="simple">
+<li>the module can be installed on any database (the check that the
+database is the <tt class="docutils literal">partner_db_instance_master</tt> one is skipped);</li>
+<li>the instance URL uses the database name (<tt class="docutils literal">&lt;base&gt;_&lt;subdomain&gt;</tt>) as
+host label instead of the bare subdomain, because <tt class="docutils literal">dbfilter</tt> is
+matched against the host.</li>
+</ul>
 <p><strong>Table of contents</strong></p>
 </div>
 <div class="section" id="bug-tracker">
