@@ -25,3 +25,14 @@ You then need to `Deploy` the instance in the `Partner DB Instance` form.
 Finally, you can connect to the partner site using the 'Connect' button in the same form once the instance is deployed. This will create a user corresponding to the current user in the partner instance.
 
 Instances can be Archived and Redeployed without data loss.
+
+Non production environments
+===========================
+
+When `running_env` is set to something else than `prod` (dev, CI, review...), or in
+test mode:
+
+* the module can be installed on any database (the check that the database is the
+  `partner_db_instance_master` one is skipped);
+* the instance URL uses the database name (`<base>_<subdomain>`) as host label
+  instead of the bare subdomain, because `dbfilter` is matched against the host.

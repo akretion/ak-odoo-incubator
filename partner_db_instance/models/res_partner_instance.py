@@ -145,10 +145,17 @@ class ResPartnerInstance(models.Model):
 
                 url = urlparse(base_url)
                 instance_netloc = url.netloc.replace(
-                    url.netloc.split(".")[0], instance.subdomain
+                    url.netloc.split(".")[0], instance._prepare_subdomain_url()
                 )
                 url = url._replace(netloc=instance_netloc)
                 instance.url = url.geturl()
+
+    def _prepare_subdomain_url(self):
+        self.ensure_one()
+        running_env = config.get("running_env")
+        if running_env and running_env != "prod":
+            return self.db_name
+        return self.subdomain
 
     @api.depends("partner_id")
     def _compute_subdomain(self):
