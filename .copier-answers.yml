@@ -1,8 +1,7 @@
 # Do NOT update manually; changes here will be overwritten by Copier
-_commit: v1.33
+_commit: v1.47
 _src_path: https://github.com/OCA/oca-addons-repo-template
 additional_ruff_rules: []
-ci: GitHub
 convert_readme_fragments_to_markdown: true
 enable_checklog_odoo: false
 generate_requirements_txt: true
@@ -14,9 +13,10 @@ github_enable_stale_action: false
 github_enforce_dev_status_compatibility: false
 include_wkhtmltopdf: false
 odoo_test_flavor: OCB
-odoo_version: 18.0
+odoo_version: 20.0
 org_name: Akretion
 org_slug: akretion
+postgres_image: ''
 rebel_module_groups: []
 repo_description: Misc Odoo modules maturing before going to a specific repo
 repo_name: Akretion Odoo Module Incubator
