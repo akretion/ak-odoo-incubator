@@ -5,10 +5,11 @@
 
 from freezegun import freeze_time
 
-from odoo.tests import TransactionCase
+from odoo.tests import TransactionCase, tagged
 
 
 @freeze_time("2023-07-24")
+@tagged("post_install", "-at_install")
 class TestSprintCommon(TransactionCase):
     @classmethod
     def setUpClass(cls):
