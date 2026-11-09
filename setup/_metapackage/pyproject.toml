@@ -1,10 +1,11 @@
 [project]
 name = "odoo-addons-akretion-ak-odoo-incubator"
-version = "18.0.20260602.0"
+version = "18.0.20261109.0"
 dependencies = [
     "odoo-addon-account_invoice_no_proforma==18.0.*",
     "odoo-addon-gitlab_integration==18.0.*",
     "odoo-addon-project_estimate_step==18.0.*",
+    "odoo-addon-project_sprint==18.0.*",
     "odoo-addon-project_task_urgency==18.0.*",
     "odoo-addon-project_time_in_day==18.0.*",
 ]
