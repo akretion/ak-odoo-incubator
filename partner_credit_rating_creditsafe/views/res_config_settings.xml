@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field
+            name="inherit_id"
+            ref="partner_credit_rating.res_config_settings_view_form"
+        />
+        <field name="arch" type="xml">
+            <setting id="rating_provider_setting" position="after">
+                <setting
+                    id="creditsafe_setting"
+                    string="Creditsafe"
+                    help="Connect API credentials"
+                    invisible="rating_provider != 'creditsafe'"
+                >
+                    <div class="content-group">
+                        <div class="row mt8">
+                            <label for="creditsafe_env" class="col-lg-4" />
+                            <field name="creditsafe_env" />
+                            <label for="creditsafe_username" class="col-lg-4" />
+                            <field name="creditsafe_username" />
+                            <label for="creditsafe_password" class="col-lg-4" />
+                            <field name="creditsafe_password" password="True" />
+                        </div>
+                        <button
+                            name="action_creditsafe_test"
+                            type="object"
+                            string="Test connection"
+                            icon="power"
+                            class="btn-link mt8"
+                        />
+                    </div>
+                </setting>
+            </setting>
+        </field>
+    </record>
+</odoo>
