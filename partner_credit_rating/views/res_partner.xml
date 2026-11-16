@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button
+                    name="action_rating_search"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="search"
+                    string="Credit Rating"
+                    invisible="not is_company or credit_rating_id"
+                />
+                <button
+                    name="action_rating_open"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="security"
+                    invisible="not credit_rating_id"
+                >
+                    <div class="o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="credit_rating_code" />
+                        </span>
+                        <field
+                            name="credit_risk"
+                            widget="badge"
+                            decoration-success="credit_risk == 'low'"
+                            decoration-warning="credit_risk == 'medium'"
+                            decoration-danger="credit_risk in ('high', 'critical')"
+                        />
+                    </div>
+                </button>
+            </div>
+        </field>
+    </record>
+
+    <record id="view_partner_tree" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree" />
+        <field name="arch" type="xml">
+            <list position="inside">
+                <field
+                    name="credit_risk"
+                    optional="hide"
+                    widget="badge"
+                    decoration-success="credit_risk == 'low'"
+                    decoration-warning="credit_risk == 'medium'"
+                    decoration-danger="credit_risk in ('high', 'critical')"
+                />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <field name="arch" type="xml">
+            <filter name="inactive" position="before">
+                <filter
+                    name="rating_risky"
+                    string="High Credit Risk"
+                    domain="[('credit_risk', 'in', ('high', 'critical'))]"
+                />
+                <separator />
+            </filter>
+        </field>
+    </record>
+</odoo>

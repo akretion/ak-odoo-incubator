@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="credit_rating_form" model="ir.ui.view">
+        <field name="model">credit.rating</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_refresh"
+                        type="object"
+                        string="Refresh"
+                        icon="refresh"
+                        class="btn-primary"
+                        invisible="not ref"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id" />
+                            <field
+                                name="risk"
+                                widget="badge"
+                                decoration-success="risk == 'low'"
+                                decoration-warning="risk == 'medium'"
+                                decoration-danger="risk in ('high', 'critical')"
+                            />
+                            <field name="code" />
+                            <field name="label" />
+                            <field name="score" />
+                        </group>
+                        <group>
+                            <field name="provider" />
+                            <field name="ref" />
+                            <field name="date" />
+                            <field name="monitor" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="credit_rating_list" model="ir.ui.view">
+        <field name="model">credit.rating</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="partner_id" />
+                <field name="code" />
+                <field name="label" />
+                <field name="score" optional="hide" />
+                <field
+                    name="risk"
+                    widget="badge"
+                    decoration-success="risk == 'low'"
+                    decoration-warning="risk == 'medium'"
+                    decoration-danger="risk in ('high', 'critical')"
+                />
+                <field name="provider" optional="hide" />
+                <field name="date" />
+                <field name="monitor" />
+            </list>
+        </field>
+    </record>
+
+    <record id="credit_rating_search" model="ir.ui.view">
+        <field name="model">credit.rating</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id" />
+                <field name="ref" />
+                <filter
+                    name="risky"
+                    string="High Risk"
+                    domain="[('risk', 'in', ('high', 'critical'))]"
+                />
+                <filter
+                    name="monitored"
+                    string="Monitored"
+                    domain="[('monitor', '=', True)]"
+                />
+                <group>
+                    <filter
+                        name="group_risk"
+                        string="Risk"
+                        context="{'group_by': 'risk'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="credit_rating_action" model="ir.actions.act_window">
+        <field name="name">Credit Ratings</field>
+        <field name="res_model">credit.rating</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="credit_rating_menu"
+        action="credit_rating_action"
+        parent="contacts.menu_contacts"
+        sequence="10"
+    />
+</odoo>

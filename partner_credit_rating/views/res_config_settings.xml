@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <block name="contacts_setting_container" position="inside">
+                <setting
+                    id="rating_provider_setting"
+                    string="Credit Rating"
+                    help="Provider used to rate company solvency"
+                >
+                    <field name="rating_provider" />
+                </setting>
+            </block>
+        </field>
+    </record>
+</odoo>
