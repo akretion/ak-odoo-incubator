@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="credit_rating_form" model="ir.ui.view">
+        <field name="model">credit.rating</field>
+        <field name="inherit_id" ref="partner_credit_rating.credit_rating_form" />
+        <field name="arch" type="xml">
+            <field name="score" position="after">
+                <field name="limit_currency_id" invisible="1" />
+                <field name="credit_limit" invisible="provider != 'creditsafe'" />
+            </field>
+        </field>
+    </record>
+</odoo>
