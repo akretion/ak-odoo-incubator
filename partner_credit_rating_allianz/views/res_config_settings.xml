@@ -1,0 +1,53 @@
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field
+            name="inherit_id"
+            ref="partner_credit_rating.res_config_settings_view_form"
+        />
+        <field name="arch" type="xml">
+            <setting id="rating_provider_setting" position="after">
+                <setting
+                    id="allianz_setting"
+                    string="Allianz Trade"
+                    help="Base URLs without endpoint, e.g. without /oauth2/authorize"
+                    invisible="rating_provider != 'allianz'"
+                >
+                    <div class="content-group">
+                        <div class="row mt8">
+                            <label for="allianz_env" class="col-lg-4" />
+                            <field name="allianz_env" />
+                            <label for="allianz_api_key" class="col-lg-4" />
+                            <field name="allianz_api_key" password="True" />
+                            <label for="allianz_business_unit" class="col-lg-4" />
+                            <field name="allianz_business_unit" />
+                            <label for="allianz_policy" class="col-lg-4" />
+                            <field name="allianz_policy" />
+                        </div>
+                        <div class="row mt8">
+                            <span class="col-lg-4" />
+                            <span class="col-lg-4 fw-bold">UAT</span>
+                            <span class="col-lg-4 fw-bold">PROD</span>
+                            <span class="col-lg-4">IDP</span>
+                            <field name="allianz_idp_base_uat" class="col-lg-4" />
+                            <field name="allianz_idp_base_prod" class="col-lg-4" />
+                            <span class="col-lg-4">Company Search</span>
+                            <field name="allianz_search_base_uat" class="col-lg-4" />
+                            <field name="allianz_search_base_prod" class="col-lg-4" />
+                            <span class="col-lg-4">Grade Check</span>
+                            <field name="allianz_grade_base_uat" class="col-lg-4" />
+                            <field name="allianz_grade_base_prod" class="col-lg-4" />
+                        </div>
+                        <button
+                            name="action_allianz_test"
+                            type="object"
+                            string="Test connection"
+                            icon="power"
+                            class="btn-link mt8"
+                        />
+                    </div>
+                </setting>
+            </setting>
+        </field>
+    </record>
+</odoo>
