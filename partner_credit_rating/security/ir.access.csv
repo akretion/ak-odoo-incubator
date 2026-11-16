@@ -1,0 +1,5 @@
+id,name,model_id,group_id/id,operation,domain
+access_credit_rating_user,credit.rating user,credit.rating,base.group_user,cru,
+access_credit_rating_manager,credit.rating manager,credit.rating,base.group_partner_manager,crud,
+access_credit_rating_search,credit.rating.search,credit.rating.search,base.group_user,crud,
+access_credit_rating_search_line,credit.rating.search.line,credit.rating.search.line,base.group_user,crud,

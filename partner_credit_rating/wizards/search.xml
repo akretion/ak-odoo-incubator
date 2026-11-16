@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="credit_rating_search_form" model="ir.ui.view">
+        <field name="model">credit.rating.search</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="partner_id" invisible="1" />
+                <field name="provider" invisible="1" />
+                <group>
+                    <group>
+                        <field name="name" />
+                        <field name="vat" />
+                        <field name="registry" />
+                    </group>
+                    <group>
+                        <field name="country_id" />
+                        <field name="zip" />
+                        <field name="city" />
+                    </group>
+                </group>
+                <button
+                    name="action_search"
+                    type="object"
+                    string="Search"
+                    icon="search"
+                    class="btn-secondary"
+                />
+                <field name="line_ids" readonly="1" nolabel="1">
+                    <list>
+                        <field name="name" />
+                        <field name="street" />
+                        <field name="zip" />
+                        <field name="city" />
+                        <field name="country_code" />
+                        <field name="vat" optional="show" />
+                        <field name="registry" optional="show" />
+                        <field name="ref" optional="hide" />
+                        <button
+                            name="action_select"
+                            type="object"
+                            string="Select"
+                            icon="check"
+                            class="btn-primary"
+                        />
+                    </list>
+                </field>
+                <footer>
+                    <button string="Close" special="cancel" class="btn-secondary" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
