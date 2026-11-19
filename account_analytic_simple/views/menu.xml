@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="account.menu_analytic_accounting" model="ir.ui.menu">
+        <field
+            name="groups_id"
+            eval="[Command.link(ref('account_analytic_simple.group_analytic_accounting_simple'))]"
+        />
+    </record>
+
+    <record id="account.account_analytic_def_account" model="ir.ui.menu">
+        <field
+            name="groups_id"
+            eval="[Command.link(ref('account_analytic_simple.group_analytic_accounting_simple'))]"
+        />
+    </record>
+
+    <record id="account.account_analytic_plan_menu" model="ir.ui.menu">
+        <field
+            name="groups_id"
+            eval="[Command.link(ref('account_analytic_simple.group_analytic_accounting_simple'))]"
+        />
+    </record>
+
+</odoo>

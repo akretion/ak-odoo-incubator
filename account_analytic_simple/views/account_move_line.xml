@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_move_line_tree" model="ir.ui.view">
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field
+                    name="analytic_account_id"
+                    optional="show"
+                    groups="account_analytic_simple.group_analytic_accounting_simple"
+                    readonly="1"
+                />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_account_move_line_filter" model="ir.ui.view">
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter" />
+        <field name="arch" type="xml">
+            <field name="account_id" position="after">
+                <field string="Simple Analytic Account" name="analytic_account_id" />
+            </field>
+        </field>
+    </record>
+
+
+
+</odoo>
