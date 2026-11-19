@@ -1,0 +1,289 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* tracking_sale_reconfirmation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-07 12:40+0000\n"
+"PO-Revision-Date: 2026-04-07 14:45+0200\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.9\n"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_order__cancel_tracking_count
+msgid "# Cancel Cycles"
+msgstr "Cycles d'annulation"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_tree
+msgid "# Changes"
+msgstr "Modifications"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_order__active_cancel_tracking_id
+msgid "Active Cancel Tracking"
+msgstr "Suivi d'annulation actif"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__new_value
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_form
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_tree
+msgid "After"
+msgstr "Après"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__old_value
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_form
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_tree
+msgid "Before"
+msgstr "Avant"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_form
+msgid "Cancel / Reconfirm Cycle"
+msgstr "Cycle annulation / reconfirmation"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_tree
+msgid "Cancel / Reconfirm Cycles"
+msgstr "Cycles annulation / reconfirmation"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_order_form_cancel_tracking
+msgid "Cancel Cycles"
+msgstr "Cycles d'annulation"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "Cancel Tracking"
+msgstr "Suivi d'annulation"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_order__cancel_tracking_ids
+msgid "Cancel Tracking History"
+msgstr "Historique de suivi d'annulation"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields.selection,name:tracking_sale_reconfirmation.selection__sale_cancel_tracking__state__cancelled
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "Cancelled"
+msgstr "Annulé"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__cancel_date
+msgid "Cancelled On"
+msgstr "Annulé le"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_graph
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_pivot
+msgid "Change Line Statistics"
+msgstr "Statistiques des lignes de modification"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.actions.act_window,name:tracking_sale_reconfirmation.action_sale_cancel_tracking_line
+#: model:ir.ui.menu,name:tracking_sale_reconfirmation.menu_sale_cancel_tracking_line
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_search
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_tree
+msgid "Change Lines"
+msgstr "Lignes de modification"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__change_date
+msgid "Changed On"
+msgstr "Modifié le"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__change_line_ids
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_form
+msgid "Changes"
+msgstr "Modifications"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__change_count
+msgid "Changes Count"
+msgstr "Nombre de modifications"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__company_id
+msgid "Company"
+msgstr "Société"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__create_uid
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__create_date
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__partner_id
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "Customer"
+msgstr "Client"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_form
+msgid "Cycle"
+msgstr "Cycle"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__state
+msgid "Cycle State"
+msgstr "État du cycle"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__display_name
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__field_label
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_form
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_search
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_tree
+msgid "Field"
+msgstr "Champ"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_search
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "Group By"
+msgstr "Regrouper par"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__id
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields.selection,name:tracking_sale_reconfirmation.selection__sale_cancel_tracking__state__draft
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "In Draft"
+msgstr "En brouillon"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking____last_update
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__write_uid
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__write_date
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_search
+msgid "Month"
+msgstr "Mois"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.actions.act_window,help:tracking_sale_reconfirmation.action_sale_cancel_tracking_line
+msgid "No change lines recorded yet."
+msgstr "Aucune ligne de modification enregistrée pour le moment."
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_form
+msgid "Order"
+msgstr "Commande"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields.selection,name:tracking_sale_reconfirmation.selection__sale_cancel_tracking__state__done
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "Reconfirmed"
+msgstr "Reconfirmé"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__confirm_date
+msgid "Reconfirmed On"
+msgstr "Reconfirmé le"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__draft_date
+msgid "Reset to Draft On"
+msgstr "Remis en brouillon le"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model,name:tracking_sale_reconfirmation.model_sale_cancel_tracking_line
+msgid "Sale Cancel Tracking Change Line"
+msgstr "Ligne de modification du suivi d'annulation de vente"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model,name:tracking_sale_reconfirmation.model_sale_cancel_tracking
+msgid "Sale Cancel/Reconfirm Tracking"
+msgstr "Suivi annulation/reconfirmation de vente"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__sale_order_id
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__sale_order_id
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_search
+msgid "Sale Order"
+msgstr "Bon de commande"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model,name:tracking_sale_reconfirmation.model_sale_order
+msgid "Sales Order"
+msgstr "Commande client"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model,name:tracking_sale_reconfirmation.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de bons de commande"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__user_id
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "Salesperson"
+msgstr "Vendeur"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking__smart_search
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__smart_search
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_order__smart_search
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_order_line__smart_search
+msgid "Smart Search"
+msgstr "Recherche intelligente"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__source
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_line_search
+msgid "Source"
+msgstr "Source"
+
+#. module: tracking_sale_reconfirmation
+#: model_terms:ir.ui.view,arch_db:tracking_sale_reconfirmation.view_sale_cancel_tracking_search
+msgid "State"
+msgstr "État"
+
+#. module: tracking_sale_reconfirmation
+#: model:ir.model.fields,field_description:tracking_sale_reconfirmation.field_sale_cancel_tracking_line__tracking_id
+msgid "Tracking"
+msgstr "Suivi"
+
+#. module: tracking_sale_reconfirmation
+#: model:res.groups,name:tracking_sale_reconfirmation.group_tracking_sale_reconfirmation
+msgid "Tracking Sale Reconfirmation Manager"
+msgstr "Responsable du suivi de reconfirmation des ventes"
