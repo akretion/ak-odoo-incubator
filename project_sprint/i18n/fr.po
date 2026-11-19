@@ -1,0 +1,257 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* project_sprint
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__active
+msgid "Active"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__child_count
+msgid "Child Count"
+msgstr "Nombre d'enfants"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__child_ids
+msgid "Child Sprints"
+msgstr "Sprints enfants"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Current Sprint By Fortnight"
+msgstr "Sprint actuel par quinzaine"
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Current Sprint By Month"
+msgstr "Sprint actuel par mois"
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Current Sprint By Quarter"
+msgstr "Sprint actuel par trimestre"
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Current Sprint By Year"
+msgstr "Sprint actuel par année"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__date_end
+msgid "Date End"
+msgstr "Date de fin"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__date_start
+msgid "Date Start"
+msgstr "Date de début"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__display_name
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__full_name
+msgid "Full Name"
+msgstr "Nom complet"
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.project_sprint_view_form
+msgid "Generate"
+msgstr "Générer"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__id
+msgid "ID"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__level
+msgid "Level"
+msgstr "Niveau"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__max_level
+msgid "Max Level"
+msgstr "Niveau maximum"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__parent_path
+msgid "Parent Path"
+msgstr "Chemin parent"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_sprint__parent_id
+msgid "Parent Sprint"
+msgstr "Sprint parent"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__planned_date_end
+msgid "Planned Date End"
+msgstr "Date de fin prévue"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__planned_date_start
+msgid "Planned Date Start"
+msgstr "Date de début prévue"
+
+#. module: project_sprint
+#: model:ir.model,name:project_sprint.model_project_project
+msgid "Project"
+msgstr "Projet"
+
+#. module: project_sprint
+#: model:ir.actions.act_window,name:project_sprint.project_sprint_action
+#: model:ir.actions.act_window,name:project_sprint.project_sprint_action_from_project_sprint
+#: model:ir.model,name:project_sprint.model_project_sprint
+msgid "Project Sprint"
+msgstr "Sprint de projet"
+
+#. module: project_sprint
+#: model:res.groups,name:project_sprint.group_project_sprint
+msgid "Show Project Sprint"
+msgstr "Afficher le sprint de projet"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_id
+#: model:ir.ui.menu,name:project_sprint.project_sprint_menu
+#: model_terms:ir.ui.view,arch_db:project_sprint.project_sprint_view_form
+msgid "Sprint"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_4_id
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Sprint By Fortnight"
+msgstr "Sprint par quinzaine"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_3_id
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Sprint By Month"
+msgstr "Sprint par mois"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_2_id
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Sprint By Quarter"
+msgstr "Sprint par trimestre"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__sprint_level_1_id
+#: model_terms:ir.ui.view,arch_db:project_sprint.view_task_search_form_extended
+msgid "Sprint By Year"
+msgstr "Sprint par année"
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.project_sprint_view_form
+msgid "Sprint Children"
+msgstr "Enfants du sprint"
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.edit_project
+#: model_terms:ir.ui.view,arch_db:project_sprint.project_sprint_view_search
+msgid "Sprints"
+msgstr ""
+
+#. module: project_sprint
+#: model:ir.model,name:project_sprint.model_project_task
+msgid "Task"
+msgstr "Tâche"
+
+#. module: project_sprint
+#. odoo-python
+#: code:addons/project_sprint/models/project_sprint.py:0
+#, python-format
+msgid "The name of the top level sprint must be a year."
+msgstr "Le nom du sprint de niveau supérieur doit être une année."
+
+#. module: project_sprint
+#. odoo-python
+#: code:addons/project_sprint/models/project_sprint.py:0
+#, python-format
+msgid "The start and end date are required."
+msgstr "La date de début et de fin sont requises."
+
+#. module: project_sprint
+#. odoo-python
+#: code:addons/project_sprint/models/project_sprint.py:0
+#, python-format
+msgid "The start date must be before the end date."
+msgstr "La date de début doit être antérieure à la date de fin."
+
+#. module: project_sprint
+#. odoo-python
+#: code:addons/project_sprint/models/project_sprint.py:0
+#, python-format
+msgid "Q"
+msgstr "T"
+
+#. module: project_sprint
+#. odoo-python
+#: code:addons/project_sprint/models/project_sprint.py:0
+#, python-format
+msgid "F"
+msgstr "Q"
+
+#. module: project_sprint
+#: model_terms:ir.ui.view,arch_db:project_sprint.project_sprint_view_search
+msgid "Top Level"
+msgstr "Niveau supérieur"
+
+#. module: project_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_project__use_sprint
+#: model:ir.model.fields,field_description:project_sprint.field_project_task__use_sprint
+msgid "Use Sprint"
+msgstr "Utiliser les sprints"
+
+#. module: project_sprint
+#. odoo-python
+#: code:addons/project_sprint/models/project_sprint.py:0
+#, python-format
+msgid "You cannot create recursive sprint."
+msgstr "Vous ne pouvez pas créer de sprint récursif."
