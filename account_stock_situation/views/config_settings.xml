@@ -1,0 +1,77 @@
+<odoo>
+
+<record id="res_config_settings_view_form" model="ir.ui.view">
+    <field name="model">res.config.settings</field>
+    <field name="inherit_id" ref="account.res_config_settings_view_form" />
+    <field name="arch" type="xml">
+        <xpath expr="//div[@id='invoicing_settings']" position="after">
+            <h2>Stock Valuation</h2>
+            <div class="row mt16 o_settings_container" name="stock_valuation">
+                <div class="col-12 col-lg-6 o_setting_box" id="valued_wh">
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label">Warehouses</span>
+                        <div class="text-muted">
+                            Warehouses where stock is valued periodically
+                        </div>
+                        <div class="row mt8">
+                            <field
+                                    name="valued_warehouse_ids"
+                                    widget="many2many_tags"
+                                />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="cost_vs_purchase">
+                    <div class="o_setting_right_pane">
+                        <span
+                                class="o_form_label"
+                            >Cost vs. purchase price % threshold </span>
+                        <div class="text-muted">
+                            Below this threshold, the cost value is substitued by purchase price.
+                        </div>
+                        <div class="row mt8">
+                            <field name="cost_vs_purchase_threshold" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="stock_journal">
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label">Journal</span>
+                        <div class="text-muted">
+                            Journal used for stock valuation.
+                        </div>
+                        <div class="row mt8">
+                            <field name="stock_journal_id" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="account_stock_help">
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label">Aide</span>
+                        <div class="row mt8">
+                            <field name="account_stock_help" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="account_stock">
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label">Stock account</span>
+                        <div class="row mt8">
+                            <field name="account_stock_id" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 o_setting_box" id="account_purchase_stock">
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label">Purchase stock account</span>
+                        <div class="row mt8">
+                            <field name="account_purchase_stock_id" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </field>
+</record>
+
+</odoo>
