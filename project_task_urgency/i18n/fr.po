@@ -1,0 +1,154 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* project_task_urgency
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_task_urgency
+#: model_terms:ir.ui.view,arch_db:project_task_urgency.view_task_form2
+msgid ""
+"<strong>This task has been marked as urgent.</strong>\n"
+"                        <br/> All other tasks\n"
+"                        will be put on hold until this task is completed in order to treat it with\n"
+"                        the highest priority. This will have an impact on the treatment delay of the\n"
+"                        other tasks."
+msgstr ""
+"<strong>Cette tâche a été marquée comme urgente.</strong>\n"
+"                        <br/> Toutes les autres tâches\n"
+"                        seront mises en attente jusqu'à ce que cette tâche soit terminée afin de la\n"
+"                        traiter avec la plus haute priorité. Cela aura un impact sur le délai de\n"
+"                        traitement des autres tâches."
+
+#. module: project_task_urgency
+#: model:ir.model.fields,help:project_task_urgency.field_project_task__is_urgent
+msgid "Check this box if the task is urgent."
+msgstr "Cochez cette case si la tâche est urgente."
+
+#. module: project_task_urgency
+#: model:ir.model.fields,help:project_task_urgency.field_project_project__urgency_user_ids
+msgid "Contacts to notify when a task is marked as urgent."
+msgstr "Contacts à notifier lorsqu'une tâche est marquée comme urgente."
+
+#. module: project_task_urgency
+#: model:ir.model,name:project_task_urgency.model_project_project
+msgid "Project"
+msgstr "Projet"
+
+#. module: project_task_urgency
+#: model:ir.model,name:project_task_urgency.model_project_task
+msgid "Task"
+msgstr "Tâche"
+
+#. module: project_task_urgency
+#. odoo-python
+#: code:addons/project_task_urgency/models/project_task.py:0
+#, python-format
+msgid "Task marked as urgent"
+msgstr "Tâche marquée comme urgente"
+
+#. module: project_task_urgency
+#. odoo-python
+#: code:addons/project_task_urgency/models/project_task.py:0
+#, python-format
+msgid "Task marked as urgent to assign"
+msgstr "Tâche marquée comme urgente à assigner"
+
+#. module: project_task_urgency
+#. odoo-python
+#: code:addons/project_task_urgency/models/project_task.py:0
+#, python-format
+msgid "Task was assigned to %s"
+msgstr "La tâche a été assignée à %s"
+
+#. module: project_task_urgency
+#. odoo-python
+#: code:addons/project_task_urgency/models/project_task.py:0
+#: code:addons/project_task_urgency/models/project_task.py:0
+#, python-format
+msgid "Task was closed"
+msgstr "La tâche a été fermée"
+
+#. module: project_task_urgency
+#: model:ir.model.fields,help:project_task_urgency.field_project_task__urgency_start_date
+msgid "The date when the task was marked as urgent."
+msgstr "La date à laquelle la tâche a été marquée comme urgente."
+
+#. module: project_task_urgency
+#: model:ir.model.fields,help:project_task_urgency.field_project_task__urgency_end_date
+msgid "The date when the urgent task was closed."
+msgstr "La date à laquelle la tâche urgente a été fermée."
+
+#. module: project_task_urgency
+#: model:ir.model.fields,help:project_task_urgency.field_project_task__urgency_duration
+msgid "The duration of the task urgency in hours."
+msgstr "La durée de l'urgence de la tâche en heures."
+
+#. module: project_task_urgency
+#. odoo-python
+#: code:addons/project_task_urgency/models/project_task.py:0
+#, python-format
+msgid "The task has been marked as urgent and must be assigned."
+msgstr "La tâche a été marquée comme urgente et doit être assignée."
+
+#. module: project_task_urgency
+#. odoo-python
+#: code:addons/project_task_urgency/models/project_task.py:0
+#, python-format
+msgid "The task has been marked as urgent and must be treated."
+msgstr "La tâche a été marquée comme urgente et doit être traitée."
+
+#. module: project_task_urgency
+#. odoo-python
+#: code:addons/project_task_urgency/models/project_task.py:0
+#, python-format
+msgid "The task has been marked as urgent."
+msgstr "La tâche a été marquée comme urgente."
+
+#. module: project_task_urgency
+#: model:ir.model.fields,field_description:project_task_urgency.field_project_project__urgency_user_ids
+msgid "Urgency Contacts"
+msgstr "Contacts d'urgence"
+
+#. module: project_task_urgency
+#: model:ir.model.fields,field_description:project_task_urgency.field_project_task__urgency_duration
+msgid "Urgency Duration"
+msgstr "Durée de l'urgence"
+
+#. module: project_task_urgency
+#: model:ir.model.fields,field_description:project_task_urgency.field_project_task__urgency_end_date
+msgid "Urgency End Date"
+msgstr "Date de fin de l'urgence"
+
+#. module: project_task_urgency
+#: model:ir.model.fields,field_description:project_task_urgency.field_project_task__urgency_start_date
+msgid "Urgency Start Date"
+msgstr "Date de début de l'urgence"
+
+#. module: project_task_urgency
+#: model:mail.activity.type,name:project_task_urgency.mail_activity_data_urgency_to_assign
+msgid "Urgency To Assign"
+msgstr "Urgence à assigner"
+
+#. module: project_task_urgency
+#: model:mail.activity.type,name:project_task_urgency.mail_activity_data_urgency_todo
+msgid "Urgency Todo"
+msgstr "Urgence à traiter"
+
+#. module: project_task_urgency
+#: model:ir.model.fields,field_description:project_task_urgency.field_project_task__is_urgent
+msgid "Urgent"
+msgstr ""
+
+#. module: project_task_urgency
+#: model_terms:ir.ui.view,arch_db:project_task_urgency.view_task_search_form
+msgid "Urgent Tasks"
+msgstr "Tâches urgentes"
