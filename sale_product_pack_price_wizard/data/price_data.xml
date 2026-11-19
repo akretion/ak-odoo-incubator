@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record forcecreate="True" id="line_item_price" model="decimal.precision">
+     <field name="name">Line Item Price</field>
+     <field name="digits">4</field>
+  </record>
+</odoo>
