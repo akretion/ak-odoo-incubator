@@ -1,0 +1,3 @@
+- Give some feedback to user when pywebdriver is unreachable
+- Check for https issues when self-signed certificates are in use
+  (default)
