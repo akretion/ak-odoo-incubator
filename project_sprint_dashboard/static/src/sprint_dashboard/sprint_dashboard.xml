@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2026 Akretion (<http://www.akretion.com>).
+@author Kévin Roche <kevin.roche@akretion.com>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<templates xml:space="preserve">
+    <t t-name="project_sprint_dashboard.SprintDashboard">
+        <div class="o_action o_sprint_dashboard h-100 overflow-auto">
+            <t t-set="data" t-value="state.data" />
+            <div class="o_sprint_dashboard_content container-fluid py-3 px-4">
+                <div
+                    class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4"
+                >
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-user-circle-o fa-lg text-muted" />
+                        <select
+                            class="form-select o_sprint_dashboard_partner"
+                            t-on-change="onPartnerChange"
+                        >
+                            <t
+                                t-foreach="data.partners"
+                                t-as="partner"
+                                t-key="partner.id"
+                            >
+                                <option
+                                    t-att-value="partner.id"
+                                    t-att-selected="partner.id === state.partnerId"
+                                    t-esc="partner.name"
+                                />
+                            </t>
+                        </select>
+                    </div>
+                    <div t-if="data.sprint" class="d-flex align-items-center gap-2">
+                        <button
+                            class="btn btn-light"
+                            t-att-disabled="!data.previous_id"
+                            t-on-click="() => this.goToSprint(data.previous_id)"
+                            title="Previous sprint"
+                        >
+                            <i class="fa fa-chevron-left" />
+                        </button>
+                        <div class="text-center px-2">
+                            <div class="fw-bold fs-5" t-esc="data.sprint.name" />
+                            <div class="text-muted small">
+                                <t t-esc="data.sprint.date_start" />
+                                <i class="fa fa-long-arrow-right mx-1" />
+                                <t t-esc="data.sprint.date_end" />
+                            </div>
+                        </div>
+                        <button
+                            class="btn btn-light"
+                            t-att-disabled="!data.next_id"
+                            t-on-click="() => this.goToSprint(data.next_id)"
+                            title="Next sprint"
+                        >
+                            <i class="fa fa-chevron-right" />
+                        </button>
+                        <span
+                            t-if="data.sprint.is_current"
+                            class="badge rounded-pill text-bg-primary ms-2"
+                        >Current sprint</span>
+                        <button
+                            t-else=""
+                            class="btn btn-link ms-2"
+                            t-on-click="goToCurrent"
+                        >Back to current sprint</button>
+                    </div>
+                </div>
+
+                <div
+                    t-if="!data.partners.length"
+                    class="o_view_nocontent_smiling_face text-center py-5"
+                >
+                    <p class="fs-4">No customer project uses sprints yet</p>
+                    <p class="text-muted">
+                        Enable sprints on a project with a customer to follow it here.
+                    </p>
+                </div>
+                <div t-elif="!data.sprint" class="text-center text-muted py-5">
+                    No sprint found. Generate the sprints from the yearly sprint.
+                </div>
+                <t t-else="">
+                    <div class="mb-4">
+                        <div
+                            class="d-flex justify-content-between small text-muted mb-1"
+                        >
+                            <span>Sprint time elapsed</span>
+                            <span>
+                                <t t-esc="data.sprint.elapsed" /> / <t
+                                t-esc="data.sprint.duration"
+                            /> days
+                            </span>
+                        </div>
+                        <div class="progress o_sprint_dashboard_time">
+                            <div
+                                class="progress-bar bg-secondary"
+                                t-att-style="'width: ' + sprintProgress + '%'"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <t t-foreach="buckets" t-as="bucket" t-key="bucket.key">
+                            <t t-set="total" t-value="data.totals[bucket.key]" />
+                            <div class="col-6 col-lg-3">
+                                <div
+                                    t-attf-class="o_sprint_dashboard_kpi o_sprint_{{ bucket.key }} card h-100 p-3 {{ total.count ? 'cursor-pointer' : '' }}"
+                                    t-att-title="bucket.help"
+                                    t-on-click="() => this.openTasks(total.task_ids, bucket.label)"
+                                >
+                                    <div
+                                        class="text-muted small"
+                                        t-esc="bucket.label"
+                                    />
+                                    <div
+                                        class="o_sprint_dashboard_kpi_value"
+                                        t-esc="total.count"
+                                    />
+                                    <div class="text-muted small">
+                                        <t t-esc="formatDays(total.days)" /> d estimated
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                    <t t-set="run" t-value="data.totals.run" />
+                    <div
+                        t-attf-class="o_sprint_dashboard_kpi o_sprint_run card mb-4 px-3 py-2 {{ run.count ? 'cursor-pointer' : '' }}"
+                        t-on-click="() => this.openRun(run.task_ids)"
+                    >
+                        <div class="d-flex flex-wrap align-items-center gap-4">
+                            <div>
+                                <span
+                                    class="o_sprint_dashboard_kpi_value"
+                                    t-esc="run.count"
+                                />
+                                <span class="text-muted ms-1">run tickets</span>
+                            </div>
+                            <div>
+                                <span class="fw-bold" t-esc="formatDays(run.days)" />
+                                <span class="text-muted ms-1">d spent</span>
+                            </div>
+                            <div class="flex-fill">
+                                <div
+                                    class="d-flex justify-content-between small text-muted mb-1"
+                                >
+                                    <span>Share of the sprint taken by run</span>
+                                    <span
+                                        class="fw-bold"
+                                        t-esc="runPercent(data.totals) + ' %'"
+                                    />
+                                </div>
+                                <div class="progress o_sprint_dashboard_run_bar">
+                                    <div
+                                        class="progress-bar"
+                                        t-att-style="'width: ' + runPercent(data.totals) + '%'"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-transparent fw-bold">By project</div>
+                        <div
+                            t-if="!data.projects.length"
+                            class="card-body text-muted"
+                        >No task planned in this sprint for this customer.</div>
+                        <ul t-else="" class="list-group list-group-flush">
+                            <t
+                                t-foreach="data.projects"
+                                t-as="project"
+                                t-key="project.id"
+                            >
+                                <li class="list-group-item o_sprint_dashboard_project">
+                                    <div class="row align-items-center g-2">
+                                        <div class="col-12 col-md-3">
+                                            <a
+                                                href="#"
+                                                class="fw-bold"
+                                                t-on-click.prevent="() => this.openTasks(this.allTaskIds(project.buckets), project.name)"
+                                                t-esc="project.name"
+                                            />
+                                            <span
+                                                t-if="project.buckets.carried_over.count"
+                                                class="badge text-bg-warning ms-2 cursor-pointer"
+                                                t-on-click="() => this.openTasks(project.buckets.carried_over.task_ids, project.name + ' / ' + buckets[3].label)"
+                                            >
+                                                <t
+                                                t-esc="project.buckets.carried_over.count"
+                                            /> carried over
+                                            </span>
+                                            <span
+                                                t-if="project.buckets.run.count"
+                                                class="badge o_sprint_run_badge ms-2 cursor-pointer"
+                                                t-on-click="() => this.openRun(project.buckets.run.task_ids, project.name)"
+                                            >
+                                                <t
+                                                t-esc="project.buckets.run.count"
+                                            /> run
+                                            </span>
+                                        </div>
+                                        <div class="col-8 col-md-6">
+                                            <div class="o_sprint_dashboard_bar d-flex">
+                                                <t
+                                                    t-foreach="statusBuckets"
+                                                    t-as="bucket"
+                                                    t-key="bucket.key"
+                                                >
+                                                    <t
+                                                        t-set="pbucket"
+                                                        t-value="project.buckets[bucket.key]"
+                                                    />
+                                                    <div
+                                                        t-if="pbucket.count"
+                                                        t-attf-class="o_sprint_{{ bucket.key }} o_sprint_dashboard_segment"
+                                                        t-att-style="'flex: ' + pbucket.count"
+                                                        t-att-title="bucket.label + ': ' + pbucket.count + ' (' + formatDays(pbucket.days) + ' d)'"
+                                                        t-on-click="() => this.openTasks(pbucket.task_ids, project.name + ' / ' + bucket.label)"
+                                                    >
+                                                        <span t-esc="pbucket.count" />
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 col-md-3 text-end">
+                                            <span
+                                                class="fw-bold"
+                                                t-esc="donePercent(project.buckets) + ' %'"
+                                            />
+                                            <span
+                                                class="text-muted small ms-1"
+                                            >done</span>
+                                            <div class="text-muted small">
+                                                <t
+                                                t-esc="formatDays(project.buckets.done.days)"
+                                            /> / <t
+                                                t-esc="formatDays(project.buckets.done.days + project.buckets.in_progress.days + project.buckets.todo.days)"
+                                            /> d
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div
+                            class="card-header bg-transparent d-flex justify-content-between"
+                        >
+                            <span class="fw-bold">Last sprints</span>
+                            <span class="small text-muted">
+                                <span class="o_sprint_legend o_sprint_done" /> done
+                                <span
+                                class="o_sprint_legend o_sprint_run ms-2"
+                            /> run
+                                <span
+                                class="o_sprint_legend o_sprint_planned ms-2"
+                            /> planned (d)
+                            </span>
+                        </div>
+                        <div
+                            class="card-body d-flex align-items-end gap-3 o_sprint_dashboard_history"
+                        >
+                            <t t-foreach="data.history" t-as="hist" t-key="hist.id">
+                                <div
+                                    class="flex-fill text-center cursor-pointer"
+                                    t-att-title="runTitle(hist)"
+                                    t-on-click="() => this.goToSprint(hist.id)"
+                                >
+                                    <div
+                                        class="small text-muted"
+                                        t-esc="formatDays(hist.done_days)"
+                                    />
+                                    <div class="o_sprint_dashboard_history_col mx-auto">
+                                        <div
+                                            class="o_sprint_planned"
+                                            t-att-style="'height: ' + historyHeight(hist.planned_days) + '%'"
+                                        >
+                                            <div
+                                                class="o_sprint_done"
+                                                t-att-style="'height: ' + (hist.planned_days ? Math.round(hist.done_days / hist.planned_days * 100) : 0) + '%'"
+                                            >
+                                                <div
+                                                    class="o_sprint_run_part"
+                                                    t-att-style="'height: ' + (hist.done_days ? Math.round(hist.run_days / hist.done_days * 100) : 0) + '%'"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        t-att-class="'small mt-1 ' + (hist.id === data.sprint.id ? 'fw-bold' : 'text-muted')"
+                                        t-esc="hist.name"
+                                    />
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

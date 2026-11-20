@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2026 Akretion (<http://www.akretion.com>).
+@author Kévin Roche <kevin.roche@akretion.com>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="action_sprint_dashboard" model="ir.actions.client">
+        <field name="name">Sprint Dashboard</field>
+        <field name="tag">project_sprint_dashboard.sprint_dashboard</field>
+    </record>
+
+    <menuitem
+        id="menu_sprint_dashboard"
+        parent="project.menu_project_report"
+        sequence="5"
+        name="Sprint Dashboard"
+        action="action_sprint_dashboard"
+        groups="project_sprint.group_project_sprint"
+    />
+</odoo>
