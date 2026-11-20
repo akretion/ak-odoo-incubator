@@ -1,0 +1,124 @@
+// Copyright 2026 Akretion (https://www.akretion.com).
+// @author Kévin Roche <kevin.roche@akretion.com>
+// License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+.o_sprint_dashboard {
+    --sprint-done: #1d9e75;
+    --sprint-in-progress: #378add;
+    --sprint-todo: #b4b2a9;
+    --sprint-carried-over: #ef9f27;
+    --sprint-planned: #e3e1d9;
+    --sprint-run: #7f77dd;
+
+    .o_sprint_dashboard_content {
+        max-width: 1200px;
+    }
+    .o_sprint_dashboard_partner {
+        min-width: 16rem;
+    }
+    .o_sprint_dashboard_time {
+        height: 6px;
+    }
+    .o_sprint_dashboard_kpi {
+        border-left: 4px solid var(--sprint-color);
+        border-radius: 0;
+        &.cursor-pointer:hover {
+            background-color: var(--bs-tertiary-bg);
+        }
+    }
+    .o_sprint_dashboard_kpi_value {
+        font-size: 2rem;
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--sprint-color);
+    }
+    .o_sprint_done {
+        --sprint-color: var(--sprint-done);
+    }
+    .o_sprint_in_progress {
+        --sprint-color: var(--sprint-in-progress);
+    }
+    .o_sprint_todo {
+        --sprint-color: var(--sprint-todo);
+    }
+    .o_sprint_carried_over {
+        --sprint-color: var(--sprint-carried-over);
+    }
+    .o_sprint_run {
+        --sprint-color: var(--sprint-run);
+    }
+    .o_sprint_run_badge {
+        color: #fff;
+        background-color: var(--sprint-run);
+    }
+    .o_sprint_dashboard_run_bar {
+        height: 6px;
+        .progress-bar {
+            background-color: var(--sprint-run);
+        }
+    }
+    .o_sprint_dashboard_bar {
+        height: 1.4rem;
+        gap: 2px;
+        border-radius: 0.7rem;
+        overflow: hidden;
+        background-color: var(--sprint-planned);
+    }
+    .o_sprint_dashboard_segment {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.6rem;
+        cursor: pointer;
+        font-size: 0.75rem;
+        color: #fff;
+        background-color: var(--sprint-color);
+        &:hover {
+            filter: brightness(0.9);
+        }
+    }
+    .o_sprint_dashboard_history {
+        height: 12rem;
+    }
+    .o_sprint_dashboard_history_col {
+        height: 8rem;
+        width: 2.5rem;
+        display: flex;
+        align-items: flex-end;
+    }
+    .o_sprint_planned {
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        background-color: var(--sprint-planned);
+        border-radius: 4px 4px 0 0;
+    }
+    .o_sprint_dashboard_history_col .o_sprint_done {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--sprint-done);
+        border-radius: 4px 4px 0 0;
+    }
+    .o_sprint_run_part {
+        width: 100%;
+        background-color: var(--sprint-run);
+        border-radius: 4px 4px 0 0;
+    }
+    .o_sprint_legend {
+        display: inline-block;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 2px;
+        vertical-align: middle;
+        &.o_sprint_done {
+            background-color: var(--sprint-done);
+        }
+        &.o_sprint_planned {
+            background-color: var(--sprint-planned);
+        }
+        &.o_sprint_run {
+            background-color: var(--sprint-run);
+        }
+    }
+}

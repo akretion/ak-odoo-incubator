@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2026 Akretion (<http://www.akretion.com>).
+@author Kévin Roche <kevin.roche@akretion.com>
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sprint_id']" position="after">
+                <field
+                    name="sprint_history_ids"
+                    widget="many2many_tags"
+                    invisible="not use_sprint or not sprint_history_ids"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_tree2" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sprint_id']" position="after">
+                <field
+                    name="sprint_status"
+                    widget="badge"
+                    optional="show"
+                    invisible="not use_sprint"
+                    decoration-success="sprint_status == 'done'"
+                    decoration-info="sprint_status == 'in_progress'"
+                    decoration-muted="sprint_status == 'canceled'"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_search_form" model="ir.ui.view">
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='current_sprint_level_4']" position="after">
+                <separator />
+                <filter
+                    name="sprint_status_done"
+                    string="Sprint: Done"
+                    domain="[('sprint_status', '=', 'done')]"
+                />
+                <filter
+                    name="sprint_status_in_progress"
+                    string="Sprint: In Progress"
+                    domain="[('sprint_status', '=', 'in_progress')]"
+                />
+                <filter
+                    name="sprint_status_todo"
+                    string="Sprint: To Start"
+                    domain="[('sprint_status', '=', 'todo')]"
+                />
+                <separator />
+                <filter name="is_run" string="Run" domain="[('is_run', '=', True)]" />
+                <filter
+                    name="not_run"
+                    string="Planned Work"
+                    domain="[('is_run', '=', False)]"
+                />
+            </xpath>
+            <xpath expr="//filter[@name='group_sprint_level_4']" position="after">
+                <filter
+                    name="group_sprint_status"
+                    string="Sprint Status"
+                    context="{'group_by': 'sprint_status'}"
+                />
+                <filter
+                    name="group_is_run"
+                    string="Run"
+                    context="{'group_by': 'is_run'}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

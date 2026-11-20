@@ -1,0 +1,284 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* project_sprint_dashboard
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-20 10:21+0000\n"
+"PO-Revision-Date: 2026-11-20 10:21+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields,help:project_sprint_dashboard.field_project_project__run_tag_ids
+msgid ""
+"Tasks with one of these tags are run work (debug, urgent, out of sprint "
+"planning). A done run task without sprint is put in the sprint of its "
+"closing date."
+msgstr ""
+"Les tâches portant l'une de ces étiquettes sont du run (debug, urgence, hors "
+"planification du sprint). Une tâche run terminée sans sprint est placée dans "
+"le sprint de sa date de clôture."
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Back to current sprint"
+msgstr "Revenir au sprint en cours"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "By project"
+msgstr "Par projet"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields.selection,name:project_sprint_dashboard.selection__project_task__sprint_status__canceled
+msgid "Canceled"
+msgstr "Annulé"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Current sprint"
+msgstr "Sprint en cours"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.esm.js:0
+#: model:ir.model.fields.selection,name:project_sprint_dashboard.selection__project_task__sprint_status__done
+msgid "Done"
+msgstr "Terminé"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Enable sprints on a project with a customer to follow it here."
+msgstr "Activez les sprints sur un projet ayant un client pour le suivre ici."
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields.selection,name:project_sprint_dashboard.selection__project_task__sprint_status__in_progress
+msgid "In Progress"
+msgstr "En cours"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.esm.js:0
+msgid "In progress"
+msgstr "En cours"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields,field_description:project_sprint_dashboard.field_project_sprint__is_current
+msgid "Is Current"
+msgstr "Sprint en cours"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Last sprints"
+msgstr "Derniers sprints"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Next sprint"
+msgstr "Sprint suivant"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "No customer project uses sprints yet"
+msgstr "Aucun projet client n'utilise encore les sprints"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "No sprint found. Generate the sprints from the yearly sprint."
+msgstr "Aucun sprint trouvé. Générez les sprints à partir du sprint annuel."
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "No task planned in this sprint for this customer."
+msgstr "Aucune tâche planifiée dans ce sprint pour ce client."
+
+#. module: project_sprint_dashboard
+#: model_terms:ir.ui.view,arch_db:project_sprint_dashboard.view_task_search_form
+msgid "Planned Work"
+msgstr "Travail planifié"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.esm.js:0
+msgid "Carried over"
+msgstr "Reporté"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.esm.js:0
+msgid ""
+"Tasks of the sprint coming from a previous sprint, also counted in their "
+"status"
+msgstr ""
+"Tâches du sprint reportées d'un sprint précédent, également comptées dans "
+"leur statut"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Previous sprint"
+msgstr "Sprint précédent"
+
+#. module: project_sprint_dashboard
+#: model:ir.model,name:project_sprint_dashboard.model_project_project
+msgid "Project"
+msgstr "Projet"
+
+#. module: project_sprint_dashboard
+#: model:ir.model,name:project_sprint_dashboard.model_project_sprint
+msgid "Project Sprint"
+msgstr "Sprint de projet"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.esm.js:0
+#: model:ir.model.fields,field_description:project_sprint_dashboard.field_project_task__is_run
+#: model_terms:ir.ui.view,arch_db:project_sprint_dashboard.view_task_search_form
+msgid "Run"
+msgstr "Run"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields,field_description:project_sprint_dashboard.field_project_project__run_tag_ids
+msgid "Run Tags"
+msgstr "Étiquettes run"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Share of the sprint taken by run"
+msgstr "Part du sprint prise par le run"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields,field_description:project_sprint_dashboard.field_project_task__sprint_id
+msgid "Sprint"
+msgstr "Sprint"
+
+#. module: project_sprint_dashboard
+#: model:ir.actions.client,name:project_sprint_dashboard.action_sprint_dashboard
+#: model:ir.ui.menu,name:project_sprint_dashboard.menu_sprint_dashboard
+msgid "Sprint Dashboard"
+msgstr "Tableau de bord des sprints"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields,field_description:project_sprint_dashboard.field_project_task__sprint_history_ids
+msgid "Sprint History"
+msgstr "Historique des sprints"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields,field_description:project_sprint_dashboard.field_project_task__sprint_status
+#: model_terms:ir.ui.view,arch_db:project_sprint_dashboard.view_task_search_form
+msgid "Sprint Status"
+msgstr "Statut du sprint"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "Sprint time elapsed"
+msgstr "Temps écoulé du sprint"
+
+#. module: project_sprint_dashboard
+#: model_terms:ir.ui.view,arch_db:project_sprint_dashboard.view_task_search_form
+msgid "Sprint: Done"
+msgstr "Sprint : terminé"
+
+#. module: project_sprint_dashboard
+#: model_terms:ir.ui.view,arch_db:project_sprint_dashboard.view_task_search_form
+msgid "Sprint: In Progress"
+msgstr "Sprint : en cours"
+
+#. module: project_sprint_dashboard
+#: model_terms:ir.ui.view,arch_db:project_sprint_dashboard.view_task_search_form
+msgid "Sprint: To Start"
+msgstr "Sprint : à démarrer"
+
+#. module: project_sprint_dashboard
+#: model_terms:ir.ui.view,arch_db:project_sprint_dashboard.edit_project
+msgid "Sprints"
+msgstr "Sprints"
+
+#. module: project_sprint_dashboard
+#: model:ir.model,name:project_sprint_dashboard.model_project_task
+msgid "Task"
+msgstr "Tâche"
+
+#. module: project_sprint_dashboard
+#: model:ir.model.fields.selection,name:project_sprint_dashboard.selection__project_task__sprint_status__todo
+msgid "To Start"
+msgstr "À démarrer"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.esm.js:0
+msgid "To start"
+msgstr "À démarrer"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.esm.js:0
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "d"
+msgstr "j"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "d estimated"
+msgstr "j estimés"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "d spent"
+msgstr "j passés"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "days"
+msgstr "jours"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "done"
+msgstr "terminé"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "planned (d)"
+msgstr "planifié (j)"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "carried over"
+msgstr "reporté"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "run"
+msgstr "run"
+
+#. module: project_sprint_dashboard
+#. odoo-javascript
+#: code:addons/project_sprint_dashboard/static/src/sprint_dashboard/sprint_dashboard.xml:0
+msgid "run tickets"
+msgstr "tickets run"
